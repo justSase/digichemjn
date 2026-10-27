@@ -7,6 +7,8 @@ use_style("quiet")
 set_notebook("vorlage", "Notebook title")      # id (klein, mit -), Titel
 # E30 B2: the texts in English, German in de.txt (the reading copy switches them too)
 set_metadata(
+    thema="vorlage.vorlage",                # E39a: Katalog-Schlüssel bereich.thema (eindeutig)
+    kurse=[],                   # ("<HS> · <Vorlesung>", "<platz>"), …
     title="Notebook title",
     subtitle="Series, section (placeholder)",
     authors=["… enter the authors …"],

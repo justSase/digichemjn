@@ -11,6 +11,8 @@ use_style("quiet")
 set_notebook("start-here", "Start here")
 
 set_metadata(
+    thema="start.start-here",                # E39a: Katalog-Schlüssel (vorläufig, Nutzer entscheidet)
+    kurse=[],
     title="Start here",
     subtitle="How a DigiChemJN notebook works — the first notebook of the catalogue",
     authors=["… Autor:innen bitte eintragen …"],

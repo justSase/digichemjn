@@ -1,4 +1,4 @@
-DigiChemJN — Quellen-Bündel (Stand 2026-10-26, v1.83)
+DigiChemJN — Quellen-Bündel (Stand 2026-10-27, v1.84)
 
 Arbeitsweise, Bauen, Prüfen: Projekt-Anweisungen + plan/STOP.md, plan/ZIELPLAN.md.
 Bauen:  cd complex && python3 build_complex.py ;  cd modeling && python3 build_modeling.py

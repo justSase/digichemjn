@@ -517,6 +517,10 @@ nb["metadata"]["digichemjn"] = {"id": _NB_ID_EARLY, "class": "nbid-" + _NB_ID_EA
                                 "version": NBV, "toolkit": VERSION,
                                 "cell": "short cell (E26.3): the code is the _NBZ line, zlib + base64; "
                                         "toolkit/shortcell.py expand() gives it back"}
+# E39a K1 — Katalog: thema + kurse aus chapters/_setup*.py (toolkit/katalog.py, eine Quelle)
+from katalog import notebook as _kat
+_KAT = _kat("chapters"); assert _KAT["id"] == _NB_ID_EARLY, "set_notebook-id ≠ Bau-id"
+nb["metadata"]["digichemjn"].update(thema=_KAT["thema"], kurse=_KAT["kurse"])
 OUT = "Vorlage_v" + NBV + ".ipynb"
 json.dump(nb, open(OUT, "w"), ensure_ascii=False, indent=1)
 print("formulas: %d typeset by the build, %d at run time (seed-dependent)" % (_n_pre, _n_rt))

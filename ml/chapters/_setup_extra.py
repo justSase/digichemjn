@@ -144,5 +144,6 @@ def show_quiz():
 
 use_profile("bioinformatics")
 set_notebook("ml-llm-ai", "Machine Learning, LLMs & AI")
+set_metadata(thema="ml.ml-llm-ai", kurse=[])   # E39a: Katalog-Schlüssel (vorläufig, Nutzer entscheidet)
 inject_style()
 # (no "Ready." print — the input bar is hidden, so any stray output would show)

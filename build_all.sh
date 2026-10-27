@@ -9,9 +9,14 @@
 # the stale file was simply still there from before. That is the failure mode
 # this project keeps paying for — a green run that is green because of the bug.
 # There are five. Count them.
+#
+# 2026-10-27 (E39a A1, Speicher): start/ und ml/ sind aus dem Buendel ausgelagert
+# (C:/DigiChem/archiv/buendel-auslagerung-2026-10-27.tar.gz). Fehlt ein Ordner,
+# sagt das Skript es laut - gebaut wird, was da ist.
 set -e
-(cd start    && python3 build_start.py)
-(cd complex  && python3 build_complex.py)
-(cd sets     && python3 build_sets.py)
-(cd ml       && python3 build_main.py)
-(cd modeling && python3 build_modeling.py)
+b() { if [ -d "$1" ]; then (cd "$1" && python3 "$2"); else echo "UEBERSPRUNGEN: $1/ (ausgelagert 2026-10-27)"; fi; }
+b start    build_start.py
+b complex  build_complex.py
+b sets     build_sets.py
+b ml       build_main.py
+b modeling build_modeling.py

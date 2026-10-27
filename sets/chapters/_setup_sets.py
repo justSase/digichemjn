@@ -10,6 +10,8 @@ use_style("quiet")
 set_notebook("sets", "Sets")
 
 set_metadata(
+    thema="math.sets",                # E39a: Katalog-Schlüssel bereich.thema (eindeutig)
+    kurse=[("ALU · Einführung in die Biophysik", "1.1")],
     title="Sets",
     subtitle="Principles of Biophysics & Computational methods, section 1.1",
     authors=["… Autor:innen bitte eintragen …"],

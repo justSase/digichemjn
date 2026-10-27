@@ -20,6 +20,8 @@ set_notebook("intro-modeling", "Introduction to Modeling")
 # duration and objectives are NOT typed: refs_m.py writes them in at the end,
 # from time_budget_text() and register_goals() — one source each.
 set_metadata(
+    thema="bioinf.intro-modeling",                # E39a: Katalog-Schlüssel bereich.thema (eindeutig)
+    kurse=[("ALU · Vertiefende Methoden der Bioinformatik", "1")],
     title="Introduction to Modeling",
     subtitle="Perception, calibration, validation and sensitivity",
     authors=["… Autor:innen bitte eintragen …"],

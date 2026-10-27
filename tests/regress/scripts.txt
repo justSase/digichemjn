@@ -67,3 +67,4 @@ regress/py_e38a_p2.py 300 complex {nb}    # E38a P2 manifest.pyodide "/pyodide/<
 regress/py_e38a_p3.py 900 complex {nb}    # E38a P3 sichtbare Codezelle ASCII (Datei + code-server, DIGICHEM_CODE_SERVER), B1 jetTransient wird ausgehalten
 regress/py_e38a_p4.py 600 complex {nb}    # E38a P4 Zelle 1 zweite Zeile (PyCharm/VS Code), eine Zeile, direkt unter der Startzeile
 regress/py_e38a_p6.py 600 complex {nb}    # E38a P6 Rolle weg (Python): keine .nbrolerow, kein „Teaching adds/Kursleitung“
+regress/py_e39a_themen.py 300 complex {nb}    # E39a K1–K3 (Werkstatt Python) thema Pflicht + eindeutig über alle build_*.py, kurse in .ipynb/meta.json, dist/kurse.json = Quellen

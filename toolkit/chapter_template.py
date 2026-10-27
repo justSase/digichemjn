@@ -2068,8 +2068,8 @@ def fig_to_html(fig, dpi=100, tight=True):
 # a reader would notice. TOOLKIT_VERSION is the build — a date and a letter —
 # and it only matters when two notebooks from different days meet in one
 # JupyterLab window and their stylesheets have to agree which is newer.
-NB_VERSION = "1.83"
-TOOLKIT_VERSION = "2026-10-26a"
+NB_VERSION = "1.84"
+TOOLKIT_VERSION = "2026-10-27a"
 # E26.3 — the short cell (toolkit/shortcell.py): 0 = the cargo on ONE line;
 # > 0 = Variant B, the cargo in lines of that many characters (~4 000) for an
 # editor that cannot show one long line (PyCharm, to be measured). Read by the build.
@@ -3495,6 +3495,9 @@ META = {
     "version": "", "date": "", "doi": "", "repo": "", "keywords": [],
     "audience": "", "prerequisites": "", "duration": "", "source": "",
     "objectives": [],
+    # E39a K1 — the catalogue: thema = "bereich.thema" (one per notebook, no duplicates),
+    # kurse = [("<HS> · <Vorlesung>", "<platz>"), …] (toolkit/katalog.py reads them from the source)
+    "thema": "", "kurse": [],
 }
 
 def set_metadata(**fields):
@@ -3502,6 +3505,14 @@ def set_metadata(**fields):
     unknown = [k for k in fields if k not in META]
     if unknown:
         raise KeyError("unknown metadata field(s): %s" % ", ".join(sorted(unknown)))
+    import re as _re39
+    if "thema" in fields and not _re39.match(r"^[a-z0-9]+(-[a-z0-9]+)*\.[a-z0-9]+(-[a-z0-9]+)*$", str(fields["thema"])):
+        raise ValueError("thema must look like 'bereich.thema': %r" % (fields["thema"],))
+    if "kurse" in fields:
+        fields["kurse"] = [{"kurs": k, "platz": p} for k, p in fields["kurse"]]
+        for e in fields["kurse"]:
+            if " · " not in e["kurs"] or not _re39.match(r"^\d+(\.\d+)*$", e["platz"]):
+                raise ValueError("kurse: (\"<HS> · <Vorlesung>\", \"<platz>\") expected: %r" % (e,))
     META.update(fields)
 
 def _meta_row(label, value):

@@ -26,6 +26,7 @@ sind bei jedem Bau gleich → das Paket ist byte-gleich reproduzierbar) und schr
                                    Marken der Zeitleiste, Seed und Modus des Baus
       meta.json                    id, nb_version, toolkit, langs, lang, title en/de, OER-Felder (META), Dateien
   dist/inhalt/<id>/aktuell.json    {"v": NB_VERSION} (lesen.html?nb=<id> ohne v)
+  dist/kurse.json                  E39a K2: {kurs-id: [{platz, id, titel, version}, …]} aus allen chapters/_setup*.py
 
 Reglerbilder stehen EINMAL im Paket: in der Lesefassung (`data-z`, das liest 20-reader.js
 aus dem DOM); daten.json nennt je Regler Element-Id, Zahl der Bilder, Bytes und sha8 —
@@ -230,7 +231,9 @@ def meta(k, md, files, huelle_rel):
     return {"format": "digichemjn-meta/1", "id": k["id"], "nb_version": k["nb_version"], "toolkit": k["toolkit"],
             "langs": list(LANGS), "lang": LANGS[0],
             "title": {"en": k.get("title"), "de": (md or {}).get("title_de") or k.get("title")},
-            "huelle": huelle_rel, "seed": k["seed"], "modus": k["mode"], "oer": oer, "dateien": files}
+            "huelle": huelle_rel, "seed": k["seed"], "modus": k["mode"], "oer": oer, "dateien": files,
+            # E39a K2 — Katalog (Felder ergänzt, claude/VERTRAG-E36.md): aus dem Lauf, gleich der .ipynb
+            "thema": m.get("thema"), "kurse": m.get("kurse") or []}
 
 
 # ---------------------------------------------------------------------------
@@ -319,6 +322,10 @@ def ausgaenge(nb_path, md, dist="../dist", lesen_html="../toolkit/js/huelle/lese
         _write(os.path.join(out, "lesefassung.%s.html" % lang), b)
         files["lesefassung.%s.html" % lang] = _size(b)
     k_en = runs["en"][1]
+    for lang in LANGS:                     # E39a K2: Lauf und .ipynb nennen dasselbe Thema, dieselben Kurse
+        km = runs[lang][1].get("meta") or {}
+        if (km.get("thema"), km.get("kurse") or []) != (md.get("thema"), md.get("kurse") or []):
+            raise RuntimeError("E39a: thema/kurse im Lauf (%s) ≠ metadata.digichemjn" % lang)
     b = json.dumps(daten(runs["en"][0], k_en), ensure_ascii=False, indent=1).encode("utf-8")
     _write(os.path.join(out, "daten.json"), b)
     files["daten.json"] = _size(b)
@@ -328,6 +335,8 @@ def ausgaenge(nb_path, md, dist="../dist", lesen_html="../toolkit/js/huelle/lese
     b = json.dumps(meta(k_en, md, files, rel), ensure_ascii=False, indent=1).encode("utf-8")
     _write(os.path.join(out, "meta.json"), b)
     files["meta.json"] = _size(b)
+    import katalog                         # E39a K2: dist/kurse.json aus ALLEN Quellen (auch ohne eigenes Paket)
+    katalog.write_kurse(dist)
     pk = sum(f["bytes"] for f in files.values()), sum(f["gzip"] for f in files.values())
     hk = sum(f["bytes"] for f in man["dateien"].values()), sum(f["gzip"] for f in man["dateien"].values())
     log("dist: inhalt/%s/%s %d B (gzip %d) · huelle/%s %d B (gzip %d) · Kernel %s"

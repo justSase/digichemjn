@@ -11,6 +11,8 @@ use_style("quiet")
 set_notebook("complex-numbers", "Complex Numbers")
 # --- OER record (FCI proposal: open licence, metadata, DOI, versioning) -----
 set_metadata(
+    thema="math.complex-numbers",                # E39a: Katalog-Schlüssel bereich.thema (eindeutig)
+    kurse=[("ALU · Einführung in die Biophysik", "1.2")],
     title="Complex Numbers",
     subtitle="Principles of Biophysics & Computational methods, section 1.2",
     authors=["… Autor:innen bitte eintragen …"],

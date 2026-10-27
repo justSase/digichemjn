@@ -167,6 +167,11 @@ nb = {"cells": cells,
       "metadata": {"kernelspec": {"display_name": "Python 3", "language": "python", "name": "python3"},
                    "language_info": {"name": "python", "version": "3.8"}},
       "nbformat": 4, "nbformat_minor": 4}
+# E39a K1 — Katalog: thema + kurse aus chapters/_setup_sets.py (toolkit/katalog.py, eine Quelle)
+from katalog import notebook as _kat
+_KAT = _kat("chapters")
+nb["metadata"]["digichemjn"] = {"id": _KAT["id"], "title": _KAT["titel"], "version": NBV,
+                                "thema": _KAT["thema"], "kurse": _KAT["kurse"]}
 OUT = "Sets_Step_by_Step_v" + NBV + ".ipynb"
 json.dump(nb, open(OUT, "w"), ensure_ascii=False, indent=1)
 print("built", OUT, "with", len(cells), "cells;", len(MEGA), "chars in the mega-cell")
