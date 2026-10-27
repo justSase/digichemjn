@@ -1,0 +1,69 @@
+# E21.0 — the stand-alone measuring scripts of the workshops that belong in the gate
+# (Befund Dirigent 02.10.: they had not run before delivery since E12). One per line:
+#   <script under tests/>  <timeout s>  <complex|modeling|both>  <arguments>   ({nb} notebook, {out} a scratch .json)
+# Each runs once per notebook on the runner's JupyterLab (DIGICHEM_LAB_URL is inherited);
+# exit code 0 = green row. The owner of a script keeps its line up to date.
+regress/py_e25_l.py 900  both     {nb}
+regress/py_e22p.py 600  both     {nb}
+lab_yoc.py        600  both     {nb}
+lab_seed.py       600  both     {nb}
+lab_inputs.py     600  complex  {nb}
+lab_flow.py       900  both     {nb} {out}
+lab_skip.py       900  both     {nb} {out}
+lab_k2.py         900  both     {nb} {out}
+lab_landing.py    900  complex  {nb} {out}
+lab_overlay.py    900  both     {nb} {out}
+lab_readline.py   600  both     {nb} {out}
+lab_griptitle.py  300  both     {nb} {out}
+lab_cover.py      600  both     {nb}
+regress/py_e22.py  900  both     {nb}
+regress/py_e23_1.py 900  both     {nb}
+regress/cold.py   1500 complex  {nb} --scenario bare,hub,offline   # E24.0 Kaltstart (py-E24.0); R7 (Cover als Ausgabe, js-E24.3) zählt
+regress/py_e25_a.py 600  complex  {nb}      # E25.a eine Vorschau in PyCharm (Kernel PYCHARM_HOSTED=1)
+regress/py_e25_k.py 600  complex  {nb}      # E25.k Vorschau-Reihenfolge, Reihe (Cover-Markup: Complex)
+regress/py_e25_o.py 900  both     {nb}      # E25.o Sprache je Notebook, Standardwerte
+regress/py_e25_h.py 900  complex  {nb}      # E25.h gespeicherte Vorschau (seit py-E26.1: Lesefassung, Zeile „run the cell“, kein toter Play)
+regress/py_e25_c.py 600  complex  {nb}      # E25.c Startzeile als Markdown
+regress/py_e25_n.py 900  both     {nb}      # E25.n → E29 P5 Feedback = ein Text (kein mailto, kein JSON)
+regress/py_e25_v.py 2400 complex  {nb}      # E25.v Versionen: Python 3.8/3.9/3.10, ipywidgets 7 (uv, Cache)
+# regress/js_e25.py 900  complex  {nb}   # RUHT seit py-E26.1 (11.10.): baute PyCharm als EINE Seite nach (grün wegen des Fehlers, STOP E26.1);
+#   ohne gezeichnete Widgets startet unser Skript dort nicht mehr. Ersatz für e/h: env_iframe.py; o/n/k/v → Werkstatt JS (Lab-Zeilen)
+regress/env_iframe.py 1200 complex {nb}      # E26.1 jede Ausgabe in eigenem iframe (PyCharm/VS Code), nbconvert-HTML; Lesefassung zuerst
+regress/env_reader.py 900 complex {nb}      # E26.2 Lesefenster (JS): Rad, Marken, Höhe/Lupe gemerkt, Daumen; nicht in nbconvert
+regress/css_e26_reader.py 900 complex {nb}   # E26.2 Lesefenster (15-reader.css) hell/dunkel × minimal/cyber/fairy, Stand-in nach claude/VERTRAG-nbrw.md
+regress/py_e26_2.py 900 complex {nb}      # E26.2 Python: Aufgaben/Regler/Kopierzeile im Lesefenster (Antworten je Seed, JS prüft), pruefe() im Kernel + Fortschrittsdatei
+regress/css_e26_3.py 900 complex {nb}      # E26.3 Lesefenster wie Lab (CSS): Schrift/Farben/Spalte gegen Lab-Messung, Achse, Vorschau/Sprache/Modus, Schloss, Code-Overlay
+regress/env_multi.py 1800 complex {nb}      # E26.3 KORREKTUR: Complex + Modeling + Vorlage zugleich (je Ausgabe eigene Seite / alle in einer Seite): je Notebook ein Fenster, nichts geteilt
+regress/env_colab.py 900 complex {nb}      # E32 K1 Colab: alle Ausgaben in EINEM iframe, Widgets gezeichnet (spät, CDN), iframe so hoch wie der Inhalt: ein Fenster, 0 Lab-Werkzeuge, Höhe ±2 px über 10 s
+regress/py_e26_short.py 1500 complex {nb}   # E26.3 kurze Zelle (≤ 15 Zeilen, Komprimat, Fehler mit Kapitelnamen, Lauf gleich), Cover beider Sprachen + Gating/Modus + Prüf-Logik als Text fürs Fenster
+regress/lab_same.py 5400 complex {nb}   # E26.3 Lab bleibt Lab: Bilder Referenz (DIGICHEM_LAB_SAME_REF=v1.72) ↔ neu pixelgleich, Cover/Dokument × Panel × 3 Stile × hell/dunkel × 1920/1366
+regress/py_e29.py  900  complex  {nb}      # E29 (nur Vorlage; „complex“ = Vorlage/Complex) P1 Cover zweisprachig (P1 Texte: Python; P1a Tooltips/Hover: JS), P5 Feedback-Zeile, P7 Reihe, P8 Zellhinweis, D1 Titelpille
+regress/py_e30.py  900  complex  {nb}      # E30 (nur Vorlage) A1 Fazit als Text (conclusion), B2 Lesefassung beide Sprachen (Fenster EN|DE), B6 Lab-Zeitleiste als <template> im Fenster, T1 Tooltip gesperrter Kapitel
+regress/py_e31.py  1200 complex  {nb}      # E31 (nur Vorlage) C1 Warnung in der Startzeile + Kommentarblock je Satz eine Zeile, F1 Formeln in em (Fenster A 90/150 %), W1 Fenster bleibt nach 5 Läufen (Metadaten collapsed false, keine Ausgabe-Änderung nach dem Fenster, PyCharm-Nachbau); W1d (JS) nur berichtet, --js streng
+regress/js_e29.py  900  complex  {nb}      # E29 (Werkstatt JS, nur Vorlage) P1m/P1 Sprache im Cover (Attribute data-nbl-*), P5 kein Feedback-Link/Ring, P6 kein Zoom über der Vorschau, D2 Scrollen nach Lupe, D3 gesperrtes Kapitel, D4 50 Klicks, D5 Vollbild, D7 Schriftgröße, D9 Rad-Beschleunigung
+regress/js_e30.py  900  complex  {nb}      # E30 (Werkstatt JS, nur Vorlage) M1 Marken an ihren Überschriften, L1/P1/P2/F1 Lesehöhe + Pin, K1 gesperrt, H1 Hover, X2 Pips/XP, M2 Modus, Y1 eigene Zellen, R1 Lesehöhe gemerkt, N1 Schriftgröße, L2 eine Sprache, B5 zu breit
+regress/css_e30.py 900  complex  {nb}      # E30 (Werkstatt CSS, nur Vorlage) A1 Fazit-Satz, A2 keine Dreiecke (Lab + Fenster), B1 Vorschau auf der Achse, B3 Breiten wie Lab, B4 Tabellen, B5 760/1024/1366 hell/dunkel, L1 Schrift wie Lab
+regress/js_e31.py  900  complex  {nb}      # E31 (Werkstatt JS, nur Vorlage) Fenster: T2 Werkzeuge schwebend, S1 Scrollleiste links, P1 Griff/Breite, L1 Lesehöhe, M1 Marker, Z1 Achse, G1 Bedienelemente-Größe, T1 Vorschau eine Reihe, W1 fünf Läufe in einer Seite; G1L Lab ⚙ Größe; F1 nur Info
+regress/css_e31.py 900  complex  {nb}      # E31 (Werkstatt CSS, nur Vorlage) Fenster F1w/G1w/T2/V1w/P1/M1/Z1/T1, Lab N1 kein Verblassen, V1 keine Linie, F1 A± skaliert alles, G1 --nbgs
+regress/env_offline_requests.py 600 complex {nb}      # E32 K3 (Werkstatt Python, nur Vorlage) Anfragen an fremde Hosts zählen: Lab (Run All + Play, 10 s) und Lesefenster (Vorschau 10 s, Play, 10 s, kein ▶) — Soll 0; Selbsttest des Zählers je Zeile
+regress/py_e33.py  1500 complex  {nb} --lite      # E33 (Werkstatt Python, nur Vorlage) A1 gespeicherte Lesefassung einsprachig + Kontrast ≥ 4,5 (Lab/Lite nicht vertraut hell/dunkel, PyCharm-Nachbau mit Sanitizer), R1 Rückbau = v1.78-Markup, A2 gespeicherte Vorschau (Lab/Lite/nbconvert), A3 kein 3.9-Kasten, B3 Konto-Behälter, D Startzeile ohne Entities + keine leeren text/plain; --vscode mit DIGICHEM_CODE_SERVER
+regress/js_e33.py  900  complex  {nb}      # E33 (Werkstatt JS, nur Vorlage; Zeile von Python eingetragen, Datei kommt mit PATCH-js-E33) B1–B6, C1, D
+regress/css_e33.py 900  complex  {nb}      # E33 (Werkstatt CSS, nur Vorlage; Zeile von Python eingetragen, Datei kommt mit PATCH-css-E33) B2, B4–B6, C1, D; nach dem Zusammenführen auch --static (A1s)
+regress/py_e34.py  900  complex  {nb} --js      # E34 (Werkstatt Python, nur Vorlage) K1 Standard digi + dunkel, K2 Feed data-nbdefaults, K3 fünf Stile + Ornament digi, K4 Titel des Stil-Knopfs en/de; B1–B3 (frisch → digi dunkel, Stil-Menü vier ohne retro, gespeicherte Wahl gewinnt)
+regress/css_e34.py 2400 complex  {nb} --strict   # E34 (Werkstatt CSS, nur Vorlage) Stil digi in Lab, NB7, Lite (baut sich die Lite-Seite, Pyodide lokal) × hell/dunkel: S0 digi vom Notebook, R1 Rail Gold, R2 Karte 14 px/Pille 999 px, R3 Unbounded geladen, R4 Kontrast ≥ 4,5 (oben, weiter unten, ⚙), R5 0 Schriften aus dem Netz
+regress/js_e34.py 1500 complex {nb}   # E34 (Werkstatt JS) F1–F3, S1–S3, R1
+regress/py_e35.py  900  complex  {nb}      # E35 (Werkstatt Python, nur Vorlage) K1 NB_DEFAULTS digi/dunkel, S1 gespeicherte Vorschau .nbstill in digi-Farben (Datei), B1 vier Seiten (weiß, digi, Lab dunkel, GitHub dunkel) Karte/Kicker/Pille/Unbounded + Kontrast ≥ 4,5, B2 Lab hell/dunkel nicht vertraut + nbconvert
+regress/css_e35.py 3000 complex  {nb} --js   # E35 (Werkstatt CSS, nur Vorlage) Lab × Stil (digi, minimal, cyber, fairy) × hell/dunkel: C1 Sternenhimmel (Kachel = stars()), C1s ruhig beim Scrollen, C2 jede Fläche/Ring in der Palette des Stils, C2k Kontrast; C3a/C3 kein Aufblitzen nach Run All (CDP-Screencast), C3d erstes Bild digi (C3/C3d brauchen J1: --js)
+regress/js_e35.py 900 complex {nb}   # E35 (Werkstatt JS) J1 F1/F2 kein Aufblitzen hell/dunkel, S1/S2 gespeicherte Wahl ab dem ersten Bild
+regress/py_e36.py  900  complex  {nb}      # E36 (Werkstatt Python, nur Vorlage) Ausgang A (toolkit/paket.py): V1 Paket vollständig, H1 keine Hülle im Paket (0 <style>, nur Daten-<script>), H2 Hülle ohne Notebook-Id, D1 daten.json (Antworten, Prüf-Code, Regler, Gating, Marken), D0 dist/ aktuell, R1 reproduzierbar, R2 Rückbau, B1 Paket + Hülle = Ausgabe des Kernels pixelgleich (1366/390 × hell/dunkel); --mit <nb2>: H3 Hülle gleich
+regress/css_e36.py 1800 complex {nb} --strict   # E36 (Werkstatt CSS, nur Vorlage) Lesefenster aus Hülle + Paket (lesen.html, dist/) ↔ Lesefassung im Notebook-iframe: H1 Hülle-CSS notebookunabhängig, H2 Seite (Rand 0, Grund = Fenster), P pixelgleich je Stil × hell/dunkel × 1366/390 × Vorschau/Dokument; I390 abgeschnitten (INFO)
+regress/js_e36.py 900 complex {nb}   # E36 (Werkstatt JS) L1–L7 lesen.html aus Hülle + Paket, ohne Kernel
+regress/css_e38a_c1.py 600 complex {nb}   # E38a C1 (Werkstatt CSS) digi im Lesefenster (lesen.html): D1 Palette/Karte/Pille/Sterne, D2 Seite = Fenster, D3 Kontrast, D4 VS Code
+regress/css_e38a_c2.py 600 complex {nb}   # E38a C2 (Werkstatt CSS) I390: Namen der Vorschau-Zeitleiste bei 390/360 px ganz zu sehen; W breit unverändert
+regress/css_e38a_c3.py 2400 complex {nb}  # E38a C3 (Werkstatt CSS) Cover-Kontrast ≥ 4,5 je Stil × hell/dunkel (geladen, aufgeklappt, Hover)
+regress/js_e38a.py 900 complex {nb}       # E38a J1–J3 (Werkstatt JS) J1a lesen.html volle Höhe, J1b Jupyter-Regel bleibt, J2a/J2b manifest.pyodide, J3 Rolle weg
+regress/py_e38a_p1.py 600 complex {nb}    # E38a P1 (Werkstatt Python) Lesezeile in lesen.html passt zur Seite (en/de)
+regress/py_e38a_p2.py 300 complex {nb}    # E38a P2 manifest.pyodide "/pyodide/<PYV>/", DIGICHEM_PYODIDE_URL, off → null
+regress/py_e38a_p3.py 900 complex {nb}    # E38a P3 sichtbare Codezelle ASCII (Datei + code-server, DIGICHEM_CODE_SERVER), B1 jetTransient wird ausgehalten
+regress/py_e38a_p4.py 600 complex {nb}    # E38a P4 Zelle 1 zweite Zeile (PyCharm/VS Code), eine Zeile, direkt unter der Startzeile
+regress/py_e38a_p6.py 600 complex {nb}    # E38a P6 Rolle weg (Python): keine .nbrolerow, kein „Teaching adds/Kursleitung“

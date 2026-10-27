@@ -1,0 +1,945 @@
+  /* ======================================================================
+     2026-09-29e — EILAUFTRAG E7 (Skizze). One place for the look of E7.
+     E7.3 (Oberfläche) — no bookmark sign on the timeline: the bookmark is
+     still kept and B still goes there (17-marker), only the 🔖 is not drawn. */
+  html body #nbpanel-root#nbpanel-root .nbbm-ic{display:none!important;}
+
+  /* E7.4 (Oberfläche) — THE WORDS FADE, THE PIPS STAY. `nbnotext` (applyGui)
+     is on while the tallies still fit but the names do not: names, task
+     names and the pips' labels fade out instead of being cut or re-wrapped
+     into nothing; the circles stay until `nbnames` goes too. */
+  html body #nbpanel-root#nbpanel-root.vert.nbnames .nbmap-node :is(.nbmap-lab,.nbtasklab){
+      transition:opacity .22s ease, visibility 0s linear 0s;}
+  html body #nbpanel-root#nbpanel-root.vert.nbnames.nbnotext .nbmap-node :is(.nbmap-lab,.nbtasklab){
+      opacity:0!important;visibility:hidden!important;pointer-events:none!important;
+      transition:opacity .22s ease, visibility 0s linear .22s;}
+  html body #nbpanel-root#nbpanel-root.vert.nbnotext .nbchapstat .nbpip-lab{display:none!important;}
+
+  /* E7.5 (Struktur + Oberfläche) — THE CURSOR IS A SCROLL THUMB: an upright
+     pill with three grip lines, in the mark colour, ringed by the panel's own
+     surface so it reads as part of the panel. Shut, it hangs outside the
+     panel (`nbcur-out`, 19-title-sync) and is still pulled the same way. */
+  html body #nbpanel-root#nbpanel-root.vert .nbmap-cursor{
+      width:calc(14px * var(--nbk,1))!important;height:calc(44px * var(--nbk,1))!important;
+      cursor:grab;}
+  html body #nbpanel-root#nbpanel-root.vert .nbmap-cursor::before{
+      left:0!important;right:0!important;top:0!important;bottom:0!important;
+      height:auto!important;margin-top:0!important;box-sizing:border-box;
+      border-radius:calc(7px * var(--nbk,1))!important;
+      background:linear-gradient(90deg,
+          color-mix(in srgb,var(--nbmark,#0d63e0) 78%%,#fff),var(--nbmark,#0d63e0))!important;
+      border:1px solid color-mix(in srgb,var(--nbmark,#0d63e0) 72%%,#000);
+      box-shadow:0 0 0 calc(3px * var(--nbk,1)) var(--nbpanel-surf,#f6f8fa),
+                 0 0 0 calc(4px * var(--nbk,1)) var(--nbrail-edge,#e4e9ee),
+                 0 2px 6px rgba(0,0,0,.22)!important;
+      transition:filter .12s ease, box-shadow .12s ease;}
+  html body #nbpanel-root#nbpanel-root.vert .nbmap-cursor::after{
+      content:'';position:absolute;left:28%%;right:28%%;top:50%%;
+      height:calc(10px * var(--nbk,1));transform:translateY(-50%%);pointer-events:none;
+      background:repeating-linear-gradient(180deg,rgba(255,255,255,.92) 0 1.5px,transparent 1.5px 4px);}
+  html body #nbpanel-root#nbpanel-root.vert .nbmap-cursor:hover::before,
+  html body #nbpanel-root#nbpanel-root.vert .nbmap-cursor.nbdragging::before{
+      height:auto!important;margin-top:0!important;filter:brightness(1.12);
+      box-shadow:0 0 0 calc(3px * var(--nbk,1)) var(--nbpanel-surf,#f6f8fa),
+                 0 0 0 calc(4px * var(--nbk,1)) var(--nbmark,#0d63e0),
+                 0 0 12px 2px var(--nbglow,rgba(13,99,224,.55))!important;}
+  html body #nbpanel-root#nbpanel-root.vert .nbmap-cursor.nbdragging{cursor:grabbing;}
+
+  /* E7.6 + E7.7 (Oberfläche) — THE TAB IS THE PANEL'S, AND A BUTTON. Same
+     surface, blur and edge as the panel (K3.3), a little wider, with a
+     chevron that says "pull" above its two lines; on hover and while held
+     the edge and the lines take the mark colour, so it reads as the thing
+     to press. The lane, the cursor ring and the tab share one edge colour
+     (--nbrail-edge). */
+  html body #nbpanel-root#nbpanel-root.vert .nbgrip{
+      width:16px!important;border-width:1px!important;border-right:0!important;
+      border-style:solid!important;}
+  html body #nbpanel-root#nbpanel-root.vert .nbgrip::after{
+      content:'';position:absolute;left:50%%;top:9px;width:5px;height:5px;
+      margin-left:-1px;border-left:2px solid var(--nbskin-quiet,#55636f);
+      border-bottom:2px solid var(--nbskin-quiet,#55636f);transform:rotate(45deg);
+      opacity:.85;pointer-events:none;}
+  html body #nbpanel-root#nbpanel-root.vert .nbgrip:hover,
+  html body #nbpanel-root#nbpanel-root.vert .nbgrip.nbdragging{
+      border-color:var(--nbmark,#0d63e0)!important;}
+  html body #nbpanel-root#nbpanel-root.vert .nbgrip:is(:hover,.nbdragging) span{
+      background:var(--nbmark,#0d63e0)!important;opacity:1!important;
+      box-shadow:-4px 0 0 0 var(--nbmark,#0d63e0),4px 0 0 0 var(--nbmark,#0d63e0)!important;}
+  html body #nbpanel-root#nbpanel-root.vert .nbgrip:is(:hover,.nbdragging)::after{
+      border-color:var(--nbmark,#0d63e0);opacity:1;}
+
+  /* ======================================================================
+     2026-09-30 — EILAUFTRAG E9.1 (Oberfläche, Skizze; Lage und Ziehen macht
+     JS-a). DIE LESEHÖHE IST EINE EINHEIT. Marker mit Spur, Scrollbar-Daumen
+     (rechts im Panel), Ausklappknopf (Variante C) und der Fixpunkt im
+     Dokument tragen EINE Farbe, --nbread (= die Markerfarbe des Stils), und
+     leuchten gemeinsam auf, sobald einer von ihnen berührt oder gezogen wird.
+     Eine Haarlinie vom Knopf quer durchs Panel (Breite --nbvert-w, die JS
+     schon setzt) bis zum Daumen zeigt die Höhe; der Fixpunkt setzt sie im
+     Dokument fort.
+     Vertrag für JS-a (Vorschlag): Fixpunkt = `.nbreadfix` (ein Element in
+     der Notebook-Fläche, JS setzt top/left/width, Höhe 0); beim Ziehen am
+     Knopf trägt der Host `.nbread-drag` (ohne sie reicht `.nbgrip.nbdragging`).
+     Ohne `.nbreadfix` im DOM wirkt nichts davon im Dokument. */
+  body{--nbread:var(--nbmark,#0d63e0);
+       --nbread-soft:color-mix(in srgb,var(--nbmark,#0d63e0) 38%%,transparent);}
+  /* der Knopf: Ring und Pfeil in der Lesefarbe; greifbar, weil er zieht */
+  html body #nbpanel-root#nbpanel-root#nbpanel-root.vert .nbgrip{
+      border:2px solid var(--nbread)!important;cursor:grab;overflow:visible!important;}
+  html body #nbpanel-root#nbpanel-root#nbpanel-root.vert .nbgrip.nbdragging{cursor:grabbing;}
+  html body #nbpanel-root#nbpanel-root#nbpanel-root.vert .nbgrip::after{
+      border-left-color:var(--nbread)!important;border-bottom-color:var(--nbread)!important;}
+  html body #nbpanel-root#nbpanel-root#nbpanel-root.vert .nbgrip:is(:hover,:focus-visible,.nbdragging){
+      background:var(--nbread)!important;
+      box-shadow:0 0 0 3px var(--nbread-soft),0 0 14px 2px var(--nbglow,rgba(13,99,224,.45)),
+                 0 2px 6px rgba(0,0,0,.22)!important;}
+  /* die Haarlinie: vom Knopf nach rechts genau durchs Panel; multiply, damit
+     sie über Lane und Marken wie darunter wirkt */
+  html body #nbpanel-root#nbpanel-root#nbpanel-root.vert .nbgrip::before{
+      content:''!important;display:block!important;position:absolute!important;
+      left:100%%!important;top:50%%!important;width:var(--nbvert-w,0px)!important;height:0!important;mix-blend-mode:multiply;
+      margin:0!important;border:0!important;opacity:1!important;background:none!important;
+      border-top:1px dashed var(--nbread-soft)!important;
+      pointer-events:none!important;transform:none!important;}
+  /* der Daumen: dieselbe Farbe, voll statt mit Grau gemischt */
+  html body #nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-cursor::before{
+      background:var(--nbread)!important;opacity:.78;}
+  /* gemeinsam heiß: berührt oder gezogen wird einer, leuchten alle */
+  html body #nbpanel-root#nbpanel-root#nbpanel-root.vert:is(.nbread-drag,
+      :has(.nbgrip:is(:hover,.nbdragging)),:has(.nbmap-cursor:is(:hover,.nbdragging))) .nbmap-cursor::before{
+      opacity:1;box-shadow:0 0 0 2px var(--nbread-soft),0 0 12px 2px var(--nbglow,rgba(13,99,224,.45))!important;}
+  html body #nbpanel-root#nbpanel-root#nbpanel-root.vert:is(.nbread-drag,
+      :has(.nbgrip:is(:hover,.nbdragging)),:has(.nbmap-cursor:is(:hover,.nbdragging))) .nbmap-here{
+      filter:brightness(1.12) drop-shadow(0 0 6px var(--nbglow,rgba(13,99,224,.55)));}
+  html body #nbpanel-root#nbpanel-root#nbpanel-root.vert:is(.nbread-drag,
+      :has(.nbgrip:is(:hover,.nbdragging)),:has(.nbmap-cursor:is(:hover,.nbdragging))) .nbgrip::before{
+      border-top:1px solid var(--nbread)!important;opacity:.55!important;}
+  /* der Fixpunkt im Dokument: dieselbe gestrichelte Linie, am panelseitigen
+     Ende ein Punkt in der Lesefarbe mit Hof — „hier liest du“ */
+  html body .nbreadfix{
+      position:fixed;height:0;pointer-events:none;z-index:30;
+      border-top:1px dashed var(--nbread-soft);
+      transition:border-color .15s ease,opacity .15s ease;}
+  html body .nbreadfix::after{
+      content:'';position:absolute;right:-4px;top:-4.5px;width:8px;height:8px;
+      border-radius:50%%;background:var(--nbread);
+      box-shadow:0 0 0 3px var(--nbread-soft),0 0 8px var(--nbglow,rgba(13,99,224,.45));}
+  html body:has(#nbpanel-root.nbread-drag) .nbreadfix,
+  html body:has(#nbpanel-root .nbgrip:is(:hover,.nbdragging)) .nbreadfix,
+  html body:has(#nbpanel-root .nbmap-cursor:is(:hover,.nbdragging)) .nbreadfix{
+      border-top:1.5px solid var(--nbread);}
+  body.nbskin-retro .nbreadfix::after{border-radius:0;}
+  html body.nbdark #nbpanel-root#nbpanel-root#nbpanel-root.vert .nbgrip::before{mix-blend-mode:screen;}
+
+  /* ======================================================================
+     2026-09-30 — EILAUFTRAG E11.9 (Oberfläche). DIE GESTRICHELTE
+     LESEHÖHEN-LINIE IST WEG. Sie lief in zwei Stücken: als Haarlinie vom
+     Knopf quer durchs Panel (.nbgrip::before, E9.1) und im Dokument als
+     Fixpunkt-Linie (.nbreadfix, border-top). Beide Linien gehen, in Ruhe
+     wie beim Berühren und Ziehen; die Lesehöhe zeigen weiter Knopf,
+     Marker und Scrollbar-Daumen, und der Punkt am Panelrand des Fixpunkts
+     (.nbreadfix::after) bleibt. `.nbreadfix` selbst bleibt im DOM — JS
+     misst daran die Lesehöhe. */
+  html body #nbpanel-root#nbpanel-root#nbpanel-root.vert .nbgrip::before,
+  html body #nbpanel-root#nbpanel-root#nbpanel-root.vert:is(.nbread-drag,
+      :has(.nbgrip:is(:hover,.nbdragging)),:has(.nbmap-cursor:is(:hover,.nbdragging))) .nbgrip::before{
+      border-top:0!important;}
+  html body .nbreadfix,
+  html body:has(#nbpanel-root.nbread-drag) .nbreadfix,
+  html body:has(#nbpanel-root .nbgrip:is(:hover,.nbdragging)) .nbreadfix,
+  html body:has(#nbpanel-root .nbmap-cursor:is(:hover,.nbdragging)) .nbreadfix{
+      border-top:0!important;}
+
+  /* ======================================================================
+     2026-10-02 — EILAUFTRAG E15.1 (Oberfläche). JEDES ZEICHEN SITZT AUF DER
+     MITTE SEINER FORM — gemessen an der Tinte, nicht an der Box
+     (tests/lab_ink.py: Pixel mit/ohne Zeichen, gegen die Mitte der Form).
+     v1.49, cyber dunkel, Lupe 100 %%: ✓ im Coding-Quadrat 2,5 px links und
+     2,5 px tiefer, ✓ der Aufgabe bis 1,8 px, ⤼ 0,8–1,0 px, das offene Schloss
+     1,2–1,8 px rechts — je Schrift anders, denn ein getipptes Zeichen hat eine
+     schiefe Tintenbox in einer Zeilenbox, die oben an der Form hing.
+     Jetzt, für jedes Zeichen in Aufgaben- und Coding-Marke:
+       * die Box des Zeichens steht MITTEN in der Form (absolut, 50 %% / 50 %%,
+         translate −50 %%); sie dreht um die eigene Mitte, bleibt also in jedem
+         Drehwinkel mittig — beim Hovern, Auswählen und mitten im Drehen;
+       * ✓ ✗ ⤼ sind Masken in currentColor, deren Tinte in der Mitte der
+         viewBox liegt (✓ ✗ neu gezeichnet, ⤼ verschoben); der Text bleibt im
+         DOM (Vorleser, Kopieren). 68 %% der Form: ein waagerechtes Quadrat
+         passt bis 70,7 %% in die Raute (lab_marks „inside“);
+       * das offene Schloss (aktuelle Aufgabe) hat den Bügel nach rechts oben
+         geschwenkt; Bügel und Körper rücken um die halbe Schwenkweite zurück
+         (−3,35 %% · +3,78 %% der Schlossbox), seine Tinte ist dann mittig;
+       * der Rand des Zeichens ist ein gleichmäßiger Schatten (der alte
+         Textschatten lag 1 px tiefer und zog die Tinte mit). */
+  html body #nbpanel-root#nbpanel-root.vert .nbmap-node :is(.nbrail-dot,.nbcodemark) .nbdotg{
+      position:absolute!important;left:50%%!important;top:50%%!important;margin:0!important;
+      translate:-50%% -50%%;}
+  html body #nbpanel-root#nbpanel-root.vert .nbmap-node:not(.is-current) :is(.st-ans,.st-both,.cd-done,.st-fail,.cd-fail,.st-skip,.cd-skip) .nbdotg{
+      width:68%%!important;height:68%%!important;font-size:0!important;line-height:0!important;
+      text-shadow:none!important;-webkit-text-stroke:0!important;filter:drop-shadow(0 0 1px rgba(0,0,0,.5));}
+  html body #nbpanel-root#nbpanel-root.vert .nbmap-node:not(.is-current) :is(.st-ans,.st-both,.cd-done,.st-fail,.cd-fail,.st-skip,.cd-skip) .nbdotg::before{
+      content:'';position:absolute;inset:0;background:currentColor;
+      -webkit-mask:var(--nbsg) center/contain no-repeat;mask:var(--nbsg) center/contain no-repeat;}
+  #nbpanel-root.vert :is(.st-ans,.st-both,.cd-done){--nbsg:url("data:image/svg+xml,%%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='3 3 18 18'%%3E%%3Cpath d='M5 12.5 10 17.5 19 6.5' fill='none' stroke='black' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'/%%3E%%3C/svg%%3E");}
+  #nbpanel-root.vert :is(.st-fail,.cd-fail){--nbsg:url("data:image/svg+xml,%%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='3.5 3.5 17 17'%%3E%%3Cpath d='M6 6 18 18M18 6 6 18' fill='none' stroke='black' stroke-width='3.2' stroke-linecap='round'/%%3E%%3C/svg%%3E");}
+  #nbpanel-root.vert :is(.st-skip,.cd-skip){--nbsg:var(--nbskip-sign);}
+  html body #nbpanel-root#nbpanel-root.vert :is(.nbmap-node.is-current .nbrail-dot,.nbcodemark.cd-current) .nbdotg::before{translate:-6.2%% 7%%;}
+  html body #nbpanel-root#nbpanel-root.vert :is(.nbmap-node.is-current .nbrail-dot,.nbcodemark.cd-current) .nbdotg::after{translate:-3.35%% 7%%;}
+  /* hell: der ✗ stand bisher als transparente Schrift nur über Kontur und
+     Schatten (v1.51 gemessen: color rgba(0,0,0,0)); als Maske braucht er
+     Farbe — die helle Tönung des Aufgeben-Rots auf der grauen Fläche (≈ 7 : 1) */
+  html body:not(.nbdark) #nbpanel-root#nbpanel-root.vert .nbmap-node :is(.st-fail,.cd-fail) .nbdotg{color:#fbe0dd!important;}
+  /* E15.1-Rest (2026-10-02): unter dem Zeiger und ausgewählt füllt sich die
+     Coding-Marke (hell) mit --nbpick und ihre Schrift wird --nbrail-bg
+     (04-timeline); nur das OFFENE Schloss behielt seine Routenfarbe (#7a37e6
+     auf #c2399a ≈ 1,3 : 1) und war unsichtbar — lab_ink fand bei Lupe 60 %%
+     nur Pixelreste (3,5 × 2,5 px, „1,1 px daneben“). Jetzt trägt es die
+     Farbe der Marke wie ✓ ✗ ⤼. Die aktuelle Aufgabe bleibt beim Hovern
+     hell (nicht gefüllt) und behält ihr Grün; dunkel gilt 09. */
+  #nbpanel-root .nbmap-node:is(:hover,.nbsel) .cd-current .nbdotg{color:inherit!important;}
+  /* …und es war zu klein, um zu stimmen: die Coding-Marke ist ein Ring mit
+     kleinem Loch; 46 %% davon sind bei Lupe 60 %% 1,36 px. Der Bügel ist aber
+     mindestens 2 Randbreiten (2 px) breit, nicht 54 %% — sein Schwenk (55 %%
+     der eigenen Breite) und die Rücknahme (bemessen für 54 %%) gingen nicht
+     mehr auf: Tinte +1,0 px rechts. Ab 4 px Kante gilt 54 %% ≥ 2 px wieder;
+     so groß ist auch das Schloss der Aufgabe bei 60 %% (4,1 px). */
+  #nbpanel-root .cd-current .nbdotg{min-width:4px;min-height:4px;}
+
+  /* ======================================================================
+     2026-10-02 — EILAUFTRAG E18.7 (Oberfläche; gehört zu E16.3). DER
+     MARKER IST EIN SCHMALER WAAGERECHTER STRICH AUF DER XP-LEISTE, kein
+     Oval: Höhe 3 px × Lupe, so breit wie die Leiste (8 px × Lupe, wie
+     `.nbmap-inner::before`), Mitte = Mitte des Markers = Lesehöhe. Farbe
+     wie bisher (--nbmark, hell in Leseton --nbmark-ink), ohne Ring und
+     Glanz; dahinter der Leuchtkreis (E16.3). Die Box `.nbmap-here` bleibt
+     (Griff zum Ziehen), nur ihr Kopf `::before` ist der Strich. */
+  html body #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-here::before{
+      left:50%%!important;top:50%%!important;bottom:auto!important;box-sizing:border-box!important;
+      width:calc(8px * var(--nbkz,1))!important;height:calc(3px * var(--nbkz,1))!important;
+      margin:calc(-1.5px * var(--nbkz,1)) 0 0 calc(-4px * var(--nbkz,1))!important;
+      border:0!important;border-radius:calc(1px * var(--nbkz,1))!important;
+      background:var(--nbmark,#0d63e0)!important;box-shadow:none!important;
+      -webkit-mask-image:none!important;mask-image:none!important;}
+  html body:not(.nbdark) #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-here::before{
+      background:var(--nbmark-ink,var(--nbmark,#0d63e0))!important;}
+
+  /* ======================================================================
+     2026-10-02 — EILAUFTRAG E21.9 (Oberfläche). MARKER UND LEUCHTEN IM
+     HELLEN MODUS GUT SICHTBAR. Gemessen v1.61 (= v1.60), hell: der Strich
+     liegt auf der dunklen XP-Leiste und hob sich kaum ab (Strich ↔ Leiste
+     1,42 minimal · 1,96 cyber · 1,48 retro; retro ↔ Panel 2,98), das
+     Leuchten blass (ΔE 15–22 neben der Leiste). Jetzt, nur hell:
+       * je eine helle Kante über und unter dem Strich (Schatten 2 px ×
+         Lupe, keine Höhe dazu: E18.7 gilt), Kante ↔ Leiste ≥ 3 : 1,
+         Strich ↔ Kante ≥ 3 : 1; fairy (helle Leiste) braucht sie nicht,
+         dort steht der Strich direkt ≥ 3 : 1;
+       * retro: Strich dunkler (#6e2c00), ≥ 3 : 1 auch auf dem dunkelsten
+         Leinenstreifen;
+       * Leuchten in Leseton (--nbmark-ink) statt Markenfarbe, dichter
+         (70 %%, Deckkraft 1, Unschärfe 5 px × Lupe); Form und Lage aus
+         E16.3 unverändert (rund, mittig, z −1). */
+  html body:not(.nbdark) #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-here::before{
+      box-shadow:0 calc(-2px * var(--nbkz,1)) 0 var(--nbm-edge,#fff),
+                 0 calc(2px * var(--nbkz,1)) 0 var(--nbm-edge,#fff)!important;}
+  html body.nbskin-fairy:not(.nbdark) #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-here::before{box-shadow:none!important;}
+  html body.nbskin-retro:not(.nbdark) #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-here::before{background:#6e2c00!important;}
+  html body:not(.nbdark) #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-here::after{
+      background:color-mix(in srgb,var(--nbmark-ink,var(--nbmark,#0d63e0)) 70%%,transparent)!important;
+      filter:blur(calc(5px * var(--nbkz,1)))!important;opacity:1!important;}
+
+  /* 2026-10-02 E19.9 (Oberfläche) — OPTISCH AUFWERTEN. Je Stil ein eigenes
+     SVG-Zierelement unter dem Lehrtext jedes Kapitels (minimal: Linie mit
+     Raute · cyber: Leiterbahn mit Knoten · retro: Doppellinie mit Blatt ·
+     fairy: Ranke mit Stern), als Maske in der Stilfarbe, blendet sanft ein
+     (nur opacity, E18.6). Kapitelköpfe heben sich unter dem Zeiger um 1 px
+     mit weichem Schatten (transform, schon in der Übergangsliste). Keine
+     Fläche hinter dem Text: Lesbarkeit (E19.7) bleibt unberührt. */
+  body.nb-dc-active{--nborn:#9aaabb;--nborn-m:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 24'><path d='M30 12H108M132 12H210' stroke='black' stroke-width='1.2'/><path d='M120 5l7 7-7 7-7-7z'/><circle cx='30' cy='12' r='1.8'/><circle cx='210' cy='12' r='1.8'/></svg>");}
+  body.nb-dc-active.nbdark{--nborn:#5d6f82;}
+  body.nb-dc-active.nbskin-cyber{--nborn:#7c5cd6;--nborn-m:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 24'><path d='M14 12H84l8-7h56l8 7h70M100 19h40' fill='none' stroke='black' stroke-width='1.5'/><circle cx='14' cy='12' r='3'/><circle cx='226' cy='12' r='3'/><rect x='116' y='9' width='8' height='6'/></svg>");}
+  body.nb-dc-active.nbskin-cyber.nbdark{--nborn:#00e5ff;}
+  body.nb-dc-active.nbskin-retro{--nborn:#a8703a;--nborn-m:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 24'><path d='M24 10H102M24 14H102M138 10H216M138 14H216' stroke='black' stroke-width='1'/><path d='M120 3c7 5 7 13 0 18c-7-5-7-13 0-18z'/><circle cx='108' cy='12' r='2'/><circle cx='132' cy='12' r='2'/></svg>");}
+  body.nb-dc-active.nbskin-retro.nbdark{--nborn:#c98a4b;}
+  body.nb-dc-active.nbskin-fairy{--nborn:#c85aaa;--nborn-m:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 24'><path d='M22 12c12-9 24 9 36 0s24 9 36 0M146 12c12-9 24 9 36 0s24 9 36 0' fill='none' stroke='black' stroke-width='1.4'/><path d='M120 3l2.6 6.4 6.9.5-5.3 4.4 1.7 6.7-5.9-3.7-5.9 3.7 1.7-6.7-5.3-4.4 6.9-.5z'/><circle cx='104' cy='12' r='1.6'/><circle cx='136' cy='12' r='1.6'/></svg>");}
+  body.nb-dc-active.nbskin-fairy.nbdark{--nborn:#e6a0ff;}
+  body.nb-dc-active.nbskin-digi{--nborn:#d9a21c;}
+  body.nb-dc-active.nbskin-digi.nbdark{--nborn:#ffd36b;}
+  html body .jp-Notebook .nbbox.nbbox-concept::after{content:'';display:block;height:20px;max-width:260px;
+      margin:16px auto 0;background:var(--nborn);-webkit-mask:var(--nborn-m) center/contain no-repeat;
+      mask:var(--nborn-m) center/contain no-repeat;animation:nborn-in .6s ease both;}
+  @keyframes nborn-in{from{opacity:0}to{opacity:.85}}
+  html body .jp-Notebook .nbbox.nbbox-concept::after{opacity:.85;}
+  @media (prefers-reduced-motion:reduce){html body .jp-Notebook .nbbox.nbbox-concept::after{animation:none;}}
+  html body [data-digichem] .jupyter-widget-Collapse-header.jupyter-widget-Collapse-header:hover{transform:translateY(-1px)!important;}
+  html body:not(.nbskin-retro) [data-digichem] .jupyter-widget-Collapse-header.jupyter-widget-Collapse-header:hover{
+      box-shadow:0 6px 16px -8px color-mix(in srgb,var(--nborn) 70%%,transparent)!important;}
+
+  /* ======================================================================
+     2026-10-02 — EILAUFTRAG E17.1 (Oberfläche; Wahl/Schalter JS, Texte
+     Python). DIE SPRACHE (English/Deutsch). Vertrag an JS:
+       .nblang[role=radiogroup]          das Feld
+         .nblang-t                       Name („Language · Sprache“), optional
+         button.nblang-opt[data-lang="en|de"][aria-checked]   eine Wahl
+           .nblang-ic (optional: „EN“/„DE“) + Name
+     Auf dem Cover steht es direkt unter den Modus-Karten (im Feld .nbmode
+     oder als Geschwister danach): eine Zeile, mittig, Name links, zwei
+     Pillen — so ruhig, dass die Modus-Karten die Hauptwahl bleiben, und in
+     derselben Farbe wie sie (gewählt = Rand + Tönung --nbcov-acc). Im
+     👤-Fenster (.nbset-row, E17.2) wird es dort zur Segment-Leiste. Keine
+     Flaggen: eine Sprache ist kein Land. */
+  html body .nblang{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;
+      gap:8px 10px;margin:10px auto 0;text-align:center;font-family:inherit;}
+  html body .nbtitle:has(>.nbcover) .nblang{max-width:640px;margin:-8px auto 20px;}
+  html body .nbmode .nblang{margin:12px auto 0;}
+  html body .nblang .nblang-t{font-size:.72em;font-weight:800;letter-spacing:2px;text-transform:uppercase;
+      color:var(--nbcov-ink,#55636f)!important;margin-right:2px;}
+  html body .nblang button.nblang-opt{all:unset;box-sizing:border-box;cursor:pointer;
+      display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 14px;border-radius:999px;
+      font-size:13px;font-weight:700;font-family:inherit;
+      color:var(--nbskin-ink,#1f2933)!important;background:var(--nbcov-face,#fff)!important;
+      border:1.5px solid color-mix(in srgb,var(--nbcov-ink,#55636f) 35%%,transparent)!important;
+      transition:transform .16s ease;}
+  html body .nblang button.nblang-opt .nblang-ic{font-size:10.5px;font-weight:900;letter-spacing:.06em;
+      padding:1px 5px;border-radius:5px;border:1px solid currentColor;opacity:.8;}
+  html body .nblang button.nblang-opt:hover{transform:translateY(-1px);border-color:var(--nbcov-acc,#3fa877)!important;}
+  html body .nblang button.nblang-opt:focus-visible{outline:2px solid var(--nbring,#0d63e0);outline-offset:2px;}
+  html body .nblang button.nblang-opt:is([aria-checked="true"],.on){
+      border-color:var(--nbcov-acc,#3fa877)!important;
+      background:color-mix(in srgb,var(--nbcov-acc,#3fa877) 12%%,var(--nbcov-face,#fff))!important;
+      box-shadow:0 0 0 3px color-mix(in srgb,var(--nbcov-acc,#3fa877) 22%%,transparent)!important;}
+  html body .nblang button.nblang-opt:is([aria-checked="true"],.on)::after{content:"✓";
+      font-size:11px;font-weight:900;color:var(--nbskin-ink,#1f2933);}
+  html body .nbtitle:has(>.nbcover) .nblang{--nbskin-ink:#1f2933;--nbskin-font:var(--jp-content-font-family);}
+  html body.nbdark .nbtitle:has(>.nbcover) .nblang,
+  html body[data-jp-theme-light="false"] .nbtitle:has(>.nbcover) .nblang{--nbskin-ink:#dbe2e9;}
+  @media (prefers-reduced-motion:reduce){ html body .nblang button.nblang-opt{transition:none!important;} }
+
+  /* ======================================================================
+     2026-10-04 — EILAUFTRAG E22.6 (Oberfläche; Gleichlauf JS). KEINE
+     LAGE-TRANSITION BEIM ZIEHEN UND SCROLLEN. Was im Panel der Lage des
+     Dokuments folgt (Marker, Daumen, Griff, Fixpunkt, Leiste, Werkzeug-
+     leiste, Kartenfläche), bekommt seine Lage im selben Bild wie das
+     Dokument: `transform`/`translate`/`scale`/`rotate` laufen hier nie
+     über einen Übergang (E18.6 erlaubte sie allen Elementen; gemessen
+     v1.62: .nbmap-here 0,2 s, .nbgrip und .nbreadfix 0,15 s). Was bleibt:
+     opacity (Ein-/Ausblenden) und am Marker die Spur (--nbm-lag, E21.8).
+     Die Zeichen IN den Marken und der Pfeil im Griff (Pseudo-Elemente)
+     drehen und wachsen weiter wie bisher. Acht IDs: schlägt E21.8 (sieben). */
+  html body:not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz) :is(#nbpanel-root,#nbpanel-root .nbrail,#nbpanel-root .nbdock,
+      #nbpanel-root .nbmap,#nbpanel-root .nbmap-inner,#nbpanel-root .nbmap-cursor,#nbpanel-root .nbgrip,
+      #nbpanel-root .nbsb,.nbreadfix){
+      transition-property:opacity!important;}
+  html body:not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz) #nbpanel-root .nbmap-here{
+      transition-property:opacity,--nbm-lag!important;transition-duration:.2s,.45s!important;
+      transition-timing-function:ease,cubic-bezier(.25,.5,.4,1)!important;}
+
+  /* ======================================================================
+     2026-10-06 — EILAUFTRAG E23.9 (Oberfläche; Feld und Bindung JS, Kernel
+     Python). DAS NAMENSFELD DES KONTOS. Vertrag für JS: der frei gewählte
+     Benutzername ist `input.nbacct-name` (type text, autocomplete
+     username) in `.nbacct-form` bzw. `.nbacct-row` — auf dem Cover und im
+     👤-Fenster. Er sieht aus wie das Feld „Profil-Code“ daneben (Höhe 36 px,
+     Rand 1,5 px, Radius 10 px, Fläche, Fokus- und Fehlerring), nur in der
+     Textschrift statt in der Code-Schrift, weil ein Name kein Code ist;
+     auf dem Cover teilt er sich die Reihe wie Code und Passwort (≥ 150 px).
+     Eine ID mehr als die Schubladen-Regeln (wie 13-stats E17.2). */
+  html body .nbacct:not(#nbz) input.nbacct-name{
+      all:unset;box-sizing:border-box!important;flex:1 1 180px;min-width:0;width:100%%!important;
+      height:36px!important;padding:0 12px!important;margin:0!important;
+      border:1.5px solid color-mix(in srgb,var(--nbacct-ink) 32%%,var(--nbacct-face))!important;
+      border-radius:10px!important;background:var(--nbacct-face)!important;
+      color:var(--nbacct-ink)!important;-webkit-text-fill-color:var(--nbacct-ink);
+      font-family:var(--nbskin-font,var(--jp-content-font-family,inherit))!important;font-size:14px!important;
+      line-height:34px!important;letter-spacing:.01em;text-align:left!important;}
+  html body .nbacct:not(#nbz) input.nbacct-name::placeholder{
+      color:var(--nbacct-quiet);-webkit-text-fill-color:var(--nbacct-quiet);opacity:1;}
+  html body .nbacct:not(#nbz) input.nbacct-name:focus{
+      border-color:var(--nbacct-acc)!important;
+      box-shadow:0 0 0 3px color-mix(in srgb,var(--nbacct-acc) 25%%,transparent)!important;}
+  html body .nbacct:not(#nbz) input.nbacct-name[aria-invalid="true"]{
+      border-color:var(--nbacct-red)!important;
+      box-shadow:0 0 0 3px color-mix(in srgb,var(--nbacct-red) 22%%,transparent)!important;}
+  html body .nbtitle:has(>.nbcover) .nbacct:not(#nbz) :is(.nbacct-form,.nbacct-row) input.nbacct-name{flex:1 1 150px;}
+
+  /* ======================================================================
+     2026-10-08 — EILAUFTRAG E25.k (Oberfläche; Markup und Reihenfolge
+     Python py-E25.k, Verhalten JS). DIE VORSCHAU, AUFGERÄUMT. Aussehen der
+     neuen Teile (gilt nur im Cover `.nbcover-out`; Werte, die Python inline
+     schreibt, stehen hier mit !important — Python kann sie streichen, C24.3):
+       * Sprache klein rechts oben in der Titelkarte (`.nbcover-lang-slot`,
+         JS setzt `.nblang` hinein): ein Umschalter „EN | DE“ — Name aus,
+         Knopftext = data-lang in Großbuchstaben, gewählt fett in der
+         Akzentfarbe, der andere gedämpft, dazwischen ein Strich.
+       * Faltzeilen „What you will learn ▸“ (`details.nbcover-learn`) und
+         „Sign in ▸“ (`details.nbacct-fold`): eine ruhige Zeile, mittig,
+         Kapitälchen, ▸ dreht beim Öffnen auf ▾ (0,15 s, ohne bei
+         reduzierter Bewegung), Zeiger: Hand, Hover: Akzent. Schrift
+         ≥ 11 px, Kontrast ≥ 4,5 : 1 (--nbcov-ink; Pythons #8b98a5 hatte
+         2,9 : 1 auf Weiß).
+       * Reihe (`.nbcover-series`): eine Leiste — Kopfzeile in Kapitälchen,
+         darunter die Notebooks als Pillen in einer Reihe, verbunden durch
+         eine feine Linie (vorher · dieses · nachher); dieses Notebook mit
+         Akzent-Rand und fett. Fortschritt je Notebook (JS, E25.k): Haken
+         für JS = `--nbser-p` (0…1) an `.nbser-it` → Balken unten in der
+         Pille; `.nbser-it[data-href]` bzw. `a.nbser-it` = Zeiger Hand. */
+  html body .nbcover-out .nbtitle-card{position:relative;}
+  html body .nbcover-out .nbcover-lang-slot{position:absolute;top:10px;right:12px;margin:0;z-index:1;}
+  html body .nbcover-out .nbcover-lang-slot:empty{display:none;}
+  html body .nbcover-out .nbcover-lang-slot .nblang{display:flex!important;gap:0!important;margin:0!important;
+      max-width:none!important;flex-wrap:nowrap!important;}
+  html body .nbcover-out .nbcover-lang-slot .nblang .nblang-t{display:none!important;}
+  html body .nbcover-out .nbcover-lang-slot .nblang button.nblang-opt{all:unset;box-sizing:border-box;cursor:pointer;
+      display:inline-flex!important;align-items:center;height:22px!important;padding:0 7px!important;
+      border:0!important;border-radius:0!important;box-shadow:none!important;background:transparent!important;
+      font-size:0!important;color:var(--nbcov-ink,#55636f)!important;transform:none!important;}
+  html body .nbcover-out .nbcover-lang-slot .nblang button.nblang-opt + button.nblang-opt{
+      border-left:1px solid color-mix(in srgb,var(--nbcov-ink,#55636f) 45%%,transparent)!important;}
+  html body .nbcover-out .nbcover-lang-slot .nblang button.nblang-opt::before{content:attr(data-lang);
+      font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;}
+  html body .nbcover-out .nbcover-lang-slot .nblang button.nblang-opt::after{content:none!important;}
+  html body .nbcover-out .nbcover-lang-slot .nblang button.nblang-opt .nblang-ic{display:none!important;}
+  html body .nbcover-out .nbcover-lang-slot .nblang button.nblang-opt:is([aria-checked="true"],.on){
+      color:var(--nbskin-ink,#1f2933)!important;}
+  html body .nbcover-out .nbcover-lang-slot .nblang button.nblang-opt:is([aria-checked="true"],.on)::before{
+      font-weight:900;text-decoration:underline 2px var(--nbcov-acc,#3fa877);text-underline-offset:4px;}
+  html body .nbcover-out .nbcover-lang-slot .nblang button.nblang-opt:hover{color:var(--nbcov-acc,#3fa877)!important;}
+  html body .nbcover-out .nbcover-lang-slot .nblang button.nblang-opt:focus-visible{outline:2px solid var(--nbring,#0d63e0);outline-offset:1px;}
+  html body.nbdark .nbcover-out .nbcover-lang-slot .nblang button.nblang-opt:is([aria-checked="true"],.on),
+  html body[data-jp-theme-light="false"] .nbcover-out .nbcover-lang-slot .nblang button.nblang-opt:is([aria-checked="true"],.on){
+      color:#e8eef3!important;}
+  /* die Faltzeilen */
+  html body .nbcover-out :is(details.nbcover-learn,details.nbacct-fold){max-width:640px!important;margin:14px auto 0!important;}
+  html body .nbcover-out details.nbacct-fold{margin-top:22px!important;text-align:center!important;}
+  html body .nbcover-out :is(.nbcover-learn-h,.nbacct-fold-h){display:block;list-style:none;cursor:pointer!important;
+      text-align:center!important;font-size:11.5px!important;font-weight:800!important;letter-spacing:2px!important;
+      text-transform:uppercase!important;color:var(--nbcov-ink,#55636f)!important;padding:4px 0;
+      transition:color .15s ease;user-select:none;}
+  html body .nbcover-out :is(.nbcover-learn-h,.nbacct-fold-h)::-webkit-details-marker{display:none;}
+  html body .nbcover-out :is(.nbcover-learn-h,.nbacct-fold-h)::marker{content:'';}
+  html body .nbcover-out :is(.nbcover-learn-h,.nbacct-fold-h)::after{content:'▸';display:inline-block;
+      margin-left:.5em;letter-spacing:0;transition:transform .15s ease;}
+  html body .nbcover-out details[open] > :is(.nbcover-learn-h,.nbacct-fold-h)::after{transform:rotate(90deg);}
+  html body .nbcover-out :is(.nbcover-learn-h,.nbacct-fold-h):hover{color:var(--nbcov-acc,#3fa877)!important;}
+  html body .nbcover-out :is(.nbcover-learn-h,.nbacct-fold-h):focus-visible{outline:2px solid var(--nbring,#0d63e0);outline-offset:2px;border-radius:4px;}
+  /* die Reihe */
+  html body .nbcover-out .nbcover-series{max-width:640px!important;margin:22px auto 0!important;text-align:center!important;
+      font-size:13px!important;color:var(--nbcov-ink,#55636f)!important;}
+  html body .nbcover-out .nbcover-series-h{font-size:11.5px!important;font-weight:800!important;letter-spacing:2px!important;
+      text-transform:uppercase!important;margin-bottom:10px!important;}
+  html body .nbcover-out .nbser-list{list-style:none!important;margin:0!important;padding:0!important;position:relative;
+      display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px 22px;}
+  html body .nbcover-out .nbser-it{position:relative;display:inline-flex!important;align-items:center;margin:0!important;
+      padding:4px 12px 6px;border-radius:999px;border:1.5px solid color-mix(in srgb,var(--nbcov-ink,#55636f) 40%%,transparent);
+      background:var(--nbcov-face,#fff);color:var(--nbcov-ink,#55636f);opacity:1!important;font-weight:600!important;
+      background-image:linear-gradient(var(--nbcov-acc,#3fa877),var(--nbcov-acc,#3fa877));
+      background-repeat:no-repeat;background-position:left bottom;
+      background-size:calc(var(--nbser-p,0) * 100%%) 3px;}
+  html body .nbcover-out .nbser-it + .nbser-it::before{content:'';position:absolute;right:100%%;top:50%%;width:22px;
+      border-top:1.5px solid color-mix(in srgb,var(--nbcov-ink,#55636f) 40%%,transparent);}
+  html body .nbcover-out .nbser-it.nbser-me{border-color:var(--nbcov-acc,#3fa877);font-weight:800!important;
+      color:var(--nbskin-ink,#1f2933);box-shadow:0 0 0 3px color-mix(in srgb,var(--nbcov-acc,#3fa877) 18%%,transparent);}
+  html body.nbdark .nbcover-out .nbser-it.nbser-me,
+  html body[data-jp-theme-light="false"] .nbcover-out .nbser-it.nbser-me{color:#e8eef3;}
+  html body .nbcover-out .nbser-here{opacity:1!important;font-weight:400!important;margin-left:.35em;}
+  html body .nbcover-out :is(a.nbser-it,.nbser-it[data-href]){cursor:pointer;text-decoration:none;}
+  html body .nbcover-out :is(a.nbser-it,.nbser-it[data-href]):hover{border-color:var(--nbcov-acc,#3fa877);}
+  @media (prefers-reduced-motion:reduce){
+      html body .nbcover-out :is(.nbcover-learn-h,.nbacct-fold-h)::after{transition:none;}}
+
+  /* ======================================================================
+     2026-10-12 — EILAUFTRAG E29 (CSS; Rückmeldung Nutzer zu v1.75, Lab).
+     Gemessen an der Vorlage v1.75 (JupyterLab 4.6, Chromium, 1400 × 900).
+     P2  „You will be able to“ / „Chapters“ (Faltblock „What you will learn“):
+         die Köpfe standen mittig, die Blöcke nicht — die Ziele-Liste 640 px
+         breit mit Text ab links (Tinte 380…600 px bei Achse 700), die
+         Kapitel in zwei Spalten ab links. Jetzt ist jeder Block so breit wie
+         sein Inhalt (fit-content, höchstens die Spalte) und steht auf der
+         Hauptachse; die Kapitel einspaltig (zwei Spalten sind keine Mitte).
+     P3  Die Hover-Info der Cover-Timeline (`.nbtl-desc`, letztes Kind von
+         `.nbcover-tl`) stand im Fluss: Hover schob alles darunter 46 px
+         nach unten. Jetzt hat sie einen festen Platz unter der Timeline
+         (--nbtl-slot, immer reserviert, solange die Timeline offen ist) und
+         liegt darin absolut — darunter verschiebt sich nichts (0 px); ein
+         langer Text ragt über den Platz hinaus, statt zu schieben.
+     P4  Kopf der Infobox (Symbolname, `b`) allein und mittig in Zeile 1,
+         der Text (`span`) darunter, ebenfalls mittig.
+     P5  Feedback (Vertrag claude/VERTRAG-E29-py.md): kein Knopf, kein
+         Formular — ein kleiner Text. Vorschau: `div.nbfb.nbfb-note` >
+         `.nbfb-text` (Adresse `.nbfb-to`); ebenso das alte, von JS gesetzte
+         `a.nbfb-cover.nbfb-link`, bis JS es nicht mehr setzt = eine ruhige
+         Zeile 12 px, so breit wie ihr Text, auf der Achse, ohne Rand und
+         Fläche; Adresse fett und ganz markierbar. ⚙: `.nbcell.pg-fb.nbfb`
+         mit `.nbcell-h` + `.nbfb-text`, ebenso klein (alles 12 px).
+         Gemessen v1.75: der Vorschau-Link war eine 940 px breite Pille. */
+  html body .nbcover-out :is(.nbtitle-goals,.nbtitle-chaps){width:fit-content!important;max-width:100%%!important;
+      margin-left:auto!important;margin-right:auto!important;box-sizing:border-box!important;text-align:left!important;}
+  html body .nbcover-out .nbtitle-goals{padding-left:1.3em!important;padding-right:0!important;}
+  html body .nbcover-out .nbtitle-chaps{columns:auto!important;column-count:1!important;padding:0!important;}
+  html body .nbcover-out :is(.nbtitle-facts-h,.nbtitle-time){text-align:center!important;}
+  html body .nbcover-out .nbcover-tl{--nbtl-slot:62px;}
+  html body .nbcover-out .nbcover-tl[open]{position:relative!important;padding-bottom:var(--nbtl-slot)!important;}
+  html body .nbcover-out .nbcover-tl > .nbtl-desc{position:absolute!important;left:0;right:0;z-index:6;
+      top:calc(100%% - var(--nbtl-slot) + 6px)!important;margin:0!important;text-align:center!important;line-height:1.4;
+      box-shadow:0 4px 14px rgba(0,0,0,.10);}
+  html body .nbcover-out .nbcover-tl > .nbtl-desc > b{display:block;text-align:center;margin:0 0 2px;}
+  html body .nbcover-out .nbcover-tl > .nbtl-desc > span{display:block;text-align:center;}
+  html body .nbcover-out :is(.nbfb-note,.nbfb-cover):not(#nbz){all:unset;display:block!important;box-sizing:border-box;
+      width:fit-content!important;max-width:min(640px,100%%)!important;min-height:0!important;
+      margin:16px auto 0!important;padding:0 4px!important;border:0!important;border-radius:0!important;
+      background:none!important;box-shadow:none!important;transform:none!important;
+      font-family:inherit;font-size:12px!important;font-weight:400!important;line-height:1.45!important;
+      letter-spacing:0;text-align:center!important;text-decoration:none!important;
+      color:var(--nbcov-ink,#55636f)!important;cursor:auto!important;-webkit-user-select:text;user-select:text;}
+  html body .nbcover-out :is(.nbfb-note,.nbfb-cover):not(#nbz):hover{transform:none!important;}
+  html body :is(.nbcover-out,#nbpanel-root .nbdrawer) :is(.nbfb-to,.nbfb-addr){font-weight:700;white-space:nowrap;
+      -webkit-user-select:all;user-select:all;color:inherit;text-decoration:none;}
+  html body #nbpanel-root .nbdrawer .nbcell.pg-fb :is(a.nbfb-link,button.nbfb-btn){display:inline;min-height:0;padding:0;margin:0;
+      border:0;border-radius:0;background:none;font-size:12px;font-weight:700;color:inherit;cursor:text;transform:none;
+      -webkit-user-select:all;user-select:all;}
+  html body #nbpanel-root .nbdrawer .nbcell.pg-fb,html body #nbpanel-root .nbdrawer .nbcell.pg-fb *{font-size:12px!important;}
+  html body #nbpanel-root .nbdrawer .nbcell.pg-fb .nbcell-n{line-height:1.45;opacity:1;}
+
+  /* D5  Vollbild: JupyterLab gibt dem Viewport des Fensterlisten-Scrollers
+         je 10 px Innenrand; 05-document setzt ihn im Vollbild auf width:100%%
+         (content-box) → 20 px breiter als sein Behälter, alle Zellen (Titel,
+         Karten, eigene Zellen) standen 10 px rechts der Achse, der YOC-
+         Streifen (Fuß, außerhalb des Viewports) blieb — „YOC und Own cells
+         verrutschen“. Jetzt zählt der Innenrand mit: Viewport = Behälter.
+         Größe der Panel-Zeichen: gemessen gleich mit/ohne Vollbild
+         (1400 × 900 und 1920 × 1080, Panel zu und offen) — CSS ändert dort
+         nichts (JS prüft die Lage). */
+  body.nbfs :where([data-digichem],.nbrail-own) .jp-WindowedPanel-viewport{box-sizing:border-box!important;}
+  /* D6  Der YOC-Streifen („＋ Add your own coding cell“) wuchs mit der Lupe
+         nur in der Breite (Spalte × --nbzf), Schrift 15 px × --nbk und Höhe
+         44 px blieben — bei 60 %% größer als der Text, bei 200 %% halb so
+         groß. Jetzt Schrift, Höhe und Abstand × Lupe wie das Dokument
+         (eigene Zellen zoomt der Browser über ihre Hüllen schon richtig);
+         nichts doppelt: nicht zusätzlich × --nbk (die Panel-Größe). */
+  html body :is([data-digichem],.nbrail-own) .jp-Notebook-footer{
+      min-height:calc(44px * var(--nbzf,1))!important;margin-top:calc(14px * var(--nbzf,1))!important;}
+  html body :is([data-digichem],.nbrail-own) .jp-Notebook-footer::before{font-size:calc(15px * var(--nbzf,1))!important;}
+  /* D7  Schriftgröße als eigenes Widget (Vertrag mit JS, E29): JS setzt
+         `--nbfs` (Zahl, 0.9 … 1.5, Standard 1 = 100 %%) auf <html> (Lab)
+         bzw. auf `.nbrw` (Lesefenster), je Notebook gemerkt; unabhängig von
+         der Lupe (die zoomt die Hüllen, --nbfs nur die Schrift). Standard
+         jetzt eine Stufe größer (Nutzer: „bei 100 %% noch zu klein“):
+         Dokumentschrift 13 → 14,3 px (× 1,1), alle em-Größen darin
+         (Überschriften, Kästen, Formeln) wachsen mit. Vorschau, Panel und
+         eigene Zellen bleiben, wie sie sind. Widget im ⚙-Fenster
+         (py-E29: `.nbcell.pg-diff.nbfontcell` > `.nbfont-slot`, JS füllt
+         ihn): eine Zeile, Knöpfe `.nbbtn` wie die Lupe, Wert `output` bzw.
+         `.nbfs-val` in festen Ziffern. */
+  html body .jp-NotebookPanel[data-digichem] .jp-Cell .jp-OutputArea-output:not(:has(> .nbcover-out)){
+      --jp-widgets-font-size:calc(14.3px * var(--nbfs,1));--jp-content-font-size1:calc(15.4px * var(--nbfs,1));}
+  html body #nbpanel-root .nbdrawer .nbfont-slot{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:4px 0 2px;}
+  html body #nbpanel-root .nbdrawer .nbfont-slot :is(output,.nbfs-val){min-width:3.4em;text-align:center;font-size:12px;
+      font-weight:700;font-variant-numeric:tabular-nums;}
+  /* D8  Der mitlaufende Marker reingezoomt: rausgezoomt (60 %%) liest sich
+         das Leuchten (Halbmesser ≈ 10 px) als EIN runder Punkt auf dem
+         Strich; ganz reingezoomt (200 %%, Halbmesser 33 px, Strich 16 px)
+         ist dasselbe Leuchten ein weicher Fleck, durch den der dunkle Strich
+         läuft, darauf nur das „=“ — es zerfällt in Teile (gleiche Maße × Lupe,
+         nur das Auge liest groß den Verlauf). Jetzt hat das Leuchten bei
+         jeder Lupe einen deckenden runden Kern (0,42 × Halbmesser, breiter
+         als der Strich: eine Perle auf der Schnur), dann den weichen Rand
+         wie E25.q (durchscheinend, außen läuft der Strich sichtbar durch);
+         Spur, Größe, Lage und Rundung unverändert. */
+  html body:not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz#nbz#nbz) #nbpanel-root.vert .nbmap-here::after{
+      background:radial-gradient(circle closest-side,
+          var(--nbm-c,#0d63e0) 0,var(--nbm-c,#0d63e0) 40%%,
+          color-mix(in srgb,var(--nbm-c,#0d63e0) 66%%,transparent) 50%%,
+          color-mix(in srgb,var(--nbm-c,#0d63e0) 34%%,transparent) 75%%,
+          transparent 100%%)!important;}
+  html body:not(.nbdark):not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz#nbz#nbz) #nbpanel-root.vert .nbmap-here::after{
+      background:radial-gradient(circle closest-side,
+          var(--nbm-c,#0d63e0) 0,var(--nbm-c,#0d63e0) 40%%,
+          color-mix(in srgb,var(--nbm-c,#0d63e0) 72%%,transparent) 50%%,
+          color-mix(in srgb,var(--nbm-c,#0d63e0) 30%%,transparent) 75%%,
+          transparent 100%%)!important;}
+  /* D10 Plots ohne Hintergrund-Textur: die Abbildungen (SVG/PNG, `.nbplot`,
+         auch Bilder einer Ausgabe) sind durchsichtig, die Textur der Stile
+         (cyber-Gitter, retro-Korn, fairy-Staub) lief durch die Plotfläche.
+         Jetzt liegt unter jeder Abbildung die ruhige Seitenfarbe des Stils;
+         die Textur bleibt außerhalb. */
+  body:is(.nbskin-cyber,.nbskin-retro,.nbskin-fairy,.nbskin-digi) .nbrail-own .jp-WindowedPanel-outer
+      :is(svg.nbplot,img.nbplot,.jp-RenderedImage > img,.jp-RenderedSVG > svg){
+      background-color:var(--nbskin-page)!important;border-radius:4px;}
+
+  /* ======================================================================
+     2026-10-12 — RUNDE E30 (CSS; Nutzer, PyCharm-Bilder Complex v1.75), alle
+     Umgebungen. Gemessen an der Vorlage v1.76 (JupyterLab 4.6, 1366 × 760).
+     A2  Die Dreiecke der Akkordeons bleiben versteckt — überall: in Lab die
+         Pillen „Visualisation / Practice / Code“ (quiet-Stil: ::before als
+         Rand-Dreieck), in der Vorschau „▾ Timeline“ (Marker des <summary>,
+         links neben der Timeline), „What you will learn ▸“ und „Sign in ▸“
+         (::after). Der Kopf klappt weiter auf Klick (Zeiger, Hover bleiben);
+         im Lesefenster dasselbe in 15-reader.css. */
+  html body:not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz#nbz#nbz) :is(.acc-viz,.acc-practice,.acc-code)
+      :is(.jupyter-widget-Collapse-header,.p-Collapse-header,.lm-Collapse-header)::before{
+      content:none!important;display:none!important;}
+  html body:not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz#nbz#nbz) .nbcover-out summary{list-style:none!important;}
+  html body:not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz#nbz#nbz) .nbcover-out summary::-webkit-details-marker{display:none!important;}
+  html body:not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz#nbz#nbz) .nbcover-out summary::marker{content:''!important;}
+  html body:not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz#nbz#nbz) .nbcover-out summary::after{content:none!important;display:none!important;}
+  /* A1  Fazit als zusammenhängender Text wie in Publikationen (Baustein
+         `conclusion`, Markup claude/VERTRAG-E30-py.md: `.nbbox.nbconcl` >
+         div > `p.nbconcl-p` (Zusammenfassung, Einordnung `.nbconcl-ctx`),
+         `div.nbconcl-h` „Outlook“ + `p.nbconcl-p.nbconcl-out`): Satzspiegel
+         ~70 Zeichen (40 em + Innenrand) auf der Achse, Blocksatz mit
+         Silbentrennung (Sprache aus `lang`), Absätze ohne Leerzeile, ab dem
+         zweiten mit Einzug (Pythons Inline-Abstand .85em ist der Rückfall
+         ohne Stylesheet); der Kopf „Outlook“ klein, gesperrt, fett, der
+         Absatz danach ohne Einzug. */
+  html body:not(#nbz) .nbbox.nbconcl{box-sizing:border-box!important;width:min(94%%,calc(40em + 48px))!important;
+      max-width:none!important;min-width:0!important;margin-left:auto!important;margin-right:auto!important;}
+  html body:not(#nbz) .nbconcl .nbconcl-p{margin:0!important;text-align:justify!important;text-align-last:left;
+      -webkit-hyphens:auto;hyphens:auto;line-height:1.65!important;text-indent:0;}
+  html body:not(#nbz) .nbconcl .nbconcl-p + .nbconcl-p{text-indent:1.5em!important;}
+  html body:not(#nbz) .nbconcl .nbconcl-h{margin:1em 0 .3em!important;font-size:.78em!important;font-weight:800!important;
+      letter-spacing:.12em;text-transform:uppercase;text-align:left;line-height:1.4;}
+
+  /* ======================================================================
+     2026-10-12 abends — EILAUFTRAG E31 (CSS; Nutzer zu v1.77: PyCharm
+     Vorlage, Lite cyber). Vertrag JS: claude/VERTRAG-E31-js.md (--nbgs).
+     Lab-Teil: N1, V1, F1, G1. Standard (A 100 %%, GUI 100 %%) = Lab wie
+     v1.77 bis auf N1/V1 und die Schrift von „Skip for now“ (F1).
+     N1  Kein Verblassen oben/unten im Dokument: die Maske des Scrollers
+         (E8.20, 01-base) ist aus — der Text steht bis an die Kante voll da.
+         Die Zeitleiste behält ihren eigenen Saum (Panel, nicht Dokument). */
+  html body:not(#nbz) :is([data-digichem],.nbrail-own) .jp-WindowedPanel-outer{
+      -webkit-mask-image:none!important;mask-image:none!important;}
+  /* V1  Die senkrechte cyan Linie mitten durch den Text (Lab/Lite cyber,
+         groß gezoomt): gemessen (Vorlage v1.77, 1400 × 900, Lupe 200 %%) ist
+         es der Tastatur-Rahmen des Panels (03-panel C2, 26c: `.nbkbd .nbrail`
+         outline 2 px in der Markerfarbe — cyber #00e5ff). `.nbkbd` steht,
+         sobald der Fokus im Panel liegt, also auch nach einem Mausklick auf
+         den Lupen-Regler oder den Griff; das aufgezogene Panel reicht bis zur
+         Hauptachse (E23.11), seine linke Rahmenkante läuft dann senkrecht
+         durch die Mitte des Textes. Jetzt: der Rahmen nur bei echter
+         Tastatur (:focus-visible), und ohne linke Kante — oben, rechts,
+         unten als innere Linie. Dazu die 1-px-Randlinie des aufgezogenen
+         Panels (Fläche und Schatten tragen dort die Kante). */
+  html body #nbpanel-root#nbpanel-root#nbpanel-root.nbpanel-host.nbkbd .nbrail{outline:none!important;}
+  html body #nbpanel-root#nbpanel-root#nbpanel-root.nbpanel-host.nbkbd:is(:focus-visible,:has(:focus-visible)) .nbrail{
+      box-shadow:inset 0 2px 0 var(--nbmark-ink,var(--nbring,#0d63e0)),inset -2px 0 0 var(--nbmark-ink,var(--nbring,#0d63e0)),
+                 inset 0 -2px 0 var(--nbmark-ink,var(--nbring,#0d63e0)),0 6px 22px rgba(0,0,0,.28)!important;}
+  html body #nbpanel-root#nbpanel-root#nbpanel-root.vert:is([data-names="1"],.nbnames,.nbpanel-open) .nbrail{
+      border-left-color:transparent!important;}
+  /* F1  A± (--nbfs, E29 D7) skaliert ALLES im Dokument, im selben
+         Verhältnis wie die Grundschrift: gemessen v1.77 blieben fest
+         Knöpfe der Aufgaben (13 px, „Skip for now“ dagegen 14,3 × A —
+         daher riesig neben „Check“), Inline-Code (--jp-code-font-size),
+         das Code-Feld (Overlay 13 px), die Köpfe der Akkordeons (Titel,
+         Abschnitt, Kapitel, Falte: em einer festen 13-px-Kette) und die
+         Hover-Box. Jetzt trägt jede Widget-Ausgabe des Dokuments 13 px × A
+         als Grundgröße (alles in em darunter wächst mit), Code und Feld
+         13 px × A, „Skip“ wie seine Nachbarn; die Hover-Box × A. HTML-
+         Ausgaben (Titelkarte) behalten ihre Lab-Größe × A (15,4, D7);
+         Vorschau, Panel, Werkzeuge, ⚙ nicht (G1). Bei A 100 %% unverändert. */
+  html body .jp-NotebookPanel[data-digichem] .jp-Cell .jp-OutputArea-output:not(:has(> .nbcover-out)){
+      --jp-code-font-size:calc(13px * var(--nbfs,1));}
+  html body .jp-NotebookPanel[data-digichem] .jp-Cell .jp-OutputArea-output:not(.jp-RenderedHTMLCommon):not(:has(> .nbcover-out)){
+      font-size:calc(13px * var(--nbfs,1))!important;}
+  html body .jp-NotebookPanel[data-digichem] .jp-OutputArea button:is(.jupyter-button,.widget-button).nbskipnow{
+      font-size:1em!important;}
+  html body .jp-NotebookPanel[data-digichem] .jp-OutputArea .codearea :is(textarea,.nbedov-hl){
+      font-size:calc(13px * var(--nbfs,1))!important;}
+  html body:not(#nbz) .nbtip{font-size:calc(12px * var(--nbfs,1))!important;max-width:calc(260px * var(--nbfs,1))!important;}
+  html body .jp-NotebookPanel[data-digichem] .nbend button.nbend-mode .nbmode-ic{font-size:calc(20px * var(--nbfs,1));}
+  /* G1  GUI-Größe als eigenes Widget (JS: --nbgs 0,8 … 1,5 auf <html>,
+         #nbpanel-root, Panel; Marken/Panel über --nbk, das JS × --nbgs
+         setzt). Hier die Werkzeugspalte (Knöpfe, Lupe, Daumen der
+         Scrollleiste) und die Schublade ⚙/👤: Maße × --nbgs, Lage bleibt
+         bei JS. Die Schublade zoomt ihren Inhalt (Breite und Höhe der Box
+         setzt JS inline; der Inhalt bricht in ihr neu um). */
+  html body #nbpanel-root#nbpanel-root .nbcorner{font-size:calc(13px * var(--nbgs,1));}
+  html body #nbpanel-root#nbpanel-root .nbcorner > :is(.nbbtn,.nbzoomgrp,.nbprofile,.nbwid){
+      min-width:calc(34px * var(--nbgs,1))!important;height:calc(34px * var(--nbgs,1))!important;
+      padding:0 calc(8px * var(--nbgs,1));font-size:calc(15px * var(--nbgs,1));}
+  html body #nbpanel-root#nbpanel-root .nbcorner > .nbzoomgrp .nbbtn{height:calc(28px * var(--nbgs,1));}
+  html body #nbpanel-root#nbpanel-root#nbpanel-root .nbcorner > .nbzoomgrp.nbz-doc{gap:calc(8px * var(--nbgs,1))!important;}
+  html body #nbpanel-root#nbpanel-root#nbpanel-root .nbcorner > .nbzoomgrp.nbz-doc > .nbslval{
+      width:calc(34px * var(--nbgs,1))!important;height:calc(34px * var(--nbgs,1))!important;
+      min-width:calc(34px * var(--nbgs,1))!important;font-size:calc(15px * var(--nbgs,1))!important;}
+  html body #nbpanel-root#nbpanel-root#nbpanel-root .nbcorner > .nbzoomgrp.nbz-doc .nbslider:not([style*="vertical"]){
+      width:calc(110px * var(--nbgs,1));height:calc(4px * var(--nbgs,1))!important;}
+  html body #nbpanel-root#nbpanel-root#nbpanel-root .nbcorner > .nbzoomgrp.nbz-doc .nbslider::-webkit-slider-thumb{
+      width:calc(14px * var(--nbgs,1))!important;height:calc(14px * var(--nbgs,1))!important;}
+  html body #nbpanel-root#nbpanel-root#nbpanel-root .nbcorner > .nbzoomgrp.nbz-doc .nbslider::-moz-range-thumb{
+      width:calc(14px * var(--nbgs,1))!important;height:calc(14px * var(--nbgs,1))!important;}
+  html body #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-cursor{
+      width:calc(10px * var(--nbgs,1))!important;}
+  html body #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-cursor::before{
+      border-radius:calc(5px * var(--nbgs,1))!important;}
+  html body #nbpanel-root .nbdrawer > *{zoom:var(--nbgs,1);}
+
+  /* ======================================================================
+     2026-10-19 — E34 C4 (CSS). KORREKTUR DES NUTZERS ZU E34: „Es soll
+     wirklich alles aussehen wie in der App, Farben einheitlich, alle Felder
+     passend eingefärbt.“ Unter body.nbskin-digi trägt jede Fläche des
+     Dokuments und des Panels die Palette aus AUFTRAG.md — keine Grau- und
+     Grüntöne des alten Dunkel-Themas mehr (gemessen: 58 Arten Fläche außerhalb
+     der Palette, css_e34 R6). Am Ende der letzten Datei und mit sechs IDs
+     (:not(#nbz…)), weil die Regeln, die hier abgelöst werden, über alle
+     fünfzehn Dateien verstreut und bis zu vier IDs schwer sind; nur die
+     Ruhe-Zustände der Marken (nicht .here, nicht unter dem Zeiger), damit das
+     Gold der Stelle, an der man steht, bleibt.
+       dunkel  Grund #05060c · Fläche #0b0e1c · Fläche 2 #10142a · Linie
+               #ffffff1c · leise #8a91aa · Gold #ffd36b · Blau #7fb4ff ·
+               Rosa #ff7bd5 · Grün #6be3a0 · Rot #ff6b7a
+       hell    Grund #f5f6fa · Fläche #ffffff · Fläche 2 #f7f8fc · Linie
+               #dde1ec · leise #5b6178 · Gold #9a6b00 (Text) / #f2b426 ·
+               Blau #2a5bc8 · Rosa #c2338f · Grün #1a7a4c · Rot #b3263a
+     Bedeutung der Zustände bleibt: erledigt = Grün, Code erledigt = Rosa,
+     falsch = Rot, übersprungen = Gold, offen/gesperrt = Fläche mit Linie. */
+  html body.nbskin-digi.nbdark{--nbskin-lock:#ffd36b;--nbsb-c:#8a91aa;--nbskin-track:rgba(255,255,255,.11);
+      --nbcode-bg:#04050b;--nbpanel-surf:#0b0e1c;
+      --dg-s1:#0b0e1c;--dg-s2:#10142a;--dg-ln:rgba(255,255,255,.11);--dg-q:#8a91aa;--dg-ink:#e9ecf6;
+      --dg-ok:#6be3a0;--dg-co:#ff7bd5;--dg-no:#ff6b7a;--dg-sk:#ffd36b;--dg-bl:#7fb4ff;--dg-pg:#04050b;--dg-btn:#10142a;}
+  html body.nbskin-digi:not(.nbdark){--nbskin-track:#e3e6ef;
+      --dg-s1:#ffffff;--dg-s2:#f7f8fc;--dg-ln:#dde1ec;--dg-q:#5b6178;--dg-ink:#141826;
+      --dg-ok:#1a7a4c;--dg-co:#c2338f;--dg-no:#b3263a;--dg-sk:#9a6b00;--dg-bl:#2a5bc8;--dg-pg:#f6f7fb;--dg-btn:#ffffff;}
+  /* E35 C2 (Nutzer 19.10.: „auch bei unterschiedlichen Stilen, hell/dunkel
+     sollen alle Flächen entsprechend eingefärbt werden“): dieselben Regeln
+     gelten seit E35 auch für cyber und fairy — mit deren Werten (Fläche,
+     Linie, leise, Schrift aus 07; Grün/Rot aus 12-k3). Gemessen v1.80: in
+     cyber und fairy trugen Dock, Knöpfe, Felder, Marken der Rail, Cover und
+     Zeitleiste die Grautöne von minimal (#1d2228, #262c33, #f6f8fa …). */
+  html body.nbdark.nbskin-cyber{
+      --dg-s1:#141a2e;--dg-s2:#1b1330;--dg-ln:#3a2a6b;--dg-q:#8fa8d8;--dg-ink:#d8e6ff;
+      --dg-ok:#3dffb0;--dg-co:#ff2fd0;--dg-no:#ff6b93;--dg-sk:#ffe066;--dg-bl:#00e5ff;--dg-pg:#0c1020;--dg-btn:#141a2e;}
+  html body.nbskin-cyber:not(.nbdark){
+      --dg-s1:#f2eeff;--dg-s2:#eef2ff;--dg-ln:#9b7fe0;--dg-q:#54437e;--dg-ink:#231a3d;
+      --dg-ok:#086643;--dg-co:#a3128c;--dg-no:#a8183f;--dg-sk:#8a5b00;--dg-bl:#00647f;--dg-pg:#f3f1fb;--dg-btn:#f2eeff;}
+  html body.nbdark.nbskin-fairy{
+      --dg-s1:#1b1426;--dg-s2:#241c33;--dg-ln:#4a3a63;--dg-q:#b3a2c8;--dg-ink:#e6d9f7;
+      --dg-ok:#82e3b8;--dg-co:#ff8fc4;--dg-no:#ff94b4;--dg-sk:#ffd38a;--dg-bl:#c79cff;--dg-pg:#1c1629;--dg-btn:#241c33;}
+  html body.nbskin-fairy:not(.nbdark){
+      --dg-s1:#fdf8ff;--dg-s2:#fbf3ff;--dg-ln:#e2cdf5;--dg-q:#655377;--dg-ink:#4a3a63;
+      --dg-ok:#1d6645;--dg-co:#a8306f;--dg-no:#a3264f;--dg-sk:#8a5b00;--dg-bl:#7b32c2;--dg-pg:#fbf6ff;--dg-btn:#fdf8ff;}
+  /* Merksatz und Kernaussage: Karte mit goldener Kante statt grünem Schleier;
+     die Warnung behält Rot */
+  html body.nb-dc-active.nbskin-digi{--nbk-g:#9a6b00;}
+  html body.nb-dc-active.nbskin-digi.nbdark{--nbk-g:#ffd36b;}
+  html body.nbskin-digi:not(#nbz#nbz#nbz#nbz#nbz#nbz) .jp-Notebook .nbbox.nbbox:is(.nbbox-interp,.nbbox-key,.nbbox-warn){
+      background:var(--dg-s2)!important;border:1px solid var(--dg-ln)!important;border-left:3px solid var(--nbk)!important;
+      border-radius:0 14px 14px 0!important;}
+
+  /* ---- die Seite hinter dem Scroller (JupyterLabs #111 an den Rändern; in
+     Notebook 7 malen auch die inneren Ebenen des Scrollers und die Zelle
+     #111 über die Seite — gemessen R6 nb7 dunkel) */
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) .nbrail-own .jp-WindowedPanel-outer :is(.jp-WindowedPanel-inner,.jp-WindowedPanel-viewport,.jp-Cell){
+      background-color:transparent!important;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) :is(.jp-NotebookPanel.nbrail-own,.nbrail-own .jp-Notebook,.nbrail-own .jp-NotebookPanel-notebook){
+      background-color:var(--dg-pg)!important;}
+
+  /* ---- Bedienelemente: Dock-Knöpfe, Knöpfe der Widgets, Felder, Auswahl */
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) .nbdock{background:var(--dg-s1)!important;border-color:var(--dg-ln)!important;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) .nbbtn,
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) .nbchip-open{
+      background:var(--dg-s2)!important;border-color:var(--dg-ln)!important;color:var(--dg-ink)!important;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz)  .jupyter-button:not(.mod-primary,.mod-success,.mod-info,.mod-warning,.mod-danger,.sc-btn,.sol-btn,.nb-runall){
+      background:var(--dg-s2)!important;background-image:none!important;border:1px solid var(--dg-ln)!important;color:var(--dg-ink)!important;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz)  :where([data-digichem],.nbrail-own,.nbpanel-host,.nbdrawer) :is(input[type="text"],input[type="number"],input:not([type]),select,textarea,.widget-input,.nbpref,.nbrolepick){
+      background:var(--dg-s1)!important;border-color:var(--dg-ln)!important;color:var(--dg-ink)!important;}
+  /* die farbigen Knöpfe (Gold „neu würfeln / neu aufbauen“, Lösung): ihre Schrift bleibt, die Fläche wird die von digi */
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) :is(.sc-btn,.sol-btn){background:var(--dg-btn)!important;background-image:none!important;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) :is(.sc-btn,.sol-btn):hover{background:color-mix(in srgb,var(--nbmark) 12%%,var(--dg-btn))!important;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) .nbacct-note{background:var(--dg-s2)!important;border-color:var(--dg-ln)!important;}
+  /* die Köpfe der Code-Falte wie die übrigen kleinen Pillen */
+  /* (E35: cyber und fairy behalten ihre farbigen Kapitel-Pillen — deren Schrift ist hell auf dem Verlauf des Stils) */
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) :where([data-digichem],.nbrail-own) .jupyter-widget-Collapse-header:not(.acc-group>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header):not(body:is(.nbskin-cyber,.nbskin-fairy) .acc-chapter>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header){
+      background:var(--dg-s2)!important;background-image:none!important;border:1px solid var(--dg-ln)!important;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) :where([data-digichem],.nbrail-own) .acc-group>:is(.jupyter-widget-Collapse,.lm-Collapse)>:is(.jupyter-widget-Collapse-header,.lm-Collapse-header){
+      background:transparent!important;border:0!important;box-shadow:none!important;}
+
+  /* ---- Schieberegler (Dokument und Lupe links), Fortschritt, Bildlauf */
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) :where([data-digichem],.nbrail-own) .noUi-target,
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) .nbslider,
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) .nbp-xp-bar{
+      background:var(--nbskin-track)!important;background-image:none!important;border-color:transparent!important;box-shadow:none!important;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) :where([data-digichem],.nbrail-own) .noUi-connect{background:var(--nbmark)!important;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) :where([data-digichem],.nbrail-own) .noUi-handle{background:var(--nbmark)!important;border-color:var(--nbmark)!important;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) .nbsb{background:color-mix(in srgb,var(--nbsb-c) 60%%,transparent)!important;}
+  /* die Griffrillen auf dem goldenen Cursor: dunkel statt weiß */
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) .nbmap-cursor::after{
+      background:repeating-linear-gradient(180deg,rgba(5,6,12,.55) 0 1.5px,transparent 1.5px 4px)!important;}
+
+  /* ---- die Zeitleiste rechts: Linie, Kreise, Rauten, Pfeile in Ruhe */
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) .nbmap-inner::before,
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) .nbmap-ahead{background:var(--dg-ln)!important;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) .nbmap-node:not(.here,:hover,.nbsel,.nbpop,.passed) :is(.nbchapdot,.nbsubdot){
+      background:var(--dg-q)!important;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) .nbmap-node.passed:not(.here,:hover,.nbsel,.nbpop) :is(.nbchapdot,.nbsubdot){
+      background:var(--dg-ok)!important;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) .nbmap-node:not(.here,:hover,.nbsel,.nbpop) .nbsect{background:var(--dg-bl)!important;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) .nbmap-node:is(.sect.cell,.sect.title,.sect.end,.locked):not(.here,:hover,.nbsel,.nbpop) .nbsect{background:var(--dg-q)!important;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) .nbmap-node:not(.here,:hover,.nbsel,.nbpop) :is(.nbrail-dot,.nbcodemark,.nbvizmark):not(.st-done,.st-both,.st-fail,.st-skip,.cd-done){
+      background-color:var(--dg-s1)!important;background-image:none!important;border-color:var(--dg-q)!important;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) .nbmap-node:not(.here,:hover,.nbsel,.nbpop) .nbrail-dot:is(.st-done,.st-both){background-color:var(--dg-ok)!important;border-color:var(--dg-ok)!important;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) .nbmap-node:not(.here,:hover,.nbsel,.nbpop) .nbrail-dot.st-fail{background-color:var(--dg-no)!important;border-color:var(--dg-no)!important;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) .nbmap-node:not(.here,:hover,.nbsel,.nbpop) .nbrail-dot.st-skip{background-color:var(--dg-sk)!important;border-color:var(--dg-sk)!important;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) .nbmap-node:not(.here,:hover,.nbsel,.nbpop) .nbcodemark.cd-done{background-color:var(--dg-co)!important;border-color:var(--dg-co)!important;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) .nbmap-node .nbcodemark{--nbsc:var(--dg-co)!important;}
+  /* die Zeichen in den Marken (Schloss, Haken, offener Zustand) */
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) .nbmap-node.locked:not(:hover,.nbsel,.here) .nbchapdot::after{background:var(--dg-q)!important;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) .nbmap-node:not(:hover,.nbsel,.here) :is(.st-lock,.cd-lock) .nbdotg{color:var(--dg-q)!important;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) .nbmap-node:not(:hover,.nbsel,.here) :is(.st-lock,.cd-lock) .nbdotg::after{background:var(--dg-q)!important;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) .nbmap-node:not(:hover,.nbsel,.here) .nbrail-dot.st-open .nbdotg::after{background:var(--dg-ok)!important;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) .nbmap-node:not(:hover,.nbsel,.here) .nbcodemark.cd-open .nbdotg::after{background:var(--dg-co)!important;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) .nbdotg .ck.ok{color:var(--dg-ok)!important;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) .nbdotg .ck.co{color:var(--dg-co)!important;}
+
+  /* ---- die Punkte des Fortschritts (Panel, Reihe): offen = Fläche, Zustände = Akzente */
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) .ps{--kc:var(--dg-ok)!important;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) .ps[data-kind="code"],
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) .ps.c{--kc:var(--dg-co)!important;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) i.ps.open{background:var(--dg-s2)!important;box-shadow:inset 0 0 0 1px var(--dg-ln)!important;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) i.ps.open::after{background:var(--kc)!important;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) i.ps.a.done{background:var(--dg-ok)!important;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) i.ps.c.done{background:var(--dg-co)!important;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) i.ps.fail{background:var(--dg-no)!important;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) i.ps.skip{background:var(--dg-sk)!important;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) :is(.nbchapstat,.nbseries-chap,.nbseries-key) .ps.done{color:var(--dg-ok)!important;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) :is(.nbchapstat,.nbseries-chap,.nbseries-key) .ps.c.done{color:var(--dg-co)!important;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) :is(.nbchapstat,.nbseries-chap,.nbseries-key) .ps.fail{color:var(--dg-no)!important;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) :is(.nbchapstat,.nbseries-chap,.nbseries-key) .ps.skip{color:var(--dg-sk)!important;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) .nbseg[data-s="done"]{background:var(--dg-ok)!important;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) .nbend-rule{background:var(--dg-ln)!important;}
+
+  /* ---- das Cover: Zeitleiste (Linie, Schlösser, offene Aufgaben), die
+     gewählte Modus-Karte, der Grund hinter dem Cover (gemessen R6, Cover) */
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz) .nbcover-tl{--nbtl-lockc:var(--dg-q);--nbtl-calc:var(--dg-ok);--nbtl-code:var(--dg-co);}
+  html body:is(.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) .nbcover-tl{--nbtl-l:var(--dg-ln);}
+  html body.nbdark.nbskin-digi:not(#nbz#nbz#nbz#nbz#nbz#nbz) .nbcover-tl{--nbtl-l:rgba(255,255,255,.14);}
+  /* das Cover liegt als feste Fläche über dem Notebook; ihr Grund steht inline
+     (JS: background:var(--jp-layout-color0)) — hier also nur die Variable */
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) .nbcover-out{--jp-layout-color0:var(--dg-pg);}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) .nbmode .nbmode-opt:is([aria-checked="true"],.on){
+      background:var(--dg-s2)!important;background-image:none!important;border-color:var(--nbcov-acc)!important;}
+
+  /* ---- Hauptwerkstatt E34 (Zusammenführen, CSS): die Spur der Code-Aufgaben
+     blieb unter C1 (#nbpanel-root .nbmap-fill = Goldverlauf) gold wie die
+     Rechenspur — test_js „coding lane not purple“: rgba(0,0,0,0). In digi ist
+     Code Rosa (wie die Marken, C4); das Leuchten bleibt das der Spur. */
+  html body.nbskin-digi:not(#nbz#nbz#nbz#nbz#nbz#nbz) #nbpanel-root .nbmap-fill.code{
+      background:rgba(194,51,143,.30)!important;background-image:none!important;}
+  html body.nbskin-digi.nbdark:not(#nbz#nbz#nbz#nbz#nbz#nbz) #nbpanel-root .nbmap-fill.code{
+      background:rgba(255,123,213,.34)!important;}
+  /* E35: cyber und fairy ebenso in ihrem Code-Rosa (--dg-co) */
+  html body:is(.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) #nbpanel-root .nbmap-fill.code{
+      background:color-mix(in srgb,var(--dg-co) 30%%,transparent)!important;background-image:none!important;}
+  html body.nbdark:is(.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) #nbpanel-root .nbmap-fill.code{
+      background:color-mix(in srgb,var(--dg-co) 34%%,transparent)!important;}
+
+  /* ======================================================================
+     2026-10-19 — E35 C2 (CSS). ALLE FLÄCHEN IN ALLEN STILEN. Was die Regeln
+     oben (E34 C4, jetzt digi · cyber · fairy) noch nicht erreichten — gemessen
+     mit tests/regress/css_e35.py (Stil × hell/dunkel, Farben jeder sichtbaren
+     Fläche, Verlaufsstopps, ::before/::after und Ringe/Leuchten):
+       * die Spur im senkrechten Panel und ihr Leuchten (Rechnen: Grün,
+         Code: Violett — in jedem Stil) und die Marke der aktuellen Aufgabe
+         mit Hof: Rechenspur = Akzent des Stils (--nbmark: digi Gold, cyber
+         Cyan, fairy Violett), Code-Spur = --dg-co (Rosa); der Ring, der die
+         Marke von der Linie hebt, in der Fläche der Rail (--nbrail-bg);
+       * das Cover in cyber und fairy (seit E15.2 überall minimal; Nutzer
+         19.10.: Cover im Stil): Karte, Titel, Linie, Kicker, Leitsatz, Play,
+         Modus-Karten (--nbcov-*); in digi hell die Rauten der Zeitleiste. */
+  html body.nbdark.nbskin-cyber{--nbcov-acc:#00e5ff;--nbcov-face:#141a2e;--nbcov-ink:#8fa8d8;}
+  html body.nbskin-cyber:not(.nbdark){--nbcov-acc:#00647f;--nbcov-face:#f2eeff;--nbcov-ink:#54437e;}
+  html body.nbdark.nbskin-fairy{--nbcov-acc:#c79cff;--nbcov-face:#241c33;--nbcov-ink:#b3a2c8;}
+  html body.nbskin-fairy:not(.nbdark){--nbcov-acc:#7b32c2;--nbcov-face:#fdf8ff;--nbcov-ink:#655377;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy) #nbpanel-root :is(.nbrail,.nbmap){--nbrail-bg:var(--dg-s1)!important;}
+  /* steht der Leser auf der aktuellen Aufgabe (.here): Fläche = Marker (--nbmark), Ring und Hof in der Farbe der Spur */
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) #nbpanel-root.vert .nbmap-node.here.is-current .nbrail-dot{
+      border-color:var(--nbmark)!important;
+      box-shadow:0 0 0 2px var(--nbmark),0 0 12px 3px color-mix(in srgb,var(--nbmark) 90%%,transparent),
+                 0 0 26px 9px color-mix(in srgb,var(--nbmark) 50%%,transparent)!important;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) #nbpanel-root.vert .nbmap-node.here .nbcodemark:is(.cd-current,.cd-done){
+      border-color:var(--dg-co)!important;
+      box-shadow:0 0 0 2px var(--dg-co),0 0 12px 3px color-mix(in srgb,var(--dg-co) 88%%,transparent),
+                 0 0 26px 9px color-mix(in srgb,var(--dg-co) 48%%,transparent)!important;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) #nbpanel-root.vert .nbmap-fill:not(.tail):not(.code){
+      background:var(--nbmark)!important;background-color:var(--nbmark)!important;background-image:none!important;
+      box-shadow:0 0 7px 2px color-mix(in srgb,var(--nbmark) 85%%,transparent),
+                 0 0 18px 7px color-mix(in srgb,var(--nbmark) 45%%,transparent)!important;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) #nbpanel-root.vert .nbmap-fill.code{
+      border-left-color:var(--dg-co)!important;border-right-color:var(--dg-co)!important;
+      box-shadow:0 0 10px 2px color-mix(in srgb,var(--dg-co) 75%%,transparent),
+                 0 0 22px 8px color-mix(in srgb,var(--dg-co) 42%%,transparent)!important;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) #nbpanel-root.vert .nbmap-node.is-current:not(.here,.nbsel) .nbrail-dot{
+      border-color:var(--nbmark)!important;background:color-mix(in srgb,var(--nbmark) 32%%,transparent)!important;
+      box-shadow:0 0 0 max(2px, calc(3px * var(--nbthick,1))) var(--dg-s1),
+                 0 0 11px 2px color-mix(in srgb,var(--nbmark) 85%%,transparent),
+                 0 0 24px 8px color-mix(in srgb,var(--nbmark) 48%%,transparent)!important;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) #nbpanel-root.vert .nbmap-node:not(.here,.nbsel) .nbcodemark.cd-current{
+      border-color:var(--dg-co)!important;background:color-mix(in srgb,var(--dg-co) 32%%,transparent)!important;
+      box-shadow:0 0 0 max(2px, calc(3px * var(--nbthick,1))) var(--dg-s1),
+                 0 0 11px 2px color-mix(in srgb,var(--dg-co) 85%%,transparent),
+                 0 0 24px 8px color-mix(in srgb,var(--dg-co) 48%%,transparent)!important;}
+  /* das Cover in cyber und fairy: die Karte und ihre Schrift wie die Titelkarte des Stils */
+  html body:is(.nbskin-cyber,.nbskin-fairy) .nbtitle:has(>.nbcover):not(#nbz#nbz#nbz#nbz#nbz#nbz) .nbtitle-card{
+      background:var(--dg-s1)!important;background-image:none!important;border-color:var(--dg-ln)!important;}
+  html body:is(.nbskin-cyber,.nbskin-fairy) .nbtitle:has(>.nbcover):not(#nbz#nbz#nbz#nbz#nbz#nbz) .nbtitle-h{color:var(--dg-ink)!important;}
+  html body:is(.nbskin-cyber,.nbskin-fairy) .nbtitle:has(>.nbcover):not(#nbz#nbz#nbz#nbz#nbz#nbz) .nbtitle-rule{background:var(--nbcov-acc)!important;}
+  html body:is(.nbskin-cyber,.nbskin-fairy) .nbtitle:has(>.nbcover):not(#nbz#nbz#nbz#nbz#nbz#nbz) .nbtitle-sub{color:var(--nbcov-acc)!important;}
+  html body:is(.nbskin-cyber,.nbskin-fairy) .nbtitle:has(>.nbcover):not(#nbz#nbz#nbz#nbz#nbz#nbz) .nbtitle-lead{color:var(--dg-q)!important;}
+  html body:is(.nbskin-cyber,.nbskin-fairy) .nbtitle:has(>.nbcover):not(#nbz#nbz#nbz#nbz#nbz#nbz) .nbmode{--nbskin-ink:var(--dg-ink);}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(.nbdark):not(#nbz#nbz#nbz#nbz#nbz#nbz) .nbcover-tl{--nbtl-f:var(--dg-q);--nbtl-b:var(--dg-q);}
+  html body.nbdark:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) .nbcover-tl{--nbtl-f:var(--dg-s1);--nbtl-b:var(--dg-q);}
+  /* die Marken der Cover-Zeitleiste (Rechnen Orange, Code Violett, Abbildung
+     Grün aus 02 und inline von Python — in jedem Stil): Akzent, Code-Rosa,
+     Blau des Stils */
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz) .nbtitle:has(>.nbcover) .nbtl-calc .nbtl-mk{color:var(--nbmark)!important;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz) .nbtitle:has(>.nbcover) .nbtl-code .nbtl-mk{color:var(--dg-co)!important;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz) .nbtitle:has(>.nbcover) .nbtl-figure .nbtl-mk{color:var(--dg-bl)!important;}
+  /* Dock: der Strich, der hell/dunkel anzeigt (minimal #46535f / #b7c3cd),
+     und der Griff des senkrechten Panels (Fläche, Linie, drei Rillen) */
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) .nbbtn.nbtheme{
+      box-shadow:inset -3px 0 0 0 var(--nbmark)!important;}
+  html body.nbdark:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) .nbbtn.nbtheme{
+      box-shadow:inset 3px 0 0 0 var(--dg-bl)!important;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) .nbpanel-host.vert .nbgrip{
+      background:var(--dg-s1)!important;border-color:var(--dg-ln)!important;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) .nbpanel-host.vert .nbgrip span{
+      background:var(--dg-q)!important;box-shadow:-4px 0 0 0 var(--dg-q),4px 0 0 0 var(--dg-q)!important;}
+  /* die leisen Namen der Rail (gesperrt, Titel, Ende, eigene Zelle): minimal
+     #7d8c99 / #8894a0 / #78848f (2,4–3,6 : 1 auf der Fläche des Panels) → leise des Stils */
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) .nbmap-node.sect:not(.here,:hover,.nbsel,.nbpop) .nbmap-lab{color:var(--dg-bl)!important;}
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) .nbmap-node:is(.locked,.sect.cell,.sect.title,.sect.end):not(.here,:hover,.nbsel,.nbpop) .nbmap-lab{color:var(--dg-q)!important;}
+  /* KONTRAST in jedem Stil, auch minimal (gemessen css_e35 C2k, hell, v1.80;
+     in digi seit E34 behoben): die Versionszeile in ⚙ (Deckkraft .6 → 3,1),
+     „Use this seed“ weiß auf #8a94a0 (3,1), „New random seed“ #b07d08 (3,2–3,6),
+     die leisen Namen der Rail in minimal (#8894a0 / #7d8c99: 3,1–3,5) */
+  html body:not(#nbz):not(#nbz) .nbbuild{color:var(--nbskin-quiet,#55636f)!important;opacity:1!important;}
+  html body:not(.nbdark):not(.nbskin-digi):not(#nbz) .nbunlock{background:var(--nbskin-quiet,#55636f)!important;color:#ffffff!important;}
+  html body:not(.nbdark):not(.nbskin-digi):not(#nbz) .sc-btn{color:#8a5b00!important;}
+  html body:not(.nbdark):not(.nbskin-digi):not(.nbskin-cyber):not(.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz) .nbmap-node:is(.locked,.sect.cell,.sect.title,.sect.end):not(.here,:hover,.nbsel,.nbpop) .nbmap-lab{color:#55636f!important;}
+  /* JupyterLabs Fuß unter der letzten Zelle (Knopf „neue Zelle“): ohne eigene Fläche, Linie des Stils */
+  html body:is(.nbskin-digi,.nbskin-cyber,.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz) :where([data-digichem],.nbrail-own) .jp-Notebook-footer{
+      background:transparent!important;border-color:var(--dg-ln)!important;color:var(--dg-q)!important;}
+
+  /* ======================================================================
+     2026-10-26 — E38a C3 (CSS). COVER-KONTRAST ≥ 4,5 IN JEDEM STIL × HELL/DUNKEL.
+     Gemessen v1.82 mit tests/regress/css_e38a_c3.py (css_e34 MEASURE auf
+     .nbcover-out, wie css_e35 C2c): 17–25 Texte unter 4,5 in jedem Stil —
+       * gesperrte Kapitelnamen der Zeitleiste: Deckkraft .45 (2,3–3,9),
+       * die großen Namen (Titel, Teile, Ende): Python-Slot mit opacity .75 (3,5–4,2),
+       * „Timeline · …“ #8b98a5 (2,6–2,9 hell), K3/K4 #5b6b7b × .75 (2,4–3,3),
+       * dunkel: „What you will learn“ (Köpfe, Ziele, Kapitel, Zeit) #5b6b7b (3,2–3,7),
+       * Modus „Both“ und „Play“ in der Akzentfarbe auf hellem Grund (minimal
+         #3fa877: 2,4–3,0; digi #9a6b00 × .9: 3,7–4,4).
+     Blass bleibt blass — über die leise Farbe des Stils (--nbcov-ink) statt
+     über Deckkraft; der Text der gewählten Karte und „Play“ hell eine Stufe
+     dunkler als der Akzent (Ring und Fläche bleiben der Akzent). */
+  html body:not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz#nbz) .nbtitle:has(>.nbcover) .nbcover-tl div:has(>.nbtl-nm){opacity:1!important;}
+  html body:not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz#nbz) .nbtitle:has(>.nbcover) .nbcover-tl .nbtl-row[data-st="locked"] .nbtl-nm{
+      opacity:1!important;color:var(--nbcov-ink)!important;font-weight:600!important;}
+  html body:not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz#nbz) .nbtitle:has(>.nbcover) :is(.nbcover-tl-h,.nbtitle-facts-h,.nbtitle-k,.nbtitle-chap>b){
+      opacity:1!important;color:var(--nbcov-ink)!important;}
+  html body.nbdark:not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz#nbz) .nbtitle:has(>.nbcover) .nbtitle-facts{color:var(--nbcov-ink)!important;}
+  html body:not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz#nbz) .nbmode .nbmode-d{opacity:1!important;}
+  html body:not(.nbdark):not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz#nbz) .nbmode .nbmode-opt:is([aria-checked="true"],.on),
+  html body:not(.nbdark):not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz#nbz) .nbmode .nbmode-opt:is([aria-checked="true"],.on) :is(.nbmode-l,.nbmode-d),
+  html body:not(.nbdark):not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz#nbz) .nbtitle .nbcover .nbcover-play-lab{
+      color:color-mix(in srgb,var(--nbcov-acc) 68%%,#000)!important;}

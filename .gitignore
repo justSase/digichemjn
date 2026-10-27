@@ -1,0 +1,11 @@
+# Bau-Ausgänge (kommen als Release, nicht in den Baum)
+dist/
+*.ipynb
+*.zip
+*.log
+*.png
+# gebaute Seiten (Quellen wie lesen.html.in bleiben)
+*.html
+__pycache__/
+*.pyc
+.ipynb_checkpoints/

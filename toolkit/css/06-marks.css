@@ -1,0 +1,1210 @@
+  /* ======================================================================
+     2026-09-24ao — THE TOOLBAR SPEAKS THE RAIL'S LANGUAGE
+     The rail settled on one ink (#46535f by day, #39424d by night), outlines
+     instead of fills, and no gradients anywhere. The toolbar was still from the
+     older palette — blue thumbs, its own greys, a readout wide enough for
+     "Panel 100%%". One vocabulary for the whole instrument. */
+  #nbpanel-root .nbdock{border-color:#cfd7de!important;}
+  body[data-jp-theme-light="false"] #nbpanel-root .nbdock{
+      border-color:#39424d!important;}
+  #nbpanel-root .nbdock .nbbtn{
+      background:transparent!important;background-image:none!important;
+      border:1px solid #cfd7de!important;border-radius:9px!important;
+      color:#46535f!important;box-shadow:none!important;}
+  body[data-jp-theme-light="false"] #nbpanel-root .nbdock .nbbtn{
+      border-color:#39424d!important;color:#b7c3cd!important;}
+  #nbpanel-root .nbdock .nbbtn:hover{
+      border-color:#46535f!important;background:rgba(70,83,95,.07)!important;}
+  body[data-jp-theme-light="false"] #nbpanel-root .nbdock .nbbtn:hover{
+      border-color:#8b98a5!important;background:rgba(183,195,205,.10)!important;}
+  /* the document's size control, tucked into the corner */
+  #nbpanel-root .nbdock-r{gap:6px!important;padding-right:2px!important;}
+  #nbpanel-root .nbz-doc{gap:6px!important;}
+  #nbpanel-root .nbz-doc .nbslider{
+      width:84px!important;height:3px!important;margin:0 4px 0 0!important;
+      background:#cfd7de!important;}
+  body[data-jp-theme-light="false"] #nbpanel-root .nbz-doc .nbslider{
+      background:#39424d!important;}
+  #nbpanel-root .nbz-doc .nbslider::-webkit-slider-thumb{
+      width:11px!important;height:11px!important;background:#46535f!important;
+      box-shadow:none!important;}
+  #nbpanel-root .nbz-doc .nbslider::-moz-range-thumb{
+      width:11px!important;height:11px!important;background:#46535f!important;}
+  body[data-jp-theme-light="false"] #nbpanel-root .nbz-doc .nbslider::-webkit-slider-thumb{
+      background:#b7c3cd!important;}
+  body[data-jp-theme-light="false"] #nbpanel-root .nbz-doc .nbslider::-moz-range-thumb{
+      background:#b7c3cd!important;}
+  /* "Panel 100%%" is gone, so the readout only ever says "Doc NN%%" */
+  #nbpanel-root .nbz-doc .nbslval{
+      min-width:0!important;color:#46535f!important;font-weight:700!important;
+      font-size:.70em!important;letter-spacing:.3px;}
+  body[data-jp-theme-light="false"] #nbpanel-root .nbz-doc .nbslval{
+      color:#8b98a5!important;}
+
+  /* 2026-09-24aq — A STATE IS STILL ALLOWED TO BE LOUD.
+     The rule above says every dock button is an outline with no shadow, and it
+     says it from an ID, so it also silenced the three marks that are not
+     decoration but state: which theme is on, that the drawer is open, that the
+     notebook is full screen. Those are restored here, in the rail's ink rather
+     than the old blue, and from the same ID so they win. */
+  #nbpanel-root .nbdock .nbbtn.nbtheme{
+      box-shadow:inset -3px 0 0 0 #46535f!important;}          /* light is on */
+  body.nbdark #nbpanel-root .nbdock .nbbtn.nbtheme,
+  body[data-jp-theme-light="false"] #nbpanel-root .nbdock .nbbtn.nbtheme{
+      box-shadow:inset 3px 0 0 0 #b7c3cd!important;}           /* dark is on  */
+  #nbpanel-root[data-page="diff"].open .nbgear,
+  #nbpanel-root[data-page="stats"].open .nbseries,
+  #nbpanel-root[data-page="code"].open .nbprofile,
+  #nbpanel-root.open .nbprofile,
+  #nbpanel-root.fs .nbfull,
+  #nbpanel-root.open .nbgear{
+      border-color:#46535f!important;color:#46535f!important;
+      background:rgba(70,83,95,.10)!important;
+      box-shadow:inset 0 0 0 1px #46535f!important;}
+  body[data-jp-theme-light="false"] #nbpanel-root[data-page="diff"].open .nbgear,
+  body[data-jp-theme-light="false"] #nbpanel-root[data-page="stats"].open .nbseries,
+  body[data-jp-theme-light="false"] #nbpanel-root[data-page="code"].open .nbprofile,
+  body[data-jp-theme-light="false"] #nbpanel-root.open .nbprofile,
+  body[data-jp-theme-light="false"] #nbpanel-root.fs .nbfull,
+  body[data-jp-theme-light="false"] #nbpanel-root.open .nbgear{
+      border-color:#b7c3cd!important;color:#e6eef5!important;
+      background:rgba(183,195,205,.14)!important;
+      box-shadow:inset 0 0 0 1px #b7c3cd!important;}
+
+  /* ======================================================================
+     2026-09-24ar — THE TWO LANES LIGHT UP, AND THE MARKER FADES OUT.
+
+     (1) Grün und lila leuchten nach außen. The quiet block flattened every
+     lane to a plain fill (`box-shadow:none!important` on `.nbmap-fill`), which
+     was right for a horizontal strip 8px tall and wrong for the vertical rail,
+     where the two lanes are the only thing carrying progress. They get a halo
+     again — two shadows each, a tight one that reads as the colour of the lane
+     and a wide soft one that reads as light. The dark theme needs a lighter,
+     more saturated ink: a 30%%-opacity green on #171c22 washes to grey.
+     Written from the ID so the quiet block cannot take it back.
+
+     (2) Der Marker leuchtet am stärksten dort, wo er sitzt. The trail is the
+     distance the reader has really covered since the mark the marker snapped
+     to, and it used to be one flat band at .34 — which said "somewhere in
+     here" and nothing about direction. Now it is a gradient: full strength at
+     the marker's end, nothing at the far end, so the light itself points back
+     at the mark the reader is on. A box-shadow cannot fade along its length,
+     so the band and its glow are two pseudo-elements, each with its own mask;
+     nothing is masked on the trail element itself, or the mask would tile over
+     the blurred glow and cut it off at 7px. `data-dir` says which end is the
+     marker's: the JS sets it from the sign of (true position − snapped). */
+  #nbpanel-root.vert .nbmap-fill:not(.tail):not(.code){
+      background:#3fa877!important;background-color:#3fa877!important;
+      box-shadow:0 0 6px 1px rgba(63,168,119,.85),
+                 0 0 15px 5px rgba(63,168,119,.42)!important;}
+  body[data-jp-theme-light="false"] #nbpanel-root.vert
+      .nbmap-fill:not(.tail):not(.code){
+      background:#4fd39b!important;background-color:#4fd39b!important;
+      box-shadow:0 0 7px 2px rgba(79,211,155,.90),
+                 0 0 18px 7px rgba(79,211,155,.50)!important;}
+  #nbpanel-root.vert .nbmap-fill.code{
+      border-left-color:rgba(139,79,242,.95)!important;
+      border-right-color:rgba(139,79,242,.95)!important;
+      box-shadow:0 0 9px 1px rgba(139,79,242,.70),
+                 0 0 20px 7px rgba(139,79,242,.38)!important;}
+  body[data-jp-theme-light="false"] #nbpanel-root.vert .nbmap-fill.code{
+      border-left-color:rgba(184,150,255,.98)!important;
+      border-right-color:rgba(184,150,255,.98)!important;
+      box-shadow:0 0 10px 2px rgba(167,131,232,.75),
+                 0 0 22px 8px rgba(167,131,232,.45)!important;}
+
+  /* ======================================================================
+     2026-09-24as — THE THREE "DO" MARKS FIT, AND THE OPEN DOOR IS A LIGHT.
+
+     (1) Sie waren zu groß und haben sich überlappt. Measured in the real rail:
+     the exercise, coding and visualisation diamonds were 42px boxes — and a
+     diamond is a square turned 45°, so its VERTICAL extent is 42 × √2 = 60px.
+     Against a 31px chapter square they were the biggest marks on the rail,
+     which is the opposite of what --nbcirc was introduced for, and the two
+     tightest neighbours on the rail sit 55px and 51px apart: they overlapped
+     by 5px and 9px. The diagonal is the thing that was never accounted for.
+     .55 puts the box at 31px and the extent at 44px — still the largest mark,
+     because an exercise is the most important thing on the rail, but now
+     inside the smallest gap the layout produces, with room to spare.
+
+     (2) Die grüne und lila Markierung wird ein leuchtender Hintergrund. The
+     highest unlocked exercise of each route wore a 2px ring at .38 — at this
+     size that is a hairline nobody reads as a state. It becomes what the
+     coding lane already does: light around the mark, in that route's colour,
+     with the mark's fill tinted so the diamond itself carries the colour too.
+     The first shadow in each list is still the opaque cut-out that lifts a
+     mark off the line (24ap) — shadows paint first-on-top, so it stays clean
+     and the glow begins just outside it. */
+  .nbpanel-host.vert{--nbcirc:.55;}
+  #nbpanel-root.vert .nbmap-node.is-current .nbrail-dot{
+      border-color:#3fa877!important;
+      background:rgba(63,168,119,.32)!important;
+      box-shadow:0 0 0 max(2px, calc(3px * var(--nbthick,1))) var(--nbrail-bg,#f6f8fa),
+                 0 0 10px 2px rgba(63,168,119,.80),
+                 0 0 22px 7px rgba(63,168,119,.42)!important;}
+  body[data-jp-theme-light="false"] #nbpanel-root.vert
+      .nbmap-node.is-current .nbrail-dot{
+      border-color:#4fd39b!important;
+      background:rgba(79,211,155,.34)!important;
+      box-shadow:0 0 0 max(2px, calc(3px * var(--nbthick,1))) var(--nbrail-bg,#1d2228),
+                 0 0 11px 2px rgba(79,211,155,.88),
+                 0 0 24px 8px rgba(79,211,155,.50)!important;}
+  #nbpanel-root.vert .nbcodemark.cd-current{
+      border-color:#8b4ff2!important;
+      background:rgba(139,79,242,.30)!important;
+      box-shadow:0 0 0 max(2px, calc(3px * var(--nbthick,1))) var(--nbrail-bg,#f6f8fa),
+                 0 0 10px 2px rgba(139,79,242,.78),
+                 0 0 22px 7px rgba(139,79,242,.40)!important;}
+  body[data-jp-theme-light="false"] #nbpanel-root.vert .nbcodemark.cd-current{
+      border-color:#b896ff!important;
+      background:rgba(167,131,232,.34)!important;
+      box-shadow:0 0 0 max(2px, calc(3px * var(--nbthick,1))) var(--nbrail-bg,#1d2228),
+                 0 0 11px 2px rgba(167,131,232,.88),
+                 0 0 24px 8px rgba(167,131,232,.48)!important;}
+  /* the pointer still lifts them, and the light grows with the lift */
+  #nbpanel-root.vert .nbmap-node.is-current:hover .nbrail-dot,
+  #nbpanel-root.vert .nbmap-node.is-current.nbpop .nbrail-dot{
+      box-shadow:0 0 0 max(2px, calc(3px * var(--nbthick,1))) var(--nbrail-bg,#f6f8fa),
+                 0 0 13px 3px rgba(63,168,119,.90),
+                 0 0 28px 10px rgba(63,168,119,.52)!important;}
+  #nbpanel-root.vert .nbmap-node:hover .nbcodemark.cd-current,
+  #nbpanel-root.vert .nbmap-node.nbpop .nbcodemark.cd-current{
+      box-shadow:0 0 0 max(2px, calc(3px * var(--nbthick,1))) var(--nbrail-bg,#f6f8fa),
+                 0 0 13px 3px rgba(139,79,242,.88),
+                 0 0 28px 10px rgba(139,79,242,.50)!important;}
+
+  /* ======================================================================
+     2026-09-24at — ROOM IN THE TOOLBAR, AND A MARKER WITH TWO SOFT ENDS.
+
+     (1) The dock gets a little more room under its row. It is a strip of
+     controls against the top of the reading column, and at 38px the buttons
+     sat on its lower edge. Only downwards: the top edge is where it meets
+     JupyterLab's own toolbar and must not move.
+
+     (2) Der mitlaufende Marker verblasst nach oben und unten. It was a band
+     with hard ends, which made a position look like a range with two borders.
+     Now it fades out at both ends, so what reads strongest is its middle —
+     the line the reader is actually on. Same construction as the trail, and
+     for the same reason: a mask on the element itself is sized to the border
+     box, so it would erase the glow that lives outside it. Band and light are
+     two pseudo-elements, each masked; the element carries neither. */
+  #nbpanel-root .nbdock{padding-bottom:15px!important;}
+  #nbpanel-root.vert .nbmap-here{
+      background:transparent!important;border-color:transparent!important;
+      box-shadow:none!important;overflow:visible!important;}
+  #nbpanel-root.vert .nbmap-here::before,
+  #nbpanel-root.vert .nbmap-here::after{
+      content:'';position:absolute;left:50%%;top:0;height:100%%;
+      border-radius:5px;pointer-events:none;
+      -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+      -webkit-mask-size:100%% 100%%;mask-size:100%% 100%%;
+      /* The marker is about 24px tall, so the fade has to be a HEM, not a
+         taper: at 34/66 the solid core was 8px and the thing read as a round
+         blob rather than a band with soft ends. Five pixels at each end. */
+      -webkit-mask-image:linear-gradient(180deg,rgba(0,0,0,0) 0%%,#000 22%%,
+                         #000 78%%,rgba(0,0,0,0) 100%%);
+      mask-image:linear-gradient(180deg,rgba(0,0,0,0) 0%%,#000 22%%,
+                 #000 78%%,rgba(0,0,0,0) 100%%);}
+  #nbpanel-root.vert .nbmap-here::before{       /* the band, ring and all */
+      width:7px;margin-left:-3.5px;box-sizing:border-box;
+      background:var(--nbmark,#0d63e0);
+      border:1px solid var(--nbring,#ffffff);}
+  #nbpanel-root.vert .nbmap-here::after{        /* the light around it */
+      /* 21px wide and blurred by 7 is wider than the marker is tall — the
+         light stopped following the band and became a disc. */
+      width:14px;margin-left:-7px;
+      background:var(--nbglow,rgba(255,255,255,.75));
+      filter:blur(5px);}
+
+  /* ======================================================================
+     2026-09-24au — THE RAIL COMES FORWARD, AND THE MARKS SAY MORE.
+
+     (1) Das Timelinepanel steht vor der Toolbar. The dock was at z-index 1300
+     and the rail below it, so the column of marks ran out from under the
+     toolbar instead of over it. The rail is the instrument; the toolbar is a
+     strip of controls beside it. The zoom bar has moved to the left group for
+     the same reason — see the markup.
+
+     (2) Deutlichere Zeichen in den Rauten. The glyph that says skipped,
+     passed or given up rode at 1.5em inside a mark that is 31px across and
+     turned 45°, so it was a speck in the middle of a diamond. It is the only
+     thing on the rail that carries a STATE, so it gets the room: bigger,
+     heavier, and with a shadow of the mark's own fill behind it so it reads
+     on a coloured circle as well as on a grey one.
+
+     (3) Dickere Umrandung für gelöste Aufgaben, und die Coderoute wird lila.
+     A solved exercise is the one thing on the rail worth a heavier line. The
+     coding route keeps its own colour throughout: purple border, purple tick,
+     and the lane behind it painted purple as far as the next mark. */
+  #nbpanel-root .nbrail{z-index:1400!important;}
+  #nbpanel-root .nbdock{z-index:1300!important;}
+
+  /* ======================================================================
+     2026-09-27b — THE PANEL IS AN OVERLAY (STRUKTUR §4, Vorhaben E).
+     The document keeps its whole width and the panel opens OVER it, so two
+     things change that the side-by-side layout never had to decide:
+
+     (1) The toolbar stands in front of the panel. It keeps the document's
+     width now, and at 100 %% the panel reaches under its right half — the zoom
+     control lies there. A control under the panel cannot be reached, and a
+     toolbar you cannot reach is not a toolbar (placeDock). The rail already
+     begins at the toolbar's top edge and fades out under it (--nbrail-hide),
+     so in front is where the 24z design had it. Below the grip (1450).
+
+     (2) The panel's free area lets the pointer through. The host has always
+     been click-through; the rail and its column were not, which did not
+     matter while they stood beside the document. Over it, 560px of empty
+     panel would be 560px of dead page. Only what the reader can press — the
+     marks and their names, the marker, the cursor, the grip — catches it. */
+  #nbpanel-root.vert .nbdock,#nbpanel-root.vert .nbdrawer{z-index:1420!important;}
+  #nbpanel-root.vert .nbrail,#nbpanel-root.vert .nbrail-row,
+  #nbpanel-root.vert .nbmap,#nbpanel-root.vert .nbmap-inner{
+      pointer-events:none!important;}
+  #nbpanel-root.vert .nbmap-node:not(.nbfolded):not(.nbgone){pointer-events:auto;}
+
+  /* ---- the state glyph, made legible ---------------------------------- */
+  /* (drawn since E15.1, 14-e7.css: no type size, no text shadow) */
+
+  /* ---- a solved exercise is drawn with a heavier line ------------------ */
+  #nbpanel-root.vert .nbmap-node .nbrail-dot.st-ans,
+  #nbpanel-root.vert .nbmap-node .nbrail-dot.st-both,
+  #nbpanel-root.vert .nbmap-node.passed .nbrail-dot{
+      border-width:max(3px, calc(4px * var(--nbthick,1)))!important;
+      border-color:#3fa877!important;}
+  body[data-jp-theme-light="false"] #nbpanel-root.vert .nbmap-node .nbrail-dot.st-ans,
+  body[data-jp-theme-light="false"] #nbpanel-root.vert .nbmap-node .nbrail-dot.st-both,
+  body[data-jp-theme-light="false"] #nbpanel-root.vert .nbmap-node.passed .nbrail-dot{
+      border-color:#4fd39b!important;}
+  /* ...and the coding route says so in its own colour, on its own mark */
+  /* A solved coding mark was filled the SAME green as the written route
+     (24u), so the rail said "solved" and hid which ladder it was solved on.
+     Purple line, purple tick, and the mark stays hollow so the tick is what
+     the eye lands on. */
+  #nbpanel-root.vert .nbcodemark.cd-done,
+  #nbpanel-root.vert .nbmap-node .nbrail-dot.st-code{
+      border-width:max(3px, calc(4px * var(--nbthick,1)))!important;
+      border-color:#8b4ff2!important;
+      background:var(--nbrail-bg,#f6f8fa)!important;}
+  body[data-jp-theme-light="false"] #nbpanel-root.vert .nbcodemark.cd-done,
+  body[data-jp-theme-light="false"] #nbpanel-root.vert .nbmap-node .nbrail-dot.st-code{
+      border-color:#b896ff!important;
+      background:var(--nbrail-bg,#1d2228)!important;}
+  #nbpanel-root.vert .nbcodemark.cd-done .nbdotg{color:#8b4ff2!important;}
+  body[data-jp-theme-light="false"] #nbpanel-root.vert
+      .nbcodemark.cd-done .nbdotg{color:#c7a8ff!important;}
+  /* the written route's solved mark keeps its green tick on the same terms */
+  #nbpanel-root.vert .nbmap-node .nbrail-dot.st-ans .nbdotg,
+  #nbpanel-root.vert .nbmap-node .nbrail-dot.st-both .nbdotg{color:#2f8f63!important;}
+  body[data-jp-theme-light="false"] #nbpanel-root.vert
+      .nbmap-node .nbrail-dot.st-ans .nbdotg,
+  body[data-jp-theme-light="false"] #nbpanel-root.vert
+      .nbmap-node .nbrail-dot.st-both .nbdotg{color:#5fe0a8!important;}
+  /* the two ticks, each in the colour of the route that earned it */
+  #nbpanel-root .nbdotg .ck.ok{color:#2f8f63!important;}
+  #nbpanel-root .nbdotg .ck.co{color:#8b4ff2!important;}
+  body[data-jp-theme-light="false"] #nbpanel-root .nbdotg .ck.ok{color:#5fe0a8!important;}
+  body[data-jp-theme-light="false"] #nbpanel-root .nbdotg .ck.co{color:#c7a8ff!important;}
+
+  /* ---- the lane a solved CODING exercise paints ------------------------ */
+  /* The written route paints the stretch behind it green and a skip amber;
+     the coding route had no stretch of its own at all, only a glow. It gets
+     the same treatment in its own colour: from the mark it solved as far as
+     the next mark, and no further. */
+  #nbpanel-root.vert .nbseg[data-s="code"]{
+      background:rgba(139,79,242,.85)!important;
+      box-shadow:0 0 8px 2px rgba(139,79,242,.55)!important;}
+  body[data-jp-theme-light="false"] #nbpanel-root.vert .nbseg[data-s="code"]{
+      background:rgba(184,150,255,.90)!important;
+      box-shadow:0 0 9px 3px rgba(167,131,232,.60)!important;}
+
+  /* ---- what a locked chapter shows when you open it -------------------- */
+  .nblocked-note{text-align:center;padding:26px 20px 28px!important;
+      border:1px dashed var(--nbquiet-line,#d6e2ec)!important;
+      border-radius:12px!important;background:transparent!important;
+      max-width:620px;margin:6px auto!important;}
+  /* the lock is drawn from the CLASS, never written into the DOM: the rail
+     rewrites its own text on every refresh and would undo anything JS put
+     there. Same trick on both sides, so the two always agree.
+     2026-09-25c: and it is a DRAWING now, not an emoji — the shape lives with
+     the rail's lock at the end of this sheet. Only the pointer state is here. */
+  .nblocked-note.nbkeyed .nblocked-lock{cursor:pointer;}
+  .nblocked-note.nbkeyed{border-color:#3fa877!important;
+      box-shadow:0 0 0 1px rgba(63,168,119,.25),0 0 26px 4px rgba(63,168,119,.12);}
+  body[data-jp-theme-light="false"] .nblocked-note.nbkeyed{
+      border-color:#4fd39b!important;}
+  .nblocked-open{display:none;}
+  .nblocked-note.nbkeyed .nblocked-shut{display:none;}
+  .nblocked-note.nbkeyed .nblocked-open{display:inline;}
+
+  /* ---- and the same two states on the rail's own mark ------------------ */
+  /* 2026-09-25c — THE OPEN PADLOCK EMOJI IS GONE FROM THE RAIL.
+     Two rules used to swap an OPEN-PADLOCK emoji into the chapter mark: one
+     on hover, one once the mark was armed by a click. Both are removed. A locked mark now carries
+     a DRAWN closed lock at all times (see the lock block further down), so the
+     state is readable standing still instead of only under the pointer — and
+     the armed state is said by the mark lighting up in the skin's own colour,
+     not by a second glyph the reader has to decode. */
+  .nblocked-head{font-weight:800;margin-bottom:6px;}
+  .nblocked-say{line-height:1.55;max-width:520px;margin:0 auto;
+      color:#5b6b7b;}
+  body[data-jp-theme-light="false"] .nblocked-note{
+      border-color:#39424d!important;}
+  body[data-jp-theme-light="false"] .nblocked-say{color:#a8b6c2;}
+
+  /* ======================================================================
+     2026-09-24av — THE RAIL GOES UNDER THE BAR, AND THE LINE GOES BEHIND
+                    THE MARKS.
+
+     (1) Die Timeline verschwindet oben unter der Toolbar. `--nbrail-hide` has
+     been computed since 24z — the height of the strip between the top of the
+     rail and the bottom of the control row — and no rule has ever read it. So
+     a mark travelling upwards was painted straight over the toolbar, because
+     the rail is in front of it (24au). One clip-path fixes it: everything
+     above the toolbar's lower edge is simply not drawn, which is exactly what
+     the document does. The rail's own surface stays opaque and in front, so
+     the top-right corner shows neither toolbar nor marks.
+
+     (2) Die Linie ist nicht mehr durch die leuchtenden Rauten zu sehen. The
+     two open-door marks were filled with a translucent tint (24as), so the
+     rail's line ran visibly through the middle of them. The fill is opaque
+     now — the route's colour mixed into the rail's own background, which is
+     the same hue at full cover. */
+  /* 2026-09-24aw — it FADES into the bar, it is not cut at it.
+     A hard clip left the marker's glow chopped off by a straight horizontal
+     line at the toolbar's edge. A mask does the same job softly: fully
+     transparent where the bar ends, fully opaque 26px later. */
+  #nbpanel-root.vert .nbmap{
+      -webkit-mask-image:linear-gradient(180deg,
+          rgba(0,0,0,0) 0px, rgba(0,0,0,0) var(--nbrail-hide,0px),
+          #000 calc(var(--nbrail-hide,0px) + 26px), #000 100%%)!important;
+      mask-image:linear-gradient(180deg,
+          rgba(0,0,0,0) 0px, rgba(0,0,0,0) var(--nbrail-hide,0px),
+          #000 calc(var(--nbrail-hide,0px) + 26px), #000 100%%)!important;
+      -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+      -webkit-mask-size:100%% 100%%;mask-size:100%% 100%%;}
+  /* …and the toolbar, with its drawer, ends before the panel's column */
+  /* 2026-09-27b — no cut any more: the toolbar keeps the document's whole
+     width and stands IN FRONT of the panel (see THE PANEL IS AN OVERLAY). */
+  /* 2026-09-24bb — and the bar LAYS OUT inside what is left of it.
+     Clipping alone put the right-hand control under the panel and then cut it
+     off: measured, the zoom bar's right edge sat 135px past the rail's left
+     edge. Reserving the same distance as padding makes the right group end
+     where the visible bar ends, which is exactly beside the panel. */
+  #nbpanel-root .nbdock{padding-right:12px!important;}
+  #nbpanel-root .nbdock{padding-bottom:22px!important;}
+
+  /* the two open doors, filled solid so the line runs BEHIND them */
+  #nbpanel-root.vert .nbmap-node.is-current .nbrail-dot{
+      background:#cfeadd!important;}
+  body[data-jp-theme-light="false"] #nbpanel-root.vert
+      .nbmap-node.is-current .nbrail-dot{background:#1f3a30!important;}
+  #nbpanel-root.vert .nbcodemark.cd-current{background:#e6dcfb!important;}
+  body[data-jp-theme-light="false"] #nbpanel-root.vert
+      .nbcodemark.cd-current{background:#2a2340!important;}
+  /* ...and so are the two solved ones, for the same reason */
+  #nbpanel-root.vert .nbcodemark.cd-done,
+  #nbpanel-root.vert .nbmap-node .nbrail-dot.st-code{
+      background:var(--nbrail-bg,#f6f8fa)!important;}
+  body[data-jp-theme-light="false"] #nbpanel-root.vert .nbcodemark.cd-done,
+  body[data-jp-theme-light="false"] #nbpanel-root.vert
+      .nbmap-node .nbrail-dot.st-code{background:var(--nbrail-bg,#1d2228)!important;}
+
+  /* ---- the section rules, narrowed ------------------------------------ */
+  /* They ran the full width of the reading column, which made three hairlines
+     the widest thing on the page — louder than the chapter headings they were
+     meant to separate. A rule is a separator, not a border. */
+  body.nbquiet .acc-group>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header,
+  body.nbquiet .acc-group>.p-Collapse>.p-Collapse-header,
+  body.nbquiet .acc-group>.lm-Collapse>.lm-Collapse-header{
+      width:520px!important;max-width:88%%!important;
+      margin:34px auto 14px!important;gap:14px!important;}
+  body.nbquiet .acc-group>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header::before,
+  body.nbquiet .acc-group>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header::after,
+  body.nbquiet .acc-group>.p-Collapse>.p-Collapse-header::before,
+  body.nbquiet .acc-group>.p-Collapse>.p-Collapse-header::after,
+  body.nbquiet .acc-group>.lm-Collapse>.lm-Collapse-header::before,
+  body.nbquiet .acc-group>.lm-Collapse>.lm-Collapse-header::after{
+      /* a hairline, and no more than a third of the label's width on each side:
+         2px at 840px made three separators the loudest thing on the page */
+      border-top-width:1px!important;opacity:.28!important;
+      flex:0 1 120px!important;}
+
+  /* ======================================================================
+     2026-09-24aw — THE MARKER LIGHTS THE TWO OPEN DOORS TOO.
+
+     24as gave the highest unlocked exercise of each route a solid fill, and
+     24av made that fill opaque so the line would run behind it. Both rules
+     name `#nbpanel-root.vert .nbmap-node.is-current .nbrail-dot` — the same
+     weight as the rule that lights a mark the marker is passing, and later in
+     the sheet, so they won. The consequence on screen: every mark on the rail
+     filled as the marker went over it except the two that matter most.
+
+     `.here` is added to the selector here, which puts these one class above
+     the pair above, so the marker wins while it is level with the mark and
+     hands the colour straight back when it moves on. */
+  #nbpanel-root.vert .nbmap-node.here.is-current .nbrail-dot,
+  #nbpanel-root.vert .nbmap-node.here .nbrail-dot.st-code,
+  #nbpanel-root.vert .nbmap-node.here .nbcodemark.cd-current,
+  #nbpanel-root.vert .nbmap-node.here .nbcodemark.cd-done{
+      background:var(--nbmark)!important;border-color:var(--nbmark)!important;}
+
+  /* ---- and the marker's own light is the light those marks wear -------- */
+  /* Its glow was a flat white/blue halo; the marks use two shadows, a tight
+     one that reads as the colour and a wide soft one that reads as light.
+     The marker takes the same pair, so the whole instrument glows one way. */
+  #nbpanel-root.vert .nbmap-here::after{
+      width:16px;margin-left:-8px;
+      background:var(--nbglow,rgba(255,255,255,.75));
+      filter:blur(4px);
+      box-shadow:0 0 9px 2px var(--nbglow,rgba(255,255,255,.55)),
+                 0 0 20px 7px var(--nbglow,rgba(255,255,255,.30));}
+
+  /* ======================================================================
+     2026-09-24ax — THE COVER IS FOR THE COLD PAGE ONLY.
+     The preview of the structure, the Play button and the closing line all
+     answer one question — "what is this and how do I start it" — and the
+     moment the notebook has run, the real structure is on screen and the
+     rail is beside it, so all three are answering a question nobody is
+     asking any more. `nbrail-live` goes on the body when the panel mounts,
+     which is exactly that moment; the title card and its one line stay. */
+  /* 2026-09-24bh — AND TO ITS OWN NOTEBOOK.
+     `nbrail-live` is on the BODY, so with several notebooks open in one
+     JupyterLab the first one to run hid the cover of every other tab —
+     including notebooks that had not run and still needed their Play button.
+     The reader met the reverse of it too: a cold tab showing Play while a
+     panel from another tab sat above it. The class that decides this now goes
+     on the NOTEBOOK PANEL that actually holds a running feed. */
+  .jp-NotebookPanel.nbrail-own .nbcover,
+  .jp-NotebookPanel.nbrail-own .nbtitle-fine,
+  .jp-Notebook.nbrail-own .nbcover,
+  .jp-Notebook.nbrail-own .nbtitle-fine{display:none!important;}
+  /* the whole markdown cell goes with it: the heading is re-emitted at the top
+     of the document cell, so keeping the cell as well would show it twice and
+     leave JupyterLab's cell furniture — the input prompt, the hover toolbar,
+     the blue selection bar — around a title. */
+  .jp-NotebookPanel.nbrail-own .jp-Cell.nbtitle-cell,
+  .jp-Notebook.nbrail-own .jp-Cell.nbtitle-cell{
+      display:none!important;}
+  /* and the cold cover ends where its last line ends. Stated at cell level so
+     a stale stylesheet from an older build — another notebook in the same
+     window, opened from an older file — cannot put its full-screen version
+     back and leave five hundred pixels of nothing under the Appendix bar. */
+  .jp-Cell .nbtitle .nbcover,
+  .jp-Cell .nbcover{min-height:0!important;padding-bottom:20px!important;}
+  /* the Play button, while it IS shown */
+  .nbcover-play{transition:border-color .18s ease,color .18s ease,
+                           transform .18s ease,box-shadow .18s ease;}
+  .nbcover-play:hover{border-color:#3fa877!important;color:#3fa877!important;
+      transform:scale(1.06);
+      box-shadow:0 0 0 6px rgba(63,168,119,.12),0 0 22px 6px rgba(63,168,119,.22);}
+  .nbcover-play:active{transform:scale(.98);}
+  body[data-jp-theme-light="false"] .nbcover-play:hover{
+      border-color:#4fd39b!important;color:#4fd39b!important;
+      box-shadow:0 0 0 6px rgba(79,211,155,.14),0 0 24px 7px rgba(79,211,155,.26);}
+
+  /* ======================================================================
+     2026-09-24az — THE MARKER'S LIGHT POINTS THE WAY IT IS GOING, AND THE
+                    LIGHT THEME GETS THE SAME MARKS THE DARK ONE HAS.
+
+     (1) Der Gradient läuft vom markierten Symbol zum nächsten. The marker
+     faded at BOTH ends (24at), which says "somewhere in this band". It is a
+     position, and it has a direction: full strength on the mark it is sitting
+     on, running out towards the mark it is travelling to. `data-dir` is the
+     same attribute the trail already carries.
+
+     (2) Im Hellmodus sehen die Rauten jetzt aus wie im Dunkelmodus. Dark
+     fills the two open doors with a deep tint and lets a bright ring and a
+     bright halo carry the colour. Light was given a pale mint and lavender
+     instead — a muddy middle that greyed the glyph and swallowed the glow.
+     It gets the same construction now: the rail's own surface inside, the
+     colour in the ring and the light. */
+  /* the two open doors, in the light theme, built like the dark ones */
+  #nbpanel-root.vert .nbmap-node.is-current .nbrail-dot{
+      background:var(--nbrail-bg,#f6f8fa)!important;
+      border-width:max(3px, calc(4px * var(--nbthick,1)))!important;
+      border-color:#2f8f63!important;
+      box-shadow:0 0 0 max(2px, calc(3px * var(--nbthick,1))) var(--nbrail-bg,#f6f8fa),
+                 0 0 11px 2px rgba(47,143,99,.85),
+                 0 0 24px 8px rgba(63,168,119,.45)!important;}
+  #nbpanel-root.vert .nbcodemark.cd-current{
+      background:var(--nbrail-bg,#f6f8fa)!important;
+      border-width:max(3px, calc(4px * var(--nbthick,1)))!important;
+      border-color:#7b3fe4!important;
+      box-shadow:0 0 0 max(2px, calc(3px * var(--nbthick,1))) var(--nbrail-bg,#f6f8fa),
+                 0 0 11px 2px rgba(123,63,228,.80),
+                 0 0 24px 8px rgba(139,79,242,.42)!important;}
+  /* dark keeps its own, stated again here so this block cannot undo it */
+  body[data-jp-theme-light="false"] #nbpanel-root.vert
+      .nbmap-node.is-current .nbrail-dot{
+      background:var(--nbrail-bg,#1d2228)!important;border-color:#4fd39b!important;
+      box-shadow:0 0 0 max(2px, calc(3px * var(--nbthick,1))) var(--nbrail-bg,#1d2228),
+                 0 0 11px 2px rgba(79,211,155,.88),
+                 0 0 24px 8px rgba(79,211,155,.50)!important;}
+  body[data-jp-theme-light="false"] #nbpanel-root.vert .nbcodemark.cd-current{
+      background:var(--nbrail-bg,#1d2228)!important;border-color:#b896ff!important;
+      box-shadow:0 0 0 max(2px, calc(3px * var(--nbthick,1))) var(--nbrail-bg,#1d2228),
+                 0 0 11px 2px rgba(167,131,232,.88),
+                 0 0 24px 8px rgba(167,131,232,.48)!important;}
+  /* the marker still fills them as it goes over (24aw) */
+  #nbpanel-root.vert .nbmap-node.here.is-current .nbrail-dot,
+  #nbpanel-root.vert .nbmap-node.here .nbcodemark.cd-current{
+      background:var(--nbmark)!important;border-color:var(--nbmark)!important;}
+
+  /* ======================================================================
+     2026-09-24bb — THE GLYPH STAYS LEVEL, AND THE CODING ROUTE IS COUNTED.
+
+     A mark is a square turned 45°, and the tick inside it is turned back the
+     other way so it reads level. That worked at rest and broke under the
+     pointer: hovering turns the mark a further 315° to rotate(360deg) — an
+     upright SQUARE — while the glyph stayed at −45°, so the tick went diagonal
+     exactly when the reader was looking at it. Measured: mark
+     matrix(.707,.707,-.707,.707), glyph matrix(.707,-.707,.707,.707).
+     The counter-turn has to follow the mark's own state, so there are two
+     rules, not one. */
+  /* (E15.1: the sign's turn back is 12-k3.css alone; this rule was always outranked there) */
+
+  /* …and it is bigger and carries its own edge, so a tick on a coloured
+     circle is as readable as one on a grey */
+  /* (E15.1: the signs are drawn — 14-e7.css; the edge is a drop shadow there) */
+
+  /* ---- the coding route's own chip in the badge ------------------------ */
+  #nbpanel-root .nbstat.code{color:#7b3fe4!important;font-weight:800;
+      margin-left:7px;padding-left:8px;
+      border-left:1px solid var(--nbquiet-line,#d6e2ec);}
+  body[data-jp-theme-light="false"] #nbpanel-root .nbstat.code{
+      color:#c7a8ff!important;border-left-color:#39424d;}
+
+
+  /* ======================================================================
+     2026-09-24bg — WHAT THE BROWSER PAINTS FOR US.
+     The reader reported that in night mode "text in windows outside the
+     document" became unreadable. MEASURED, with ◐ on and JupyterLab light:
+     the cell-type <select> in JupyterLab's toolbar computes to
+     color rgb(232,238,244) on background rgba(0,0,0,0). Its dropdown is a
+     NATIVE window, drawn by the browser on the system's own white — so the
+     options came out near-white on white. Lumino's own menus were fine
+     (measured rgb(17,24,32) behind rgb(232,238,244)); it is only the native
+     controls that were never told which way round the page is.
+     `color-scheme` is that instruction, and it covers every native window at
+     once: select popups, date pickers, scrollbars, form controls. The
+     explicit backgrounds below are the belt to that braces, because a
+     transparent control still has to sit on something. */
+  body.nbforce-dark:where(.nb-dc-active){color-scheme:dark;}
+  body.nbforce-light:where(.nb-dc-active){color-scheme:light;}
+  body.nbforce-dark :where([data-digichem],.nbrail-own) select,body.nbforce-dark :where([data-digichem],.nbrail-own) input,body.nbforce-dark :where([data-digichem],.nbrail-own) textarea,
+  body.nbforce-dark :where([data-digichem],.nbrail-own) .jp-Toolbar select{
+      background-color:#1b222b!important;color:#dbe4ec!important;
+      border-color:#39424d!important;}
+  body.nbforce-light :where([data-digichem],.nbrail-own) select,body.nbforce-light :where([data-digichem],.nbrail-own) input,body.nbforce-light :where([data-digichem],.nbrail-own) textarea,
+  body.nbforce-light :where([data-digichem],.nbrail-own) .jp-Toolbar select{
+      background-color:#ffffff!important;color:#33475b!important;}
+
+  /* The settings drawer is a window outside the document too, and the widgets
+     the panel BORROWS out of the notebook bring JupyterLab's own colours with
+     them. In the dark drawer "Use this seed" was grey on grey and the two
+     inputs stayed light. Stated once, for every control the drawer can hold. */
+  body[data-jp-theme-light="false"] #nbpanel-root .nbdrawer select,
+  body[data-jp-theme-light="false"] #nbpanel-root .nbdrawer input,
+  body[data-jp-theme-light="false"] #nbpanel-root .nbdrawer textarea,
+  body.nbdark #nbpanel-root .nbdrawer select,
+  body.nbdark #nbpanel-root .nbdrawer input,
+  body.nbdark #nbpanel-root .nbdrawer textarea{
+      background:#1b222b!important;color:#dbe4ec!important;
+      border:1px solid #39424d!important;}
+  body[data-jp-theme-light="false"] #nbpanel-root .nbdrawer button,
+  body.nbdark #nbpanel-root .nbdrawer button{
+      background:#2a323a!important;color:#e8eef4!important;
+      border:1px solid #46535f!important;}
+  body[data-jp-theme-light="false"] #nbpanel-root .nbdrawer button:hover,
+  body.nbdark #nbpanel-root .nbdrawer button:hover{
+      background:#39424d!important;border-color:#8b98a5!important;}
+  body[data-jp-theme-light="false"] #nbpanel-root .nbdrawer .widget-label,
+  body[data-jp-theme-light="false"] #nbpanel-root .nbdrawer label,
+  body.nbdark #nbpanel-root .nbdrawer .widget-label,
+  body.nbdark #nbpanel-root .nbdrawer label{color:#c3d0da!important;}
+
+  /* ======================================================================
+     2026-09-24bg — "CLICK TO ADD CELL" STOPS AT THE PANEL.
+     JupyterLab's footer strip is the width of the notebook, and the notebook
+     runs under the rail — so the hover bar was drawn beneath the timeline and
+     its right end was unreachable. The document's own column already ends at
+     --nbvert-pad; the footer now ends there too. */
+  /* MEASURED: --nbvert-pad is what the CELLS give up, and the footer's own
+     container is wider than they are — cutting by that number still left 77px
+     of hover bar under the timeline. The cut is the overlap itself, written
+     by vertPlace(), which is the only place the rail's left edge is known. */
+  /* 2026-09-27b — the strip is the document's again, full width: the panel
+     lies over it, and its free area lets the click through (§4). */
+
+  /* ======================================================================
+     2026-09-24bg — THE MARKER DOES NOT PUT THE LIGHT OUT.
+     The two "open door" marks — the exercise you are on (green) and the coding
+     exercise you are on (purple) — wear a coloured ring and a glow. The marker
+     used to set background AND border-color to its own white and replace the
+     glow with a white one, so the moment it reached the mark that matters most
+     the mark stopped saying anything. Measured in dark: ring and halo both
+     rgb(255,255,255).
+     Now the marker fills the CORE and leaves the ring and the halo alone: the
+     mark reads as "here" and as "this is your next step" at the same time.
+     One class more than the rules it overrides (`.here` plus the state), so
+     order in the sheet cannot decide it. */
+  #nbpanel-root.vert .nbmap-node.here.is-current .nbrail-dot{
+      background:var(--nbmark)!important;
+      border-color:#2f8f63!important;
+      box-shadow:0 0 0 2px #2f8f63,
+                 0 0 12px 3px rgba(63,168,119,.88),
+                 0 0 26px 9px rgba(63,168,119,.48)!important;}
+  #nbpanel-root.vert .nbmap-node.here .nbcodemark.cd-current{
+      background:var(--nbmark)!important;
+      border-color:#7b3fe4!important;
+      box-shadow:0 0 0 2px #7b3fe4,
+                 0 0 12px 3px rgba(139,79,242,.85),
+                 0 0 26px 9px rgba(139,79,242,.45)!important;}
+  body[data-jp-theme-light="false"] #nbpanel-root.vert
+      .nbmap-node.here.is-current .nbrail-dot,
+  body.nbdark #nbpanel-root.vert .nbmap-node.here.is-current .nbrail-dot{
+      background:var(--nbmark)!important;
+      border-color:#4fd39b!important;
+      box-shadow:0 0 0 2px #4fd39b,
+                 0 0 12px 3px rgba(79,211,155,.92),
+                 0 0 26px 9px rgba(79,211,155,.55)!important;}
+  body[data-jp-theme-light="false"] #nbpanel-root.vert
+      .nbmap-node.here .nbcodemark.cd-current,
+  body.nbdark #nbpanel-root.vert .nbmap-node.here .nbcodemark.cd-current{
+      background:var(--nbmark)!important;
+      border-color:#b896ff!important;
+      box-shadow:0 0 0 2px #b896ff,
+                 0 0 12px 3px rgba(167,131,232,.92),
+                 0 0 26px 9px rgba(167,131,232,.52)!important;}
+  /* a SOLVED mark keeps its colour under the marker for the same reason */
+  #nbpanel-root.vert .nbmap-node.here .nbcodemark.cd-done{
+      background:var(--nbmark)!important;border-color:#7b3fe4!important;
+      box-shadow:0 0 0 2px #7b3fe4,
+                 0 0 10px 2px rgba(139,79,242,.70)!important;}
+  body[data-jp-theme-light="false"] #nbpanel-root.vert
+      .nbmap-node.here .nbcodemark.cd-done,
+  body.nbdark #nbpanel-root.vert .nbmap-node.here .nbcodemark.cd-done{
+      border-color:#b896ff!important;
+      box-shadow:0 0 0 2px #b896ff,
+                 0 0 10px 2px rgba(167,131,232,.75)!important;}
+
+  /* ======================================================================
+     2026-09-24bg — THE CURSOR BESIDE THE LANE.
+     The reading marker has been draggable since 24y, but nothing said so: it
+     is a thin band ON the line, and a reader does not think to grab the line
+     they are reading by. The cursor is the handle made visible — a small
+     triangle to the LEFT of the progress lane, level with the marker, moving
+     with it as it snaps from mark to mark. Pull it and the document scrolls.
+     It is drawn by the panel, positioned from the marker's own top in JS, so
+     the two can never disagree about where "here" is. */
+  .nbmap-cursor{display:none;}
+  /* MEASURED: drawn as a bare CSS triangle — a zero-size box with borders —
+     elementFromPoint at its own centre returned `nbmap-inner`, so a real mouse
+     went straight through it and only a synthetic event could grab it. It is a
+     box now, with the triangle painted inside it by ::before, and it sits above
+     the lane. A handle you cannot hit is not a handle. */
+  /* 2026-09-24bi — A HORIZONTAL BAR, AND IT RUNS SMOOTHLY.
+     The triangle was two mistakes at once: a shape that POINTS at the lane
+     instead of lying alongside it, and a `transition` that made it arrive a
+     fifth of a second after the thing it is part of. It is a bar now, placed
+     in window coordinates every pass with no transition at all — and it
+     follows the TRUE reading position rather than the marker's snapped one,
+     so it glides while the marker steps from mark to mark. */
+  #nbpanel-root.vert .nbmap-cursor{
+      display:block;position:fixed;z-index:1450;
+      width:30px;height:14px;
+      background:transparent;pointer-events:auto;cursor:grab;
+      transition:none;}
+  #nbpanel-root.vert .nbmap-cursor::before{
+      content:"";position:absolute;left:0;right:3px;top:50%%;margin-top:-3px;
+      height:6px;border-radius:3px;
+      background:var(--nbmark,#0d63e0);
+      box-shadow:0 0 6px 1px var(--nbglow,rgba(13,99,224,.55));
+      transition:height .12s ease,background .12s ease;}
+  #nbpanel-root.vert .nbmap-cursor:hover::before{
+      height:10px;margin-top:-5px;}
+  /* 2026-09-25 — GRABBING IT DOES NOT REPAINT IT.
+     The drag switched the bar to --nbpick, a magenta that reads as red — as if
+     something had gone wrong at the exact moment the reader took hold of it.
+     Being held is not a state that needs a colour; it needs a little more
+     light. */
+  #nbpanel-root.vert .nbmap-cursor.nbdragging{cursor:grabbing;}
+  #nbpanel-root.vert .nbmap-cursor.nbdragging::before{
+      height:10px;margin-top:-5px;
+      box-shadow:0 0 10px 3px var(--nbglow,rgba(13,99,224,.65));}
+
+  /* ======================================================================
+     2026-09-24bg — THE TOOLBAR AT A SIZE YOU CAN READ.
+     The chips were set at .72em with 1.1px of letter-spacing, which is a
+     caption, not a control: the progress numbers — the one thing on the bar a
+     reader looks at while working — were the smallest text on the page. Every
+     control on the bar is raised to the document's own reading size and given
+     room to breathe. Nothing moves; everything grows. */
+  #nbpanel-root .nbdock .nbbtn{font-size:1.02em!important;
+      min-height:30px!important;padding:5px 11px!important;}
+  #nbpanel-root .nbdock .nbbtn.nbgear,
+  #nbpanel-root .nbdock .nbbtn.nbfull,
+  #nbpanel-root .nbdock .nbbtn.nbtheme,
+  #nbpanel-root .nbdock .nbbtn.nbskin{
+      font-size:1.18em!important;min-width:34px!important;padding:4px 8px!important;}
+  #nbpanel-root .nbdock .nbstat{font-size:1.0em!important;letter-spacing:.2px!important;}
+  #nbpanel-root .nbdock .nbpid{font-size:1em!important;letter-spacing:.4px!important;}
+  #nbpanel-root .nbdock .nbslval{font-size:.95em!important;letter-spacing:.2px!important;
+      min-width:72px!important;}
+  #nbpanel-root .nbdock .nbslider{height:16px!important;}
+  #nbpanel-root .nbdrawer .nbcell-h{font-size:.92em!important;letter-spacing:1.2px!important;}
+
+
+  /* ======================================================================
+     2026-09-28 (Paket 14, Skizze) — THE COVER WEARS THE SKIN.
+     The cover (title card, Play, the three section bars) is the markdown
+     cell and carries inline styles only: grey Play, grey bars, the same in
+     every skin. These rules reach it wherever this stylesheet is on the page
+     (a notebook that has run in this window, a saved output, the cover shown
+     again after a reset); on a truly cold first open there is no stylesheet
+     yet and the inline look stays — that part is the script's (Paket 14 JS).
+     Play is the one thing to press: it gets the skin's accent, a filled face
+     and a slow breathing ring; the bars take the skin's font and quiet ink. */
+  /* E18.6: atmet mit transform statt box-shadow */
+  @keyframes nbcover-breathe{0%%,100%%{transform:scale(1);}50%%{transform:scale(1.04);}}
+  body{--nbcov-acc:#3fa877;--nbcov-face:#ffffff;--nbcov-ink:#55636f;}
+  body[data-jp-theme-light="false"],body.nbdark{--nbcov-acc:#4fd39b;--nbcov-face:#1f252c;--nbcov-ink:#9fb0bd;}
+  /* (E15.2: no skin values here any more — the cover is minimal in every
+     skin; --nbcov-* is used by the cover alone) */
+  html body .nbtitle .nbcover .nbcover-play{
+      width:84px!important;height:84px!important;font-size:30px!important;
+      border:2px solid var(--nbcov-acc)!important;color:var(--nbcov-acc)!important;
+      background:var(--nbcov-face)!important;
+      border-radius:var(--nbskin-pill-r,50%%)!important;
+      /* 2026-09-30 (E10.M3, Paket 11): nichts länger als 1,5 s und nichts
+         ohne Ende — gemessen v1.38: 2,4 s × infinite (minimal, fairy). Drei
+         Atemzüge à 1,5 s, 4,5 s, dann steht der Ring still. */
+      animation:nbcover-breathe 1.5s ease-in-out 3;}
+  html body .nbtitle .nbcover .nbcover-play:hover{animation:none;
+      box-shadow:0 0 0 6px color-mix(in srgb,var(--nbcov-acc) 16%%,transparent),
+                 0 0 22px 6px color-mix(in srgb,var(--nbcov-acc) 26%%,transparent)!important;}
+  html body .nbtitle .nbcover .nbcover-play-lab{color:var(--nbcov-acc)!important;
+      font-family:var(--nbskin-font,inherit)!important;}
+  html body .nbtitle .nbcover .nbcover-hint,
+  html body .nbtitle .nbcover .nbcover-bar{color:var(--nbcov-ink)!important;
+      font-family:var(--nbskin-font,inherit)!important;}
+  html body .nbtitle .nbtitle-lead{font-family:var(--nbskin-font,inherit)!important;}
+  html body .nbtitle .nbcover .nbcover-bar > span:first-child,
+  html body .nbtitle .nbcover .nbcover-bar > span:last-child{
+      border-top:1px solid var(--nbcov-acc)!important;opacity:.55!important;
+      /* JupyterLab's sanitizer drops the inline border, so the rule was never drawn */}
+  /* the skins' own touches on Play are gone (E15.2: the cover is minimal);
+     fairy's soft halo stays on the DOCUMENT's title card only */
+  html body.nbskin-fairy .nbtitle:not(:has(>.nbcover)) .nbtitle-card{
+      box-shadow:0 10px 40px color-mix(in srgb,var(--nbcov-acc) 22%%,transparent)!important;}
+  @media (prefers-reduced-motion:reduce){
+      html body .nbtitle .nbcover .nbcover-play{animation:none!important;}}
+
+  /* ======================================================================
+     2026-09-28 (R3 · Paket 18, Skizze) — THE CHOICE BEFORE PLAY.
+     Contract for the script/markup (JS 18, Python 18):
+       .nbmode                    the field on the cover, above Play
+                                  (role=radiogroup)
+         .nbmode-t                its question line
+         .nbmode-opt              one choice (button, data-mode =
+                                  calc | code | both), chosen =
+                                  aria-checked="true" or `.on`
+           .nbmode-ic             its sign (✎ · ⌨ · ✎⌨)
+           .nbmode-l              its name ("Pen & paper")
+           .nbmode-d              one short line under it
+     The same field can stand in ⚙ later (it reads only its own classes).
+     Before the first Play no stylesheet is on the page: the markup must
+     carry a plain inline look of its own; these rules dress it wherever the
+     stylesheet is present (after a run, saved output, another tab). Colours
+     from the cover's --nbcov-* (Paket 14), so Play and the field are one. */
+  html body .nbmode{display:block;max-width:640px!important;margin:18px auto 22px!important;
+      text-align:center;font-family:var(--nbskin-font,inherit)!important;}
+  html body .nbmode-t{font-size:.78em;font-weight:800;letter-spacing:2px;
+      text-transform:uppercase;color:var(--nbcov-ink,#55636f)!important;margin-bottom:9px;}
+  html body .nbmode-row{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;}
+  html body .nbmode .nbmode-opt{all:unset;box-sizing:border-box;cursor:pointer;
+      display:flex;flex-direction:column;align-items:center;gap:2px;
+      flex:1 1 0;width:auto!important;min-width:120px;max-width:150px;padding:10px 8px 9px;
+      font-family:var(--nbskin-font,inherit)!important;
+      background:var(--nbcov-face,#fff)!important;color:var(--nbcov-ink,#55636f)!important;
+      border:1.5px solid color-mix(in srgb,var(--nbcov-ink) 35%%,transparent)!important;
+      border-radius:min(var(--nbskin-r,12px),16px)!important;
+      transition:border-color .16s ease,box-shadow .16s ease,transform .16s ease,color .16s ease;}
+  html body .nbmode .nbmode-opt:hover{transform:translateY(-2px);
+      border-color:var(--nbcov-acc,#3fa877)!important;}
+  html body .nbmode .nbmode-opt:focus-visible{outline:2px solid var(--nbring,#0d63e0);outline-offset:2px;}
+  html body .nbmode .nbmode-ic{font-size:20px;line-height:1.2;}
+  html body .nbmode .nbmode-l{font-weight:800;font-size:.9em;color:var(--nbskin-ink,#1f2933)!important;}
+  html body .nbmode .nbmode-d{font-size:.74em;line-height:1.3;opacity:.9;}
+  html body .nbmode .nbmode-opt:is([aria-checked="true"],.on){
+      border-color:var(--nbcov-acc,#3fa877)!important;color:var(--nbcov-acc,#3fa877)!important;
+      background:color-mix(in srgb,var(--nbcov-acc) 10%%,var(--nbcov-face))!important;
+      box-shadow:0 0 0 3px color-mix(in srgb,var(--nbcov-acc) 22%%,transparent)!important;}
+  html body .nbmode .nbmode-opt:is([aria-checked="true"],.on) .nbmode-l{color:var(--nbcov-acc,#3fa877)!important;}
+  /* the chosen one carries a small tick in its corner */
+  html body .nbmode .nbmode-opt{position:relative;}
+  html body .nbmode .nbmode-opt:is([aria-checked="true"],.on)::after{content:"✓";
+      position:absolute;top:4px;right:7px;font-size:11px;font-weight:900;color:var(--nbcov-acc);}
+  /* 2026-10-02 — E16.11 (Oberfläche): VIER KARTEN IN EINER REIHE — die
+     vierte ist „plain“ (`.nbmode-opt[data-mode="plain"]`; das Feld baut JS
+     mit Inline-Maßen 520/150 px, daher !important). Das Feld ist so breit
+     wie der Textblock (640 px), die Karten teilen sich die Reihe (je ≤ 150,
+     ≥ 120 px); wo das nicht reicht (⚙), brechen sie um. */
+  /* (the skins' own mode cards are gone: E15.2, the cover is minimal) */
+  @media (prefers-reduced-motion:reduce){ html body .nbmode .nbmode-opt{transition:none!important;} }
+
+  /* ======================================================================
+     2026-09-29 — EILAUFTRAG E8.13 (Oberfläche, Skizze). MARKER AND TRAIL
+     ARE ONE BODY — A COMET. Video V4: the band of the marker and the trail
+     behind it read as two things — a 7-px band with hemmed ends, then a gap,
+     then a thinner masked streak. Now:
+       head   a capsule as wide as the trail's root (11 px × K), lit from
+              inside (radial highlight over the mark colour), a thin ring in
+              the panel's surface and one halo around it — no hem mask, so
+              its ends are round, not faded;
+       tail   the same width where it meets the head and tapering to a
+              point (clip-path), the colour running from the head's hue to
+              nothing; it reaches 12 px (× K) INTO the head, so there is no
+              seam between them; its light is the same halo, blurred and
+              tapered the same way.
+     Which end is the head's is the trail's own data-side (above = reading
+     down, head at the bottom). */
+  html body #nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-here{
+      width:calc(11px * var(--nbk,1))!important;margin-left:calc(-5.5px * var(--nbk,1))!important;
+      z-index:6;}
+  html body #nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-here::before{
+      width:calc(11px * var(--nbk,1))!important;margin-left:calc(-5.5px * var(--nbk,1))!important;
+      border-radius:999px!important;
+      -webkit-mask-image:none!important;mask-image:none!important;
+      background:radial-gradient(ellipse 60%% 38%% at 42%% 34%%,
+                   color-mix(in srgb,#fff 70%%,var(--nbmark,#0d63e0)) 0,transparent 100%%),
+                 var(--nbmark-ink,var(--nbmark,#0d63e0))!important;
+      border:1.5px solid var(--nbpanel-surf,#fff)!important;
+      box-shadow:0 0 0 1px color-mix(in srgb,var(--nbmark,#0d63e0) 55%%,transparent),
+                 0 1px 3px rgba(0,0,0,.25)!important;}
+
+  /* ======================================================================
+     2026-10-02 — EILAUFTRAG E16.3 (Oberfläche; ersetzt E11.8 Leuchten,
+     E12.5 Spur und FINAL-KRITERIEN „Marker und Spur“). DAS LEUCHTEN IST
+     EIN KREIS HINTER DEM MARKER — kein Schweif, keine Spur. `.nbmap-trail`
+     zeichnet nicht mehr (05-document: display:none). Das Leuchten
+     (`.nbmap-here::after`) ist rund (Breite = Höhe), mittig auf dem Marker
+     (left/top 50 %% − halber Durchmesser = Lesehöhe) und liegt in der Ebene
+     darunter (z-index −1 im Stapel des Markers: unter dem Kopf ::before,
+     über dem Strahl). Vier IDs: schlagen jede ältere Regel mit drei, auch
+     die mit [data-dir]. */
+  html body #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-here::after{
+      left:50%%!important;top:50%%!important;bottom:auto!important;z-index:-1;
+      width:calc(30px * var(--nbkz,1))!important;height:calc(30px * var(--nbkz,1))!important;
+      margin:calc(-15px * var(--nbkz,1)) 0 0 calc(-15px * var(--nbkz,1))!important;
+      border-radius:50%%!important;-webkit-mask-image:none!important;mask-image:none!important;
+      background:var(--nbglow,rgba(13,99,224,.55))!important;box-shadow:none!important;
+      filter:blur(calc(6px * var(--nbkz,1)))!important;opacity:.9!important;}
+
+  /* ======================================================================
+     2026-10-02 — EILAUFTRAG E21.8 (Oberfläche; Lage JS). DIE LEUCHTSPUR
+     IST WIEDER DA: Strich (E18.7) und Kreis (E16.3) bleiben, dahinter
+     eine Spur, die der Bewegung nachläuft — ihre Länge folgt der
+     Geschwindigkeit, nach Stillstand ist sie in 0,5 s weg. Ersetzt den
+     Teil „keine Spur“ aus E16.3 (`.nbmap-trail` bleibt aus; die Spur ist
+     kein eigenes Element mehr).
+     So geht es: `--nbm-lag` (registriert) folgt `--nbm-y` mit 0,5 s
+     Übergang — die Lücke zwischen beiden ist die Spur, gezeichnet als
+     `border-image` außerhalb der Marker-Box (`outset`, oben beim Lesen
+     nach unten, unten beim Lesen nach oben), höchstens 140 px × Lupe,
+     in Ruhe 0 (in der Box selbst immer durchsichtig: Ruhebild = E16.3).
+     VERTRAG AN JS (17-rail-marker, markCentre): an `.nbmap-here` neben
+     `top` auch `--nbm-y` setzen, derselbe Wert in px:
+         mark.style.setProperty('--nbm-y', top + 'px');
+     Ohne `--nbm-y` ist alles 0 → keine Spur, nichts sonst ändert sich.
+     Sieben IDs: schlägt die Übergangsliste aus E18.6 (sechs).
+     2026-10-03 — E21 Rest C8 (Oberfläche). DIE SPUR IST WEG, BEVOR DER
+     ÜBERGANG AUSLÄUFT. Gemessen (Tor 03.10. 17:4x, Modeling cyber dunkel,
+     1 CPU): 0,7 s nach Stillstand noch 5 px Spur. Ursache: der Übergang
+     beginnt erst mit der nächsten Stilberechnung (bei 3–5 Bildern/s bis
+     0,3 s nach der letzten Bewegung), und sein flaches Ende ließ die
+     letzten Pixel bis ans Ende der 0,5 s stehen (Lücke 250 px → nach 0,4 s
+     noch 5 px). Jetzt: Übergang 0,45 s, und die Spur ist 5 px × Lupe
+     kürzer als die Lücke — die letzten 5 px des Auslaufs zeichnen nichts.
+     Gemessen (echtes Lab, Lücke im Stil): Spur weg nach 0,27–0,32 s,
+     unter Last ≤ 0,42 s (vorher 0,36–0,45 bzw. ≤ 0,54 s); in Bewegung
+     schnell weiter 140 px, langsam 8–12 px statt 14–15. */
+  @property --nbm-lag{syntax:'<length>';inherits:false;initial-value:0px;}
+  html body:not(#nbz#nbz#nbz#nbz#nbz#nbz) #nbpanel-root.vert .nbmap-here{
+      --nbm-lag:var(--nbm-y,0px);
+      --nbm-up:clamp(0px,calc(var(--nbm-y,0px) - var(--nbm-lag) - 5px * var(--nbkz,1)),calc(140px * var(--nbkz,1)));
+      --nbm-dn:clamp(0px,calc(var(--nbm-lag) - var(--nbm-y,0px) - 5px * var(--nbkz,1)),calc(140px * var(--nbkz,1)));
+      --nbm-tr:var(--nbglow,rgba(13,99,224,.55));
+      transition-property:--nbspin,--nbgrow,transform,opacity,translate,scale,rotate,--nbm-lag!important;
+      transition-duration:.2s,.2s,.2s,.2s,.2s,.2s,.2s,.45s!important;
+      transition-timing-function:ease,ease,ease,ease,ease,ease,ease,cubic-bezier(.25,.5,.4,1)!important;
+      border-style:solid!important;
+      border-image-source:linear-gradient(to bottom,transparent 0,var(--nbm-tr) var(--nbm-up),
+          transparent var(--nbm-up),transparent calc(100%% - var(--nbm-dn)),
+          var(--nbm-tr) calc(100%% - var(--nbm-dn)),transparent 100%%)!important;
+      border-image-slice:0 fill!important;border-image-width:0!important;
+      border-image-outset:var(--nbm-up) 0 var(--nbm-dn) 0!important;border-image-repeat:stretch!important;}
+  @media (prefers-reduced-motion:reduce){
+      html body:not(#nbz#nbz#nbz#nbz#nbz#nbz) #nbpanel-root.vert .nbmap-here{border-image-source:none!important;}}
+
+  /* ======================================================================
+     2026-10-04 — EILAUFTRAG E22.5 (Oberfläche; Lage und Länge weiter JS +
+     E21.8). DIE LEUCHTSPUR WIE IN v1.54: in der Farbe des Stils, weich,
+     hinter dem Marker; nie weiß auf dunkel. Video 3 (Modeling dunkel) und
+     gemessen v1.62, minimal dunkel: Kreis und Spur reinweiß (--nbglow =
+     weiß .75), die Spur ein hart begrenzter Streifen genau so breit wie die
+     Marker-Box, flach gefüllt — ein weißer Klecks mit weißem Strich darüber.
+     Jetzt:
+       * Farbe --nbm-c: hell der Leseton des Stils (--nbmark-ink, sonst
+         --nbmark, wie E21.9), dunkel die Stilfarbe (--nbmark); minimal
+         dunkel, wo --nbmark weiß ist, dessen Akzent (--nbskin-acc #8fc7e8).
+         Dunkel nehmen Spur, Kreis und (minimal) der Strich sie; hell bleiben
+         Kreis und Strich wie E21.9.
+       * Form: ein weicher Schweif statt eines Streifens, gleich breit
+         (kein Keil, E12.5): der Kern so breit wie die Box, je 5 px × Lupe
+         weicher Rand daneben; am Marker am dichtesten, nach hinten
+         auslaufend. Gezeichnet als `border-image` (Neunteilung) aus einem
+         radialen Verlauf: die mittlere Spalte gibt den Kern (nur die
+         Länge verläuft), die Ecken den weichen Rand; obere Hälfte = Spur
+         über dem Marker, untere = darunter; sie greift 6 px × Lupe in die
+         Box (unter Kreis und Strich), damit sie nicht an der Boxkante
+         abbricht. Ohne `fill`: in Ruhe zeichnet die Box nichts, Ruhebild =
+         Kreis + Strich.
+       * Länge, Richtung, Auslaufen: unverändert E21.8/C8 (--nbm-up/-dn,
+         0,45 s, in Ruhe 0). Kreis (E16.3) und Strich (E18.7) bleiben.
+     Acht IDs: schlägt E21.8 (sieben). */
+  html body:not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz) #nbpanel-root.vert .nbmap-here{
+      --nbm-c:var(--nbmark-ink,var(--nbmark,#0d63e0));
+      --nbm-wx:calc(5px * var(--nbkz,1));--nbm-in:calc(9px * var(--nbkz,1));
+      border-image-source:linear-gradient(to right,transparent 0,
+          color-mix(in srgb,var(--nbm-c) 30%%,transparent) 18%%,
+          color-mix(in srgb,var(--nbm-c) 85%%,transparent) 38%%,
+          color-mix(in srgb,var(--nbm-c) 85%%,transparent) 62%%,
+          color-mix(in srgb,var(--nbm-c) 30%%,transparent) 82%%,transparent 100%%)!important;
+      border-image-slice:50%% 0 50%% 0!important;
+      border-image-width:calc(var(--nbm-up) + min(var(--nbm-up),var(--nbm-in))) 0
+          calc(var(--nbm-dn) + min(var(--nbm-dn),var(--nbm-in))) 0!important;
+      border-image-outset:var(--nbm-up) var(--nbm-wx) var(--nbm-dn) var(--nbm-wx)!important;
+      -webkit-mask-image:radial-gradient(circle calc(26px * var(--nbkz,1)) at 50%% 50%%,#000 55%%,transparent 100%%),
+          linear-gradient(to bottom,transparent calc(50%% - 10px * var(--nbkz,1) - var(--nbm-up)),#000 50%%,
+          transparent calc(50%% + 10px * var(--nbkz,1) + var(--nbm-dn)));
+      mask-image:radial-gradient(circle calc(26px * var(--nbkz,1)) at 50%% 50%%,#000 55%%,transparent 100%%),
+          linear-gradient(to bottom,transparent calc(50%% - 10px * var(--nbkz,1) - var(--nbm-up)),#000 50%%,
+          transparent calc(50%% + 10px * var(--nbkz,1) + var(--nbm-dn)));
+      -webkit-mask-size:calc(100%% + 80px) calc(100%% + 400px);mask-size:calc(100%% + 80px) calc(100%% + 400px);
+      -webkit-mask-position:center;mask-position:center;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+      -webkit-mask-clip:no-clip;mask-clip:no-clip;mask-composite:add;-webkit-mask-composite:source-over;}
+  html body.nbdark:not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz) #nbpanel-root.vert .nbmap-here{
+      --nbm-c:var(--nbmark,#8fc7e8);}
+  html body.nbdark:not([class*="nbskin-"]):not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz) #nbpanel-root.vert .nbmap-here{
+      --nbm-c:var(--nbskin-acc,#8fc7e8);}
+  html body.nbdark:not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz) #nbpanel-root.vert .nbmap-here::after{
+      background:color-mix(in srgb,var(--nbm-c) 70%%,transparent)!important;}
+  html body.nbdark:not([class*="nbskin-"]):not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz) #nbpanel-root.vert .nbmap-here::before{
+      background:var(--nbm-c)!important;}
+  @media (prefers-reduced-motion:reduce){
+      html body:not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz) #nbpanel-root.vert .nbmap-here{border-image-source:none!important;}}
+
+  /* ======================================================================
+     2026-10-02 — EILAUFTRAG E15.2 (Oberfläche). DAS COVER IST IMMER
+     „MINIMAL“; NUR SEINE TIMELINE TRÄGT DEN GEWÄHLTEN STIL. Das Cover (die
+     Markdown-Zelle mit `.nbcover`) zeigt sich mit unserem Stylesheet, wo
+     schon ein Notebook gelaufen ist — und trug dann den Stil ganz
+     (gemessen v1.51, zweites Notebook neben einem gelaufenen: 139–145 von
+     885 Werten der Karte anders als in minimal). Jetzt:
+       * Play und die Modus-Karten: die Stil-Werte von --nbcov-* und die
+         eigenen Stil-Regeln (06-marks) sind gestrichen — es gibt sie nur
+         auf dem Cover;
+       * Titelkarte, Titel, Linie, Untertitel, Satz: die Werte von minimal
+         (Inline-Stil bzw. 03-panel/08-print), über jede Stil-Regel;
+       * Schrift, Ecken, Tinte: die minimalen; die Timeline (.nbcover-tl)
+         ist ausgenommen und erbt weiter den Stil von body.
+     Die Titelkarte im Dokument (ohne .nbcover) bleibt im Stil. Vor dem
+     ersten Lauf ist kein Stylesheet da — dort bleibt alles wie E14.
+     2026-10-04 (E21 Rest Stufe 2, Werkstatt JS mit Eintrag in DATEIEN.md;
+     Wirkung Applikation): die Nachkommen-Regel nennt das Cover über seine
+     Zelle (die Markdown-Zelle) statt über `:has(>.nbcover)`. Mit `:has` am
+     Vorfahren und dem Allquantor `:not(…)` als Subjekt kostete JEDE
+     Neuberechnung des Stils in der Seite ~ 75 ms (gemessen v1.63, 1 CPU:
+     Text im Feld eines Reglers ändern + `scrollWidth`, wie ipywidgets es nach
+     jedem Tippen tut: 74–84 ms mit, 12–13 ms ohne diese eine Regel) — beim
+     Tippen in ein Regler-Feld vor dem Senden an den Kernel (`lab_inputs` A,
+     Grenze 0,5 s). Gleiche Spezifität (1,3,2); die Titelkarte im Dokument
+     steht in einer Ausgabe, nicht in einer Markdown-Zelle, und bleibt im Stil. */
+  html body .nbtitle:has(>.nbcover):not(#nbz),
+  html body :is(.jp-RenderedMarkdown,.jp-MarkdownOutput) .nbtitle:not(#nbz) :not(.nbcover-tl,.nbcover-tl *){
+      font-family:var(--jp-content-font-family)!important;--nbskin-r:initial;--nbskin-pill-r:initial;}
+  html body .nbtitle:has(>.nbcover):not(#nbz) .nbtitle-card{
+      background:#f8fafb!important;border-color:#dde5ec!important;border-radius:16px!important;
+      box-shadow:none!important;color:inherit!important;}
+  html body .nbtitle:has(>.nbcover):not(#nbz) .nbtitle-h{color:#33475b!important;}
+  html body .nbtitle:has(>.nbcover):not(#nbz) .nbtitle-rule{background:#cbd5de!important;}
+  html body .nbtitle:has(>.nbcover):not(#nbz) :is(.nbtitle-sub,.nbtitle-lead){color:#4f5d6a!important;}
+  html body .nbtitle:has(>.nbcover):not(#nbz) .nbmode{--nbskin-ink:#1f2933;}
+  html body[data-jp-theme-light="false"] .nbtitle:has(>.nbcover):not(#nbz) .nbtitle-card{
+      background:#1d2228!important;border-color:#33414f!important;}
+  html body[data-jp-theme-light="false"] .nbtitle:has(>.nbcover):not(#nbz) .nbtitle-h{color:#dbe4ec!important;}
+  html body[data-jp-theme-light="false"] .nbtitle:has(>.nbcover):not(#nbz) .nbtitle-rule{background:#3b4652!important;}
+  html body.nbdark .nbtitle:has(>.nbcover):not(#nbz) :is(.nbtitle-sub,.nbtitle-lead){color:#7fb8dc!important;}
+  html body.nbdark .nbtitle:has(>.nbcover):not(#nbz) .nbmode{--nbskin-ink:#dbe2e9;}
+
+  /* ======================================================================
+     2026-10-02 — EILAUFTRAG E17.3 (Oberfläche; Verhalten JS, Markup JS/
+     Python). EINLOGGEN SCHON AUF DEM COVER. Das Konto (.nbacct, Vertrag
+     E19.5) steht auf dem Cover dort, wo die Wahl wirkt: im Feld der
+     Modus-Karten, als ruhige Karte gleicher Breite (Textblock, 640 px),
+     Überschrift wie „What do you want to practise?“ (.nbacct-t). Nicht
+     eingeloggt: Profil-Code + Passwort + „Log in“ in einer Reihe, „New
+     account“ daneben; eingeloggt (data-in="1"): nur die Person-Id und
+     „Log out“, mittig. Farben: minimal wie das ganze Cover (E15.2,
+     --nbcov-*), hell/dunkel folgen dem Lab. Vor Play (kein Stylesheet)
+     zeichnet das Markup sich selbst — oder fehlt, das entscheidet JS.
+     2026-10-03 (rebase v1.62, Markup JS PAUSE-js): ebenso
+     .nbacct-cover > .nbacct-cover-h (Überschrift außerhalb der Karte) +
+     .nbacct[data-where="cover"][data-state] mit .nbacct-row (s. E19.5). */
+  html body .nbcover .nbacct,html body .nbtitle:has(>.nbcover) .nbacct{
+      --nbacct-acc:var(--nbcov-acc,#3fa877);--nbacct-ink:#1f2933;--nbskin-ink:#1f2933;
+      --nbskin-font:var(--jp-content-font-family);
+      --nbacct-face:var(--nbcov-face,#fff);--nbacct-quiet:#55636f;--nbacct-line:#c3ced8;--nbacct-ok:#1e7a4c;
+      max-width:640px!important;margin:0 auto 20px!important;padding:12px 14px 13px;
+      box-sizing:border-box;text-align:center;
+      border:1.5px solid color-mix(in srgb,var(--nbcov-ink,#55636f) 35%%,transparent);
+      border-radius:16px;background:var(--nbacct-face);
+      font-family:var(--jp-content-font-family)!important;}
+  html body.nbdark .nbtitle:has(>.nbcover) .nbacct,
+  html body[data-jp-theme-light="false"] .nbtitle:has(>.nbcover) .nbacct{
+      --nbacct-ink:#dbe2e9;--nbskin-ink:#dbe2e9;--nbacct-quiet:#9fb0bd;--nbacct-line:#3b4652;--nbacct-ok:#4fd39b;}
+  html body .nbtitle:has(>.nbcover) :is(.nbacct:not(#nbz) .nbacct-t,.nbacct-cover:not(#nbz) > .nbacct-cover-h){font-size:.78em;font-weight:800;letter-spacing:2px;
+      text-transform:uppercase;color:var(--nbcov-ink,#55636f)!important;margin:0 0 9px;}
+  html body .nbtitle:has(>.nbcover) .nbacct:not(#nbz) :is(.nbacct-form,.nbacct-me,.nbacct-row){justify-content:center;}
+  html body .nbtitle:has(>.nbcover) .nbacct:not(#nbz) :is(.nbacct-form,.nbacct-row) :is(input.nbacct-code,.nbacct-pwbox,input.nbacct-pw){flex:1 1 150px;}
+  /* Hauptknopf auf dem Cover in der Farbe von Play/Modus-Wahl; Text dunkel
+     auf dem hellen Grün (≥ 4,5 : 1), weiß gäbe nur 2,9 : 1 */
+  html body .nbtitle:has(>.nbcover) .nbacct:not(#nbz) button.nbacct-btn:is(.nbprimary,[data-do="in"],[data-do="create"],[data-do="code"]){color:#10251b!important;}
+  html body .nbtitle:has(>.nbcover) .nbacct:not(#nbz) :is(.nbacct-msg,.nbacct-note){text-align:left;}
+  html body .nbtitle:has(>.nbcover) .nbacct:is([data-in="1"],[data-state="in"]){padding-block:10px;}
+  html body .nbtitle:has(>.nbcover) .nbacct:is([data-in="1"],[data-state="in"]):not(#nbz) .nbacct-id{font-size:15px!important;}
+  /* E24.3 (2026-10-06, Python): das Cover ist jetzt die letzte AUSGABE der
+     Mega-Zelle (.nbtitle.nbcover-out), nicht mehr die Markdown-Zelle. In einem
+     Notebook mit laufendem Dokument bleibt es weg wie bisher das kalte Cover
+     (Regel oben fuer .nbcover); ohne diese Zeile staenden Karte und Lernziele
+     des Covers als zweite Titelkarte ueber dem Dokument. Wann das Cover nach
+     dem Lauf sichtbar ist (zuerst Cover, Play -> Dokument), entscheidet JS. */
+  .jp-NotebookPanel.nbrail-own .nbcover-out,
+  .jp-Notebook.nbrail-own .nbcover-out{display:none!important;}
+  /* 2026-10-07 — E24 Stufe 2 Rest (CSS; Hinweis aus dem js-E24.3-Lauf).
+     DAS COVER UEBER DEM NOTEBOOK GEHOERT DEM STYLESHEET. Liegt das Ausgabe-
+     Cover oben (JS setzt `[data-nbcov]` an `.nbcover-out`, 19-rail covLay),
+     gibt diese Regel es und sein inneres `.nbcover` frei: die Sperren oben
+     (`.nbrail-own .nbcover`, `.nbrail-own .nbcover-out`, display:none!important)
+     gelten dem laufenden Dokument, nicht dem Cover. JS braucht dafuer kein
+     `display` inline mehr (bisher am Cover und am inneren `.nbcover`).
+     Die Flaeche: der Grund des Notebooks in seinem hell/dunkel
+     (--jp-layout-color0, das auch nbforce-dark/-light setzt); die Karte bleibt
+     minimal (E15.2), nur die Cover-Timeline traegt den Stil. Lage, Groesse,
+     Rollen und der Raum unter der letzten Zeile bleiben beim Skript.
+     Spezifitaet (0,3,2) bzw. (0,4,2) ueber (0,3,0) der Sperren. */
+  html body .jp-NotebookPanel .nbcover-out[data-nbcov],
+  html body .jp-NotebookPanel .nbcover-out[data-nbcov] .nbcover{display:block!important;}
+  html body .jp-NotebookPanel .nbcover-out[data-nbcov]{background:var(--jp-layout-color0,#fff)!important;}
+
+  /* ======================================================================
+     2026-10-08 — EILAUFTRAG E25.q (Oberfläche; Spur-Länge und Lage JS).
+     MARKER, LEUCHTEN UND SPUR SIND EIN ZUSAMMENHÄNGENDES OBJEKT. Video
+     Nutzer (v1.67, Lab dunkel, reingezoomt): das Leuchten ein senkrechtes
+     Band, links und rechts hart abgeschnitten. Gemessen v1.67: (1) das
+     Leuchten (Kreis 30 px × Lupe + Unschärfe 6 px × Lupe, sichtbar ≈ 50 px
+     × Lupe) ist breiter als die eingeklappte Leiste (`.nbmap`, ein
+     Scroll-Container, schneidet ab: 38 px bei 100 %%, 69 px bei 200 %%) —
+     an beiden Kanten gekappt; (2) die Maske aus E22.5 ist nur Box + 80 px
+     breit und ihr Kreis 26 px × Lupe — ganz reingezoomt schneidet sie das
+     Leuchten seitlich (Panel offen, 200 %%: 69 × 78 px statt rund).
+     Jetzt:
+       * Leuchten = radialer Verlauf, rund (Breite = Höhe), läuft weich
+         bis auf 0 aus, ohne `filter` (nichts ragt über die Box hinaus);
+         Halbmesser 16,5 px × Lupe — passt in die eingeklappte Leiste bei
+         jeder Lupe (Abstand Marker-Mitte ↔ Leistenkante ≈ 18 px × Lupe),
+         wird also nie von ihr beschnitten.
+       * Durchscheinend: die XP-Leiste läuft sichtbar DURCH das Leuchten
+         (Leuchten über der Leiste, Leiste scheint durch; der Strich davor).
+         *Lesart „teils davor, teils dahinter“.*
+       * Maske (E22.5) so groß, dass sie nichts seitlich abschneidet:
+         Box + 400 px, ihr Kreis bis 16,6 px × Lupe voll (≥ Leuchten), dann
+         weich bis 26 px (kein Bogen, wo die Spur ins Leuchten geht); die Spur
+         kommt weiter aus E21.8/E22.5 (gleich breit, schmaler als das
+         Leuchten, setzt am Leuchten an, verblasst ≤ 0,45 s).
+     Neun IDs: schlägt E22.5 (acht) und E21.9/E16.3 (vier). */
+  html body:not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz#nbz#nbz) #nbpanel-root.vert .nbmap-here{
+      -webkit-mask-image:radial-gradient(circle calc(26px * var(--nbkz,1)) at 50%% 50%%,#000 64%%,transparent 100%%),
+          linear-gradient(to bottom,transparent calc(50%% - 10px * var(--nbkz,1) - var(--nbm-up)),#000 50%%,
+          transparent calc(50%% + 10px * var(--nbkz,1) + var(--nbm-dn)));
+      mask-image:radial-gradient(circle calc(26px * var(--nbkz,1)) at 50%% 50%%,#000 64%%,transparent 100%%),
+          linear-gradient(to bottom,transparent calc(50%% - 10px * var(--nbkz,1) - var(--nbm-up)),#000 50%%,
+          transparent calc(50%% + 10px * var(--nbkz,1) + var(--nbm-dn)));
+      -webkit-mask-size:calc(100%% + 400px) calc(100%% + 400px);mask-size:calc(100%% + 400px) calc(100%% + 400px);}
+  html body:not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz#nbz#nbz) #nbpanel-root.vert .nbmap-here::after{
+      left:50%%!important;top:50%%!important;bottom:auto!important;z-index:-1;
+      width:calc(33px * var(--nbkz,1))!important;height:calc(33px * var(--nbkz,1))!important;
+      margin:calc(-16.5px * var(--nbkz,1)) 0 0 calc(-16.5px * var(--nbkz,1))!important;
+      border-radius:50%%!important;-webkit-mask-image:none!important;mask-image:none!important;
+      background:radial-gradient(circle closest-side,
+          color-mix(in srgb,var(--nbm-c,#0d63e0) 80%%,transparent) 0,
+          color-mix(in srgb,var(--nbm-c,#0d63e0) 66%%,transparent) 45%%,
+          color-mix(in srgb,var(--nbm-c,#0d63e0) 34%%,transparent) 75%%,
+          transparent 100%%)!important;
+      box-shadow:none!important;filter:none!important;opacity:1!important;}
+  /* Verlauf dunkel dichter als im ersten Wurf (74/52/20): 10 px neben der
+     Mitte war der Kreis in minimal dunkel zu blass (C22.5: Chroma 29 < 30,
+     Tor v1.68); jetzt 80/66/34 — ≈ 47 %% Farbe dort, Chroma ≈ 40. */
+  /* E25 Rest q (v1.68, Tor „pair“): die eingeklappte Leiste ist nicht immer
+     18 px × Lupe je Seite breit — mit zwei offenen Notebooks gemessen bei
+     Lupe 130–150 %% nur 28–32 px (Achse 15–17 px von der linken, 13–15 px von
+     der rechten Kante; JS-Befund). Das Leuchten richtet sich darum nach der
+     echten Leiste: Halbmesser = der kleinste von 16,5 px × Lupe, Abstand
+     Achse ↔ linke Kante − 2 px, Abstand Achse ↔ rechte Kante − 2 px
+     (Container-Einheit `cqi` der Leiste `.nbmap`). Rund bleibt es immer,
+     abgeschnitten wird es nie. Ohne Container-Abfragen (Safari < 16) gilt
+     die Regel davor (@supports: sonst machte `cqi` die Werte ungültig). */
+  @supports (width:1cqi){
+    html body #nbpanel-root#nbpanel-root.vert .nbmap{container-type:inline-size;}
+    /* Die Spur (E22.5, Kern = Box, je 5 px × Lupe weicher Rand) bleibt
+       schmaler als das Leuchten: ihr Rand schrumpft mit, wenn die Leiste das
+       Leuchten verkleinert (Box-Hälfte 5,5 px × Lupe, 1 px Luft).
+       E25 Rest q 2 (Tor v1.69-Probe, rot 2×): Panel ganz zugezogen bzw.
+       „pair“ macht die eingeklappte Leiste bei Lupe 60 nur 15–17 px breit
+       (JS: WMIN aus markFloor). Dort war das Leuchten 10 × 10 px, der Rand der
+       Spur 0 und ihr Kern (38–62 %% der Breite) ≈ 1,5 px — ein Faden hinter
+       dem 4,8 px breiten Strich, vom Leuchten abgerissen. Jetzt:
+         * das Leuchten schrumpft nie unter den Strich: Halbmesser ≥ halber
+           Strich (4 px × Lupe) + 2 px × Lupe + 2,5 px — es rahmt den Strich
+           immer sichtbar ein (Lupe 60: 12 px, passt in die 15-px-Leiste mit
+           1,4 px Abstand zu den Kanten);
+         * die Spur ist dann so breit wie das Leuchten (− 1 px je Seite);
+         * ihr Kern wächst um so viel, wie das Leuchten fehlt
+           (--nbgl-d = 16,5 px × Lupe − Halbmesser): bei voller Größe sind
+           die Stopps 18/38/62/82 %% wie E22.5, in der schmalen Leiste reicht
+           der Kern über die Strichbreite — die Spur setzt sichtbar am
+           kleinen Leuchten an, ein Objekt. */
+    html body:not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz#nbz#nbz) #nbpanel-root.vert .nbmap-here{
+        --nbgl-r:max(calc(6px * var(--nbkz,1) + 2.5px),min(calc(16.5px * var(--nbkz,1)),calc(var(--nbvert-axis,30px) - 2px),
+            calc(100cqi - var(--nbvert-axis,30px) - 2px)));
+        --nbgl-d:max(0px,calc(16.5px * var(--nbkz,1) - var(--nbgl-r)));
+        --nbm-wx:max(0px,min(calc(5px * var(--nbkz,1)),calc(var(--nbgl-r) - 5.5px * var(--nbkz,1) - 1px)));}
+    html body:not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz#nbz#nbz) #nbpanel-root.vert .nbmap-here::after{
+        width:calc(2 * var(--nbgl-r))!important;height:calc(2 * var(--nbgl-r))!important;
+        margin:calc(-1 * var(--nbgl-r)) 0 0 calc(-1 * var(--nbgl-r))!important;}
+    @media (prefers-reduced-motion:no-preference){
+      html body:not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz#nbz#nbz) #nbpanel-root.vert .nbmap-here{
+        border-image-source:linear-gradient(to right,transparent 0,
+            color-mix(in srgb,var(--nbm-c) 30%%,transparent) max(.5px,calc(18%% - .6 * var(--nbgl-d))),
+            color-mix(in srgb,var(--nbm-c) 85%%,transparent) max(1.5px,calc(38%% - .6 * var(--nbgl-d))),
+            color-mix(in srgb,var(--nbm-c) 85%%,transparent) min(calc(100%% - 1.5px),calc(62%% + .6 * var(--nbgl-d))),
+            color-mix(in srgb,var(--nbm-c) 30%%,transparent) min(calc(100%% - .5px),calc(82%% + .6 * var(--nbgl-d))),
+            transparent 100%%)!important;}}}
+  /* hell dichter (E21.9: ΔE ≥ 25 neben der Leiste, 9 px von der Mitte) */
+  html body:not(.nbdark):not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz#nbz#nbz) #nbpanel-root.vert .nbmap-here::after{
+      background:radial-gradient(circle closest-side,
+          color-mix(in srgb,var(--nbm-c,#0d63e0) 88%%,transparent) 0,
+          color-mix(in srgb,var(--nbm-c,#0d63e0) 72%%,transparent) 45%%,
+          color-mix(in srgb,var(--nbm-c,#0d63e0) 30%%,transparent) 75%%,
+          transparent 100%%)!important;}

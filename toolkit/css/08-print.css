@@ -1,0 +1,218 @@
+  /* ======================================================================
+     2026-09-27 (night shift) — THE PRINT VIEW IS A HANDOUT.
+
+     Measured before this block (Complex, Lab 4.6.4, Chromium 141, Ctrl+P
+     emulated): the print view was the screen — panel, sidebars, tab bar,
+     toolbar, ONE chapter open, and the PDF was ONE page holding 1 of 23
+     chapter headings. Not because the printer clipped on purpose: JupyterLab
+     lays its shell out with absolute positions and puts the document in an
+     `overflow:auto` scroller sized to the window, and a scroller prints
+     exactly one window's worth. So a handout needs three things, all
+     print-only, none touching the screen:
+
+       1. the shell, the panel, every control and every piece of cell
+          furniture go — a reader of paper cannot click;
+       2. every ancestor between <body> and the cells stops being a positioned
+          box of window size and becomes ordinary flow, so the page grows
+          with the document instead of the window;
+       3. every chapter is open — the accordion hides a closed one with
+          `.lm-mod-hidden` (0,1,0 + !important); the rule here is heavier
+          (0,2,0 + !important) and wins. A LOCKED chapter has no content in
+          the DOM at all — gating, not printing — so it prints as its header
+          and its locked note, which is what the reader would see on screen.
+
+     The dark document prints LIGHT (2026-09-27a): colour is keyed on
+     body.nbdark and CSS cannot take a class away, so the panel script takes
+     it off on `beforeprint` and puts it back on `afterprint` (see
+     __nbPrintLight). The widgets' input fields print as they are. */
+  @media print{
+    /* 1. the shell */
+    body:where(.nb-dc-active) #jp-top-panel,body:where(.nb-dc-active) #jp-menu-panel,body:where(.nb-dc-active) .jp-SideBar,body:where(.nb-dc-active) #jp-left-stack,body:where(.nb-dc-active) #jp-right-stack,
+    body:where(.nb-dc-active) #jp-bottom-panel,body:where(.nb-dc-active) .lm-DockPanel-tabBar,.jp-NotebookPanel-toolbar:where([data-digichem],.nbrail-own),
+    :where([data-digichem],.nbrail-own) .jp-Notebook-footer,:where([data-digichem],.nbrail-own) .jp-Notebook-ExecutionIndicator,:where([data-digichem],.nbrail-own) .jp-Toolbar,
+    body:where(.nb-dc-active) .lm-SplitPanel-handle,body:where(.nb-dc-active) .lm-DockPanel-handle,body:where(.nb-dc-active) .jp-Dialog,body:where(.nb-dc-active) .lm-Menu{display:none!important;}
+    /* 1. the panel, the drawer windows, every control */
+    #nbpanel-root,.nbpanel-host,.nbdock,.nbbtn,.nbgrip,.nbcover-play,.nbprog,
+    .nblockwin,:where([data-digichem],.nbrail-own) .jupyter-button,:where([data-digichem],.nbrail-own) .widget-button,.nb-runall,
+    body:where(.nb-dc-active) .Toastify__toast-container,body:where(.nb-dc-active) .jp-toastContainer{display:none!important;}
+    /* 1. the cell furniture */
+    :where([data-digichem],.nbrail-own) .jp-InputPrompt,:where([data-digichem],.nbrail-own) .jp-OutputPrompt,:where([data-digichem],.nbrail-own) .jp-Collapser,:where([data-digichem],.nbrail-own) .jp-Cell-inputCollapser,
+    :where([data-digichem],.nbrail-own) .jp-OutputCollapser,:where([data-digichem],.nbrail-own) .jp-cell-toolbar,.jp-CodeCell:has(.acc-group) .jp-Cell-inputWrapper,
+    .jp-CodeCell:has(.acc-group) .jp-InputArea{display:none!important;}
+    /* 2. window-sized boxes become flow */
+    html:where(:has(> body.nb-dc-active)),body:where(.nb-dc-active),body:where(.nb-dc-active) #main,body:where(.nb-dc-active) #jp-main-content-panel,body:where(.nb-dc-active) #jp-main-split-panel,body:where(.nb-dc-active) #jp-main-vsplit-panel,
+    body:where(.nb-dc-active) #jp-main-dock-panel,body:where(.nb-dc-active) .lm-DockPanel,body:where(.nb-dc-active) .lm-DockPanel-widget,body:where(.nb-dc-active) .lm-TabPanel-stackedPanel,
+    body:where(.nb-dc-active) .lm-StackedPanel,.jp-NotebookPanel:where([data-digichem],.nbrail-own),.jp-NotebookPanel:where([data-digichem],.nbrail-own)>.lm-Widget,:where([data-digichem],.nbrail-own) .jp-Notebook,
+    :where([data-digichem],.nbrail-own) .jp-WindowedPanel-outer,:where([data-digichem],.nbrail-own) .jp-WindowedPanel-inner,:where([data-digichem],.nbrail-own) .jp-WindowedPanel-viewport,
+    :where([data-digichem],.nbrail-own) .jp-Notebook .jp-Cell,:where([data-digichem],.nbrail-own) .jp-Cell-outputWrapper,:where([data-digichem],.nbrail-own) .jp-OutputArea{
+      position:static!important;top:auto!important;left:auto!important;
+      right:auto!important;bottom:auto!important;
+      width:auto!important;height:auto!important;min-height:0!important;
+      max-height:none!important;overflow:visible!important;contain:none!important;
+      transform:none!important;margin-left:0!important;margin-right:0!important;}
+    :where([data-digichem],.nbrail-own) .jp-Notebook .jp-Cell{padding-left:0!important;padding-right:0!important;}
+    /* JupyterLab's own print rule says `.jp-OutputArea-child{break-inside:
+       avoid-page}` — right for a cell's small outputs, wrong for ours: one
+       output is a whole chapter group, taller than a page, and "avoid" then
+       means "start a fresh page and break anyway" (measured: page 1 held the
+       title card alone, page 3 two lines). */
+    :where([data-digichem],.nbrail-own) .jp-OutputArea-child{display:block!important;break-inside:auto!important;}
+    :where([data-digichem],.nbrail-own) .jp-OutputArea-output{display:block!important;width:auto!important;}
+    /* the frame and the active-cell glow are screen things (measured: a
+       1 px grey line and a 1 px blue one ran down every page) */
+    .jp-NotebookPanel:where([data-digichem],.nbrail-own),:where([data-digichem],.nbrail-own) .jp-Notebook .jp-Cell{border:0!important;box-shadow:none!important;outline:0!important;}
+    /* 3. every chapter open. No `break-after:avoid` on the headers: Chromium
+       answered it by moving a header AND its whole group to a fresh page,
+       which left page 1 and page 3 nearly blank (measured, 10 pages). */
+    :where([data-digichem],.nbrail-own) .jupyter-widget-Collapse-contents.lm-mod-hidden,
+    :where([data-digichem],.nbrail-own) .lm-Collapse-contents.lm-mod-hidden{display:block!important;}
+    /* the screen's reading measure is meaningless on paper */
+    .nbbox,.nblock,.nbtitle-card{max-width:none!important;}
+  }
+
+  /* ---- THE OPEN CHAPTER'S PILL: the skins never actually reached it ----
+     Found by the gradient-aware sweep, and it had been there since the skins
+     were written. A skin recolours `.jupyter-widget-Collapse-header *` at
+     specificity (0,2,0); the default chapter ink is stated at
+     `body.nbquiet .acc-chapter>.lm-Collapse>.lm-Collapse-header *` — (0,4,1),
+     four times heavier. So every OPEN chapter kept the default dark blue and
+     wore it on the skin's own coloured gradient:
+
+       cyber, light : #12324a on #3a2a6b  → 1.09:1   (invisible)
+       retro, light : #12324a on #a8460f  → 2.24:1
+       fairy, dark  : #dce6ee on #ff8fc4  → 1.66:1
+
+     Two changes, because one was not enough. The ink is stated here at a
+     weight that wins — and the gradients themselves are brought down, because
+     no ink at all passes over retro's #d1793b or fairy's #ff8fc4. The skins
+     keep their character (a warm orange, a purple-to-pink) and gain a pill
+     whose text is legible across its whole width, worst stop included. */
+  body[class*="nbskin-"] .acc-chapter>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header,
+  body[class*="nbskin-"] .acc-chapter>.lm-Collapse>.lm-Collapse-header,
+  body[class*="nbskin-"] .acc-chapter>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header *,
+  body[class*="nbskin-"] .acc-chapter>.lm-Collapse>.lm-Collapse-header *,
+  body[class*="nbskin-"] :where([data-digichem],.nbrail-own) .jupyter-widget-Collapse-header,
+  body[class*="nbskin-"] :where([data-digichem],.nbrail-own) .lm-Collapse-header,
+  body[class*="nbskin-"] :where([data-digichem],.nbrail-own) .jupyter-widget-Collapse-header *,
+  body[class*="nbskin-"] :where([data-digichem],.nbrail-own) .lm-Collapse-header *{
+      color:var(--nbskin-pill-ink,#ffffff)!important;}
+  body.nbskin-cyber{--nbskin-pill-ink:#c9f7ff;}
+  body.nbskin-retro{--nbskin-pill-ink:#fdf3e2;}
+  body.nbskin-fairy{--nbskin-pill-ink:#fff7fb;}
+  body.nbskin-retro :where([data-digichem],.nbrail-own) .jupyter-widget-Collapse-header,
+  body.nbskin-retro :where([data-digichem],.nbrail-own) .lm-Collapse-header{
+      background:linear-gradient(90deg,#8f3a0c,#a04d1a)!important;}
+  body.nbskin-fairy :where([data-digichem],.nbrail-own) .jupyter-widget-Collapse-header,
+  body.nbskin-fairy :where([data-digichem],.nbrail-own) .lm-Collapse-header{
+      background:linear-gradient(90deg,#7b32c2,#a8306f)!important;}
+  /* ...and the same again one notch heavier, for the DARK page. The default
+     dark ink is stated at `body.nbdark.nbquiet .acc-chapter>…>header *` —
+     (0,5,1) — which is why, measured, a dark notebook showed #dce6ee on every
+     pill whatever the skin, and a LOCKED chapter looked exactly as loud as an
+     open one. The state had quietly stopped being visible in dark mode. */
+  body.nbdark.nbquiet[class*="nbskin-"] .acc-chapter>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header,
+  body.nbdark.nbquiet[class*="nbskin-"] .acc-chapter>.lm-Collapse>.lm-Collapse-header,
+  body.nbdark.nbquiet[class*="nbskin-"] .acc-chapter>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header *,
+  body.nbdark.nbquiet[class*="nbskin-"] .acc-chapter>.lm-Collapse>.lm-Collapse-header *{
+      color:var(--nbskin-pill-ink,#ffffff)!important;}
+  /* the locked pill has to out-weigh the rule just above it — a locked
+     chapter is ALSO an .acc-chapter, and the attribute in that selector made
+     it the heavier of the two. Counted, not guessed: (0,6,2) against (0,5,2). */
+  body.nbdark.nbquiet[class*="nbskin-"] .acc-locked>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header,
+  body.nbdark.nbquiet[class*="nbskin-"] .acc-locked>.lm-Collapse>.lm-Collapse-header,
+  body.nbdark.nbquiet[class*="nbskin-"] .acc-locked>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header *,
+  body.nbdark.nbquiet[class*="nbskin-"] .acc-locked>.lm-Collapse>.lm-Collapse-header *,
+  body.nbdark.nbquiet .acc-locked>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header,
+  body.nbdark.nbquiet .acc-locked>.lm-Collapse>.lm-Collapse-header,
+  body.nbdark.nbquiet .acc-locked>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header *,
+  body.nbdark.nbquiet .acc-locked>.lm-Collapse>.lm-Collapse-header *{
+      color:var(--nbskin-quiet)!important;}
+  body[class*="nbskin-"].nbquiet .acc-locked>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header,
+  body[class*="nbskin-"].nbquiet .acc-locked>.lm-Collapse>.lm-Collapse-header,
+  body[class*="nbskin-"].nbquiet .acc-locked>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header *,
+  body[class*="nbskin-"].nbquiet .acc-locked>.lm-Collapse>.lm-Collapse-header *{
+      color:var(--nbskin-quiet)!important;}
+
+  /* ---- the four pairs the sweep actually caught ----------------------- */
+  /* (1) "This chapter is locked" was WHITE ON WHITE — measured 1.00:1, the
+         worst reading on the page and an invisible heading. The box states no
+         colour of its own and inherited one; every text states its own now. */
+  .nblocked-head{color:var(--nbskin-acc)!important;}
+  .nblocked-say{color:var(--nbskin-ink)!important;}
+  .nblocked-note{border-color:var(--nbskin-line)!important;}
+  /* (2) the three QUIET greys. They step back on purpose — a locked chapter,
+         a section rule, the visualisation pill — but 2.96, 3.54 and 4.21 is
+         not stepping back, it is text you cannot read. One token, dark enough
+         to pass on every skin's own paper, and still clearly the quiet one. */
+  /* A LOCKED CHAPTER IS A FLAT PILL, NOT A COLOURED ONE.
+     Measured in retro: the quiet ink #6d5a3e was being painted on the skin's
+     orange header gradient, and the sweep did not see it because the gradient
+     lives in `background-image` — `background-color` is transparent there, so
+     the walk up the tree skipped the pill and compared the text against the
+     PAGE. Two things follow. The probe now reads gradients (see the suite),
+     and a locked chapter stops wearing the open chapter's paint: it is the
+     skin's own quiet surface with a dashed edge, which is both readable on
+     every skin and a clearer statement of "shut" than a dimmer orange. */
+  body.nbquiet .acc-locked>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header,
+  body.nbquiet .acc-locked>.lm-Collapse>.lm-Collapse-header{
+      background:var(--nbskin-surf)!important;background-image:none!important;
+      border:1px dashed var(--nbskin-line)!important;
+      box-shadow:none!important;text-shadow:none!important;}
+  body.nbquiet .acc-locked>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header,
+  body.nbquiet .acc-locked>.lm-Collapse>.lm-Collapse-header,
+  body.nbquiet .acc-locked>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header *,
+  body.nbquiet .acc-locked>.lm-Collapse>.lm-Collapse-header *,
+  body.nbquiet .acc-group>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header,
+  body.nbquiet .acc-group>.lm-Collapse>.lm-Collapse-header,
+  body.nbquiet .acc-group>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header *,
+  body.nbquiet .acc-group>.lm-Collapse>.lm-Collapse-header *,
+  body.nbquiet .acc-viz .jupyter-widget-Collapse-header,
+  body.nbquiet .acc-viz .lm-Collapse-header,
+  body.nbquiet .acc-viz .p-Collapse-header,
+  body.nbquiet .acc-practice .jupyter-widget-Collapse-header,
+  body.nbquiet .acc-practice .lm-Collapse-header,
+  body.nbquiet .acc-practice .p-Collapse-header,
+  body.nbquiet .acc-code .jupyter-widget-Collapse-header,
+  body.nbquiet .acc-code .lm-Collapse-header,
+  body.nbquiet .acc-code .p-Collapse-header,
+  .nbcell-n,.nbend-note{color:var(--nbskin-quiet)!important;}
+  /* (3) the title page's subtitle, 3.51 in minimal — the skins already
+         override it, so this is the one brightness nobody had looked at */
+  body:not([class*="nbskin-"]) .nbtitle-sub,
+  body:not([class*="nbskin-"]) .nbtitle-lead{color:var(--nbskin-acc2)!important;}
+  body:not(.nbdark):not([class*="nbskin-"]){--nbskin-acc2:#4f5d6a;}
+  /* …and the accents are taken FROM the set, in both brightnesses. These are
+     the same selectors the skins wrote by hand above; stated once here, later
+     in the sheet, so there is one place where an accent colour comes from. */
+  body[class*="nbskin-"] .nbbox b,body[class*="nbskin-"] .nbbox strong,
+  body[class*="nbskin-"] .nblock b,body[class*="nbskin-"] .nblock strong,
+  body[class*="nbskin-"] .nbtitle-h{color:var(--nbskin-acc)!important;}
+  body[class*="nbskin-"] .nbtitle-sub,
+  body[class*="nbskin-"] .nbtitle-lead{color:var(--nbskin-acc2)!important;}
+  body[class*="nbskin-"] .nbbox .nbaccent,
+  body[class*="nbskin-"] .cite-link{color:var(--nbskin-acc)!important;}
+
+
+  /* ======================================================================
+     2026-10-02 — EILAUFTRAG E18.4 (Oberfläche). MULTIPLE CHOICE UND BYOD
+     HABEN JE EINE EIGENE FARBE: MC petrol #0e7490, BYOD pink #db2777 —
+     ΔE2000 ≥ 21 zu grün/lila/rot/gold/grau und zueinander (gleiche Werte in
+     allen Stilen, hell/dunkel). Offen: nur der Rand in dieser Farbe;
+     bearbeitet (gelöst, falsch oder übersprungen — bei MC zählt
+     „bearbeitet“, nicht richtig/falsch): gefüllt, Zeichen weiß (5,4 · 4,6 : 1).
+     Gesperrt bleibt E18.3. Panel: Aufgabe `[data-task^="q"]` / `^="b"`;
+     Cover: `.nbtl-quiz` / `.nbtl-byod`. Eine Klasse/ein Attribut schwerer
+     als E18.1/E18.2, gewinnt also in jeder Reihenfolge. */
+  html body #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-node.task:is([data-task^="q"],[data-task^="b"]):not(:hover,.nbsel,.here) .nbrail-dot:not(.st-lock){
+      --nbsc:#0e7490!important;border-color:var(--nbsc)!important;border-style:solid!important;
+      background:var(--nbrail-bg,#f6f8fa)!important;background-image:none!important;opacity:1!important;}
+  html body #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-node.task[data-task^="b"]:not(:hover,.nbsel,.here) .nbrail-dot.nbrail-dot:not(.st-lock){--nbsc:#db2777!important;}
+  html body #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-node.task:is([data-task^="q"],[data-task^="b"]):not(:hover,.nbsel,.here) .nbrail-dot:is(.st-ans,.st-both,.st-fail,.st-skip){background:var(--nbsc)!important;}
+  html body #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-node.task:is([data-task^="q"],[data-task^="b"]):not(:hover,.nbsel,.here) .nbrail-dot .nbdotg{color:var(--nbsc)!important;}
+  html body #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-node.task:is([data-task^="q"],[data-task^="b"]):not(:hover,.nbsel,.here) .nbrail-dot:is(.st-ans,.st-both,.st-fail,.st-skip) .nbdotg{color:#fff!important;}
+  html body .nbcover-tl .nbtl-row.nbtl-row:is(.nbtl-quiz,.nbtl-byod):not(:hover,.nbtl-hov,.nbtl-pin,[data-st="locked"]) .nbtl-mk{
+      --nbsc:#0e7490!important;border-color:var(--nbsc)!important;border-style:solid!important;
+      background:var(--nbpanel-surf,#fff)!important;opacity:1!important;}
+  html body .nbcover-tl .nbtl-row.nbtl-row.nbtl-byod.nbtl-byod:not(:hover,.nbtl-hov,.nbtl-pin,[data-st="locked"]) .nbtl-mk{--nbsc:#db2777!important;}
+  html body .nbcover-tl .nbtl-row.nbtl-row:is(.nbtl-quiz,.nbtl-byod):is([data-st="solved"],[data-st="wrong"],[data-st="skipped"]):not(:hover,.nbtl-hov,.nbtl-pin) .nbtl-mk{
+      background:var(--nbsc)!important;box-shadow:0 0 7px 1px color-mix(in srgb,var(--nbsc) 55%%,transparent)!important;}

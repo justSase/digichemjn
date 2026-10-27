@@ -1,0 +1,421 @@
+# E17.1 (2026-10-02, Inhalt) — die Texte des Toolkits auf Deutsch (für jedes Notebook).
+# Format wie chapters/de.txt: "en:" = das englische Literal genau wie im Quelltext, darunter "de:".
+# ⎵ = ein Leerzeichen am Anfang oder Ende des Literals (sichtbar, damit es kein Werkzeug still entfernt).
+# Der Build prüft je Paar Platzhalter, Tags und Zahlen. Anrede: Sie (E22.2). Zahlen im Text mit Dezimalkomma, Code mit Punkt.
+
+# Gruppen (build_*.py: group_end)
+en: Introduction
+de: Einführung
+
+en: Content
+de: Inhalt
+
+# E22.3 — a front end without widgets (PyCharm) gets a still copy, headed by this line
+en: This window does not draw Jupyter widgets, so you see a still copy: text, formulas and figures. Exercises, checks and the timeline work in JupyterLab, Jupyter Notebook, JupyterLite, VS Code or Colab.
+de: Dieses Fenster zeigt keine Jupyter-Widgets, deshalb sehen Sie eine feste Kopie: Text, Formeln und Abbildungen. Aufgaben, Prüfen und die Zeitleiste funktionieren in JupyterLab, Jupyter Notebook, JupyterLite, VS Code oder Colab.
+
+en: Appendix
+de: Anhang
+
+# Das ⚙/👤-Fenster (chapter_template.py, drawer; zwei Literale um die Versionszeile, E21.7)
+en: <div class="nbdrawer"><div class="nbdrawer-grid"><div class="nbcell pg-diff"><div class="nbcell-h">Difficulty · Content</div><div class="nbslot" data-slot="nbctl-difficulty"></div><div class="nbcell-n">Difficulty: how close an answer must be, and how much a hint says. The question stays the same.<br>Content: calculate, code or both.</div><div class="nbbuild" title="the version of this notebook, and the toolkit build it came from" style="margin-top:10px;text-align:center;font-size:.72em;letter-spacing:.3px;opacity:.6">v
+de: <div class="nbdrawer"><div class="nbdrawer-grid"><div class="nbcell pg-diff"><div class="nbcell-h">Schwierigkeit · Inhalt</div><div class="nbslot" data-slot="nbctl-difficulty"></div><div class="nbcell-n">Schwierigkeit: wie genau eine Antwort sein muss und wie viel ein Hinweis verrät. Die Frage bleibt dieselbe.<br>Inhalt: rechnen, programmieren oder beides.</div><div class="nbbuild" title="die Version dieses Notebooks und der Toolkit-Build, aus dem es stammt" style="margin-top:10px;text-align:center;font-size:.72em;letter-spacing:.3px;opacity:.6">v
+en: </div></div><div class="nbcell pg-code"><div class="nbcell-h">Carry your progress</div><div class="nbslot" data-slot="nbctl-code"></div></div><div class="nbcell pg-keys"><div class="nbcell-h">Keyboard</div><div class="nbkeys-slot"></div><div class="nbcell-n">Every key is tested in JupyterLab. Send an answer with Enter in its field.</div></div><div class="nbcell pg-stats"><div class="nbcell-h">This notebook, in this browser</div><div class="nbserieslist">—</div><div class="nbcell-n">Stays in this browser. No grade.</div></div><div class="nbcell pg-diff"><div class="nbcell-h">Your seed</div><div class="nbslot" data-slot="nbctl-seed"></div><div class="nbcell-n">The exercise numbers come from this seed. Same seed, same exercises — for anyone.</div></div><div class="nbcell pg-code"><div class="nbcell-h">Start over</div><div class="nbslot" data-slot="nbctl-reset"></div></div>
+de: </div></div><div class="nbcell pg-code"><div class="nbcell-h">Fortschritt mitnehmen</div><div class="nbslot" data-slot="nbctl-code"></div></div><div class="nbcell pg-keys"><div class="nbcell-h">Tastatur</div><div class="nbkeys-slot"></div><div class="nbcell-n">Jede Taste ist in JupyterLab getestet. Eine Antwort schicken Sie mit Enter in ihrem Feld ab.</div></div><div class="nbcell pg-stats"><div class="nbcell-h">Dieses Notebook in diesem Browser</div><div class="nbserieslist">—</div><div class="nbcell-n">Bleibt in diesem Browser. Keine Note.</div></div><div class="nbcell pg-diff"><div class="nbcell-h">Ihr Seed</div><div class="nbslot" data-slot="nbctl-seed"></div><div class="nbcell-n">Die Aufgabenzahlen kommen aus diesem Seed. Gleicher Seed, gleiche Aufgaben, für alle.</div></div><div class="nbcell pg-code"><div class="nbcell-h">Neu anfangen</div><div class="nbslot" data-slot="nbctl-reset"></div></div>
+
+# Panel: Leiste, Marken, Werkzeugleiste, Griff (chapter_template.py; je ein Literal)
+en: <div class="nbmap"%s><div class="nbmap-inner"><span class="nbmap-fill" style="width:%d%%" title="exercises answered correctly: %d of %d"></span><span class="nbmap-fill code" style="width:%d%%" title="coding exercises solved: %d of %d"></span><span class="nbmap-fill tail" style="width:0" title="opened by skipping or giving up"></span><span class="nbmap-ahead"></span><span class="nbmap-here" title="where you are in the document"></span>%s</div></div>
+de: <div class="nbmap"%s><div class="nbmap-inner"><span class="nbmap-fill" style="width:%d%%" title="richtig beantwortete Aufgaben: %d von %d"></span><span class="nbmap-fill code" style="width:%d%%" title="gelöste Programmieraufgaben: %d von %d"></span><span class="nbmap-fill tail" style="width:0" title="durch Überspringen oder Aufgeben geöffnet"></span><span class="nbmap-ahead"></span><span class="nbmap-here" title="wo Sie im Dokument sind"></span>%s</div></div>
+
+en: <a class="nbjump nbmap-node viztask" data-target="%s" href="#%s" title="%s · visualisation for this chapter"><span class="nbmap-lab">%s</span><span class="nbvizmark"></span></a>
+de: <a class="nbjump nbmap-node viztask" data-target="%s" href="#%s" title="%s · Visualisierung zu diesem Kapitel"><span class="nbmap-lab">%s</span><span class="nbvizmark"></span></a>
+
+en: <a class="nbjump nbmap-node task%s"%s data-task="%s"%s title="%s · exercise %s — %s"><span class="nbmap-lab"></span><span class="nbrail-dot %s"><i class="nbdotg">%s</i></span><span class="nbtasklab">%s</span></a>
+de: <a class="nbjump nbmap-node task%s"%s data-task="%s"%s title="%s · Aufgabe %s: %s"><span class="nbmap-lab"></span><span class="nbrail-dot %s"><i class="nbdotg">%s</i></span><span class="nbtasklab">%s</span></a>
+
+en: <a class="nbjump nbmap-node codetask" data-target="%s" href="#%s" data-task="%s"%s title="%s · exercise %s — %s"><span class="nbmap-lab">%s</span><span class="nbcodemark %s"><i class="nbdotg">%s</i></span></a>
+de: <a class="nbjump nbmap-node codetask" data-target="%s" href="#%s" data-task="%s"%s title="%s · Aufgabe %s: %s"><span class="nbmap-lab">%s</span><span class="nbcodemark %s"><i class="nbdotg">%s</i></span></a>
+
+en: <span class="nbctrl"><span class="nbdock-l"><button class="nbbtn nbgear" title="difficulty — how close an answer has to be, and how much a hint says">⚙</button><button class="nbbtn nbfull"  title="full screen">⛶</button><button class="nbbtn nbtheme" title="switch this notebook between light and dark">◐</button><button class="nbbtn nbskin" title="the notebook's style — digi, minimal, cyberpunk, retro or fairy. It works with light and dark, not instead of them.">🎨</button><button class="nbbtn nbkeys" title="keyboard — Alt+. to steer the panel, then ? for the keys">⌨</button></span><span class="nbdock-c"><button class="nbbtn nbprofile" title="your progress code — the part of this that is yours. Click to open it.">👤 <span class="nbpid">—</span></button><button class="nbbtn nbseries" title="progress across the whole series — click for the notebook-by-notebook list">📚 —</button></span><span class="nbdock-r"><span class="nbzoomgrp nbz-doc" title="the size of the DOCUMENT — drag, turn the wheel over it, or double-click to go back to 100%"><input type="range" class="nbslider nbzoom-lab" min="0" max="100" step="5" value="100" aria-label="document size"><span class="nbslval">🔍</span></span></span></span>
+de: <span class="nbctrl"><span class="nbdock-l"><button class="nbbtn nbgear" title="Schwierigkeit: wie genau eine Antwort sein muss und wie viel ein Hinweis verrät">⚙</button><button class="nbbtn nbfull"  title="Vollbild">⛶</button><button class="nbbtn nbtheme" title="dieses Notebook zwischen hell und dunkel umschalten">◐</button><button class="nbbtn nbskin" title="der Stil des Notebooks: digi, minimal, cyberpunk, retro oder fairy. Er wirkt zusammen mit hell und dunkel, nicht an ihrer Stelle.">🎨</button><button class="nbbtn nbkeys" title="Tastatur: Alt+. steuert das Panel, dann ? für die Tasten">⌨</button></span><span class="nbdock-c"><button class="nbbtn nbprofile" title="Ihr Fortschrittscode, der Teil davon, der Ihnen gehört. Zum Öffnen klicken.">👤 <span class="nbpid">—</span></button><button class="nbbtn nbseries" title="Fortschritt über die ganze Reihe: klicken für die Liste je Notebook">📚 —</button></span><span class="nbdock-r"><span class="nbzoomgrp nbz-doc" title="die Größe des DOKUMENTS: ziehen, darüber das Mausrad drehen oder doppelklicken für 100%"><input type="range" class="nbslider nbzoom-lab" min="0" max="100" step="5" value="100" aria-label="Dokumentgröße"><span class="nbslval">🔍</span></span></span></span>
+
+en: <button class="nbgrip" type="button" tabindex="-1" title="drag up or down to move the reading height, left or right to widen or narrow the timeline"><span></span></button><div class="nbmap-cursor" title="drag to move through the notebook"></div><div class="nbrail"><div class="nbrail-row">%s</div></div><div class="nbdock">%s%s</div>
+de: <button class="nbgrip" type="button" tabindex="-1" title="nach oben oder unten ziehen verschiebt die Lesehöhe, nach links oder rechts macht die Zeitleiste breiter oder schmaler"><span></span></button><div class="nbmap-cursor" title="ziehen, um durch das Notebook zu wandern"></div><div class="nbrail"><div class="nbrail-row">%s</div></div><div class="nbdock">%s%s</div>
+
+# Ende: zurück zum Anfang, neu beginnen mit (E21.11: die Karten des Covers)
+en: <div class='nbend-go'><button class='nbend-btn nbend-top'>↑ Back to the start</button><div class='nbend-again'>Start again with</div><div class='nbmode-row nbend-modes'>
+de: <div class='nbend-go'><button class='nbend-btn nbend-top'>↑ Zurück zum Anfang</button><div class='nbend-again'>Neu beginnen mit</div><div class='nbmode-row nbend-modes'>
+en: <button class='nbend-btn nbend-mode nbmode-opt' data-mode='%s' title='start again: %s'><span class='nbmode-ic'>%s</span><span class='nbmode-l'>%s</span><span class='nbmode-d'>%s</span></button>
+de: <button class='nbend-btn nbend-mode nbmode-opt' data-mode='%s' title='neu beginnen: %s'><span class='nbmode-ic'>%s</span><span class='nbmode-l'>%s</span><span class='nbmode-d'>%s</span></button>
+en: Plain
+de: Nur lesen
+en: text and figures only
+de: nur Text und Abbildungen
+en: Pen & paper
+de: Stift & Papier
+en: only the calculating exercises
+de: nur die Rechenaufgaben
+en: only the coding exercises
+de: nur die Programmieraufgaben
+en: Both
+de: Beides
+en: calculate and code
+de: rechnen und programmieren
+
+# chapter_template.py
+en: ▶  Run all cells
+de: ▶  Alle Zellen ausführen
+
+en: Revealing the solution marks this coding exercise as given up (✗) in the progress panel.
+de: Wer die Lösung aufdeckt, markiert diese Programmieraufgabe in der Fortschrittsleiste als aufgegeben (✗).
+
+en: Revealing the solution marks this exercise as come back to later (⤳) in the progress panel.
+de: Wer die Lösung aufdeckt, markiert diese Aufgabe in der Fortschrittsleiste als später nachzuholen (⤳).
+
+en: 💡  Solution
+de: 💡  Lösung
+
+en: 💡  Hide solution
+de: 💡  Lösung verbergen
+
+en: 💬  Hint 1 of %d
+de: 💬  Hinweis 1 von %d
+
+en: <div class='nbhint nbink' style='max-width:640px;margin:10px auto 0;text-align:left;line-height:1.5'><b>Hint %d.</b> %s</div>
+de: <div class='nbhint nbink' style='max-width:640px;margin:10px auto 0;text-align:left;line-height:1.5'><b>Hinweis %d.</b> %s</div>
+
+en: 💬  Hint %d of %d
+de: 💬  Hinweis %d von %d
+
+en: 💬  Hide hints
+de: 💬  Hinweise verbergen
+
+en: 💬  Show hints
+de: 💬  Hinweise zeigen
+
+en: <div class="nberr" style="text-align:center;color:var(--nbskin-bad,#a3352b);font-weight:600">⚠ this plot could not be drawn: %r</div>
+de: <div class="nberr" style="text-align:center;color:var(--nbskin-bad,#a3352b);font-weight:600">⚠ diese Abbildung ließ sich nicht zeichnen: %r</div>
+
+en: stopped after %d seconds — is there a loop that never ends?
+de: nach %d Sekunden angehalten: Gibt es eine Schleife, die nie endet?
+
+en: Not there yet, keep going.
+de: Noch nicht ganz, bleiben Sie dran.
+
+en: Fix the error shown below, then run again.
+de: Beheben Sie den Fehler unten und führen Sie dann erneut aus.
+
+en: ⚠ your code raised: %r
+de: ⚠ Ihr Code hat einen Fehler ausgelöst: %r
+
+en: Your function ran but crashed on the test inputs.
+de: Ihre Funktion lief, ist aber bei den Testeingaben abgestürzt.
+
+en: ✓ correct, well done!
+de: ✓ richtig, gut gemacht!
+
+en: The Solution button shows a worked version.
+de: Der Knopf Lösung zeigt eine ausgearbeitete Fassung.
+
+en: Compare your output with what the exercise asks for.
+de: Vergleichen Sie Ihre Ausgabe mit dem, was die Aufgabe verlangt.
+
+en: 🔍  Check input
+de: 🔍  Eingabe prüfen
+
+en: Run ▶
+de: Ausführen ▶
+
+en: Title
+de: Titel
+
+en: Title page
+de: Titelseite
+
+en: Only calculating
+de: Nur rechnen
+
+en: Only coding
+de: Nur programmieren
+
+en: End of the guided part
+de: Ende des geführten Teils
+
+en: Below this line JupyterLab leaves you an empty cell of your own. That is not a mistake and it is not the end: carry the notebook on from there, or rewrite what is above it. It is yours — the licence says so, and so does the empty cell.
+de: Unter dieser Linie lässt Ihnen JupyterLab eine leere Zelle. Das ist kein Fehler und nicht das Ende: Führen Sie das Notebook von dort aus weiter oder schreiben Sie um, was darüber steht. Es gehört Ihnen; das sagt die Lizenz, und das sagt die leere Zelle.
+
+en: Your own cell
+de: Ihre eigene Zelle
+
+en: 📊  Visualisation for this chapter
+de: 📊  Visualisierung zu diesem Kapitel
+
+en: 📝  Practice for this chapter
+de: 📝  Übung zu diesem Kapitel
+
+en: <i>reserved on publication (Zenodo)</i>
+de: <i>wird bei der Veröffentlichung vergeben (Zenodo)</i>
+
+en: <i>not published yet</i>
+de: <i>noch nicht veröffentlicht</i>
+
+en: Authors
+de: Autor:innen
+
+en: Institution
+de: Einrichtung
+
+en: Licence
+de: Lizenz
+
+en: Version
+de: Version
+
+en: Repository
+de: Repositorium
+
+en: Notebook id
+de: Notebook-Id
+
+en: Audience
+de: Zielgruppe
+
+en: Prerequisites
+de: Voraussetzungen
+
+en: Working time
+de: Bearbeitungszeit
+
+en: Keywords
+de: Schlagwörter
+
+en: Content source
+de: Inhaltliche Quelle
+
+en: Learning objectives
+de: Lernziele
+
+en: Cite as
+de: Zitieren als
+
+en: <div style='display:table;margin:0 auto;text-align:left;max-width:820px'>%s</div><div style='max-width:820px;margin:14px auto 0;text-align:center;font-size:.9em;opacity:.85'>This notebook is an Open Educational Resource. You may share and adapt it, including commercially, as long as you credit the authors and pass it on under the same licence.</div>
+de: <div style='display:table;margin:0 auto;text-align:left;max-width:820px'>%s</div><div style='max-width:820px;margin:14px auto 0;text-align:center;font-size:.9em;opacity:.85'>Dieses Notebook ist eine offene Bildungsressource (OER). Sie dürfen es teilen und bearbeiten, auch kommerziell, solange Sie die Autor:innen nennen und es unter derselben Lizenz weitergeben.</div>
+
+en: not restored:⎵
+de: nicht wiederhergestellt:⎵
+
+en: Gentle
+de: Behutsam
+
+en: Standard
+de: Standard
+
+en: Strict
+de: Streng
+
+en: the coding exercise in front of you
+de: die Programmieraufgabe, an der Sie gerade sind
+
+en: coding exercise solved
+de: Programmieraufgabe gelöst
+
+en: coding exercise skipped
+de: Programmieraufgabe übersprungen
+
+en: coding exercise answered wrongly
+de: Programmieraufgabe falsch beantwortet
+
+en: the coding exercise before this one is still open
+de: die Programmieraufgabe davor ist noch offen
+
+en: coding exercise, still open
+de: Programmieraufgabe, noch offen
+
+en: given up
+de: aufgegeben
+
+en: still open
+de: noch offen
+
+en: Exercises
+de: Aufgaben
+
+en: Coding
+de: Code
+
+en: coding exercise
+de: Programmieraufgabe
+
+en: That does not look like a progress code.
+de: Das sieht nicht nach einem Fortschrittscode aus.
+
+en: This code does not check out — it was changed by hand, or it is from an older version without a checksum.
+de: Dieser Code ist nicht stimmig: Er wurde von Hand verändert oder stammt aus einer älteren Version ohne Prüfsumme.
+
+en: This code belongs to %r, not to this notebook (%r).
+de: Dieser Code gehört zu %r, nicht zu diesem Notebook (%r).
+
+en: The code covers %d exercises, this notebook has %d — it is probably from an older version.
+de: Der Code umfasst %d Aufgaben, dieses Notebook hat %d; er stammt wohl aus einer älteren Version.
+
+en: The code contains a state this notebook does not know.
+de: Der Code enthält einen Zustand, den dieses Notebook nicht kennt.
+
+en: Restored: %d of %d answered, %d of %d coding exercises.
+de: Wiederhergestellt: %d von %d beantwortet, %d von %d Programmieraufgaben.
+
+en: not answered yet
+de: noch nicht beantwortet
+
+en: answered correctly
+de: richtig beantwortet
+
+en: answer and code solved
+de: Antwort und Code gelöst
+
+en: skipped — exercise still open
+de: übersprungen, Aufgabe noch offen
+
+en: locked — it opens with the exercise before it
+de: gesperrt, öffnet sich mit der Aufgabe davor
+
+en: not answered (bypassed or solution revealed)
+de: nicht beantwortet (umgangen oder Lösung aufgedeckt)
+
+en: ⎵— locked: it opens once %s is answered
+de: ⎵· gesperrt: öffnet sich, sobald %s beantwortet ist
+
+en: Chapter %s: %s
+de: Kapitel %s: %s
+
+en: Figure %s: %s
+de: Abbildung %s: %s
+
+en: Figure %s
+de: Abbildung %s
+
+en: Exercise %s: %s
+de: Aufgabe %s: %s
+
+en: Exercise %s
+de: Aufgabe %s
+
+en: Coding %s: %s()
+de: Code %s: %s()
+
+en: Coding %s
+de: Code %s
+
+en: <div class="nbprog"><div style="font-weight:800;font-size:.95em">Your progress</div>%s</div>
+de: <div class="nbprog"><div style="font-weight:800;font-size:.95em">Ihr Fortschritt</div>%s</div>
+
+en: I have worked through this
+de: Ich habe das durchgearbeitet
+
+en: <div class='nbink' style='text-align:center;font-size:.9em'>Marked as open again.</div>
+de: <div class='nbink' style='text-align:center;font-size:.9em'>Wieder als offen markiert.</div>
+
+en: ↺  Mark as not done
+de: ↺  Als nicht erledigt markieren
+
+en: <div class='nbok' style='text-align:center;font-size:.9em'>Done — the circle for this section is filled.</div>
+de: <div class='nbok' style='text-align:center;font-size:.9em'>Erledigt: Der Kreis für diesen Abschnitt ist gefüllt.</div>
+
+en: ≈ %d min · text and figures
+de: ≈ %d min · Text und Abbildungen
+
+en: ≈ %d min · %d exercise
+de: ≈ %d min · %d Aufgabe
+
+en: ≈ %d min · %d exercises
+de: ≈ %d min · %d Aufgaben
+
+en: ⎵· %d coding
+de: ⎵· %d Programmieraufgaben
+
+en: ⎵· %d coding (+%d min)
+de: ⎵· %d Programmieraufgaben (+%d min)
+
+en: <div class='nbtitle-facts-h' style='font-size:.74em;font-weight:800;letter-spacing:2px;text-transform:uppercase;margin:0 0 6px'>You will be able to</div><ul class='nbtitle-goals' style='text-align:left;margin:0 auto;padding-left:20px;max-width:620px;line-height:1.45'>%s</ul>
+de: <div class='nbtitle-facts-h' style='font-size:.74em;font-weight:800;letter-spacing:2px;text-transform:uppercase;margin:0 0 6px'>Das können Sie danach</div><ul class='nbtitle-goals' style='text-align:left;margin:0 auto;padding-left:20px;max-width:620px;line-height:1.45'>%s</ul>
+
+en: <div class='nbtitle-facts-h' style='font-size:.74em;font-weight:800;letter-spacing:2px;text-transform:uppercase;margin:16px 0 6px'>Chapters</div><ol class='nbtitle-chaps' style='list-style:none;text-align:left;margin:0 auto;padding:0;max-width:420px;line-height:1.45;columns:2;column-gap:28px'>%s</ol>
+de: <div class='nbtitle-facts-h' style='font-size:.74em;font-weight:800;letter-spacing:2px;text-transform:uppercase;margin:16px 0 6px'>Kapitel</div><ol class='nbtitle-chaps' style='list-style:none;text-align:left;margin:0 auto;padding:0;max-width:420px;line-height:1.45;columns:2;column-gap:28px'>%s</ol>
+
+en: <div class="nblock nblocked-note nbexlock"><div class="nblocked-lock"></div><div class="nblocked-head">The exercise is still locked</div><div class="nblocked-say">It opens as soon as <b>%s</b> is answered — right, wrong or skipped with <b>Skip for now</b>.</div></div>
+de: <div class="nblock nblocked-note nbexlock"><div class="nblocked-lock"></div><div class="nblocked-head">Die Aufgabe ist noch gesperrt</div><div class="nblocked-say">Sie öffnet sich, sobald <b>%s</b> beantwortet ist: richtig, falsch oder mit <b>Vorerst überspringen</b> übersprungen.</div></div>
+
+en: This chapter is locked
+de: Dieses Kapitel ist gesperrt
+
+en: This exercise is locked
+de: Diese Aufgabe ist gesperrt
+
+en: <div class="nblock nblocked-note nblocked-%s"><div class="nblocked-lock"></div><div class="nblocked-head">%s</div><div class="nblocked-say">It opens once <b>%s</b> is answered — right, wrong, or skipped with <b>Skip for now</b> at that exercise.</div></div>
+de: <div class="nblock nblocked-note nblocked-%s"><div class="nblocked-lock"></div><div class="nblocked-head">%s</div><div class="nblocked-say">Es öffnet sich, sobald <b>%s</b> beantwortet ist: richtig, falsch oder dort mit <b>Vorerst überspringen</b> übersprungen.</div></div>
+
+en: ⤼  Skip for now
+de: ⤼  Vorerst überspringen
+
+en: Skipped — the next coding exercise is open. This one stays amber until you come back and get it right.
+de: Übersprungen: Die nächste Programmieraufgabe ist offen. Diese hier bleibt gelb, bis Sie zurückkommen und sie richtig lösen.
+
+en: Skipped — the next chapter and its exercise are open. This one stays amber until you come back and get it right.
+de: Übersprungen: Das nächste Kapitel und seine Aufgabe sind offen. Diese hier bleibt gelb, bis Sie zurückkommen und sie richtig lösen.
+
+en: This one is marked wrong, and the next coding exercise is open already. Get it right and it turns green.
+de: Diese hier ist als falsch markiert, und die nächste Programmieraufgabe ist schon offen. Lösen Sie sie richtig, dann wird sie grün.
+
+en: This one is marked wrong, and the next chapter and its exercise are open already. Get it right and it turns green.
+de: Diese hier ist als falsch markiert, und das nächste Kapitel mit seiner Aufgabe ist schon offen. Lösen Sie sie richtig, dann wird sie grün.
+
+en: Already solved — nothing to skip.
+de: Schon gelöst, es gibt nichts zu überspringen.
+
+en: Check the formula in the box above, then try again.
+de: Prüfen Sie die Formel im Kasten oben und versuchen Sie es dann noch einmal.
+
+en: 🔍  Check answer
+de: 🔍  Antwort prüfen
+
+en: Enter <b>decimals</b>, not fractions or roots (for example 1.414, not √2, and 0.5, not 1/2). The check allows a small tolerance.
+de: Geben Sie <b>Dezimalzahlen</b> ein, mit Komma oder Punkt, keine Brüche oder Wurzeln (zum Beispiel 1,414 statt √2 und 0,5 statt 1/2). Die Prüfung erlaubt eine kleine Toleranz.
+
+en: Could not check that input.
+de: Diese Eingabe ließ sich nicht prüfen.
+
+# E22.2 — the answer box is a text box: what is no number is not judged
+en: Enter a number in every box, for example 2.5 (%s).
+de: Geben Sie in jedes Feld eine Zahl ein, zum Beispiel 2,5 (%s).
+
+en: Pick one of the options first.
+de: Wählen Sie zuerst eine der Antworten.
+
+en: Could not check that choice.
+de: Diese Wahl ließ sich nicht prüfen.
+
+en: 🎯  Check position
+de: 🎯  Position prüfen
+
+en: Could not check that position.
+de: Diese Position ließ sich nicht prüfen.
+
+en: 💻  Optional: write it in code
+de: 💻  Optional: in Code schreiben
+
+en: 💻  Write it in code
+de: 💻  In Code schreiben
+
+en: <div class="nblock nblock-code"><div style="font-size:1.4em;line-height:1">💻</div><div style="font-weight:800;margin:8px 0 4px">The coding route is one step behind</div><div style="max-width:560px;margin:0 auto;line-height:1.55">This one opens once the coding exercise in <b>%s</b> is answered — right, wrong, or skipped with <b>Skip for now</b>. It is a separate ladder: the chapters themselves are <b>not</b> waiting for it, so you can read on at any time.</div></div>
+de: <div class="nblock nblock-code"><div style="font-size:1.4em;line-height:1">💻</div><div style="font-weight:800;margin:8px 0 4px">Der Programmierweg ist einen Schritt zurück</div><div style="max-width:560px;margin:0 auto;line-height:1.55">Diese hier öffnet sich, sobald die Programmieraufgabe in <b>%s</b> beantwortet ist: richtig, falsch oder mit <b>Vorerst überspringen</b> übersprungen. Das ist eine eigene Leiter: Die Kapitel selbst warten <b>nicht</b> darauf, Sie können also jederzeit weiterlesen.</div></div>
+
+# E23.1 (2026-10-06) — the timeline's last two marks: their tooltips
+en: <a class="nbjump nbmap-node sect cell" data-bottom="1" data-acc="yoc" href="#" title="%s — the empty cell JupyterLab leaves you at the end; click to go there"><span class="nbmap-lab">%s</span><span class="nbsect"></span></a>
+de: <a class="nbjump nbmap-node sect cell" data-bottom="1" data-acc="yoc" href="#" title="%s — die leere Zelle, die JupyterLab am Ende lässt; ein Klick führt dorthin"><span class="nbmap-lab">%s</span><span class="nbsect"></span></a>
+
+en: <a class="nbjump nbmap-node sect end" data-mark="nbend"%s title="%s — and not the end of the notebook: there is an empty cell under it, carry on there or rewrite what is above"><span class="nbmap-lab">%s</span><span class="nbsect"></span></a>
+de: <a class="nbjump nbmap-node sect end" data-mark="nbend"%s title="%s — aber nicht das Ende des Notebooks: darunter steht eine leere Zelle; dort weiterarbeiten oder das Obige umschreiben"><span class="nbmap-lab">%s</span><span class="nbsect"></span></a>
+
+# E30 A1 — conclusion(): the heading of the outlook
+en: Outlook
+de: Ausblick

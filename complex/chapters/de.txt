@@ -1,0 +1,1360 @@
+# E17.1 (2026-10-02, Inhalt) — Complex Numbers auf Deutsch.
+# Eine Zeile "en:" (das englische Literal, genau wie im Quelltext; \n = Zeilenumbruch),
+# darunter "de:". Der Build (toolkit/i18n.py) prüft je Paar: gleiche %-Platzhalter,
+# gleiche HTML-Tags, gleiche Zahlen. Anrede: Sie (E22.2). Zahlen im Text mit Dezimalkomma, in <code> mit Punkt; die Eingabefelder nehmen beides.
+# ⎵ = ein Leerzeichen am Anfang oder Ende des Literals (sichtbar, damit es kein Werkzeug still entfernt).
+# Was hier fehlt, bleibt Englisch (Literaturangaben, Code, Formeln, Zeichen wie Re(z) =).
+
+# Titelkarte nach Play (title_de: Ersetzung in der Karte)
+en: Principles of Biophysics &amp; Computational methods &mdash; section 1.2
+de: Principles of Biophysics &amp; Computational methods &mdash; Abschnitt 1.2
+
+en: From one impossible equation to rotation in the plane, built up by editing code yourself
+de: Von einer unlösbaren Gleichung zur Drehung in der Ebene, aufgebaut durch Code, den Sie selbst bearbeiten
+
+# Bindewort zwischen zwei Formeln (c06)
+en: ⎵and⎵
+de: ⎵und⎵
+
+# Beschriftung der Auswahl in c03/c07 (kommt nur dort als Literal vor)
+en: operation
+de: Rechenart
+
+# _setup_cx.py
+en: Complex Numbers
+de: Komplexe Zahlen
+
+en: Principles of Biophysics & Computational methods, section 1.2
+de: Principles of Biophysics & Computational methods, Abschnitt 1.2
+
+en: Master Chemie, Biochemie & Biophysik, Pharmazeutische Wissenschaften, Sustainable Materials — from the 7th semester
+de: Master Chemie, Biochemie & Biophysik, Pharmazeutische Wissenschaften, Sustainable Materials, ab dem 7. Semester
+
+en: School algebra and trigonometry; no programming knowledge required
+de: Schulalgebra und Trigonometrie; keine Programmierkenntnisse nötig
+
+en: complex numbers
+de: komplexe Zahlen
+
+en: Argand plane
+de: Gaußsche Zahlenebene
+
+en: Euler's relation
+de: Eulersche Formel
+
+en: polar form
+de: Polarform
+
+en: L. Heidinger, Principles of Biophysics & Computational methods, Univ. Freiburg, WS 2025/26, section 1.2 (pp. 26–38)
+de: L. Heidinger, Principles of Biophysics & Computational methods, Univ. Freiburg, WS 2025/26, Abschnitt 1.2 (S. 26–38)
+
+en: state the definition i² = −1 and split any z ∈ ℂ into its real part Re(z) and imaginary part Im(z)
+de: die Definition i² = −1 angeben und jedes z ∈ ℂ in seinen Realteil Re(z) und seinen Imaginärteil Im(z) zerlegen
+
+en: locate a complex number in the Argand plane (the complex plane) and name its quadrant
+de: eine komplexe Zahl in der Gaußschen Zahlenebene (der komplexen Ebene) einzeichnen und ihren Quadranten benennen
+
+en: add, multiply and divide complex numbers, and describe what each operation does to the arrow in the plane
+de: komplexe Zahlen addieren, multiplizieren und dividieren und beschreiben, was jede Rechenart mit dem Pfeil in der Ebene macht
+
+en: convert between z = a + ib and z = |z|e^{iφ}, including the quadrant correction that plain arctan does not make
+de: zwischen z = a + ib und z = |z|e^{iφ} umrechnen, einschließlich der Quadrantenkorrektur, die der einfache arctan nicht macht
+
+en: check a published worked solution against your own calculation and say exactly where and why it differs
+de: eine veröffentlichte Musterlösung mit der eigenen Rechnung vergleichen und genau sagen, wo und warum sie abweicht
+
+en: explain why an RC membrane model uses a complex impedance, and what the modulus and the argument of that number mean physically
+de: erklären, warum ein RC-Modell der Membran eine komplexe Impedanz verwendet und was Betrag und Argument dieser Zahl physikalisch bedeuten
+
+en: 1 · roots
+de: 1 · Nullstellen
+
+en: Imaginary roots
+de: Imaginäre Nullstellen
+
+en: 2 · quadrant
+de: 2 · Quadrant
+
+en: Find the quadrant
+de: Den Quadranten finden
+
+en: 3 · add / subtract
+de: 3 · addieren / subtrahieren
+
+en: Sum and difference
+de: Summe und Differenz
+
+en: 4 · multiply
+de: 4 · multiplizieren
+
+en: Multiply
+de: Multiplizieren
+
+en: 5 · divide
+de: 5 · dividieren
+
+en: Divide via the conjugate
+de: Dividieren mit der Konjugierten
+
+en: 6 · polar form
+de: 6 · Polarform
+
+en: Polar form
+de: Polarform
+
+en: 7 · rotate
+de: 7 · drehen
+
+en: Hit the target
+de: Das Ziel treffen
+
+en: 8 · multiple choice
+de: 8 · Multiple Choice
+
+en: Multiple-choice quiz
+de: Multiple-Choice-Quiz
+
+en: 9 · own data
+de: 9 · eigene Daten
+
+en: Membrane impedance
+de: Membranimpedanz
+
+en: What is i² ?
+de: Was ist i² ?
+
+en: Correct. This one definition generates everything else.
+de: Richtig. Aus dieser einen Definition folgt alles andere.
+
+en: That is i⁴.
+de: Das ist i⁴.
+
+en: That is i¹.
+de: Das ist i¹.
+
+en: No, i is not zero.
+de: Nein, i ist nicht null.
+
+en: Where does the conjugate z̄ sit relative to z in the complex plane?
+de: Wo liegt die konjugierte Zahl z̄ in der komplexen Ebene im Vergleich zu z?
+
+en: Mirrored across the real axis
+de: An der reellen Achse gespiegelt
+
+en: Yes. a + ib becomes a − ib, so only the sign of the imaginary part flips.
+de: Ja. Aus a + ib wird a − ib, es ändert sich also nur das Vorzeichen des Imaginärteils.
+
+en: Mirrored across the imaginary axis
+de: An der imaginären Achse gespiegelt
+
+en: That would be −a + ib, which is −z̄.
+de: Das wäre −a + ib, also −z̄.
+
+en: Rotated by 90°
+de: Um 90° gedreht
+
+en: Rotation by 90° is multiplication by i.
+de: Eine Drehung um 90° ist die Multiplikation mit i.
+
+en: At the same place
+de: An derselben Stelle
+
+en: Only when z is real.
+de: Nur wenn z reell ist.
+
+en: Multiplying two complex numbers in polar form means …
+de: Zwei komplexe Zahlen in Polarform zu multiplizieren heißt …
+
+en: multiply the moduli, add the angles
+de: die Beträge multiplizieren, die Winkel addieren
+
+en: Correct: |z₁||z₂| e^{i(φ₁+φ₂)}.
+de: Richtig: |z₁||z₂| e^{i(φ₁+φ₂)}.
+
+en: add the moduli, multiply the angles
+de: die Beträge addieren, die Winkel multiplizieren
+
+en: The exponents add, so the angles add; the moduli multiply.
+de: Die Exponenten addieren sich, also addieren sich die Winkel; die Beträge multiplizieren sich.
+
+en: multiply both
+de: beides multiplizieren
+
+en: Only the moduli multiply.
+de: Nur die Beträge werden multipliziert.
+
+en: add both
+de: beides addieren
+
+en: Only the angles add.
+de: Nur die Winkel werden addiert.
+
+en: For z = −2 − 4i, plain arctan(b/a) gives an angle in which quadrant?
+de: Für z = −2 − 4i liefert der einfache arctan(b/a) einen Winkel in welchem Quadranten?
+
+en: The first; it is off by π
+de: Im ersten; er liegt um π daneben
+
+en: Right. arctan only returns angles in (−π/2, π/2), so quadrants II and III need +π.
+de: Richtig. arctan liefert nur Winkel in (−π/2, π/2), deshalb brauchen die Quadranten II und III ein +π.
+
+en: The third; it is already correct
+de: Im dritten; er stimmt schon
+
+en: No: b/a = 2 > 0, so arctan returns a first-quadrant angle.
+de: Nein: b/a = 2 > 0, also liefert arctan einen Winkel im ersten Quadranten.
+
+en: The second
+de: Im zweiten
+
+en: arctan never returns an angle beyond ±π/2.
+de: arctan liefert nie einen Winkel jenseits von ±π/2.
+
+en: The fourth
+de: Im vierten
+
+en: arctan(2) is positive, so not the fourth.
+de: arctan(2) ist positiv, also nicht der vierte.
+
+en: Is there an order relation (z₁ < z₂) on ℂ?
+de: Gibt es auf ℂ eine Ordnung (z₁ < z₂)?
+
+en: No
+de: Nein
+
+en: Correct. Only the moduli |z₁| and |z₂| can be compared, not the numbers themselves.
+de: Richtig. Vergleichen lassen sich nur die Beträge |z₁| und |z₂|, nicht die Zahlen selbst.
+
+en: Yes, by real part
+de: Ja, nach dem Realteil
+
+en: That ignores the imaginary part entirely.
+de: Das lässt den Imaginärteil völlig außer Acht.
+
+en: Yes, by modulus
+de: Ja, nach dem Betrag
+
+en: |z| can be compared, but that compares two real numbers; it is not an order on ℂ.
+de: |z| lässt sich vergleichen, aber dann vergleicht man zwei reelle Zahlen; eine Ordnung auf ℂ ist das nicht.
+
+en: Only for purely imaginary numbers
+de: Nur für rein imaginäre Zahlen
+
+en: No order exists on ℂ at all.
+de: Auf ℂ gibt es überhaupt keine Ordnung.
+
+# conclusion.py (E21.13, vorher setup.py)
+en: <div style='margin-top:12px'>All content follows section 1.2 of the lecture script
+de: <div style='margin-top:12px'>Alle Inhalte folgen Abschnitt 1.2 des Vorlesungsskripts
+
+en: <b>Your numbers are not your neighbour's.</b> The exercise values are drawn from your seed. This makes copying pointless. It also means that your numbers differ from those on your neighbour's screen, so quote the seed when you ask someone about a result
+de: <b>Ihre Zahlen sind nicht die der Person neben Ihnen.</b> Die Werte in den Aufgaben werden aus Ihrem Seed gezogen. Abschreiben lohnt sich deshalb nicht. Es heißt aber auch, dass sich Ihre Zahlen von denen auf dem Bildschirm neben Ihnen unterscheiden. Nennen Sie also den Seed, wenn Sie jemanden nach einem Ergebnis fragen
+
+# controls.py
+en: Gentle — wide tolerance, full hints
+de: Behutsam: große Toleranz, ausführliche Hinweise
+
+en: Standard
+de: Standard
+
+en: Strict — tight tolerance, minimal hints
+de: Streng: enge Toleranz, knappe Hinweise
+
+en: Difficulty:
+de: Schwierigkeit:
+
+en: Both — calculate and code
+de: Beides: rechnen und programmieren
+
+en: Only calculating
+de: Nur rechnen
+
+en: Only coding
+de: Nur programmieren
+
+en: Plain — text and figures only
+de: Nur lesen: Text und Abbildungen
+
+en: Content:
+de: Inhalt:
+
+en: ▶  Rebuild now with this content
+de: ▶  Jetzt mit diesem Inhalt neu aufbauen
+
+en: <div style='text-align:center;font-size:.85em;opacity:.8'>Now: <b>%s</b>. Each choice keeps its own progress.</div>
+de: <div style='text-align:center;font-size:.85em;opacity:.8'>Jetzt: <b>%s</b>. Jede Wahl behält ihren eigenen Fortschritt.</div>
+
+en: “%s” saved — it applies from the next run. ▶ rebuilds now.
+de: „%s“ gespeichert, gilt ab dem nächsten Lauf. ▶ baut jetzt neu auf.
+
+en: Could not save this choice here.
+de: Diese Wahl ließ sich hier nicht speichern.
+
+en: ↺  Reset this notebook
+de: ↺  Dieses Notebook zurücksetzen
+
+en: Yes, reset
+de: Ja, zurücksetzen
+
+en: Cancel
+de: Abbrechen
+
+en: <div class='nbwarn' style='text-align:center;font-size:.9em'><b>Sure?</b> Clears answers and statistics of <b>this notebook</b> and locks the chapters. Seed, style and settings stay.</div>
+de: <div class='nbwarn' style='text-align:center;font-size:.9em'><b>Sicher?</b> Löscht Antworten und Statistik <b>dieses Notebooks</b> und sperrt die Kapitel wieder. Seed, Stil und Einstellungen bleiben.</div>
+
+en: <div class='nbok' style='text-align:center;font-size:.9em'>Reset: %d exercises open again.</div>
+de: <div class='nbok' style='text-align:center;font-size:.9em'>Zurückgesetzt: %d Aufgaben sind wieder offen.</div>
+
+en: <div class='nbink' style='text-align:center;font-size:.9em'>Nothing was reset.</div>
+de: <div class='nbink' style='text-align:center;font-size:.9em'>Es wurde nichts zurückgesetzt.</div>
+
+en: paste a progress code here
+de: Fortschrittscode hier einfügen
+
+en: Show my progress code
+de: Meinen Fortschrittscode zeigen
+
+en: Restore from code
+de: Aus Code wiederherstellen
+
+en: <div class='nbink' style='text-align:center;font-size:.9em;margin-top:4px'>Keep this code. Paste it back to restore:</div><pre style='%s;margin:6px auto 0;text-align:left;max-width:640px;white-space:pre-wrap;word-break:break-all'>%s</pre>
+de: <div class='nbink' style='text-align:center;font-size:.9em;margin-top:4px'>Bewahren Sie diesen Code auf. Fügen Sie ihn wieder ein, um den Stand herzustellen:</div><pre style='%s;margin:6px auto 0;text-align:left;max-width:640px;white-space:pre-wrap;word-break:break-all'>%s</pre>
+
+en: Seed:
+de: Seed:
+
+en: Use this seed
+de: Diesen Seed verwenden
+
+en: 🎲  New random seed
+de: 🎲  Neuer Zufalls-Seed
+
+en: <div class='nbink' style='text-align:center;font-size:.88em;margin-top:6px'>Seed <b>%d</b> — %s.</div>
+de: <div class='nbink' style='text-align:center;font-size:.88em;margin-top:6px'>Seed <b>%d</b>: %s.</div>
+
+en: pinned: same numbers next run
+de: festgehalten, im nächsten Lauf dieselben Zahlen
+
+en: not pinned: new numbers next run
+de: nicht festgehalten, im nächsten Lauf neue Zahlen
+
+en: <div class='nbok' style='text-align:center;font-size:.9em'>New numbers from seed %d. Progress kept.</div>
+de: <div class='nbok' style='text-align:center;font-size:.9em'>Neue Zahlen aus Seed %d. Der Fortschritt bleibt.</div>
+
+en: <div class='nbwarn' style='text-align:center;font-size:.9em'>A whole number, 0 to 99999999.</div>
+de: <div class='nbwarn' style='text-align:center;font-size:.9em'>Eine ganze Zahl von 0 bis 99999999.</div>
+
+en: <div class='nbwarn' style='text-align:center;font-size:.9em'>Could not save this seed here. Nothing changed.</div>
+de: <div class='nbwarn' style='text-align:center;font-size:.9em'>Dieser Seed ließ sich hier nicht speichern. Es hat sich nichts geändert.</div>
+
+# howto.py
+en: How to use this notebook
+de: So benutzen Sie dieses Notebook
+
+en: <b>Every chapter:</b> an idea with its formula, a <b>Visualisation</b>, one <b>Practice</b> exercise.<br><br><b>No programming needed.</b> Type a number, pick an option or move the sliders, then press <i>Check</i>. A wrong answer gets a hint, never the answer.<br><br><b>Coding is optional.</b> The fold <i>write it in code</i> unlocks the same step. If you skip it, you lose nothing.<br><br><b>Chapters open one by one.</b> Answer, or press <i>Skip for now</i>. The timeline shows what you skipped. The lock only sets your pace; it is not a grade.
+de: <b>Jedes Kapitel:</b> eine Idee mit ihrer Formel, eine <b>Visualisierung</b> und eine <b>Übungsaufgabe</b>.<br><br><b>Programmieren ist nicht nötig.</b> Tippen Sie eine Zahl ein, wählen Sie eine Antwort oder bewegen Sie die Schieberegler und drücken Sie dann <i>Prüfen</i>. Eine falsche Antwort bekommt einen Hinweis, nie die Lösung.<br><br><b>Programmieren ist freiwillig.</b> Der Abschnitt <i>in Code schreiben</i> schaltet denselben Schritt frei. Wenn Sie ihn auslassen, verpassen Sie nichts.<br><br><b>Die Kapitel öffnen sich nacheinander.</b> Antworten Sie oder drücken Sie <i>Vorerst überspringen</i>. Die Zeitleiste zeigt, was Sie übersprungen haben. Die Sperre gibt nur Ihr Tempo vor; sie ist keine Note.
+
+# teaches.py
+en: What you will be able to do
+de: Was Sie danach können
+
+en: After working through this notebook, you can:<table style='border-collapse:collapse;margin:12px auto 0'>%s</table><div style='margin-top:14px;font-size:.93em'>Each objective belongs to an exercise below. So you can check every one of them yourself.<br><br><b>No programming is required.</b> This is a <i>%s</i> notebook. In this standard, the objectives are the concepts, the physics and the critical check, not the implementation. You solve every exercise by entering numbers, choosing an option or moving sliders. Each exercise also has a clearly marked <i>optional</i> code fold, closed at first, for anyone who wants to write the formula in Python. It unlocks the same step, and you never need it to get through.</div>
+de: Wenn Sie dieses Notebook durchgearbeitet haben, können Sie:<table style='border-collapse:collapse;margin:12px auto 0'>%s</table><div style='margin-top:14px;font-size:.93em'>Jedes Lernziel gehört zu einer Aufgabe weiter unten. So können Sie jedes davon selbst überprüfen.<br><br><b>Programmieren ist nicht nötig.</b> Dies ist ein <i>%s</i>-Notebook. In diesem Standard sind die Lernziele die Begriffe, die Physik und die kritische Prüfung, nicht die Umsetzung in Code. Jede Aufgabe lösen Sie, indem Sie Zahlen eingeben, eine Antwort wählen oder Schieberegler bewegen. Jede Aufgabe hat außerdem einen deutlich als <i>freiwillig</i> markierten Code-Abschnitt, zunächst geschlossen, für alle, die die Formel in Python schreiben möchten. Er schaltet denselben Schritt frei, und Sie brauchen ihn nie, um durchzukommen.</div>
+
+# roadmap.py
+en: The route through this notebook
+de: Der Weg durch dieses Notebook
+
+en: We start where the real numbers run out: an equation with no real solution. One definition, <b>i² = −1</b>, fixes that, and everything else in this notebook follows from it. Chapter 2 gives the new numbers a <b>place</b>: the plane. This turns algebra into geometry. Chapters 3 to 5 carry out the four basic operations component by component. Chapter 6 writes the same numbers in <b>polar form</b> (length and angle), where multiplication becomes easy. Chapter 7 uses this: every product is a rotation plus a stretch. The appendix ends with a check of the lecture script itself and with a biophysical application of exactly these tools.<div class='nbcontact' style='margin-top:14px;padding-top:12px;border-top:1px solid var(--nbskin-line,#cdd6dd)'>Found a mistake, or want to tell us what helped and what did not? Write to <a href='mailto:samuel.wiese@gmx.de'>samuel.wiese@gmx.de</a>.</div>
+de: Wir beginnen dort, wo die reellen Zahlen nicht mehr weiterhelfen: bei einer Gleichung ohne reelle Lösung. Eine einzige Definition, <b>i² = −1</b>, behebt das, und alles Weitere in diesem Notebook folgt daraus. Kapitel 2 gibt den neuen Zahlen einen <b>Ort</b>: die Ebene. So wird aus Algebra Geometrie. Die Kapitel 3 bis 5 führen die vier Grundrechenarten Komponente für Komponente aus. Kapitel 6 schreibt dieselben Zahlen in <b>Polarform</b> (Länge und Winkel), in der das Multiplizieren leicht wird. Kapitel 7 nutzt das: Jedes Produkt ist eine Drehung mit einer Streckung. Der Anhang endet mit einer Prüfung des Vorlesungsskripts selbst und mit einer biophysikalischen Anwendung genau dieser Werkzeuge.<div class='nbcontact' style='margin-top:14px;padding-top:12px;border-top:1px solid var(--nbskin-line,#cdd6dd)'>Einen Fehler gefunden, oder möchten Sie uns sagen, was Ihnen geholfen hat und was nicht? Schreiben Sie an <a href='mailto:samuel.wiese@gmx.de'>samuel.wiese@gmx.de</a>.</div>
+
+# c01.py
+en: Each number system in mathematics was invented because the previous one ran out of answers. The real numbers run out at a surprisingly simple equation:⎵
+de: Jedes Zahlensystem der Mathematik wurde erfunden, weil das vorige keine Antworten mehr hatte. Die reellen Zahlen scheitern an einer überraschend einfachen Gleichung:⎵
+
+en: . The square of a real number is never negative, so this polynomial has no real root (no real x solves it)
+de: . Das Quadrat einer reellen Zahl ist nie negativ, deshalb hat dieses Polynom keine reelle Nullstelle (kein reelles x löst es)
+
+en: . The fix is a single definition, <b>i² = −1</b>. The rest of this notebook follows from it.
+de: . Die Lösung ist eine einzige Definition, <b>i² = −1</b>. Der Rest dieses Notebooks folgt daraus.
+
+en: the imaginary unit
+de: die imaginäre Einheit
+
+en: a complex number, written z = a + ib
+de: eine komplexe Zahl, geschrieben z = a + ib
+
+en: the real part of z
+de: der Realteil von z
+
+en: the imaginary part of z: a real number, the factor in front of i
+de: der Imaginärteil von z: eine reelle Zahl, der Faktor vor i
+
+en: <div style='max-width:800px;margin:14px auto 0;text-align:justify;line-height:1.6'>Look closely at <b>Im(z)</b>. For⎵
+de: <div style='max-width:800px;margin:14px auto 0;text-align:justify;line-height:1.6'>Sehen Sie sich <b>Im(z)</b> genau an. Für⎵
+
+en: ⎵the imaginary part is the real number 5, not 5i. So a complex number is not a strange new kind of number. It is a <i>pair</i> of real numbers with one extra rule for multiplication.</div>
+de: ⎵ist der Imaginärteil die reelle Zahl 5, nicht 5i. Eine komplexe Zahl ist also keine seltsame neue Art von Zahl. Sie ist ein <i>Paar</i> reeller Zahlen mit einer zusätzlichen Regel für die Multiplikation.</div>
+
+en: real roots
+de: reelle Nullstellen
+
+en: lowest point
+de: tiefster Punkt
+
+en: none on this line
+de: keine auf dieser Geraden
+
+en: The parabola⎵
+de: Die Parabel⎵
+
+en: ⎵crosses the horizontal axis exactly where⎵
+de: ⎵schneidet die waagerechte Achse genau dort, wo⎵
+
+en: ⎵has a real solution (a root). Pull <b>q</b> below zero and two crossings appear. Raise it above zero and the curve lifts off the axis: there is nothing left to find <i>on this line</i>. The roots have not vanished. The number line is just the wrong place to look for them. Chapter 2 gives them the plane they live in.
+de: ⎵eine reelle Lösung (eine Nullstelle) hat. Ziehen Sie <b>q</b> unter null, und zwei Schnittpunkte erscheinen. Heben Sie es über null, und die Kurve löst sich von der Achse: <i>auf dieser Geraden</i> ist nichts mehr zu finden. Die Nullstellen sind nicht verschwunden. Die Zahlengerade ist nur der falsche Ort, um nach ihnen zu suchen. Kapitel 2 gibt ihnen die Ebene, in der sie zu Hause sind.
+
+en: Both roots are purely imaginary, so the real part is 0. You entered %g.
+de: Beide Nullstellen sind rein imaginär, der Realteil ist also 0. Sie haben %g eingegeben.
+
+en: You entered q itself. The imaginary part is the square <i>root</i> of q.
+de: Sie haben q selbst eingegeben. Der Imaginärteil ist die <i>Wurzel</i> aus q.
+
+en: Not yet. Take the square root of q = %d and put an i in front: the two roots are ±i·√%d. Your imaginary part was %g.
+de: Noch nicht. Ziehen Sie die Wurzel aus q = %d und setzen Sie ein i davor: Die beiden Nullstellen sind ±i·√%d. Ihr Imaginärteil war %g.
+
+en: That is the root with the negative imaginary part. Enter the one with the positive part.
+de: Das ist die Nullstelle mit negativem Imaginärteil. Geben Sie die mit dem positiven ein.
+
+en: Correct: √%d = %d, so the roots are ±%d i.
+de: Richtig: √%d = %d, die Nullstellen sind also ±%d i.
+
+en: <b>Give the root of⎵
+de: <b>Geben Sie die Nullstelle von⎵
+
+en: ⎵that has a positive imaginary part.</b>
+de: ⎵an, deren Imaginärteil positiv ist.</b>
+
+en: <div>Your personal value is <b>q =⎵
+de: <div>Ihr persönlicher Wert ist <b>q =⎵
+
+en: </b>, so the imaginary part you need is⎵
+de: </b>, der gesuchte Imaginärteil ist also⎵
+
+en: . It is a whole number, so you need no calculator. The real part is the easy one: both roots are purely imaginary (a real number times i).</div>
+de: . Das ist eine ganze Zahl, Sie brauchen also keinen Taschenrechner. Der Realteil ist der leichte Teil: Beide Nullstellen sind rein imaginär (eine reelle Zahl mal i).</div>
+
+en: You need a number whose <i>square</i> is −q. No real number can do that: every real square is 0 or more. This is exactly why the parabola above never reaches the axis. The number i was made for this case, since i² is −1. So try z = i·y with a real y. Then z² = i²·y² = −y², and the question becomes: which real y has y² equal to q?
+de: Sie brauchen eine Zahl, deren <i>Quadrat</i> −q ist. Keine reelle Zahl schafft das: Jedes reelle Quadrat ist 0 oder größer. Genau deshalb erreicht die Parabel oben die Achse nie. Die Zahl i wurde für diesen Fall geschaffen, denn i² ist −1. Probieren Sie also z = i·y mit einem reellen y. Dann ist z² = i²·y² = −y², und die Frage lautet: Welches reelle y hat y² gleich q?
+
+en: With your q = %d: y² must be %d, so y is ±√%d and the two roots are ±i·√%d. Which whole number, multiplied by itself, gives %d? The root you are asked for has the plus sign. Its real part is the easy box: i·y has no real part at all.
+de: Mit Ihrem q = %d: y² muss %d sein, also ist y = ±√%d, und die beiden Nullstellen sind ±i·√%d. Welche ganze Zahl ergibt mit sich selbst multipliziert %d? Gefragt ist die Nullstelle mit dem Pluszeichen. Ihr Realteil ist das leichte Feld: i·y hat überhaupt keinen Realteil.
+
+en: Write <code>roots_of(q)</code> that returns the two solutions of z² + q = 0 for a positive real number q. It takes q &gt; 0 and returns a tuple of two complex numbers, +i·√q and −i·√q. Example: <code>roots_of(4)</code> → <code>(2j, -2j)</code>.
+de: Schreiben Sie <code>roots_of(q)</code>, das die beiden Lösungen von z² + q = 0 für eine positive reelle Zahl q zurückgibt. Die Funktion nimmt q &gt; 0 und gibt ein Tupel aus zwei komplexen Zahlen zurück, +i·√q und −i·√q. Beispiel: <code>roots_of(4)</code> → <code>(2j, -2j)</code>.
+
+en: Define a function called roots_of(q) that returns a tuple.
+de: Definieren Sie eine Funktion namens roots_of(q), die ein Tupel zurückgibt.
+
+en: roots_of(%g) raised %r.
+de: roots_of(%g) hat %r ausgelöst.
+
+en: Return exactly two values, e.g. (z1, z2).
+de: Geben Sie genau zwei Werte zurück, z. B. (z1, z2).
+
+en: Both roots are purely imaginary, so Re(z) must be 0.
+de: Beide Nullstellen sind rein imaginär, Re(z) muss also 0 sein.
+
+en: For q = %g the roots should be ±i·%.4f.
+de: Für q = %g sollten die Nullstellen ±i·%.4f sein.
+
+en: Correct: two purely imaginary roots with opposite signs.
+de: Richtig: zwei rein imaginäre Nullstellen mit entgegengesetztem Vorzeichen.
+
+en: One definition,⎵
+de: Eine einzige Definition,⎵
+
+en: , turns a dead end into a solvable equation. It breaks none of the old arithmetic. Every real number is still a complex number, namely one with <b>Im(z) = 0</b>. This pattern is worth remembering: the real numbers are not replaced, they become part of something larger.
+de: , macht aus einer Sackgasse eine lösbare Gleichung. Sie bricht keine der alten Rechenregeln. Jede reelle Zahl ist weiterhin eine komplexe Zahl, nämlich eine mit <b>Im(z) = 0</b>. Dieses Muster lohnt sich zu merken: Die reellen Zahlen werden nicht ersetzt, sie werden Teil von etwas Größerem.
+
+en: Why complex numbers?
+de: Warum komplexe Zahlen?
+
+en: Where the real roots end
+de: Wo die reellen Nullstellen enden
+
+# c02.py
+en: A complex number carries two independent real numbers,⎵
+de: Eine komplexe Zahl trägt zwei unabhängige reelle Zahlen,⎵
+
+en: . A single line cannot hold it, but a plane can. Put <b>Re</b> (the real part) on the horizontal axis and <b>Im</b> (the imaginary part) on the vertical one. Then⎵
+de: . Eine einzelne Gerade kann sie nicht aufnehmen, eine Ebene schon. Legen Sie <b>Re</b> (den Realteil) auf die waagerechte Achse und <b>Im</b> (den Imaginärteil) auf die senkrechte. Dann wird⎵
+
+en: ⎵becomes the point with coordinates⎵
+de: ⎵zum Punkt mit den Koordinaten⎵
+
+en: , or the arrow from the origin to that point
+de: , oder zum Pfeil vom Ursprung zu diesem Punkt
+
+en: . This plane is called the <i>Argand plane</i> or complex plane. From here on, almost every rule about complex numbers comes with a picture.
+de: . Diese Ebene heißt <i>Gaußsche Zahlenebene</i> oder komplexe Ebene. Von hier an kommt fast jede Regel über komplexe Zahlen mit einem Bild.
+
+en: Re-axis
+de: Re-Achse
+
+en: horizontal, carries the real part a
+de: waagerecht, trägt den Realteil a
+
+en: Im-axis
+de: Im-Achse
+
+en: vertical, carries the imaginary part b
+de: senkrecht, trägt den Imaginärteil b
+
+en: the modulus: length of the arrow from the origin to z
+de: der Betrag: Länge des Pfeils vom Ursprung zu z
+
+en: the argument: angle of that arrow, measured from the positive Re-axis
+de: das Argument: Winkel dieses Pfeils, gemessen von der positiven Re-Achse
+
+en: <div style='max-width:800px;margin:14px auto 0;text-align:justify;line-height:1.6'>The axes divide the plane into four <b>quadrants</b>. They are numbered anticlockwise, starting with the one where both parts are positive. The quadrant matters more than it seems. Chapter 6 shows that the standard formula for the angle gives a wrong result in two of the four, without any warning.</div>
+de: <div style='max-width:800px;margin:14px auto 0;text-align:justify;line-height:1.6'>Die Achsen teilen die Ebene in vier <b>Quadranten</b>. Sie werden gegen den Uhrzeigersinn nummeriert, beginnend mit dem, in dem beide Teile positiv sind. Der Quadrant ist wichtiger, als er aussieht. Kapitel 6 zeigt, dass die übliche Formel für den Winkel in zwei der vier Quadranten ein falsches Ergebnis liefert, ohne jede Warnung.</div>
+
+en: on an axis
+de: auf einer Achse
+
+en: Drag <b>a</b> and <b>b</b> and watch four things at once: the point, the arrow, its length⎵
+de: Ziehen Sie an <b>a</b> und <b>b</b> und beobachten Sie vier Dinge zugleich: den Punkt, den Pfeil, seine Länge⎵
+
+en: ⎵and its angle⎵
+de: ⎵und seinen Winkel⎵
+
+en: . Start in the first quadrant. Then move the point anticlockwise through all four and watch the angle in the line under the sliders: it runs from 0 up towards 2π. Now set <b>b = 0</b>. The arrow collapses onto the horizontal axis, and you are back to an ordinary real number. This is what “the reals sit inside ℂ” means in the picture (ℂ is the set of all complex numbers).
+de: . Beginnen Sie im ersten Quadranten. Führen Sie den Punkt dann gegen den Uhrzeigersinn durch alle vier und beobachten Sie den Winkel in der Zeile unter den Schiebereglern: Er wächst von 0 bis gegen 2π. Setzen Sie jetzt <b>b = 0</b>. Der Pfeil fällt auf die waagerechte Achse, und Sie haben wieder eine gewöhnliche reelle Zahl. Das bedeutet im Bild der Satz „die reellen Zahlen liegen in ℂ“ (ℂ ist die Menge aller komplexen Zahlen).
+
+en: Quadrant I  (Re > 0, Im > 0)
+de: Quadrant I  (Re > 0, Im > 0)
+
+en: Quadrant II  (Re < 0, Im > 0)
+de: Quadrant II  (Re < 0, Im > 0)
+
+en: Quadrant III  (Re < 0, Im < 0)
+de: Quadrant III  (Re < 0, Im < 0)
+
+en: Quadrant IV  (Re > 0, Im < 0)
+de: Quadrant IV  (Re > 0, Im < 0)
+
+en: on one of the axes
+de: auf einer der Achsen
+
+en: Correct: Re(z) = %g and Im(z) = %g, so z sits in %s.
+de: Richtig: Re(z) = %g und Im(z) = %g, also liegt z in %s.
+
+en: Neither part is zero, so z is not on an axis.
+de: Keiner der beiden Teile ist null, z liegt also nicht auf einer Achse.
+
+en: Right half of the plane or left? Re(z) = %g decides that, and you picked the other side.
+de: Rechte oder linke Hälfte der Ebene? Das entscheidet Re(z) = %g, und Sie haben die andere Seite gewählt.
+
+en: Not that one. Read off the two signs: Re(z) = %g and Im(z) = %g. Quadrants are counted anticlockwise from the one where both are positive.
+de: Der ist es nicht. Lesen Sie die beiden Vorzeichen ab: Re(z) = %g und Im(z) = %g. Die Quadranten werden gegen den Uhrzeigersinn gezählt, beginnend mit dem, in dem beide positiv sind.
+
+en: <b>Which quadrant does your number sit in?</b>
+de: <b>In welchem Quadranten liegt Ihre Zahl?</b>
+
+en: <div>Your personal number is <b>z =⎵
+de: <div>Ihre persönliche Zahl ist <b>z =⎵
+
+en: </b>. Use the visualisation above if it helps: set the sliders to these values and look at where the arrow points.</div>
+de: </b>. Nutzen Sie die Visualisierung oben, wenn es hilft: Stellen Sie die Schieberegler auf diese Werte und sehen Sie, wohin der Pfeil zeigt.</div>
+
+en: Write <code>quadrant(a, b)</code> that says in which quadrant of the complex plane z = a + ib lies. It takes the real part a and the imaginary part b and returns 1, 2, 3 or 4 (counted anticlockwise, starting top right), or 0 if z lies on an axis. Example: <code>quadrant(-3, 2)</code> → <code>2</code>.
+de: Schreiben Sie <code>quadrant(a, b)</code>, das angibt, in welchem Quadranten der komplexen Ebene z = a + ib liegt. Die Funktion nimmt den Realteil a und den Imaginärteil b und gibt 1, 2, 3 oder 4 zurück (gegen den Uhrzeigersinn gezählt, oben rechts beginnend) oder 0, wenn z auf einer Achse liegt. Beispiel: <code>quadrant(-3, 2)</code> → <code>2</code>.
+
+en: Only two signs decide the quadrant. Is the real part positive or negative, that is, right or left of the vertical axis? Is the imaginary part positive or negative, that is, above or below the horizontal axis? The size of the parts does not matter.
+de: Nur zwei Vorzeichen entscheiden über den Quadranten. Ist der Realteil positiv oder negativ, liegt der Punkt also rechts oder links der senkrechten Achse? Ist der Imaginärteil positiv oder negativ, liegt er also über oder unter der waagerechten Achse? Wie groß die Teile sind, spielt keine Rolle.
+
+en: Your z has Re(z) = %s and Im(z) = %s. Write down the two signs as a pair (sign of Re, sign of Im). The quadrants are counted anticlockwise, starting where both are positive: (+, +) is I, (−, +) is II, (−, −) is III, (+, −) is IV. A part that is exactly zero would put z on an axis.
+de: Ihr z hat Re(z) = %s und Im(z) = %s. Schreiben Sie die beiden Vorzeichen als Paar auf (Vorzeichen von Re, Vorzeichen von Im). Die Quadranten werden gegen den Uhrzeigersinn gezählt, beginnend dort, wo beide positiv sind: (+, +) ist I, (−, +) ist II, (−, −) ist III, (+, −) ist IV. Ein Teil, der genau null ist, würde z auf eine Achse legen.
+
+en: Define a function called quadrant(a, b).
+de: Definieren Sie eine Funktion namens quadrant(a, b).
+
+en: Don't forget the axes: with a = %g, b = %g the answer is 0, but you returned %r.
+de: Vergessen Sie die Achsen nicht: Mit a = %g, b = %g ist die Antwort 0, Sie haben aber %r zurückgegeben.
+
+en: For a = %g, b = %g the point is in quadrant %d, but you returned %r.
+de: Für a = %g, b = %g liegt der Punkt in Quadrant %d, Sie haben aber %r zurückgegeben.
+
+en: Correct: all four quadrants and the axis cases are handled.
+de: Richtig: Alle vier Quadranten und die Fälle auf den Achsen sind abgedeckt.
+
+en: Once a complex number is a point, every operation on it becomes a <b>movement</b> in the plane. This is the most useful idea in this notebook. Addition will turn out to be a shift, and conjugation (changing the sign of the imaginary part) a mirror image. Multiplication will be a rotation combined with a stretch. These three pictures are far easier to remember than three formulas.
+de: Sobald eine komplexe Zahl ein Punkt ist, wird jede Rechenoperation mit ihr zu einer <b>Bewegung</b> in der Ebene. Das ist der nützlichste Gedanke in diesem Notebook. Die Addition wird sich als Verschiebung herausstellen und die Konjugation (das Umdrehen des Vorzeichens des Imaginärteils) als Spiegelung. Die Multiplikation wird eine Drehung mit einer Streckung sein. Diese drei Bilder kann man sich viel leichter merken als drei Formeln.
+
+en: The complex plane
+de: Die komplexe Ebene
+
+en: Point, length and angle
+de: Punkt, Länge und Winkel
+
+# c03.py
+en: Addition and subtraction need nothing new. Real parts go with real parts, imaginary parts with imaginary parts, and the two never mix
+de: Addition und Subtraktion brauchen nichts Neues. Realteile gehen zu Realteilen, Imaginärteile zu Imaginärteilen, und die beiden mischen sich nie
+
+en: . The reason: here i is treated as an ordinary factor, and no⎵
+de: . Der Grund: Hier wird i wie ein gewöhnlicher Faktor behandelt, und es taucht nie ein⎵
+
+en: ⎵ever appears. So the defining rule of i is not even needed yet. In the picture this is plain vector addition (adding arrows tip to tail). That is why the figure below shows a parallelogram and nothing exotic.
+de: ⎵auf. Die definierende Regel von i wird also noch gar nicht gebraucht. Im Bild ist das gewöhnliche Vektoraddition (Pfeile werden Spitze an Ende aneinandergelegt). Deshalb zeigt die Abbildung unten ein Parallelogramm und nichts Exotisches.
+
+en: first number
+de: erste Zahl
+
+en: second number
+de: zweite Zahl
+
+en: real part of the result
+de: Realteil des Ergebnisses
+
+en: imaginary part of the result
+de: Imaginärteil des Ergebnisses
+
+en: Switch between <b>z₁ + z₂</b> and <b>z₁ − z₂</b> and watch how the construction changes. For the sum, the dashed lines close a parallelogram: move z₂ so that it starts at the tip of z₁, and it ends exactly on the result. For the difference, z₂ is first flipped through the origin, and then the same construction is used. Subtracting means adding the reversed arrow. The line under the sliders shows the two component sums separately. You will notice that they never influence each other.
+de: Wechseln Sie zwischen <b>z₁ + z₂</b> und <b>z₁ − z₂</b> und beobachten Sie, wie sich die Konstruktion ändert. Bei der Summe schließen die gestrichelten Linien ein Parallelogramm: Verschieben Sie z₂ so, dass es an der Spitze von z₁ beginnt, dann endet es genau auf dem Ergebnis. Bei der Differenz wird z₂ zuerst am Ursprung gespiegelt, danach folgt dieselbe Konstruktion. Subtrahieren heißt, den umgedrehten Pfeil zu addieren. Die Zeile unter den Schiebereglern zeigt die beiden Komponentensummen getrennt. Sie werden merken, dass sie einander nie beeinflussen.
+
+en: You have swapped them. The first pair of boxes is the sum.
+de: Sie haben sie vertauscht. Das erste Paar Felder ist die Summe.
+
+en: The sum is not right yet: add the real parts (%g + %g) and the imaginary parts (%g + %g) separately.
+de: Die Summe stimmt noch nicht: Addieren Sie die Realteile (%g + %g) und die Imaginärteile (%g + %g) getrennt.
+
+en: The sum is right, the difference is not. Watch the sign on the imaginary part: %g − (%g) = %g.
+de: Die Summe stimmt, die Differenz nicht. Achten Sie auf das Vorzeichen beim Imaginärteil: %g − (%g) = %g.
+
+en: Both correct. Note that the two components never influenced each other.
+de: Beides richtig. Die beiden Komponenten haben einander nicht beeinflusst.
+
+en: <b>Compute the sum and the difference of your two numbers.</b>
+de: <b>Berechnen Sie die Summe und die Differenz Ihrer beiden Zahlen.</b>
+
+en: <div>Your personal pair is <b>z₁ =⎵
+de: <div>Ihr persönliches Paar ist <b>z₁ =⎵
+
+en: </b> and <b>z₂ =⎵
+de: </b> und <b>z₂ =⎵
+
+en: </b>. Combine real parts with real parts and imaginary parts with imaginary parts. You need no calculator. Type the four numbers below.</div>
+de: </b>. Fassen Sie Realteile mit Realteilen und Imaginärteile mit Imaginärteilen zusammen. Sie brauchen keinen Taschenrechner. Geben Sie die vier Zahlen unten ein.</div>
+
+en: Adding complex numbers means adding arrows, and an arrow has two independent components. Real parts go with real parts, imaginary parts with imaginary parts. Treat i like a unit, as in 3 m + 2 m: the two kinds never mix. For the difference, subtract z₂ as a whole, so both of its parts change sign.
+de: Komplexe Zahlen addieren heißt Pfeile addieren, und ein Pfeil hat zwei unabhängige Komponenten. Realteile gehen zu Realteilen, Imaginärteile zu Imaginärteilen. Behandeln Sie i wie eine Einheit, wie bei 3 m + 2 m: Die beiden Sorten mischen sich nie. Für die Differenz ziehen Sie z₂ als Ganzes ab, beide Teile wechseln also ihr Vorzeichen.
+
+en: Sum: real part %s + %s, imaginary part %s + %s. Difference: real part %s − %s, imaginary part %s − %s. Where a minus meets a negative number, the two minus signs make a plus.
+de: Summe: Realteil %s + %s, Imaginärteil %s + %s. Differenz: Realteil %s − %s, Imaginärteil %s − %s. Wo ein Minus auf eine negative Zahl trifft, ergeben die beiden Minuszeichen ein Plus.
+
+en: Write <code>add_sub(a1, b1, a2, b2)</code> that adds and subtracts z₁ = a1 + i·b1 and z₂ = a2 + i·b2. It takes the four real components and returns the tuple (z₁ + z₂, z₁ − z₂) as two complex numbers. Example: <code>add_sub(2, 4, 1, 3)</code> → <code>((3+7j), (1+1j))</code>.
+de: Schreiben Sie <code>add_sub(a1, b1, a2, b2)</code>, das z₁ = a1 + i·b1 und z₂ = a2 + i·b2 addiert und subtrahiert. Die Funktion nimmt die vier reellen Komponenten und gibt das Tupel (z₁ + z₂, z₁ − z₂) als zwei komplexe Zahlen zurück. Beispiel: <code>add_sub(2, 4, 1, 3)</code> → <code>((3+7j), (1+1j))</code>.
+
+en: Define a function called add_sub(a1, b1, a2, b2).
+de: Definieren Sie eine Funktion namens add_sub(a1, b1, a2, b2).
+
+en: add_sub raised %r.
+de: add_sub hat %r ausgelöst.
+
+en: Return exactly two values: (sum, difference).
+de: Geben Sie genau zwei Werte zurück: (Summe, Differenz).
+
+en: Sum and difference are the other way round.
+de: Summe und Differenz sind vertauscht.
+
+en: For z₁ = %s and z₂ = %s the sum is %s.
+de: Für z₁ = %s und z₂ = %s ist die Summe %s.
+
+en: The difference is wrong: for z₁ = %s, z₂ = %s it is %s.
+de: Die Differenz ist falsch: Für z₁ = %s, z₂ = %s ist sie %s.
+
+en: Correct: both operations, with every component sign right.
+de: Richtig: beide Rechenarten, jedes Vorzeichen der Komponenten stimmt.
+
+en: Addition keeps the two components strictly apart. That is why it is <b>vector addition</b>: here ℂ behaves exactly like ℝ², the ordinary plane of vectors. Everything really new about complex numbers is hidden in the <i>multiplication</i>. That is where we go next.
+de: Die Addition hält die beiden Komponenten streng getrennt. Deshalb ist sie <b>Vektoraddition</b>: Hier verhält sich ℂ genau wie ℝ², die gewöhnliche Ebene der Vektoren. Alles wirklich Neue an den komplexen Zahlen steckt in der <i>Multiplikation</i>. Dorthin geht es als Nächstes.
+
+en: Addition and subtraction
+de: Addition und Subtraktion
+
+en: Parallelogram rule
+de: Parallelogrammregel
+
+# c04.py
+en: With multiplication, a complex number becomes more than two separate columns of numbers. Multiply out⎵
+de: Mit der Multiplikation wird eine komplexe Zahl mehr als zwei getrennte Zahlenspalten. Multiplizieren Sie⎵
+
+en: ⎵as usual. One term then contains⎵
+de: ⎵wie gewohnt aus. Ein Term enthält dann⎵
+
+en: , which by definition equals⎵
+de: , und das ist nach Definition gleich⎵
+
+en: . This one sign change mixes the two components and gives ℂ its own arithmetic
+de: . Dieser eine Vorzeichenwechsel mischt die beiden Komponenten und gibt ℂ seine eigene Arithmetik
+
+en: . The chapter also introduces the <b>conjugate</b>⎵
+de: . Das Kapitel führt außerdem die <b>konjugierte Zahl</b>⎵
+
+en: . It is the mirror image of z across the real axis, and you will use it constantly in the next chapter.
+de: ein. Sie ist das Spiegelbild von z an der reellen Achse, und Sie werden sie im nächsten Kapitel ständig brauchen.
+
+en: real part; the minus sign comes from i² = −1
+de: Realteil; das Minuszeichen kommt von i² = −1
+
+en: imaginary part: the two cross terms
+de: Imaginärteil: die beiden gemischten Terme
+
+en: the conjugate: same real part, opposite imaginary part
+de: die konjugierte Zahl: gleicher Realteil, entgegengesetzter Imaginärteil
+
+en: <div style='max-width:800px;margin:14px auto 0;text-align:justify;line-height:1.6'>The minus sign in the real part is the most common mistake in this topic. If a result looks wrong, check this sign first.</div>
+de: <div style='max-width:800px;margin:14px auto 0;text-align:justify;line-height:1.6'>Das Minuszeichen im Realteil ist der häufigste Fehler bei diesem Thema. Wenn ein Ergebnis falsch aussieht, prüfen Sie zuerst dieses Vorzeichen.</div>
+
+en: start on the real axis at 1
+de: Start auf der reellen Achse bei 1
+
+en: one factor of i: a quarter turn anticlockwise
+de: ein Faktor i: eine Vierteldrehung gegen den Uhrzeigersinn
+
+en: two factors: half a turn. This <i>is</i> the definition
+de: zwei Faktoren: eine halbe Drehung. Das <i>ist</i> die Definition
+
+en: three factors: three quarters of a turn
+de: drei Faktoren: drei Viertel einer Drehung
+
+en: full circle, back to 1. The powers of i repeat with period 4
+de: voller Kreis, zurück bei 1. Die Potenzen von i wiederholen sich mit der Periode 4
+
+en: <b>Top:</b> step through the powers of i. Each factor of i turns the arrow by a quarter circle, so after four steps you are back at the start. This repetition makes i² = −1 look natural rather than arbitrary.<br><br><b>Bottom:</b> drag z and watch its conjugate z̄, the mirror image across the horizontal axis. Watch the title: the product⎵
+de: <b>Oben:</b> Gehen Sie die Potenzen von i schrittweise durch. Jeder Faktor i dreht den Pfeil um einen Viertelkreis, nach vier Schritten sind Sie also wieder am Anfang. Diese Wiederholung lässt i² = −1 natürlich statt willkürlich wirken.<br><br><b>Unten:</b> Ziehen Sie an z und beobachten Sie die konjugierte Zahl z̄, das Spiegelbild an der waagerechten Achse. Achten Sie auf den Titel: Das Produkt⎵
+
+en: ⎵stays real and non-negative wherever you put z, because the imaginary parts cancel exactly. The absolute value in the next chapter rests on this fact.
+de: ⎵bleibt reell und nicht negativ, wo immer Sie z hinlegen, weil sich die Imaginärteile genau aufheben. Der Betrag im nächsten Kapitel beruht auf dieser Tatsache.
+
+en: power of i
+de: Potenz von i
+
+en: Correct: %s · %s = %s. The minus sign in the real part comes from i².
+de: Richtig: %s · %s = %s. Das Minuszeichen im Realteil kommt von i².
+
+en: Sign error: you used a₁a₂ <b>+</b> b₁b₂ for the real part. It must be a₁a₂ <b>−</b> b₁b₂, because i·i = −1.
+de: Vorzeichenfehler: Sie haben a₁a₂ <b>+</b> b₁b₂ für den Realteil genommen. Richtig ist a₁a₂ <b>−</b> b₁b₂, weil i·i = −1.
+
+en: You swapped the real and imaginary parts.
+de: Sie haben Real- und Imaginärteil vertauscht.
+
+en: Not yet. Real part: a₁a₂ − b₁b₂ = %g·%g − %g·%g. Imaginary part: a₁b₂ + a₂b₁.
+de: Noch nicht. Realteil: a₁a₂ − b₁b₂ = %g·%g − %g·%g. Imaginärteil: a₁b₂ + a₂b₁.
+
+en: <b>Multiply your two numbers.</b>
+de: <b>Multiplizieren Sie Ihre beiden Zahlen.</b>
+
+en: <div>Your pair is <b>z₁ =⎵
+de: <div>Ihr Paar ist <b>z₁ =⎵
+
+en: </b>. You need two products for the real part and two for the imaginary part. One minus sign decides whether the answer is right.</div>
+de: </b>. Sie brauchen zwei Produkte für den Realteil und zwei für den Imaginärteil. Ein einziges Minuszeichen entscheidet, ob die Antwort stimmt.</div>
+
+en: Multiply out the brackets as in school algebra: (a₁ + ib₁)(a₂ + ib₂) gives four products. Three of them are straightforward. One contains i·i, and i·i is −1. So that product loses its i and moves into the real part with its sign flipped. Then sort the terms: everything without i is the real part, everything with one i is the imaginary part.
+de: Multiplizieren Sie die Klammern aus wie in der Schulalgebra: (a₁ + ib₁)(a₂ + ib₂) ergibt vier Produkte. Drei davon sind einfach. Eines enthält i·i, und i·i ist −1. Dieses Produkt verliert also sein i und wandert mit umgedrehtem Vorzeichen in den Realteil. Dann sortieren Sie die Terme: Alles ohne i ist der Realteil, alles mit einem i ist der Imaginärteil.
+
+en: With your numbers the four products are %s·%s, %s·%s, %s·%s and %s·%s. The last one is %s·%s·i²; replace i² by −1. <b>Real part:</b> the first product plus the last one after that replacement. <b>Imaginary part:</b> the two middle products, added.
+de: Mit Ihren Zahlen sind die vier Produkte %s·%s, %s·%s, %s·%s und %s·%s. Das letzte ist %s·%s·i²; ersetzen Sie i² durch −1. <b>Realteil:</b> das erste Produkt plus das letzte nach dieser Ersetzung. <b>Imaginärteil:</b> die beiden mittleren Produkte, addiert.
+
+en: Write <code>mul(a1, b1, a2, b2)</code> that multiplies z₁ = a1 + i·b1 by z₂ = a2 + i·b2, working with the four components. It returns the product as one complex number. Mind the minus sign that i·i = −1 puts into the real part. Example: <code>mul(0, 1, 0, 1)</code> → <code>(-1+0j)</code>.
+de: Schreiben Sie <code>mul(a1, b1, a2, b2)</code>, das z₁ = a1 + i·b1 mit z₂ = a2 + i·b2 multipliziert und dabei mit den vier Komponenten arbeitet. Die Funktion gibt das Produkt als eine komplexe Zahl zurück. Achten Sie auf das Minuszeichen, das i·i = −1 in den Realteil bringt. Beispiel: <code>mul(0, 1, 0, 1)</code> → <code>(-1+0j)</code>.
+
+en: Define a function called mul(a1, b1, a2, b2).
+de: Definieren Sie eine Funktion namens mul(a1, b1, a2, b2).
+
+en: mul raised %r.
+de: mul hat %r ausgelöst.
+
+en: Sign error: the real part must be a₁a₂ <b>−</b> b₁b₂, because i·i = −1.
+de: Vorzeichenfehler: Der Realteil muss a₁a₂ <b>−</b> b₁b₂ sein, weil i·i = −1.
+
+en: For z₁ = %s and z₂ = %s the product is %s.
+de: Für z₁ = %s und z₂ = %s ist das Produkt %s.
+
+en: Correct, including the sign from i·i = −1.
+de: Richtig, einschließlich des Vorzeichens aus i·i = −1.
+
+en: Multiplication mixes the components, but not at random: the powers of i show that it is a <b>rotation</b>. Multiplying by i turns an arrow by 90°; multiplying by i² = −1 turns it by 180°. Chapter 6 extends this to any angle. After that, you will rarely need to write out the component formula above.
+de: Die Multiplikation mischt die Komponenten, aber nicht willkürlich: Die Potenzen von i zeigen, dass sie eine <b>Drehung</b> ist. Mit i multiplizieren dreht einen Pfeil um 90°; mit i² = −1 multiplizieren dreht ihn um 180°. Kapitel 6 erweitert das auf jeden Winkel. Danach werden Sie die Komponentenformel oben nur noch selten ausschreiben müssen.
+
+en: Multiplication and conjugation
+de: Multiplikation und Konjugation
+
+en: Powers of i, conjugate
+de: Potenzen von i, konjugierte Zahl
+
+# c05.py
+en: The conjugate now proves useful in two ways. First,⎵
+de: Die konjugierte Zahl erweist sich jetzt auf zwei Arten als nützlich. Erstens ist⎵
+
+en: ⎵is always a real, non-negative number. Its square root therefore gives the <b>length</b> of z, called the absolute value⎵
+de: ⎵immer eine reelle, nicht negative Zahl. Ihre Wurzel liefert deshalb die <b>Länge</b> von z, den sogenannten Betrag⎵
+
+en: . Second, the same product makes division possible: multiply numerator and denominator by⎵
+de: . Zweitens macht dasselbe Produkt die Division möglich: Erweitern Sie Zähler und Nenner mit⎵
+
+en: , and the denominator becomes real. You already know how to divide by a real number
+de: , dann wird der Nenner reell. Durch eine reelle Zahl zu teilen, können Sie schon
+
+en: modulus (absolute value): the distance from the origin to z
+de: Betrag: der Abstand vom Ursprung zu z
+
+en: conjugate of the denominator
+de: konjugierte Zahl des Nenners
+
+en: the real denominator you are left with, equal to |z₂|²
+de: der reelle Nenner, der übrig bleibt, gleich |z₂|²
+
+en: <div style='max-width:800px;margin:14px auto 0;text-align:justify;line-height:1.6'>Written out in components, the quotient is⎵
+de: <div style='max-width:800px;margin:14px auto 0;text-align:justify;line-height:1.6'>In Komponenten ausgeschrieben lautet der Quotient⎵
+
+en: . You do not need to memorise this expression. The two-step recipe is easier: <b>conjugate the denominator, then divide by a real number</b>.
+de: . Diesen Ausdruck müssen Sie nicht auswendig lernen. Das Rezept in zwei Schritten ist einfacher: <b>Nenner konjugieren, dann durch eine reelle Zahl teilen</b>.
+
+en: off frame
+de: außerhalb des Bildes
+
+en: undefined: z₂ is zero
+de: nicht definiert: z₂ ist null
+
+en: identical, always
+de: immer gleich
+
+en: On the left, each number sits on a circle whose radius is its modulus. Move a slider, and the circle grows or shrinks with the arrow. On the right is the quotient. Watch the two numbers in the right-hand title: the modulus of the quotient always equals the quotient of the moduli, however you move the points. This is a first glimpse of a rule that chapter 7 makes exact: under multiplication and division, <b>lengths and angles behave separately</b>.
+de: Links liegt jede Zahl auf einem Kreis, dessen Radius ihr Betrag ist. Bewegen Sie einen Schieberegler, und der Kreis wächst oder schrumpft mit dem Pfeil. Rechts steht der Quotient. Achte auf die beiden Zahlen im rechten Titel: Der Betrag des Quotienten ist immer gleich dem Quotienten der Beträge, wie auch immer Sie die Punkte bewegen. Das ist ein erster Blick auf eine Regel, die Kapitel 7 genau macht: Bei Multiplikation und Division <b>verhalten sich Längen und Winkel getrennt</b>.
+
+en: Correct: (%s)/(%s) = %s. The conjugate turned the denominator into the real number %d.
+de: Richtig: (%s)/(%s) = %s. Die konjugierte Zahl hat den Nenner in die reelle Zahl %d verwandelt.
+
+en: You divided the other way round. It is z₁/z₂, not z₂/z₁.
+de: Sie haben andersherum geteilt. Gesucht ist z₁/z₂, nicht z₂/z₁.
+
+en: Your answer is the conjugate of the right one. Check the sign in the imaginary part of the numerator: it is a₂b₁ − a₁b₂.
+de: Ihre Antwort ist die konjugierte Zahl der richtigen. Prüfen Sie das Vorzeichen im Imaginärteil des Zählers: Es ist a₂b₁ − a₁b₂.
+
+en: Not yet. Multiply top and bottom by z̄₂ = %s. The denominator becomes (%d)² + (%d)² = %d. Then divide both components by %d.
+de: Noch nicht. Erweitern Sie Zähler und Nenner mit z̄₂ = %s. Der Nenner wird (%d)² + (%d)² = %d. Teilen Sie dann beide Komponenten durch %d.
+
+en: <b>Divide, using the conjugate of the denominator.</b>
+de: <b>Dividieren Sie mithilfe der konjugierten Zahl des Nenners.</b>
+
+en: </b>. Conjugate the denominator and multiply out the numerator with the rule from chapter 4. Then divide both components by the real number⎵
+de: </b>. Konjugieren Sie den Nenner und multiplizieren Sie den Zähler mit der Regel aus Kapitel 4 aus. Teilen Sie dann beide Komponenten durch die reelle Zahl⎵
+
+en: . The numbers work out neatly, so you do not need a calculator.</div>
+de: . Die Zahlen gehen glatt auf, Sie brauchen also keinen Taschenrechner.</div>
+
+en: Dividing by a complex number is hard; dividing by a <i>real</i> number is easy. Which number can you multiply your z₂,⎵
+de: Durch eine komplexe Zahl zu teilen ist schwer; durch eine <i>reelle</i> Zahl zu teilen ist leicht. Mit welcher Zahl können Sie Ihr z₂,⎵
+
+en: , by so that the product is real? Chapter 4 has the answer: z · z̄ gives |z|². Multiply the top <i>and</i> the bottom of the fraction by that number. This changes nothing, because it is a multiplication by 1.
+de: , multiplizieren, damit das Produkt reell wird? Kapitel 4 hat die Antwort: z · z̄ ergibt |z|². Multiplizieren Sie Zähler <i>und</i> Nenner des Bruchs mit dieser Zahl. Das ändert nichts, denn es ist eine Multiplikation mit 1.
+
+en: The bottom: (%s)(%s) gives %s² + %s², a real number. The top: expand (%s)(%s) term by term and replace i² by −1. Collect the real and the imaginary part, then divide <b>each</b> of them by the bottom.
+de: Der Nenner: (%s)(%s) ergibt %s² + %s², eine reelle Zahl. Der Zähler: Multiplizieren Sie (%s)(%s) Term für Term aus und ersetzen Sie i² durch −1. Sammeln Sie Real- und Imaginärteil und teilen Sie dann <b>jeden</b> davon durch den Nenner.
+
+en: Write <code>divide(a1, b1, a2, b2)</code> that returns z₁ / z₂ for z₁ = a1 + i·b1 and z₂ = a2 + i·b2, by multiplying top and bottom by the conjugate of z₂. It returns one complex number and raises <code>ZeroDivisionError</code> if z₂ = 0. Example: <code>divide(1, 0, 0, 1)</code> → <code>-1j</code>.
+de: Schreiben Sie <code>divide(a1, b1, a2, b2)</code>, das z₁ / z₂ für z₁ = a1 + i·b1 und z₂ = a2 + i·b2 zurückgibt, indem es Zähler und Nenner mit der konjugierten Zahl von z₂ erweitert. Die Funktion gibt eine komplexe Zahl zurück und löst <code>ZeroDivisionError</code> aus, wenn z₂ = 0 ist. Beispiel: <code>divide(1, 0, 0, 1)</code> → <code>-1j</code>.
+
+en: Define a function called divide(a1, b1, a2, b2).
+de: Definieren Sie eine Funktion namens divide(a1, b1, a2, b2).
+
+en: divide raised %r.
+de: divide hat %r ausgelöst.
+
+en: You divided the other way round.
+de: Sie haben andersherum geteilt.
+
+en: That is the conjugate. Check the sign of a₂b₁ − a₁b₂.
+de: Das ist die konjugierte Zahl. Prüfen Sie das Vorzeichen von a₂b₁ − a₁b₂.
+
+en: For z₁ = %s, z₂ = %s the quotient is %s.
+de: Für z₁ = %s, z₂ = %s ist der Quotient %s.
+
+en: Dividing by zero should raise ZeroDivisionError.
+de: Eine Division durch null sollte ZeroDivisionError auslösen.
+
+en: Dividing by zero raised %r; expected ZeroDivisionError.
+de: Die Division durch null hat %r ausgelöst; erwartet war ZeroDivisionError.
+
+en: Correct on all pairs, and the zero denominator is handled.
+de: Richtig für alle Paare, und der Nenner null ist abgefangen.
+
+en: Both results of this chapter come from one idea: <b>the conjugate removes the imaginary part of a product</b>. It gives a length, and it turns any denominator into a real number. Notice also what |z| does <i>not</i> give you: an order. You cannot call one complex number “smaller” or “larger” than another. Only their moduli can be compared, and those are ordinary real numbers
+de: Beide Ergebnisse dieses Kapitels kommen aus einer Idee: <b>Die konjugierte Zahl beseitigt den Imaginärteil eines Produkts</b>. Sie liefert eine Länge, und sie macht jeden Nenner reell. Beachten Sie auch, was |z| Ihnen <i>nicht</i> liefert: eine Ordnung. Sie können eine komplexe Zahl nicht „kleiner“ oder „größer“ als eine andere nennen. Vergleichen lassen sich nur ihre Beträge, und das sind gewöhnliche reelle Zahlen
+
+en: <b>There is no order on ℂ.</b> For two complex numbers,⎵
+de: <b>Auf ℂ gibt es keine Ordnung.</b> Für zwei komplexe Zahlen ist⎵
+
+en: ⎵is not just unknown; it is undefined
+de: ⎵nicht nur unbekannt, sondern nicht definiert
+
+en: . You can compare only the moduli, and those are real numbers. Code that sorts complex numbers really sorts something else, usually |z| or Re(z), and should say so.
+de: . Vergleichen können Sie nur die Beträge, und das sind reelle Zahlen. Code, der komplexe Zahlen sortiert, sortiert in Wahrheit etwas anderes, meist |z| oder Re(z), und sollte das sagen.
+
+en: Absolute value and division
+de: Betrag und Division
+
+en: Moduli of a quotient
+de: Beträge eines Quotienten
+
+# c06.py
+en: You can describe a point in the plane by its coordinates or by its <b>distance and direction</b>. For complex numbers the second description is the natural one. With⎵
+de: Einen Punkt der Ebene können Sie durch seine Koordinaten beschreiben oder durch <b>Abstand und Richtung</b>. Für komplexe Zahlen ist die zweite Beschreibung die natürliche. Mit⎵
+
+en: ⎵we get⎵
+de: ⎵erhalten wir⎵
+
+en: . The bracket is exactly the series expansion of⎵
+de: . Die Klammer ist genau die Reihenentwicklung von⎵
+
+en: . This identity is the key to the whole topic. At⎵
+de: . Diese Identität ist der Schlüssel zum ganzen Thema. Bei⎵
+
+en: ⎵it reads⎵
+de: ⎵lautet sie⎵
+
+en: modulus: the distance from the origin
+de: Betrag: der Abstand vom Ursprung
+
+en: argument: the angle measured from the positive real axis, in radians (not degrees)
+de: Argument: der Winkel, gemessen von der positiven reellen Achse, im Bogenmaß (nicht in Grad)
+
+en: = π/180°, the conversion between the two
+de: = π/180°, die Umrechnung zwischen beiden
+
+en: <div style='max-width:800px;margin:14px auto 0;text-align:justify;line-height:1.6'>The angle is defined on⎵
+de: <div style='max-width:800px;margin:14px auto 0;text-align:justify;line-height:1.6'>Der Winkel ist definiert auf⎵
+
+en: . The obvious formula⎵
+de: . Die naheliegende Formel⎵
+
+en: ⎵only works for⎵
+de: ⎵funktioniert nur für⎵
+
+en: , that is, in quadrants I and IV. For⎵
+de: , also in den Quadranten I und IV. Für⎵
+
+en: ⎵you must add π. The second visualisation below shows exactly this trap.
+de: ⎵müssen Sie π addieren. Die zweite Visualisierung unten zeigt genau diese Falle.
+
+en: &nbsp;&nbsp;<b class='nbaccent'>half a turn: e<sup>iπ</sup> = −1</b>: Euler's relation, read straight off the picture
+de: &nbsp;&nbsp;<b class='nbaccent'>eine halbe Drehung: e<sup>iπ</sup> = −1</b>: die Eulersche Formel, direkt am Bild abgelesen
+
+en: &nbsp;&nbsp;<b class='nbaccent'>a quarter turn: e<sup>iπ/2</sup> = i</b>
+de: &nbsp;&nbsp;<b class='nbaccent'>eine Vierteldrehung: e<sup>iπ/2</sup> = i</b>
+
+en: <span class='nbok'>arctan is correct here (a &gt; 0)</span>
+de: <span class='nbok'>arctan stimmt hier (a &gt; 0)</span>
+
+en: <span class='nbwarn'>arctan is off by π: add π</span>
+de: <span class='nbwarn'>arctan liegt um π daneben: π addieren</span>
+
+en: true φ
+de: wahres φ
+
+en: <b>Top: the unfolding.</b> Step φ from 0 to 2π. The arrow rides around the unit circle (the circle of radius one). Its shadow on the horizontal axis traces cos φ (blue), its shadow on the vertical axis traces sin φ (green). Stop at step 12: the arrow points at −1. That is Euler's relation, with nothing left to prove. The frames are pre-rendered, so stepping is instant.<br><br><b>Bottom: the trap.</b> The red arrow is the true z. The dashed orange arrow is what the plain formula⎵
+de: <b>Oben: das Abwickeln.</b> Lassen Sie φ schrittweise von 0 bis 2π laufen. Der Pfeil fährt um den Einheitskreis (den Kreis mit Radius eins). Sein Schatten auf der waagerechten Achse zeichnet cos φ (blau), sein Schatten auf der senkrechten Achse zeichnet sin φ (grün). Halten Sie bei Schritt 12 an: Der Pfeil zeigt auf −1. Das ist die Eulersche Formel, und es bleibt nichts zu beweisen. Die Bilder sind vorberechnet, deshalb geht das Weiterschalten sofort.<br><br><b>Unten: die Falle.</b> Der rote Pfeil ist das wahre z. Der gestrichelte orange Pfeil ist das, was die einfache Formel⎵
+
+en: ⎵gives you. Keep <b>a</b> positive and the two coincide. Make <b>a</b> negative (quadrant II or III) and they differ by exactly π. The reason: arctan only returns values between −π/2 and +π/2, so it cannot tell those quadrants apart.
+de: ⎵Ihnen liefert. Halten Sie <b>a</b> positiv, dann fallen beide zusammen. Machen Sie <b>a</b> negativ (Quadrant II oder III), dann unterscheiden sie sich um genau π. Der Grund: arctan liefert nur Werte zwischen −π/2 und +π/2 und kann diese Quadranten deshalb nicht unterscheiden.
+
+en: φ step
+de: φ-Schritt
+
+en: The modulus is not right: |z| = √(a² + b²) = √(%g² + %g²) = %.4f.
+de: Der Betrag stimmt nicht: |z| = √(a² + b²) = √(%g² + %g²) = %.4f.
+
+en: Correct: |z| = %.4f and φ = %.4f rad = %.1f°. Your z is in the third quadrant, so the + π was needed.
+de: Richtig: |z| = %.4f und φ = %.4f rad = %.1f°. Ihr z liegt im dritten Quadranten, deshalb war das + π nötig.
+
+en: Off by exactly π. That is the trap: Re(z) = %g is negative, so the plain arctan(b/a) lands in the wrong half of the plane. You need to add π.
+de: Genau um π daneben. Das ist die Falle: Re(z) = %g ist negativ, deshalb landet der einfache arctan(b/a) in der falschen Hälfte der Ebene. Sie müssen π addieren.
+
+en: That looks like degrees. Enter the angle in radians.
+de: Das sieht nach Grad aus. Geben Sie den Winkel im Bogenmaß ein.
+
+en: The modulus is right, but the angle is not. Start from arctan(b/a) = arctan(%g/%g). Then check the sign of Re(z): it decides whether you have to add π.
+de: Der Betrag stimmt, der Winkel nicht. Fangen Sie mit arctan(b/a) = arctan(%g/%g) an. Prüfen Sie dann das Vorzeichen von Re(z): Es entscheidet, ob Sie π addieren müssen.
+
+en: <b>Write your number in polar form.</b>
+de: <b>Schreiben Sie Ihre Zahl in Polarform.</b>
+
+en: </b>. Give the modulus and the angle <b>in radians</b>, on the interval⎵
+de: </b>. Geben Sie den Betrag und den Winkel <b>im Bogenmaß</b> an, auf dem Intervall⎵
+
+en: Here b/a = 1, so⎵
+de: Hier ist b/a = 1, also folgt⎵
+
+en: ⎵follows without a calculator
+de: ⎵ohne Taschenrechner
+
+en: Here |z| is a whole number. For the angle, use your calculator's arctan (in radians)
+de: Hier ist |z| eine ganze Zahl. Für den Winkel nehmen Sie den arctan Ihres Taschenrechners (im Bogenmaß)
+
+en: . But check the sign of the real part before you trust the result. The second visualisation above shows what goes wrong otherwise. Enter decimals (
+de: . Prüfen Sie aber das Vorzeichen des Realteils, bevor Sie dem Ergebnis trauen. Die zweite Visualisierung oben zeigt, was sonst schiefgeht. Geben Sie Dezimalzahlen ein (
+
+en: Two boxes, two questions. <b>|z|</b> is the length of the arrow from 0 to z; you get it with Pythagoras from the two components. <b>φ</b> is the angle measured anticlockwise from the positive real axis. Before you compute anything, sketch z =⎵
+de: Zwei Felder, zwei Fragen. <b>|z|</b> ist die Länge des Pfeils von 0 bis z; Sie erhalten sie mit Pythagoras aus den beiden Komponenten. <b>φ</b> ist der Winkel, gegen den Uhrzeigersinn von der positiven reellen Achse aus gemessen. Bevor Sie etwas rechnen, skizzieren Sie z =⎵
+
+en: . Which quadrant is it in? The quadrant fixes the range for φ (I: 0 to π/2, II: π/2 to π, III: π to 3π/2, IV: 3π/2 to 2π).
+de: . In welchem Quadranten liegt es? Der Quadrant legt den Bereich für φ fest (I: 0 bis π/2, II: π/2 bis π, III: π bis 3π/2, IV: 3π/2 bis 2π).
+
+en: |z| is √(a² + b²), with a and b both %s. For the angle, start from arctan(b/a). Here b/a is 1, and arctan 1 is π/4. But that angle belongs to an arrow pointing to the <i>right</i>. Your a is negative, so your arrow points to the left: add π. Check that the result lies between π and 3π/2, and enter it in radians.
+de: |z| ist √(a² + b²), wobei a und b beide %s sind. Für den Winkel fangen Sie mit arctan(b/a) an. Hier ist b/a gleich 1, und arctan 1 ist π/4. Dieser Winkel gehört aber zu einem Pfeil, der nach <i>rechts</i> zeigt. Ihr a ist negativ, Ihr Pfeil zeigt also nach links: Addieren Sie π. Prüfen Sie, dass das Ergebnis zwischen π und 3π/2 liegt, und geben Sie es im Bogenmaß ein.
+
+en: |z| is √(a² + b²) with a = %s and b = %s. Square both, add them and take the root; the result is a whole number. For the angle, type arctan(b/a) into a calculator set to radians. It returns an angle between −π/2 and π/2, which belongs to an arrow pointing to the <i>right</i>. Your a is negative, so your arrow points to the left: add π. Check that the result lies between π and 3π/2.
+de: |z| ist √(a² + b²) mit a = %s und b = %s. Quadrieren Sie beide, addieren Sie sie und ziehen Sie die Wurzel; das Ergebnis ist eine ganze Zahl. Für den Winkel tippen Sie arctan(b/a) in einen Taschenrechner, der auf Bogenmaß steht. Er liefert einen Winkel zwischen −π/2 und π/2, und der gehört zu einem Pfeil, der nach <i>rechts</i> zeigt. Ihr a ist negativ, Ihr Pfeil zeigt also nach links: Addieren Sie π. Prüfen Sie, dass das Ergebnis zwischen π und 3π/2 liegt.
+
+en: Write a function <code>to_polar(a, b)</code> that converts z = a + ib into polar form. It returns the tuple (r, phi): the modulus r = |z| and the angle phi in radians. The angle must be correct in all four quadrants and lie in [0, 2π). Example: <code>to_polar(-3, 4)</code> → <code>(5.0, 2.214…)</code>.
+de: Schreiben Sie eine Funktion <code>to_polar(a, b)</code>, die z = a + ib in Polarform umrechnet. Sie gibt das Tupel (r, phi) zurück: den Betrag r = |z| und den Winkel phi im Bogenmaß. Der Winkel muss in allen vier Quadranten stimmen und in [0, 2π) liegen. Beispiel: <code>to_polar(-3, 4)</code> → <code>(5.0, 2.214…)</code>.
+
+en: Define a function called to_polar(a, b).
+de: Definieren Sie eine Funktion namens to_polar(a, b).
+
+en: to_polar raised %r.
+de: to_polar hat %r ausgelöst.
+
+en: Return exactly two values: (r, phi).
+de: Geben Sie genau zwei Werte zurück: (r, phi).
+
+en: For z = %s the modulus is %.4f.
+de: Für z = %s ist der Betrag %.4f.
+
+en: Off by exactly π for z = %s. For a < 0 the angle needs + π (or use np.arctan2).
+de: Genau um π daneben für z = %s. Für a < 0 braucht der Winkel + π (oder nehmen Sie np.arctan2).
+
+en: For z = %s the angle is %.4f rad.
+de: Für z = %s ist der Winkel %.4f rad.
+
+en: The angle is right but outside [0, 2π).
+de: Der Winkel stimmt, liegt aber außerhalb von [0, 2π).
+
+en: Correct in all four quadrants.
+de: Richtig in allen vier Quadranten.
+
+en: Polar form does not add information. It <b>re-sorts</b> it: the same number is now described by a length and a direction. The next chapter shows why this pays off. In polar form, multiplying is almost no work at all. The price is the caveat above: the angle needs a quadrant check that the textbook formula quietly leaves out.
+de: Die Polarform fügt keine Information hinzu. Sie <b>sortiert sie um</b>: Dieselbe Zahl wird jetzt durch eine Länge und eine Richtung beschrieben. Das nächste Kapitel zeigt, warum sich das lohnt. In Polarform ist das Multiplizieren fast keine Arbeit mehr. Der Preis ist der Vorbehalt oben: Der Winkel braucht eine Quadrantenprüfung, die die Lehrbuchformel stillschweigend weglässt.
+
+en: <b>The angle is only defined up to 2π</b>, and a number on the negative real axis sits exactly at the seam. Libraries choose different intervals: <b>np.angle</b> returns (−π, π], while this notebook wraps to [0, 2π). Neither is more correct, but mixing them unnoticed is a reliable source of sign errors.
+de: <b>Der Winkel ist nur bis auf 2π festgelegt</b>, und eine Zahl auf der negativen reellen Achse sitzt genau an der Nahtstelle. Bibliotheken wählen verschiedene Intervalle: <b>np.angle</b> liefert (−π, π], dieses Notebook dagegen [0, 2π). Keines davon ist richtiger, aber wer beide unbemerkt mischt, bekommt zuverlässig Vorzeichenfehler.
+
+en: Polar form and Euler's relation
+de: Polarform und Eulersche Formel
+
+en: Euler and the arctan trap
+de: Euler und die arctan-Falle
+
+# c07.py
+en: Write both factors in polar form and multiply:⎵
+de: Schreiben Sie beide Faktoren in Polarform und multiplizieren Sie:⎵
+
+en: . The exponents add, so <b>the moduli (the lengths) multiply and the angles add</b>
+de: . Die Exponenten addieren sich, also <b>multiplizieren sich die Beträge (die Längen), und die Winkel addieren sich</b>
+
+en: . Division reverses both. This one line replaces the component formula of chapter 4. It turns every complex multiplication into a picture: a rotation combined with a stretch.
+de: . Die Division kehrt beides um. Diese eine Zeile ersetzt die Komponentenformel aus Kapitel 4. Sie macht aus jeder komplexen Multiplikation ein Bild: eine Drehung mit einer Streckung.
+
+en: the product stretches by the second modulus
+de: das Produkt wird um den zweiten Betrag gestreckt
+
+en: the product rotates by the second angle
+de: das Produkt wird um den zweiten Winkel gedreht
+
+en: the quotient shrinks by the second modulus
+de: der Quotient wird um den zweiten Betrag gestaucht
+
+en: the quotient rotates backwards
+de: der Quotient wird rückwärts gedreht
+
+en: <div style='max-width:800px;margin:14px auto 0;text-align:justify;line-height:1.6'>An important special case: if⎵
+de: <div style='max-width:800px;margin:14px auto 0;text-align:justify;line-height:1.6'>Ein wichtiger Sonderfall: Wenn⎵
+
+en: , nothing is stretched, and the product is a <b>pure rotation</b> by φ₂. Multiplying by⎵
+de: , wird nichts gestreckt, und das Produkt ist eine <b>reine Drehung</b> um φ₂. Multiplizieren mit⎵
+
+en: ⎵is therefore the quarter turn you already met in chapter 4.
+de: ⎵ist deshalb die Vierteldrehung, die Sie schon aus Kapitel 4 kennen.
+
+en: Here you steer the two numbers directly in polar form, each by a length and an angle. Switch between product and quotient and look at the line under the sliders: its two arithmetic lines are the whole rule. Try two experiments. First set <b>|z₂| = 1</b> and sweep <b>φ₂</b>. The result keeps the length of z₁ and only turns: a pure rotation. Then set <b>φ₂ = 0</b> and sweep <b>|z₂|</b>. Now the direction stays fixed and only the length changes. Every complex multiplication is a mixture of these two motions.
+de: Hier steuern Sie die beiden Zahlen direkt in Polarform, jede über eine Länge und einen Winkel. Wechseln Sie zwischen Produkt und Quotient und sehen Sie auf die Zeile unter den Schiebereglern: Ihre beiden Rechenzeilen sind die ganze Regel. Probieren Sie zwei Versuche. Setzen Sie zuerst <b>|z₂| = 1</b> und fahren Sie <b>φ₂</b> durch. Das Ergebnis behält die Länge von z₁ und dreht sich nur: eine reine Drehung. Setzen Sie dann <b>φ₂ = 0</b> und fahren Sie <b>|z₂|</b> durch. Jetzt bleibt die Richtung fest, und nur die Länge ändert sich. Jede komplexe Multiplikation ist eine Mischung aus diesen beiden Bewegungen.
+
+en: <span class='nbok'>on target</span>
+de: <span class='nbok'>im Ziel</span>
+
+en: <span class='nbwarn'>distance to target: %.2f</span>
+de: <span class='nbwarn'>Abstand zum Ziel: %.2f</span>
+
+en: length %s &nbsp;·&nbsp; angle %s
+de: Länge %s &nbsp;·&nbsp; Winkel %s
+
+en: <b class='nbok'>right</b>
+de: <b class='nbok'>stimmt</b>
+
+en: 2.00 × %.2f = %.2f  (target %.2f)
+de: 2,00 × %.2f = %.2f  (Ziel %.2f)
+
+en: 0.60 + %.2f = %.2f  (target %.2f)
+de: 0,60 + %.2f = %.2f  (Ziel %.2f)
+
+en: On target. You needed |z₂| = %.2f, so that 2·|z₂| = %.1f, and φ₂ = %.2f, so that 0.60 + φ₂ reaches %.2f. Length and angle can be set independently.
+de: Im Ziel. Sie brauchten |z₂| = %.2f, damit 2·|z₂| = %.1f wird, und φ₂ = %.2f, damit 0,60 + φ₂ den Wert %.2f erreicht. Länge und Winkel lassen sich unabhängig einstellen.
+
+en: The length is off: the product has |z| = %.2f, but the target sits at %.2f. Remember that the moduli <i>multiply</i>, and |z₁| is fixed at 2.
+de: Die Länge stimmt nicht: Das Produkt hat |z| = %.2f, das Ziel liegt aber bei %.2f. Denken Sie daran, dass sich die Beträge <i>multiplizieren</i>, und |z₁| ist fest auf 2.
+
+en: The length is right, the direction is not: your product points at %.2f rad, the target at %.2f rad. The angles <i>add</i>, and φ₁ is fixed at 0.60.
+de: Die Länge stimmt, die Richtung nicht: Ihr Produkt zeigt auf %.2f rad, das Ziel auf %.2f rad. Die Winkel <i>addieren</i> sich, und φ₁ ist fest auf 0,60.
+
+en: <b>Steer the product onto the target.</b>
+de: <b>Steuern Sie das Produkt ins Ziel.</b>
+
+en: <div><b>z₁ is fixed</b> at⎵
+de: <div><b>z₁ ist fest</b> bei⎵
+
+en: . Move the two sliders for <b>z₂</b> until the green product arrow lands inside the orange target circle. Then press the button. You do not type or compute anything. But you will only find the target quickly if you use the rule: the moduli multiply, the angles add.</div>
+de: . Bewegen Sie die beiden Schieberegler für <b>z₂</b>, bis der grüne Produktpfeil im orangen Zielkreis landet. Drücken Sie dann den Knopf. Sie tippen nichts ein und rechnen nichts aus. Schnell finden Sie das Ziel aber nur, wenn Sie die Regel nutzen: Die Beträge multiplizieren sich, die Winkel addieren sich.</div>
+
+en: Two sliders, two separate questions. Do not search with both at once. Multiplying <i>multiplies the lengths</i> and <i>adds the angles</i>. So the length of the product depends only on |z₂|, and its direction only on φ₂. Set one slider, then the other.
+de: Zwei Schieberegler, zwei getrennte Fragen. Suchen Sie nicht mit beiden gleichzeitig. Multiplizieren <i>multipliziert die Längen</i> und <i>addiert die Winkel</i>. Die Länge des Produkts hängt also nur von |z₂| ab, seine Richtung nur von φ₂. Stellen Sie erst den einen Regler ein, dann den anderen.
+
+en: Start with the length. The product is 2·|z₂| long, because |z₁| is 2. The readout shows the target's length: divide it by 2 and set |z₂| to the result. Then the angle. The product points at 0.60 + φ₂. The readout shows the target's angle: subtract 0.60 and set φ₂ to the result. The line under the readout tells you which of the two is still off.
+de: Fangen Sie mit der Länge an. Das Produkt ist 2·|z₂| lang, weil |z₁| gleich 2 ist. Die Anzeige zeigt die Länge des Ziels: Teilen Sie sie durch 2 und stellen Sie |z₂| auf das Ergebnis. Dann der Winkel. Das Produkt zeigt auf 0,60 + φ₂. Die Anzeige zeigt den Winkel des Ziels: Ziehen Sie 0,60 ab und stellen Sie φ₂ auf das Ergebnis. Die Zeile unter der Anzeige sagt Ihnen, welcher der beiden Werte noch nicht stimmt.
+
+en: Write a function <code>rotate(a, b, phi)</code> that turns z = a + ib anticlockwise about the origin by the angle phi (in radians). The length |z| must stay the same. The function returns the rotated number z·e^(iφ) as a single complex number. Example: <code>rotate(1, 0, np.pi/2)</code> → about <code>1j</code>.
+de: Schreiben Sie eine Funktion <code>rotate(a, b, phi)</code>, die z = a + ib um den Ursprung gegen den Uhrzeigersinn um den Winkel phi (im Bogenmaß) dreht. Die Länge |z| muss gleich bleiben. Die Funktion gibt die gedrehte Zahl z·e^(iφ) als eine komplexe Zahl zurück. Beispiel: <code>rotate(1, 0, np.pi/2)</code> → ungefähr <code>1j</code>.
+
+en: Define a function called rotate(a, b, phi).
+de: Definieren Sie eine Funktion namens rotate(a, b, phi).
+
+en: rotate raised %r.
+de: rotate hat %r ausgelöst.
+
+en: A rotation must not change the length: |z| = %.4f, but your result has |w| = %.4f.
+de: Eine Drehung darf die Länge nicht ändern: |z| = %.4f, Ihr Ergebnis hat aber |w| = %.4f.
+
+en: You are rotating clockwise. Check the sign of the sine terms.
+de: Sie drehen im Uhrzeigersinn. Prüfen Sie das Vorzeichen der Sinusterme.
+
+en: Rotating %s by %.3f rad gives %s.
+de: %s um %.3f rad gedreht ergibt %s.
+
+en: Length preserved, direction correct, and the quarter turn lands on i.
+de: Länge erhalten, Richtung richtig, und die Vierteldrehung landet auf i.
+
+en: This is the payoff of the whole notebook. Complex multiplication is not an odd bookkeeping rule. It is a <b>rotation with a stretch</b>. That is why complex numbers appear wherever something oscillates or turns: alternating currents, waves, the Fourier transform of section 1.9 of the script, and the membrane impedance in the appendix
+de: Hier zahlt sich das ganze Notebook aus. Die komplexe Multiplikation ist keine seltsame Buchhaltungsregel. Sie ist eine <b>Drehung mit Streckung</b>. Deshalb tauchen komplexe Zahlen überall dort auf, wo etwas schwingt oder sich dreht: bei Wechselströmen, Wellen, der Fourier-Transformation aus Abschnitt 1.9 des Skripts und der Membranimpedanz im Anhang
+
+en: . A single number carries an amplitude (a size) and a phase (an angle) at the same time.
+de: . Eine einzige Zahl trägt zugleich eine Amplitude (eine Größe) und eine Phase (einen Winkel).
+
+en: The geometry of multiplication
+de: Die Geometrie der Multiplikation
+
+en: Rotate and stretch
+de: Drehen und strecken
+
+# conclusion.py (E21.13, vorher summary.py)
+en: the one definition that everything else follows from
+de: die eine Definition, aus der alles andere folgt
+
+en: a pair of real numbers: Re(z) = a and Im(z) = b, so Im(z) is real too
+de: ein Paar reeller Zahlen: Re(z) = a und Im(z) = b, also ist auch Im(z) reell
+
+en: point / arrow
+de: Punkt / Pfeil
+
+en: Re horizontal, Im vertical: algebra becomes geometry
+de: Re waagerecht, Im senkrecht: Aus Algebra wird Geometrie
+
+en: component by component, like adding vectors; real and imaginary parts never mix
+de: Komponente für Komponente, wie bei Vektoren; Real- und Imaginärteil mischen sich nie
+
+en: (a₁a₂ − b₁b₂) + i(a₁b₂ + a₂b₁); the minus sign comes from i²
+de: (a₁a₂ − b₁b₂) + i(a₁b₂ + a₂b₁); das Minuszeichen kommt von i²
+
+en: the mirror image across the real axis; z·z̄ = |z|² is real
+de: das Spiegelbild an der reellen Achse; z·z̄ = |z|² ist reell
+
+en: the length of the arrow; the only quantity in ℂ you can order
+de: die Länge des Pfeils; die einzige Größe in ℂ, die sich ordnen lässt
+
+en: multiply by the conjugate of the denominator, then divide by a real number
+de: mit der konjugierten Zahl des Nenners erweitern, dann durch eine reelle Zahl teilen
+
+en: polar form (length and angle); e^{iπ} = −1
+de: Polarform (Länge und Winkel); e^{iπ} = −1
+
+en: valid only for a > 0; add π when a < 0
+de: gilt nur für a > 0; π addieren, wenn a < 0
+
+en: z₁z₂ polar
+de: z₁z₂ polar
+
+en: moduli multiply, angles add: rotation plus stretch
+de: Beträge multiplizieren sich, Winkel addieren sich: Drehung plus Streckung
+
+en: Conclusion
+de: Fazit
+
+en: Everything on one screen:
+de: Alles auf einem Bildschirm:
+
+en: <b>The locks in this notebook set your pace; they are not an assessment.</b> Everything runs in your browser, the check functions sit in the same cell as the exercises, and the <b>Skip for now</b> button is there on purpose. Treat the timeline as a note to yourself about what to revisit.
+de: <b>Die Sperren in diesem Notebook geben Ihr Tempo vor; sie sind keine Bewertung.</b> Alles läuft in Ihrem Browser, die Prüffunktionen stehen in derselben Zelle wie die Aufgaben, und der Knopf <b>Vorerst überspringen</b> ist mit Absicht da. Nehmen Sie die Zeitleiste als Notiz an sich selbst, was Sie sich noch einmal ansehen wollen.
+
+# conclusion.py (E21.13, vorher glossary.py)
+en: imaginary unit i
+de: imaginäre Einheit i
+
+en: the number with i² = −1
+de: die Zahl mit i² = −1
+
+en: complex number
+de: komplexe Zahl
+
+en: z = a + ib with a, b ∈ ℝ
+de: z = a + ib mit a, b ∈ ℝ
+
+en: real part Re(z)
+de: Realteil Re(z)
+
+en: a, a real number
+de: a, eine reelle Zahl
+
+en: imaginary part Im(z)
+de: Imaginärteil Im(z)
+
+en: b, also a real number: the factor in front of i
+de: b, ebenfalls eine reelle Zahl: der Faktor vor i
+
+en: the plane with Re on the horizontal axis and Im on the vertical axis; z is a point in it
+de: die Ebene mit Re auf der waagerechten und Im auf der senkrechten Achse; z ist ein Punkt darin
+
+en: conjugate z̄
+de: konjugierte Zahl z̄
+
+en: a − ib; the mirror image of z across the real axis
+de: a − ib; das Spiegelbild von z an der reellen Achse
+
+en: modulus |z|
+de: Betrag |z|
+
+en: √(a²+b²) = √(z z̄); the distance from the origin
+de: √(a²+b²) = √(z z̄); der Abstand vom Ursprung
+
+en: argument φ
+de: Argument φ
+
+en: the angle of z, measured from the positive real axis, in radians
+de: der Winkel von z, gemessen von der positiven reellen Achse, im Bogenmaß
+
+en: e^{iπ} = −1, the case φ = π of the polar form
+de: e^{iπ} = −1, der Fall φ = π der Polarform
+
+en: quadrant correction
+de: Quadrantenkorrektur
+
+en: the extra + π that arctan(b/a) needs whenever Re(z) < 0
+de: das zusätzliche + π, das arctan(b/a) immer braucht, wenn Re(z) < 0
+
+en: <b>Glossary</b>
+de: <b>Glossar</b>
+
+# refs.py
+en: References and licence
+de: Quellen und Lizenz
+
+# quiz.py
+en: <div style='text-align:center'>Quiz unavailable: %r</div>
+de: <div style='text-align:center'>Quiz nicht verfügbar: %r</div>
+
+en: Multiple choice quiz
+de: Multiple-Choice-Quiz
+
+en: I have worked through the quiz
+de: Ich habe das Quiz durchgearbeitet
+
+# byod.py
+en: Here is why a biophysicist cares. To a first approximation, a patch of cell membrane behaves like a resistor and a capacitor in parallel. Ions leak through channels (the resistance⎵
+de: Hier zeigt sich, warum das eine Biophysikerin interessiert. In erster Näherung verhält sich ein Stück Zellmembran wie ein Widerstand und ein Kondensator in Parallelschaltung. Ionen sickern durch Kanäle (der Widerstand⎵
+
+en: ), and the lipid bilayer stores charge (the capacitance⎵
+de: ), und die Lipiddoppelschicht speichert Ladung (die Kapazität⎵
+
+en: ). Hodgkin and Huxley built their description of the axon on exactly this circuit
+de: ). Hodgkin und Huxley haben ihre Beschreibung des Axons genau auf diese Schaltung gebaut
+
+en: . The specific membrane capacitance (capacitance per area) has since been measured directly; it is close to⎵
+de: . Die spezifische Membrankapazität (Kapazität pro Fläche) ist inzwischen direkt gemessen worden; sie liegt nahe bei⎵
+
+en: .<br><br>Drive such a membrane with a sinusoidal current of angular frequency⎵
+de: .<br><br>Treibt man eine solche Membran mit einem sinusförmigen Strom der Kreisfrequenz⎵
+
+en: , and the voltage response lags behind the current. Describing this with two real numbers, an amplitude and a phase shift, is awkward. With <b>one complex number</b>, the impedance Z, it is easy:<div style='text-align:center;margin:10px 0'>
+de: an, hinkt die Spannungsantwort dem Strom hinterher. Das mit zwei reellen Zahlen zu beschreiben, einer Amplitude und einer Phasenverschiebung, ist umständlich. Mit <b>einer komplexen Zahl</b>, der Impedanz Z, ist es leicht:<div style='text-align:center;margin:10px 0'>
+
+en: </div>The modulus⎵
+de: </div>Der Betrag⎵
+
+en: ⎵is the amplitude ratio, and the argument⎵
+de: ⎵ist das Amplitudenverhältnis, und das Argument⎵
+
+en: ⎵is the phase shift. One object carries both. Every rule from this notebook now does real work: the conjugate trick splits Z into real and imaginary parts, the modulus gives the amplitude, and the quadrant-aware angle gives the phase.<br><br><b>The values below are simulated.</b> They lie in a physiologically plausible range for a small cell, but they are not measurements. Replace <b>R_m</b> and <b>C_m</b> with your own values and run again.
+de: ⎵ist die Phasenverschiebung. Ein Objekt trägt beides. Jede Regel aus diesem Notebook leistet jetzt echte Arbeit: Der Trick mit der konjugierten Zahl zerlegt Z in Real- und Imaginärteil, der Betrag liefert die Amplitude, und der quadrantenrichtige Winkel liefert die Phase.<br><br><b>Die Werte unten sind simuliert.</b> Sie liegen in einem physiologisch plausiblen Bereich für eine kleine Zelle, sind aber keine Messwerte. Ersetzen Sie <b>R_m</b> und <b>C_m</b> durch Ihre eigenen Werte und führen Sie die Zelle erneut aus.
+
+en: Bring your own data: membrane impedance
+de: Eigene Daten: Membranimpedanz
+
+en: Run ▶
+de: Ausführen ▶
+
+en: <b>Things to try.</b> At low frequency the capacitor is effectively an open circuit, so⎵
+de: <b>Zum Ausprobieren.</b> Bei niedriger Frequenz ist der Kondensator praktisch eine Unterbrechung, deshalb gilt⎵
+
+en: ⎵with almost no phase shift: the membrane looks purely resistive. At high frequency the capacitor shorts out the resistance.⎵
+de: ⎵fast ohne Phasenverschiebung: Die Membran wirkt rein ohmsch. Bei hoher Frequenz schließt der Kondensator den Widerstand kurz.⎵
+
+en: ⎵falls off and the phase approaches −90°; the response is now almost purely capacitive. At the corner frequency⎵
+de: ⎵fällt ab, und die Phase nähert sich −90°; die Antwort ist jetzt fast rein kapazitiv. Bei der Grenzfrequenz⎵
+
+en: ⎵the phase passes exactly −45°. This is the dotted line in the right-hand plot. Change⎵
+de: ⎵geht die Phase genau durch −45°. Das ist die gepunktete Linie im rechten Diagramm. Ändern Sie⎵
+
+en: ⎵by a factor of ten and watch the whole picture shift by a decade. This is why membrane capacitance is worth measuring carefully
+de: ⎵um den Faktor zehn und sehen Sie, wie sich das ganze Bild um eine Dekade verschiebt. Deshalb lohnt es sich, die Membrankapazität sorgfältig zu messen
+
+en: I have run this with my own values
+de: Ich habe das mit eigenen Werten ausgeführt
+
+# E23.1 (2026-10-06) — the ⚙ language row: in a German run only German
+en: Language · Sprache:
+de: Sprache:
+
+en: ▶  Rebuild now · Jetzt neu aufbauen
+de: ▶  Jetzt neu aufbauen
+
+en: Saved: %s from the next run.
+de: Gespeichert: ab dem nächsten Lauf %s.
+
+en: Could not save this choice here.
+de: Diese Wahl ließ sich hier nicht speichern.
+
+en: <b>%+.2f too long</b>
+de: <b>%+.2f zu lang</b>
+
+en: <b>%+.2f too short</b>
+de: <b>%+.2f zu kurz</b>

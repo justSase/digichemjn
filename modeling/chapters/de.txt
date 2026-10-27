@@ -1,0 +1,1623 @@
+# E17.1 (2026-10-02, Inhalt) — Introduction to Modeling auf Deutsch.
+# Eine Zeile "en:" (das englische Literal, genau wie im Quelltext; \n = Zeilenumbruch),
+# darunter "de:". Der Build (toolkit/i18n.py) prüft je Paar: gleiche %-Platzhalter,
+# gleiche HTML-Tags, gleiche Zahlen. Anrede: Sie (E22.2). Zahlen im Text mit Dezimalkomma, in <code> mit Punkt; die Eingabefelder nehmen beides.
+# ⎵ = ein Leerzeichen am Anfang oder Ende des Literals (sichtbar, damit es kein Werkzeug still entfernt).
+# Was hier fehlt, bleibt Englisch (Literaturangaben, Code, Formeln, Schlüssel wie "degree", "epochs",
+# "time", "concentration", "answers": dieselben Literale sind dort auch Programmschlüssel).
+
+# Titelkarte nach Play (title_de: Ersetzung in der Karte)
+en: Introduction to Modeling
+de: Einführung in die Modellierung
+
+# Einzelwörter, die in den Kapiteln nur als Beschriftung vorkommen (geprüft: kein Programmschlüssel)
+en: stage
+de: Stufe
+
+en: output
+de: Ergebnis
+
+en: perceptual
+de: wahrnehmend
+
+en: conceptual
+de: konzeptionell
+
+en: procedural
+de: prozedural
+
+en: aspect
+de: Merkmal
+
+en: direction
+de: Richtung
+
+en: extrapolates
+de: extrapoliert
+
+en: data
+de: Daten
+
+en: model
+de: Modell
+
+en: train
+de: Training
+
+en: test
+de: Test
+
+en: polynomial
+de: Polynom
+
+en: baseline
+de: Ausgangswert
+
+en: step
+de: Schritt
+
+en: steps
+de: Schritte
+
+en: slope
+de: Steigung
+
+en: inside
+de: innen
+
+en: error
+de: Fehler
+
+en: response
+de: Antwort
+
+en: half-life
+de: Halbwertszeit
+
+en: overfitting
+de: Überanpassung
+
+en: underfitting
+de: Unteranpassung
+
+en: From observation to fitting, testing and probing a pharmacokinetic model
+de: Von der Beobachtung zum Anpassen, Testen und Abtasten eines pharmakokinetischen Modells
+
+# _setup_mod.py
+en: Introduction to Modeling
+de: Einführung in die Modellierung
+
+en: Perception, calibration, validation and sensitivity
+de: Wahrnehmung, Kalibrierung, Validierung und Sensitivität
+
+en: Master Chemie, Biochemie & Biophysik, Pharmazeutische Wissenschaften, Sustainable Materials — from the 7th semester
+de: Master Chemie, Biochemie & Biophysik, Pharmazeutische Wissenschaften, Sustainable Materials, ab dem 7. Semester
+
+en: School algebra and the exponential function; no programming knowledge required
+de: Schulalgebra und die Exponentialfunktion; keine Programmierkenntnisse nötig
+
+en: objective function
+de: Zielfunktion
+
+en: gradient descent
+de: Gradientenabstieg
+
+en: sensitivity analysis
+de: Sensitivitätsanalyse
+
+en: explain the reality–observation–model relationship and the three modeling stages
+de: das Verhältnis von Wirklichkeit, Beobachtung und Modell sowie die drei Stufen der Modellbildung erklären
+
+en: tell white-box from black-box models and judge which one suits a question
+de: White-Box- von Black-Box-Modellen unterscheiden und beurteilen, welches zu einer Frage passt
+
+en: compute a calibration objective and take one step of the search that minimises it
+de: eine Zielfunktion der Kalibrierung berechnen und einen Schritt der Suche ausführen, die sie minimiert
+
+en: check a calibrated model for under- and overfitting with a train–test split
+de: ein kalibriertes Modell mit einer Aufteilung in Trainings- und Testdaten auf Unter- und Überanpassung prüfen
+
+en: measure a parameter's influence by a central difference and sample by Monte-Carlo
+de: den Einfluss eines Parameters über eine zentrale Differenz messen und per Monte-Carlo Stichproben ziehen
+
+en: apply the workflow to your own PK data and document it reproducibly (FAIR)
+de: den Arbeitsablauf auf eigene PK-Daten anwenden und ihn reproduzierbar dokumentieren (FAIR)
+
+en: 1 · scales
+de: 1 · Skalen
+
+en: Scales of a drug model
+de: Skalen eines Arzneimittelmodells
+
+en: 2 · noisy observations
+de: 2 · verrauschte Beobachtungen
+
+en: Noisy observations
+de: Verrauschte Beobachtungen
+
+en: 3 · white vs black box
+de: 3 · White Box gegen Black Box
+
+en: White box against black box
+de: White Box gegen Black Box
+
+en: 4 · half-life
+de: 4 · Halbwertszeit
+
+en: Half-life and what is left
+de: Halbwertszeit und was übrig bleibt
+
+en: 5 · the objective
+de: 5 · die Zielfunktion
+
+en: The objective of one guess
+de: Die Zielfunktion einer Schätzung
+
+en: 6 · one search step
+de: 6 · ein Suchschritt
+
+en: One step downhill
+de: Ein Schritt bergab
+
+en: 7 · test error
+de: 7 · Testfehler
+
+en: Test error and gap
+de: Testfehler und Abstand
+
+en: 8 · sensitivity
+de: 8 · Sensitivität
+
+en: Central difference
+de: Zentrale Differenz
+
+en: 9 · Monte-Carlo π
+de: 9 · Monte-Carlo-π
+
+en: π from a sample
+de: π aus einer Stichprobe
+
+en: 10 · multiple choice
+de: 10 · Multiple Choice
+
+en: Multiple-choice quiz
+de: Multiple-Choice-Quiz
+
+en: 11 · own data
+de: 11 · eigene Daten
+
+en: Your own PK data
+de: Ihre eigenen PK-Daten
+
+en: The three modeling stages, in order, are…
+de: Die drei Stufen der Modellbildung sind, in dieser Reihenfolge, …
+
+en: perceptual → conceptual → procedural
+de: wahrnehmend → konzeptionell → prozedural
+
+en: Yes: understand the system, formalise it, then implement it.
+de: Ja: das System verstehen, es formalisieren, es dann umsetzen.
+
+en: procedural → conceptual → perceptual
+de: prozedural → konzeptionell → wahrnehmend
+
+en: That reverses the workflow.
+de: Das kehrt den Arbeitsablauf um.
+
+en: conceptual → perceptual → procedural
+de: konzeptionell → wahrnehmend → prozedural
+
+en: Perception (system understanding) comes first.
+de: Die Wahrnehmung (das Systemverständnis) kommt zuerst.
+
+en: calibration → validation → perception
+de: Kalibrierung → Validierung → Wahrnehmung
+
+en: Those come after a model exists.
+de: Diese kommen erst, wenn es ein Modell gibt.
+
+en: A white-box (physics-based) model is one that…
+de: Ein White-Box-Modell (physikalisch begründet) ist eines, das …
+
+en: is built from known mechanisms and laws
+de: aus bekannten Mechanismen und Gesetzen aufgebaut ist
+
+en: White means the mechanism is transparent and explicit.
+de: White bedeutet, dass der Mechanismus durchschaubar und ausdrücklich ist.
+
+en: learns only from data with no mechanism
+de: nur aus Daten lernt, ohne Mechanismus
+
+en: That describes a black-box, data-driven model.
+de: Das beschreibt ein datengetriebenes Black-Box-Modell.
+
+en: cannot be written down as equations
+de: sich nicht als Gleichungen aufschreiben lässt
+
+en: White-box models are exactly the equation-based ones.
+de: White-Box-Modelle sind genau die, die auf Gleichungen beruhen.
+
+en: is always more accurate than any other
+de: immer genauer ist als jedes andere
+
+en: Accuracy depends on the problem and the data, not on the colour.
+de: Die Genauigkeit hängt vom Problem und von den Daten ab, nicht von der Farbe.
+
+en: Calibration of a model means…
+de: Ein Modell kalibrieren heißt …
+
+en: adjusting its parameters so it fits observed data
+de: seine Parameter so anpassen, dass es zu beobachteten Daten passt
+
+en: Right. This is usually done by minimising an objective function.
+de: Richtig. Meist geschieht das, indem man eine Zielfunktion minimiert.
+
+en: collecting more observations
+de: mehr Beobachtungen sammeln
+
+en: That is data gathering, not calibration.
+de: Das ist Datenerhebung, keine Kalibrierung.
+
+en: writing the simulation code
+de: den Simulationscode schreiben
+
+en: That is the procedural stage.
+de: Das ist die prozedurale Stufe.
+
+en: choosing the plot colours
+de: die Farben der Diagramme wählen
+
+en: That is cosmetics, not calibration.
+de: Das ist Kosmetik, keine Kalibrierung.
+
+en: An objective (loss) function in calibration measures…
+de: Eine Zielfunktion (Verlustfunktion) misst bei der Kalibrierung …
+
+en: the difference between predicted and observed data
+de: den Unterschied zwischen vorhergesagten und beobachteten Daten
+
+en: Calibration minimises exactly this.
+de: Genau das minimiert die Kalibrierung.
+
+en: the runtime of the code
+de: die Laufzeit des Codes
+
+en: Speed is not the objective here.
+de: Die Geschwindigkeit ist hier nicht das Ziel.
+
+en: the number of parameters
+de: die Zahl der Parameter
+
+en: That relates to complexity, not the objective.
+de: Das hat mit der Komplexität zu tun, nicht mit der Zielfunktion.
+
+en: the size of the dataset
+de: die Größe des Datensatzes
+
+en: That is unrelated to the objective value.
+de: Das hat mit dem Wert der Zielfunktion nichts zu tun.
+
+en: Low training error but high test error is a sign of…
+de: Ein kleiner Trainingsfehler bei großem Testfehler ist ein Zeichen für …
+
+en: The model has memorised the noise and fails on new data.
+de: Das Modell hat das Rauschen auswendig gelernt und versagt bei neuen Daten.
+
+en: Underfitting keeps BOTH errors high.
+de: Unteranpassung hält BEIDE Fehler hoch.
+
+en: perfect calibration
+de: perfekte Kalibrierung
+
+en: A good calibration must also work on new data.
+de: Eine gute Kalibrierung muss auch bei neuen Daten funktionieren.
+
+en: too little model capacity
+de: zu wenig Modellkapazität
+
+en: Too little capacity gives underfitting.
+de: Zu wenig Kapazität führt zu Unteranpassung.
+
+en: In the bias–variance picture, high bias corresponds to…
+de: Im Bild von Verzerrung und Varianz entspricht eine hohe Verzerrung (Bias) …
+
+en: underfitting (too simple a model)
+de: Unteranpassung (ein zu einfaches Modell)
+
+en: High bias is the systematic error of an over-simple model.
+de: Hoher Bias ist der systematische Fehler eines zu einfachen Modells.
+
+en: overfitting (too flexible a model)
+de: Überanpassung (ein zu flexibles Modell)
+
+en: That is high variance.
+de: Das ist hohe Varianz.
+
+en: random measurement noise
+de: zufälliges Messrauschen
+
+en: Noise is irreducible error, not bias.
+de: Rauschen ist ein nicht reduzierbarer Fehler, kein Bias.
+
+en: a large learning rate
+de: eine große Lernrate
+
+en: The learning rate is unrelated to bias.
+de: Die Lernrate hat mit dem Bias nichts zu tun.
+
+en: Cross-validation is used to…
+de: Kreuzvalidierung dient dazu, …
+
+en: estimate how well a model generalises to unseen data
+de: abzuschätzen, wie gut ein Modell auf ungesehene Daten verallgemeinert
+
+en: It holds out different parts (folds) of the data in turn.
+de: Sie hält nacheinander verschiedene Teile (Folds) der Daten zurück.
+
+en: increase the size of the dataset
+de: den Datensatz zu vergrößern
+
+en: It reuses the same data and adds none.
+de: Sie verwendet dieselben Daten wieder und fügt keine hinzu.
+
+en: speed up the optimisation
+de: die Optimierung zu beschleunigen
+
+en: It usually costs more computing time, not less.
+de: Sie kostet meist mehr Rechenzeit, nicht weniger.
+
+en: remove all noise from the data
+de: alles Rauschen aus den Daten zu entfernen
+
+en: Noise cannot be removed this way.
+de: Rauschen lässt sich so nicht entfernen.
+
+en: One-factor-at-a-time (OFAT) sensitivity analysis…
+de: Die Sensitivitätsanalyse „ein Faktor nach dem anderen“ (OFAT) …
+
+en: varies a single parameter while holding the others fixed
+de: variiert einen einzelnen Parameter und hält die anderen fest
+
+en: Simple and local, but it misses interactions.
+de: Einfach und lokal, aber sie übersieht Wechselwirkungen.
+
+en: varies all parameters simultaneously at random
+de: variiert alle Parameter gleichzeitig zufällig
+
+en: That is closer to a global (Monte-Carlo) approach.
+de: Das kommt einem globalen Ansatz (Monte-Carlo) näher.
+
+en: removes the least important parameter
+de: entfernt den unwichtigsten Parameter
+
+en: It measures influence; it does not delete parameters.
+de: Sie misst den Einfluss; sie löscht keine Parameter.
+
+en: is a way to train neural networks
+de: ist eine Methode, neuronale Netze zu trainieren
+
+en: It is a sensitivity method, not a training method.
+de: Sie ist eine Methode der Sensitivitätsanalyse, keine Trainingsmethode.
+
+en: Monte-Carlo methods estimate a quantity by…
+de: Monte-Carlo-Methoden schätzen eine Größe durch …
+
+en: repeated random sampling of the inputs
+de: wiederholtes zufälliges Ziehen der Eingaben
+
+en: Many random draws, taken together, approximate the answer.
+de: Viele zufällige Ziehungen zusammen nähern die Antwort an.
+
+en: solving the problem exactly with algebra
+de: exaktes Lösen des Problems mit Algebra
+
+en: Monte-Carlo is used when exact solutions are impractical.
+de: Monte-Carlo kommt zum Einsatz, wenn exakte Lösungen nicht praktikabel sind.
+
+en: using a single best-guess input
+de: eine einzige beste Schätzung der Eingabe
+
+en: A single input value is not Monte-Carlo.
+de: Ein einzelner Eingabewert ist kein Monte-Carlo.
+
+en: sorting the data
+de: Sortieren der Daten
+
+en: Sorting is unrelated.
+de: Das Sortieren hat damit nichts zu tun.
+
+en: “All models are wrong, but some are useful” is attributed to…
+de: „Alle Modelle sind falsch, aber manche sind nützlich“ stammt von …
+
+en: Box, 1976: the classic reminder to judge models by their usefulness.
+de: Box, 1976: die klassische Mahnung, Modelle nach ihrem Nutzen zu beurteilen.
+
+en: Bayes gave us the theorem, not this quote.
+de: Bayes verdanken wir den Satz, nicht dieses Zitat.
+
+en: Shannon founded information theory.
+de: Shannon hat die Informationstheorie begründet.
+
+en: Not Newton.
+de: Nicht Newton.
+
+en: jupyterquiz not available (%s). Questions as text:
+de: jupyterquiz ist nicht verfügbar (%s). Die Fragen als Text:
+
+# conclusion_m.py (E21.13, vorher setup_m.py)
+en: <b>The data are simulated.</b> The pharmacokinetic data in this notebook (drug concentrations over time) are generated from a fixed seed with realistic orders of magnitude and are meant for teaching only.
+de: <b>Die Daten sind simuliert.</b> Die pharmakokinetischen Daten in diesem Notebook (Wirkstoffkonzentrationen im Zeitverlauf) werden aus einem festen Seed mit realistischen Größenordnungen erzeugt und dienen nur der Lehre.
+
+# controls_m.py
+en: Gentle — wide tolerance, full hints
+de: Behutsam: große Toleranz, ausführliche Hinweise
+
+en: Strict — tight tolerance, minimal hints
+de: Streng: enge Toleranz, knappe Hinweise
+
+en: Difficulty:
+de: Schwierigkeit:
+
+en: Both — calculate and code
+de: Beides: rechnen und programmieren
+
+en: Plain — text and figures only
+de: Nur lesen: Text und Abbildungen
+
+en: Content:
+de: Inhalt:
+
+en: ▶  Rebuild now with this content
+de: ▶  Jetzt mit diesem Inhalt neu aufbauen
+
+en: <div style='text-align:center;font-size:.85em;opacity:.8'>Now: <b>%s</b>. Each choice keeps its own progress.</div>
+de: <div style='text-align:center;font-size:.85em;opacity:.8'>Jetzt: <b>%s</b>. Jede Wahl behält ihren eigenen Fortschritt.</div>
+
+en: “%s” saved — it applies from the next run. ▶ rebuilds now.
+de: „%s“ gespeichert, gilt ab dem nächsten Lauf. ▶ baut jetzt neu auf.
+
+en: Could not save this choice here.
+de: Diese Wahl ließ sich hier nicht speichern.
+
+en: ↺  Reset this notebook
+de: ↺  Dieses Notebook zurücksetzen
+
+en: Yes, reset
+de: Ja, zurücksetzen
+
+en: Cancel
+de: Abbrechen
+
+en: <div class='nbwarn' style='text-align:center;font-size:.9em'><b>Sure?</b> Clears answers and statistics of <b>this notebook</b> and locks the chapters. Seed, style and settings stay.</div>
+de: <div class='nbwarn' style='text-align:center;font-size:.9em'><b>Sicher?</b> Löscht Antworten und Statistik <b>dieses Notebooks</b> und sperrt die Kapitel wieder. Seed, Stil und Einstellungen bleiben.</div>
+
+en: <div class='nbok' style='text-align:center;font-size:.9em'>Reset: %d exercises open again.</div>
+de: <div class='nbok' style='text-align:center;font-size:.9em'>Zurückgesetzt: %d Aufgaben sind wieder offen.</div>
+
+en: <div class='nbink' style='text-align:center;font-size:.9em'>Nothing was reset.</div>
+de: <div class='nbink' style='text-align:center;font-size:.9em'>Es wurde nichts zurückgesetzt.</div>
+
+en: paste a progress code here
+de: Fortschrittscode hier einfügen
+
+en: Show my progress code
+de: Meinen Fortschrittscode zeigen
+
+en: Restore from code
+de: Aus Code wiederherstellen
+
+en: <div class='nbink' style='text-align:center;font-size:.9em;margin-top:4px'>Keep this code. Paste it back to restore:</div><pre style='%s;margin:6px auto 0;text-align:left;max-width:640px;white-space:pre-wrap;word-break:break-all'>%s</pre>
+de: <div class='nbink' style='text-align:center;font-size:.9em;margin-top:4px'>Bewahren Sie diesen Code auf. Fügen Sie ihn wieder ein, um den Stand herzustellen:</div><pre style='%s;margin:6px auto 0;text-align:left;max-width:640px;white-space:pre-wrap;word-break:break-all'>%s</pre>
+
+en: Seed:
+de: Seed:
+
+en: Use this seed
+de: Diesen Seed verwenden
+
+en: 🎲  New random seed
+de: 🎲  Neuer Zufalls-Seed
+
+en: <div class='nbink' style='text-align:center;font-size:.88em;margin-top:6px'>Seed <b>%d</b> — %s.</div>
+de: <div class='nbink' style='text-align:center;font-size:.88em;margin-top:6px'>Seed <b>%d</b>: %s.</div>
+
+en: pinned: same numbers next run
+de: festgehalten, im nächsten Lauf dieselben Zahlen
+
+en: not pinned: new numbers next run
+de: nicht festgehalten, im nächsten Lauf neue Zahlen
+
+en: <div class='nbok' style='text-align:center;font-size:.9em'>New numbers from seed %d. Progress kept.</div>
+de: <div class='nbok' style='text-align:center;font-size:.9em'>Neue Zahlen aus Seed %d. Der Fortschritt bleibt.</div>
+
+en: <div class='nbwarn' style='text-align:center;font-size:.9em'>A whole number, 0 to 99999999.</div>
+de: <div class='nbwarn' style='text-align:center;font-size:.9em'>Eine ganze Zahl von 0 bis 99999999.</div>
+
+en: <div class='nbwarn' style='text-align:center;font-size:.9em'>Could not save this seed here. Nothing changed.</div>
+de: <div class='nbwarn' style='text-align:center;font-size:.9em'>Dieser Seed ließ sich hier nicht speichern. Es hat sich nichts geändert.</div>
+
+# howto_m.py
+en: How to use this notebook
+de: So benutzen Sie dieses Notebook
+
+en: <b>Every chapter:</b> an idea with its formula, a <b>Visualisation</b>, one <b>Practice</b> exercise.<br><br><b>No programming needed.</b> Type a number or move the sliders, then press <i>Check</i>. A wrong answer gets a hint, never the answer.<br><br><b>Coding is optional.</b> The fold <i>write it in code</i> unlocks the same step. Skipping it costs nothing.<br><br><b>Chapters open one by one.</b> Answer, or press <i>Skip for now</i>. The timeline shows what you skipped. The lock only sets your pace. It is not a grade.
+de: <b>Jedes Kapitel:</b> eine Idee mit ihrer Formel, eine <b>Visualisierung</b> und eine <b>Übungsaufgabe</b>.<br><br><b>Programmieren ist nicht nötig.</b> Tippen Sie eine Zahl ein oder bewegen Sie die Schieberegler und drücken Sie dann <i>Prüfen</i>. Eine falsche Antwort bekommt einen Hinweis, nie die Lösung.<br><br><b>Programmieren ist freiwillig.</b> Der Abschnitt <i>in Code schreiben</i> schaltet denselben Schritt frei. Wenn Sie ihn auslassen, kostet Sie das nichts.<br><br><b>Die Kapitel öffnen sich nacheinander.</b> Antworten Sie oder drücken Sie <i>Vorerst überspringen</i>. Die Zeitleiste zeigt, was Sie übersprungen haben. Die Sperre gibt nur Ihr Tempo vor. Sie ist keine Note.
+
+# teaches_m.py
+en: What you will be able to do
+de: Was Sie danach können
+
+en: This notebook turns the lecture <b>Introduction to Modeling</b> into an interactive module. You build intuition by moving sliders and checking numbers on a small, realistic <b>pharmacokinetic</b> model (how a drug's concentration in the body changes over time). It leads from first perception to calibration, validation and sensitivity analysis. After working through it, you can:<table style='border-collapse:collapse;margin:12px auto 0'>%s</table><div style='margin-top:14px;font-size:.93em'>Each objective belongs to an exercise below. This way you can check every one of them yourself.<br><br><b>No programming is required.</b> This is a <i>%s</i> notebook: you solve every exercise by entering numbers. Each exercise also has a closed, clearly marked <i>optional</i> code fold if you want to write it out in Python. It unlocks the same step, and you never need it to get through.</div>
+de: Dieses Notebook macht aus der Vorlesung <b>Introduction to Modeling</b> ein interaktives Modul. Sie bauen Intuition auf, indem Sie Schieberegler bewegen und Zahlen prüfen, an einem kleinen, realistischen <b>pharmakokinetischen</b> Modell (wie sich die Konzentration eines Arzneimittels im Körper mit der Zeit ändert). Es führt von der ersten Wahrnehmung über Kalibrierung und Validierung bis zur Sensitivitätsanalyse. Wenn Sie es durchgearbeitet haben, können Sie:<table style='border-collapse:collapse;margin:12px auto 0'>%s</table><div style='margin-top:14px;font-size:.93em'>Jedes Lernziel gehört zu einer Aufgabe weiter unten. So können Sie jedes davon selbst überprüfen.<br><br><b>Programmieren ist nicht nötig.</b> Dies ist ein <i>%s</i>-Notebook: Jede Aufgabe lösen Sie, indem Sie Zahlen eingeben. Jede Aufgabe hat außerdem einen geschlossenen, deutlich als <i>freiwillig</i> markierten Code-Abschnitt, falls Sie sie in Python ausschreiben möchten. Er schaltet denselben Schritt frei, und Sie brauchen ihn nie, um durchzukommen.</div>
+
+# roadmap_m.py
+en: This notebook is part of a planned series. The series turns lecture material of <b>Vertiefende Methoden der Bioinformatik</b> into interactive open educational resources (free teaching material). Basic prerequisites come before it, deeper applications after it. Each will appear as a separate notebook and will be <b>linked here</b> once it exists.<div style='margin-top:12px'><b>Fundamentals, recommended beforehand (coming soon):</b><ul style='margin:4px 0 0;padding-left:22px;line-height:1.6'><li>Introduction to Python programming <i>(coming soon)</i></li><li>Working with data: NumPy &amp; pandas basics <i>(coming soon)</i></li><li>Scientific plotting with matplotlib <i>(coming soon)</i></li></ul></div><div style='margin-top:12px'><b>Advanced, building on this notebook (coming soon):</b><ul style='margin:4px 0 0;padding-left:22px;line-height:1.6'><li>Compartmental pharmacokinetic modelling in depth (multi-compartment, absorption) <i>(coming soon)</i></li><li>Global sensitivity analysis (Sobol indices) &amp; uncertainty quantification <i>(coming soon)</i></li><li>Machine learning &amp; large language models, step by step <i>(available as a separate notebook)</i></li></ul></div><div style='margin-top:14px;padding-top:12px;border-top:1px solid var(--nbskin-line,#cdd6dd)'>All notebooks of the series will be collected on the project's GitHub page: <a href='https://github.com/digichemjn/digichemjn'>github.com/digichemjn/digichemjn</a> <i>(placeholder link: the repository fills up as the notebooks are published)</i>.</div><div class='nbcontact' style='margin-top:14px;padding-top:12px;border-top:1px solid var(--nbskin-line,#cdd6dd)'>Found a mistake, or want to tell us what helped and what did not? Write to <a href='mailto:samuel.wiese@gmx.de'>samuel.wiese@gmx.de</a>.</div>
+de: Dieses Notebook gehört zu einer geplanten Reihe. Die Reihe macht Vorlesungsstoff aus <b>Vertiefende Methoden der Bioinformatik</b> zu interaktiven offenen Bildungsressourcen (freiem Lehrmaterial). Grundlagen kommen davor, vertiefende Anwendungen danach. Jedes erscheint als eigenes Notebook und wird <b>hier verlinkt</b>, sobald es existiert.<div style='margin-top:12px'><b>Grundlagen, vorher empfohlen (in Vorbereitung):</b><ul style='margin:4px 0 0;padding-left:22px;line-height:1.6'><li>Einführung in das Programmieren mit Python <i>(in Vorbereitung)</i></li><li>Arbeiten mit Daten: Grundlagen von NumPy &amp; pandas <i>(in Vorbereitung)</i></li><li>Wissenschaftliche Diagramme mit matplotlib <i>(in Vorbereitung)</i></li></ul></div><div style='margin-top:12px'><b>Vertiefung, aufbauend auf diesem Notebook (in Vorbereitung):</b><ul style='margin:4px 0 0;padding-left:22px;line-height:1.6'><li>Kompartimentmodelle der Pharmakokinetik im Detail (mehrere Kompartimente, Absorption) <i>(in Vorbereitung)</i></li><li>Globale Sensitivitätsanalyse (Sobol-Indizes) &amp; Quantifizierung von Unsicherheit <i>(in Vorbereitung)</i></li><li>Maschinelles Lernen &amp; große Sprachmodelle, Schritt für Schritt <i>(als eigenes Notebook verfügbar)</i></li></ul></div><div style='margin-top:14px;padding-top:12px;border-top:1px solid var(--nbskin-line,#cdd6dd)'>Alle Notebooks der Reihe werden auf der GitHub-Seite des Projekts gesammelt: <a href='https://github.com/digichemjn/digichemjn'>github.com/digichemjn/digichemjn</a> <i>(Platzhalter: Das Repositorium füllt sich, sobald die Notebooks veröffentlicht sind)</i>.</div><div class='nbcontact' style='margin-top:14px;padding-top:12px;border-top:1px solid var(--nbskin-line,#cdd6dd)'>Einen Fehler gefunden, oder möchten Sie uns sagen, was Ihnen geholfen hat und was nicht? Schreiben Sie an <a href='mailto:samuel.wiese@gmx.de'>samuel.wiese@gmx.de</a>.</div>
+
+en: Topic roadmap
+de: Themenübersicht
+
+# m01.py
+en: <b>Key idea.</b> A <b>model</b> is a simplified picture of a real system, built for one purpose. We use it to explain observations and to predict what has not been measured yet. You do not build it in one go: you work through stages and return to earlier ones as you learn
+de: <b>Kernidee.</b> Ein <b>Modell</b> ist ein vereinfachtes Bild eines realen Systems, gebaut für einen bestimmten Zweck. Wir nutzen es, um Beobachtungen zu erklären und vorherzusagen, was noch nicht gemessen wurde. Man baut es nicht in einem Zug: Man durchläuft Stufen und kehrt zu früheren zurück, während man dazulernt
+
+en: question it answers
+de: welche Frage sie beantwortet
+
+en: which processes matter?
+de: welche Prozesse zählen?
+
+en: a mental picture of the system
+de: ein gedankliches Bild des Systems
+
+en: which equations link them?
+de: welche Gleichungen verbinden sie?
+
+en: state variables and governing equations
+de: Zustandsgrößen und bestimmende Gleichungen
+
+en: how do we compute it?
+de: wie berechnen wir es?
+
+en: code and a numerical solver
+de: Code und ein numerischer Löser
+
+en: </div>The <b>perceptual</b> model is what you understand about the system from observation, your own study, instruments and the literature. The <b>conceptual</b> model writes that understanding as equations between the system's states. The <b>procedural</b> model puts those equations into code so a computer can simulate them. Drug action spans many scales of time and size: from receptor binding in milliseconds to physiological change over days, from a single molecule to a whole body. So the central decision in modelling is what to keep and what to leave out
+de: </div>Das <b>wahrnehmende</b> Modell ist das, was Sie aus Beobachtung, eigenem Studium, Messgeräten und Literatur über das System verstehen. Das <b>konzeptionelle</b> Modell schreibt dieses Verständnis als Gleichungen zwischen den Zuständen des Systems. Das <b>prozedurale</b> Modell setzt diese Gleichungen in Code um, damit ein Computer sie simulieren kann. Die Wirkung eines Arzneimittels erstreckt sich über viele Skalen von Zeit und Größe: von der Rezeptorbindung in Millisekunden bis zur physiologischen Veränderung über Tage, von einem einzelnen Molekül bis zum ganzen Körper. Die zentrale Entscheidung der Modellbildung ist deshalb, was man behält und was man weglässt
+
+en: .<br><br>One example runs through this whole notebook: a small <b>pharmacokinetic</b> model, which describes how the concentration of a drug given into a vein falls over time.
+de: .<br><br>Ein Beispiel zieht sich durch das ganze Notebook: ein kleines <b>pharmakokinetisches</b> Modell, das beschreibt, wie die Konzentration eines in die Vene gegebenen Arzneimittels mit der Zeit abfällt.
+
+en: receptor binding
+de: Rezeptorbindung
+
+en: signal transduction
+de: Signalübertragung
+
+en: elimination half-life
+de: Eliminationshalbwertszeit
+
+en: physiological adaptation
+de: physiologische Anpassung
+
+en: 1 wk
+de: 1 Wo.
+
+en: time scale (logarithmic; typical orders of magnitude, illustrative)
+de: Zeitskala (logarithmisch; typische Größenordnungen, zur Veranschaulichung)
+
+en: orders spanned
+de: überspannte Größenordnungen
+
+en: steps T/Δt
+de: Schritte T/Δt
+
+en: processes resolved
+de: aufgelöste Prozesse
+
+en: %d of %d
+de: %d von %d
+
+en: Five processes that decide how a drug acts, placed on one time axis by their typical order of magnitude (illustrative, not measured). The blue window is what one model resolves: from its time step <b>Δt</b> (left slider, as a power of ten in seconds) to its horizon <b>T</b> (right slider). Processes inside the window turn green. Try to catch receptor binding <i>and</i> physiological adaptation in one window, and read off how many time steps that would take. That number is the reason a modeller first chooses which scales to keep and treats the rest as instantaneous or as constant.
+de: Fünf Prozesse, die bestimmen, wie ein Arzneimittel wirkt, nach ihrer typischen Größenordnung auf einer Zeitachse angeordnet (zur Veranschaulichung, nicht gemessen). Das blaue Fenster ist das, was ein Modell auflöst: von seinem Zeitschritt <b>Δt</b> (linker Schieberegler, als Zehnerpotenz in Sekunden) bis zu seinem Horizont <b>T</b> (rechter Schieberegler). Prozesse im Fenster werden grün. Versuchen Sie, Rezeptorbindung <i>und</i> physiologische Anpassung in ein Fenster zu bekommen, und lesen Sie ab, wie viele Zeitschritte das bräuchte. Diese Zahl ist der Grund, warum man beim Modellieren zuerst wählt, welche Skalen man behält, und den Rest als augenblicklich oder als konstant behandelt.
+
+en: Define a function called orders(t_fast_ms, t_slow_h).
+de: Definieren Sie eine Funktion namens orders(t_fast_ms, t_slow_h).
+
+en: Both conversions right: the units cancel only after hours become milliseconds.
+de: Beide Umrechnungen richtig: Die Einheiten kürzen sich erst, wenn Stunden zu Millisekunden geworden sind.
+
+en: Convert first: hours to milliseconds (· 3600 · 1000), then compare.
+de: Rechnen Sie zuerst um: Stunden in Millisekunden (· 3600 · 1000), dann vergleichen.
+
+en: Orders of magnitude are counted with log10, not ln.
+de: Größenordnungen zählt man mit log10, nicht mit ln.
+
+en: 1 h against 1 ms is log10(3 600 000) ≈ 6.56; you got %s.
+de: 1 h gegenüber 1 ms ist log10(3 600 000) ≈ 6,56; Sie haben %s erhalten.
+
+en: Right: log10(%d h / %d ms) = %s. A single model cannot resolve both ends; deciding which scale to keep is the first modelling decision.
+de: Richtig: log10(%d h / %d ms) = %s. Ein einzelnes Modell kann nicht beide Enden auflösen; zu entscheiden, welche Skala man behält, ist die erste Entscheidung der Modellbildung.
+
+en: The units differ: convert the hours to milliseconds (1 h = 3 600 000 ms) before dividing.
+de: Die Einheiten unterscheiden sich: Rechnen Sie die Stunden in Millisekunden um (1 h = 3 600 000 ms), bevor Sie teilen.
+
+en: You converted hours to seconds, but the fast time is in <b>milli</b>seconds: you need one more factor of 1000.
+de: Sie haben Stunden in Sekunden umgerechnet, die schnelle Zeit ist aber in <b>Milli</b>sekunden angegeben: Sie brauchen noch einen Faktor 1000.
+
+en: That is the natural log. Orders of magnitude are powers of ten: log10.
+de: Das ist der natürliche Logarithmus. Größenordnungen sind Zehnerpotenzen: log10.
+
+en: That is the ratio itself. The question asks for its order of magnitude: log10 of it.
+de: Das ist das Verhältnis selbst. Gefragt ist seine Größenordnung: log10 davon.
+
+en: Ratio = (slow time in ms) / (fast time in ms); orders of magnitude = log10 of that ratio.
+de: Verhältnis = (langsame Zeit in ms) / (schnelle Zeit in ms); Größenordnungen = log10 dieses Verhältnisses.
+
+en: <b>How far apart are the scales a drug model must span?</b>
+de: <b>Wie weit liegen die Skalen auseinander, die ein Arzneimittelmodell überspannen muss?</b>
+
+en: <div>A receptor binding event takes about <b>%d ms</b>; the physiological change it triggers unfolds over about <b>%d h</b>. How many orders of magnitude lie between the two time scales? Two decimals are enough.</div>
+de: <div>Eine Rezeptorbindung dauert etwa <b>%d ms</b>; die physiologische Veränderung, die sie auslöst, entfaltet sich über etwa <b>%d h</b>. Wie viele Größenordnungen liegen zwischen den beiden Zeitskalen? Zwei Nachkommastellen genügen.</div>
+
+en: orders =
+de: Größenordnungen =
+
+en: An order of magnitude is a factor of ten. First put both times in the <i>same unit</i> (an hour and a millisecond differ by a factor of 3 600 000). Then ask how many factors of ten lie between them. That count is log₁₀ of their ratio.
+de: Eine Größenordnung ist ein Faktor zehn. Bringen Sie zuerst beide Zeiten in <i>dieselbe Einheit</i> (eine Stunde und eine Millisekunde unterscheiden sich um den Faktor 3 600 000). Fragen Sie dann, wie viele Faktoren zehn zwischen ihnen liegen. Diese Zahl ist der log₁₀ ihres Verhältnisses.
+
+en: Your slow time is %d h = %d × 3 600 000 ms = %s ms. Divide it by your fast time, %d ms, and take log₁₀ of the ratio (the <i>log</i> key of a calculator, not <i>ln</i>).
+de: Ihre langsame Zeit ist %d h = %d × 3 600 000 ms = %s ms. Teilen Sie sie durch Ihre schnelle Zeit, %d ms, und nehmen Sie den log₁₀ des Verhältnisses (die <i>log</i>-Taste eines Taschenrechners, nicht <i>ln</i>).
+
+en: Write <code>orders(t_fast_ms, t_slow_h)</code> that returns how many orders of magnitude lie between a fast time in milliseconds and a slow time in hours: log₁₀ of their ratio, after both are in the same unit. Example: <code>orders(1, 1)</code> → <code>6.556…</code> (1 h = 3 600 000 ms).
+de: Schreiben Sie <code>orders(t_fast_ms, t_slow_h)</code>, das zurückgibt, wie viele Größenordnungen zwischen einer schnellen Zeit in Millisekunden und einer langsamen Zeit in Stunden liegen: den log₁₀ ihres Verhältnisses, nachdem beide in derselben Einheit sind. Beispiel: <code>orders(1, 1)</code> → <code>6.556…</code> (1 h = 3 600 000 ms).
+
+en: Six or seven orders of magnitude separate the fastest and the slowest process a drug model could include. No single model resolves all of them. It picks a window and treats anything faster as instantaneous and anything slower as constant. This choice comes before any equation is written. When a model fails, it is the first thing to question.
+de: Sechs oder sieben Größenordnungen trennen den schnellsten und den langsamsten Prozess, den ein Arzneimittelmodell enthalten könnte. Kein einzelnes Modell löst sie alle auf. Es wählt ein Fenster und behandelt alles Schnellere als augenblicklich und alles Langsamere als konstant. Diese Wahl kommt vor jeder Gleichung. Wenn ein Modell versagt, ist sie das Erste, was man hinterfragen sollte.
+
+en: <b>All models are wrong, but some are useful</b>
+de: <b>Alle Modelle sind falsch, aber manche sind nützlich</b>
+
+en: . Every model in this notebook is a deliberate simplification. Always check its output against measured data and domain knowledge. A model earns trust through calibration and validation, not through elegance. Treat any model as a fast but fallible assistant: state its assumptions, quantify its uncertainty, and check its claims against primary, measured sources.
+de: . Jedes Modell in diesem Notebook ist eine bewusste Vereinfachung. Prüfen Sie seine Ausgabe immer an Messdaten und Fachwissen. Vertrauen verdient sich ein Modell durch Kalibrierung und Validierung, nicht durch Eleganz. Behandeln Sie jedes Modell wie einen schnellen, aber fehlbaren Assistenten: Nennen Sie seine Annahmen, beziffern Sie seine Unsicherheit und prüfen Sie seine Aussagen an gemessenen Primärquellen.
+
+en: What is a model?
+de: Was ist ein Modell?
+
+en: Time scales of drug action
+de: Zeitskalen der Arzneimittelwirkung
+
+# m02.py
+en: <b>Key idea and link to the previous chapter.</b> Reality exists whether we look or not. What we know of it comes from <b>observations</b>, and these are incomplete and noisy. So the true relationship between a system's inputs and outputs stays hidden. A model is a <b>parameterised abstraction</b>: a simplified description with a few adjustable numbers, its parameters. It approximates the hidden relationship from quantities we can observe. We set the parameters by comparing what the model simulates with what we observe
+de: <b>Kernidee und Verbindung zum vorigen Kapitel.</b> Die Wirklichkeit existiert, ob wir hinsehen oder nicht. Was wir von ihr wissen, stammt aus <b>Beobachtungen</b>, und die sind unvollständig und verrauscht. Der wahre Zusammenhang zwischen den Eingaben und Ausgaben eines Systems bleibt deshalb verborgen. Ein Modell ist eine <b>parametrisierte Abstraktion</b>: eine vereinfachte Beschreibung mit ein paar einstellbaren Zahlen, seinen Parametern. Es nähert den verborgenen Zusammenhang aus Größen an, die wir beobachten können. Die Parameter stellen wir ein, indem wir vergleichen, was das Modell simuliert, mit dem, was wir beobachten
+
+en: . In the visualisation you are the modeller. A hidden process produces noisy observations, and you adjust a model to match them.
+de: . In der Visualisierung sind Sie die Person, die modelliert. Ein verborgener Prozess erzeugt verrauschte Beobachtungen, und Sie passen ein Modell an sie an.
+
+en: true process (hidden)
+de: wahrer Prozess (verborgen)
+
+en: observations (noisy)
+de: Beobachtungen (verrauscht)
+
+en: your model
+de: Ihr Modell
+
+en: observed input
+de: beobachtete Eingabe
+
+en: A hidden true process (dotted) produces a handful of noisy observations (points). Your model (red line) is kept simple on purpose: it has one adjustable parameter, its slope. Drag the slider and watch the readout below it. SSE is the sum of squared errors, the squared gaps between line and points added up. You can lay the line through the middle of the cloud, but a straight line can never follow the curve. That is the point: every model gives up detail to stay simple.
+de: Ein verborgener wahrer Prozess (gepunktet) erzeugt eine Handvoll verrauschter Beobachtungen (Punkte). Ihr Modell (rote Gerade) ist mit Absicht einfach gehalten: Es hat einen einstellbaren Parameter, seine Steigung. Ziehen Sie am Schieberegler und beobachten Sie die Anzeige darunter. SSE ist die Summe der quadrierten Fehler, also der quadrierten Abstände zwischen Gerade und Punkten, aufaddiert. Sie können die Gerade durch die Mitte der Wolke legen, aber eine Gerade kann der Kurve nie folgen. Genau darum geht es: Jedes Modell gibt Einzelheiten auf, um einfach zu bleiben.
+
+en: Define a function called mean_sd(obs).
+de: Definieren Sie eine Funktion namens mean_sd(obs).
+
+en: Mean and sample standard deviation (n − 1) both right.
+de: Mittelwert und Stichproben-Standardabweichung (n − 1) beide richtig.
+
+en: Divide by n − 1, not n: the sample SD (ddof=1).
+de: Teilen Sie durch n − 1, nicht durch n: die Standardabweichung der Stichprobe (ddof=1).
+
+en: That is the variance; take its square root.
+de: Das ist die Varianz; ziehen Sie die Wurzel daraus.
+
+en: For 2, 4, 4, 6 the mean is 4 and the SD 1.633; got %s and %s.
+de: Für 2, 4, 4, 6 ist der Mittelwert 4 und die Standardabweichung 1,633; erhalten: %s und %s.
+
+en: The mean is the sum of the four readings divided by 4.
+de: Der Mittelwert ist die Summe der vier Messwerte geteilt durch 4.
+
+en: Right: %s ± %s. The true value is hidden; four readings pin it down only this well. Every model is calibrated against numbers like these.
+de: Richtig: %s ± %s. Der wahre Wert ist verborgen; vier Messwerte grenzen ihn nur so genau ein. Jedes Modell wird an Zahlen wie diesen kalibriert.
+
+en: You divided by n. For a sample, divide the sum of squares by n − 1.
+de: Sie haben durch n geteilt. Bei einer Stichprobe teilen Sie die Quadratsumme durch n − 1.
+
+en: That is the variance. The standard deviation is its square root.
+de: Das ist die Varianz. Die Standardabweichung ist ihre Wurzel.
+
+en: SD = √( Σ(yᵢ − mean)² / (n − 1) ).
+de: SD = √( Σ(yᵢ − Mittelwert)² / (n − 1) ).
+
+en: <b>What do four noisy observations tell you?</b>
+de: <b>Was sagen Ihnen vier verrauschte Beobachtungen?</b>
+
+en: <div>The same plasma sample was assayed four times (simulated readings): <b>%s mg/L</b>. Compute the mean and the sample standard deviation.</div>
+de: <div>Dieselbe Plasmaprobe wurde viermal gemessen (simulierte Messwerte): <b>%s mg/L</b>. Berechnen Sie den Mittelwert und die Standardabweichung der Stichprobe.</div>
+
+en: mean =
+de: Mittelwert =
+
+en: The mean is the centre of the readings: add them and divide by how many there are. The standard deviation says how far a single reading typically sits from that centre: take each reading's distance from the mean and square it. Add the squares, divide by <b>n − 1</b> (one less than the number of readings, because the mean came from the same four) and take the square root.
+de: Der Mittelwert ist die Mitte der Messwerte: Addieren Sie sie und teilen Sie durch ihre Anzahl. Die Standardabweichung sagt, wie weit ein einzelner Messwert typischerweise von dieser Mitte entfernt liegt: Nehmen Sie den Abstand jedes Messwerts vom Mittelwert und quadrieren Sie ihn. Addieren Sie die Quadrate, teilen Sie durch <b>n − 1</b> (eins weniger als die Zahl der Messwerte, weil der Mittelwert aus denselben vier stammt) und ziehen Sie die Wurzel.
+
+en: Your four readings add up to %d, and there are 4 of them. Once you have the mean, subtract it from each of %s, square the four differences, add them, divide by 3 and take the square root.
+de: Ihre vier Messwerte ergeben zusammen %d, und es sind 4. Wenn Sie den Mittelwert haben, ziehen Sie ihn von jedem der Werte %s ab, quadrieren Sie die vier Differenzen, addieren Sie sie, teilen Sie durch 3 und ziehen Sie die Wurzel.
+
+en: Write <code>mean_sd(obs)</code> that takes a list of repeated readings and returns their mean and their sample standard deviation (divided by n − 1) as a pair. Example: <code>mean_sd([2, 4, 4, 6])</code> → <code>(4.0, 1.633…)</code>.
+de: Schreiben Sie <code>mean_sd(obs)</code>, das eine Liste wiederholter Messwerte nimmt und ihren Mittelwert und ihre Stichproben-Standardabweichung (geteilt durch n − 1) als Paar zurückgibt. Beispiel: <code>mean_sd([2, 4, 4, 6])</code> → <code>(4.0, 1.633…)</code>.
+
+en: You never see the true process, only the points. You shape the model by making its disagreement with them smaller. That is what a parameterised abstraction means: the parameters hold our best compromise with incomplete, uncertain data. Choosing a straight line here is a modelling decision. The error that remains is the price of that simplicity.
+de: Sie sehen nie den wahren Prozess, nur die Punkte. Sie formen das Modell, indem Sie seine Abweichung von ihnen verkleinern. Das meint eine parametrisierte Abstraktion: Die Parameter halten unseren besten Kompromiss mit unvollständigen, unsicheren Daten fest. Hier eine Gerade zu wählen, ist eine Modellierungsentscheidung. Der Fehler, der bleibt, ist der Preis dieser Einfachheit.
+
+en: <b>Simplification has a range.</b> A model keeps only the processes judged to matter. It is valid only within its assumptions and the range of data behind it, and extrapolation beyond that range is risky. <b>A model is no better than its measurements.</b> It can be no more valid than its data are accurate, and transferring a model across biological scales often breaks its predictive structure.
+de: <b>Vereinfachung hat eine Reichweite.</b> Ein Modell behält nur die Prozesse, die für wichtig gehalten werden. Es gilt nur innerhalb seiner Annahmen und des Datenbereichs dahinter, und eine Extrapolation über diesen Bereich hinaus ist riskant. <b>Ein Modell ist nicht besser als seine Messungen.</b> Es kann nicht gültiger sein, als seine Daten genau sind, und die Übertragung eines Modells über biologische Skalen hinweg zerstört oft seine Vorhersagekraft.
+
+en: Reality, observation and the role of models
+de: Wirklichkeit, Beobachtung und die Rolle von Modellen
+
+en: Model against noisy observations
+de: Modell gegen verrauschte Beobachtungen
+
+# m03.py
+en: <b>Key idea and link to the previous chapter.</b> Models differ in how much mechanism they contain. An <b>event-driven</b> (white-box) model is built from known processes and clear causes and effects. It explains <i>why</i> an outcome occurs. A <b>data-driven</b> (black-box) model learns a mapping from the observed data alone, without knowing the mechanism. It captures <i>what</i> tends to occur. Most real models are <b>grey boxes</b> somewhere in between.<div style='margin:14px 0'>
+de: <b>Kernidee und Verbindung zum vorigen Kapitel.</b> Modelle unterscheiden sich darin, wie viel Mechanismus sie enthalten. Ein <b>ereignisgetriebenes</b> Modell (White Box) ist aus bekannten Prozessen und klaren Ursachen und Wirkungen aufgebaut. Es erklärt, <i>warum</i> ein Ergebnis eintritt. Ein <b>datengetriebenes</b> Modell (Black Box) lernt eine Zuordnung allein aus den beobachteten Daten, ohne den Mechanismus zu kennen. Es erfasst, <i>was</i> typischerweise eintritt. Die meisten realen Modelle sind <b>Grey Boxes</b> irgendwo dazwischen.<div style='margin:14px 0'>
+
+en: event-driven (white box)
+de: ereignisgetrieben (White Box)
+
+en: data-driven (black box)
+de: datengetrieben (Black Box)
+
+en: built from
+de: aufgebaut aus
+
+en: physical / chemical laws
+de: physikalischen / chemischen Gesetzen
+
+en: observed data
+de: beobachteten Daten
+
+en: bottom-up (mechanism)
+de: von unten nach oben (Mechanismus)
+
+en: top-down (empirical)
+de: von oben nach unten (empirisch)
+
+en: why it happens
+de: warum es geschieht
+
+en: what tends to happen
+de: was typischerweise geschieht
+
+en: often well, within its assumptions
+de: oft gut, innerhalb seiner Annahmen
+
+en: poorly, outside the training range
+de: schlecht, außerhalb des Trainingsbereichs
+
+en: </div>The visualisation fits both kinds to the same simulated drug concentrations. The white box is an exponential decay from first-order kinetics (the rate is proportional to the amount left). The black box is a polynomial that just follows the points.
+de: </div>Die Visualisierung passt beide Arten an dieselben simulierten Arzneimittelkonzentrationen an. Die White Box ist ein exponentieller Abfall aus einer Kinetik erster Ordnung (die Rate ist proportional zur verbleibenden Menge). Die Black Box ist ein Polynom, das einfach den Punkten folgt.
+
+en: data (simulated)
+de: Daten (simuliert)
+
+en: white box: exponential
+de: White Box: exponentiell
+
+en: black box: polynomial
+de: Black Box: Polynom
+
+en: time (h)
+de: Zeit (h)
+
+en: concentration (mg/L)
+de: Konzentration (mg/L)
+
+en: white box at 13 h
+de: White Box bei 13 h
+
+en: black box at 13 h
+de: Black Box bei 13 h
+
+en: The same simulated concentration&ndash;time data is described in two ways. The green curve is a white-box first-order exponential; its single rate constant comes from the assumed mechanism. The red dashed curve is a black-box polynomial whose degree you control. Raise the degree, and the polynomial fits the points ever more closely inside the measured window. Just beyond the last point, though, it swings off wildly, while the mechanistic curve keeps decaying sensibly. This is the classic trade-off. Mechanism gives you predictions you can trust outside the data (extrapolation); flexibility gives you a close fit inside it.
+de: Dieselben simulierten Konzentrations&ndash;Zeit-Daten werden auf zwei Arten beschrieben. Die grüne Kurve ist ein exponentieller White-Box-Abfall erster Ordnung; ihre einzige Geschwindigkeitskonstante stammt aus dem angenommenen Mechanismus. Die rote gestrichelte Kurve ist ein Black-Box-Polynom, dessen Grad Sie steuern. Erhöhen Sie den Grad, und das Polynom schmiegt sich innerhalb des Messfensters immer enger an die Punkte. Gleich hinter dem letzten Punkt schlägt es aber wild aus, während die mechanistische Kurve vernünftig weiter abfällt. Das ist der klassische Zielkonflikt. Ein Mechanismus liefert Vorhersagen, denen Sie außerhalb der Daten trauen können (Extrapolation); Flexibilität liefert eine enge Anpassung innerhalb der Daten.
+
+en: Define a function called predict_both(C0, C2, T).
+de: Definieren Sie eine Funktion namens predict_both(C0, C2, T).
+
+en: Both predictions right: the mechanism halves twice, the line runs out of concentration.
+de: Beide Vorhersagen richtig: Der Mechanismus halbiert sich zweimal, der Geraden geht die Konzentration aus.
+
+en: The exponential must decay: e^(−k·T).
+de: Die Exponentialfunktion muss abfallen: e^(−k·T).
+
+en: The white box is right; the line runs through (0, C0) and (2, C2), so its slope is (C2 − C0)/2.
+de: Die White Box stimmt; die Gerade geht durch (0, C0) und (2, C2), ihre Steigung ist also (C2 − C0)/2.
+
+en: For C0=100, C2=50, T=4: white box 25, black box 0; got %s and %s.
+de: Für C0 = 100, C2 = 50, T = 4: White Box 25, Black Box 0; erhalten: %s und %s.
+
+en: Your exponential grows. Elimination makes it decay: C0·e<sup>−k·T</sup>.
+de: Ihre Exponentialfunktion wächst. Die Elimination lässt sie abfallen: C0·e<sup>−k·T</sup>.
+
+en: k comes from the natural log: k = ln(C(0)/C(2)) / 2.
+de: k kommt aus dem natürlichen Logarithmus: k = ln(C(0)/C(2)) / 2.
+
+en: First k = ln(C(0)/C(2)) / 2, then C(T) = C(0)·e<sup>−k·T</sup>.
+de: Zuerst k = ln(C(0)/C(2)) / 2, dann C(T) = C(0)·e<sup>−k·T</sup>.
+
+en: Right: the mechanism predicts %s mg/L, the straight line %s mg/L%s. Both agree on the two measured points; only the mechanism survives outside them.
+de: Richtig: Der Mechanismus sagt %s mg/L voraus, die Gerade %s mg/L%s. Beide stimmen an den zwei Messpunkten überein; außerhalb davon hält nur der Mechanismus.
+
+en: ⎵(a negative concentration)
+de: ⎵(eine negative Konzentration)
+
+en: The line falls: its slope is (C(2) − C(0)) / 2, which is negative.
+de: Die Gerade fällt: Ihre Steigung ist (C(2) − C(0)) / 2, also negativ.
+
+en: The line through (0, C(0)) and (2, C(2)) is C(0) + slope·T with slope (C(2) − C(0)) / 2.
+de: Die Gerade durch (0, C(0)) und (2, C(2)) ist C(0) + Steigung·T mit der Steigung (C(2) − C(0)) / 2.
+
+en: <b>Extrapolate with both kinds of model.</b>
+de: <b>Extrapolieren Sie mit beiden Arten von Modell.</b>
+
+en: <div>Two measurements are all you have (simulated): <b>C(0) = %g mg/L</b> and <b>C(2 h) = %g mg/L</b>. A white-box model assumes first-order elimination; a black-box model draws the straight line through the two points. What does each predict at <b>t = %d h</b>?</div>
+de: <div>Sie haben nur zwei Messungen (simuliert): <b>C(0) = %g mg/L</b> und <b>C(2 h) = %g mg/L</b>. Ein White-Box-Modell nimmt eine Elimination erster Ordnung an; ein Black-Box-Modell zieht die Gerade durch die beiden Punkte. Was sagt jedes für <b>t = %d h</b> voraus?</div>
+
+en: white box =
+de: White Box =
+
+en: black box =
+de: Black Box =
+
+en: Both models have to pass through your two measured points, and in each model the points fix one number. The white box, C(t) = C(0)·e<sup>−kt</sup>, gets its rate k from how much of the drug is left after 2 h. The black box, a straight line, gets its slope from the same two points. Then read each model off at the later time.
+de: Beide Modelle müssen durch Ihre zwei Messpunkte gehen, und in jedem Modell legen die Punkte eine Zahl fest. Die White Box, C(t) = C(0)·e<sup>−kt</sup>, bekommt ihre Rate k daraus, wie viel vom Arzneimittel nach 2 h noch übrig ist. Die Black Box, eine Gerade, bekommt ihre Steigung aus denselben beiden Punkten. Lesen Sie dann jedes Modell zum späteren Zeitpunkt ab.
+
+en: White box: k = ln(%g / %g) / 2 (natural log), then evaluate %g · e<sup>−k·%d</sup>. Black box: the slope is (%g − %g) / 2 mg/L per hour (negative), and the line at t = %d h is %g + slope · %d.
+de: White Box: k = ln(%g / %g) / 2 (natürlicher Logarithmus), dann %g · e<sup>−k·%d</sup> auswerten. Black Box: Die Steigung ist (%g − %g) / 2 mg/L pro Stunde (negativ), und die Gerade bei t = %d h ist %g + Steigung · %d.
+
+en: Write <code>predict_both(C0, C2, T)</code> that takes the concentrations measured at 0 h and 2 h and returns the two predictions at time T: first the white box (first-order elimination through both points), then the black box (the straight line through both points). Example: <code>predict_both(100, 50, 4)</code> → <code>(25.0, 0.0)</code>.
+de: Schreiben Sie <code>predict_both(C0, C2, T)</code>, das die bei 0 h und 2 h gemessenen Konzentrationen nimmt und die beiden Vorhersagen zum Zeitpunkt T zurückgibt: zuerst die White Box (Elimination erster Ordnung durch beide Punkte), dann die Black Box (die Gerade durch beide Punkte). Beispiel: <code>predict_both(100, 50, 4)</code> → <code>(25.0, 0.0)</code>.
+
+en: Neither box is better in every case. The white-box model contains a pharmacological assumption and extrapolates well, which matters for dosing. The black-box model makes no such assumption and can fit more complex shapes. But you can trust it only within the range of data it saw. In practice the usual choice is a grey box: mechanism where it is known, data where it is not.
+de: Keine der beiden Boxen ist in jedem Fall besser. Das White-Box-Modell enthält eine pharmakologische Annahme und extrapoliert gut, was für die Dosierung wichtig ist. Das Black-Box-Modell macht keine solche Annahme und kann komplexere Formen anpassen. Trauen können Sie ihm aber nur innerhalb des Datenbereichs, den es gesehen hat. In der Praxis wählt man meist eine Grey Box: Mechanismus, wo er bekannt ist, Daten, wo nicht.
+
+en: <b>Correlation is not causation.</b> A data-driven fit describes an association, not a mechanism. Be sceptical of linear correlations and oversimplified patterns.
+de: <b>Korrelation ist nicht Kausalität.</b> Eine datengetriebene Anpassung beschreibt einen Zusammenhang, keinen Mechanismus. Seien Sie skeptisch gegenüber linearen Korrelationen und zu stark vereinfachten Mustern.
+
+en: Data-driven vs event-driven models
+de: Datengetriebene und ereignisgetriebene Modelle
+
+# m04.py
+en: <b>Key idea and link to the previous chapters.</b> Now the conceptual model becomes concrete. Take a single dose into a vein. The drug spreads into one well-mixed space (a compartment), and the body removes it at a rate proportional to its concentration. Then the concentration falls <b>exponentially</b> with time. This one-compartment, first-order model is the basis of clinical pharmacokinetics
+de: <b>Kernidee und Verbindung zu den vorigen Kapiteln.</b> Jetzt wird das konzeptionelle Modell konkret. Nehmen Sie eine einzelne Dosis in eine Vene. Das Arzneimittel verteilt sich in einem gut durchmischten Raum (einem Kompartiment), und der Körper entfernt es mit einer Rate, die zu seiner Konzentration proportional ist. Dann fällt die Konzentration <b>exponentiell</b> mit der Zeit. Dieses Ein-Kompartiment-Modell erster Ordnung ist die Grundlage der klinischen Pharmakokinetik
+
+en: ⎵and of the cefazolin dosing analysis later on
+de: ⎵und der Cefazolin-Dosierungsanalyse weiter hinten
+
+en: drug concentration at time t (mg/L)
+de: Arzneimittelkonzentration zur Zeit t (mg/L)
+
+en: initial concentration just after the dose (mg/L)
+de: Anfangskonzentration direkt nach der Dosis (mg/L)
+
+en: first-order elimination rate constant (1/h)
+de: Eliminationsgeschwindigkeitskonstante erster Ordnung (1/h)
+
+en: time since the dose (h)
+de: Zeit seit der Dosis (h)
+
+en: The curve is the model and the pale points are the simulated measurements. The initial concentration sets where the curve starts. The elimination rate constant sets how fast it falls. The half-life (dotted), the time until half the drug is gone, is ln(2) divided by that rate. Try a small rate near 0.15 for a drug the body clears slowly, and a large rate near 0.7 for one it clears fast. Then adjust the initial concentration until the red curve runs through the points. Finding those two numbers by eye is the calibration problem of the next chapter.
+de: Die Kurve ist das Modell, und die blassen Punkte sind die simulierten Messungen. Die Anfangskonzentration legt fest, wo die Kurve beginnt. Die Eliminationsgeschwindigkeitskonstante legt fest, wie schnell sie fällt. Die Halbwertszeit (gepunktet), also die Zeit, bis die Hälfte des Arzneimittels weg ist, ist ln(2) geteilt durch diese Rate. Probieren Sie eine kleine Rate nahe 0,15 für ein Arzneimittel, das der Körper langsam ausscheidet, und eine große Rate nahe 0,7 für eines, das er schnell ausscheidet. Stellen Sie dann die Anfangskonzentration so ein, dass die rote Kurve durch die Punkte läuft. Diese beiden Zahlen nach Augenmaß zu finden, ist das Kalibrierungsproblem des nächsten Kapitels.
+
+en: Define a function called pk_numbers(C0, k, t).
+de: Definieren Sie eine Funktion namens pk_numbers(C0, k, t).
+
+en: Half-life and remaining concentration both right.
+de: Halbwertszeit und verbleibende Konzentration beide richtig.
+
+en: The concentration must fall: e^(−k·t).
+de: Die Konzentration muss fallen: e^(−k·t).
+
+en: Half-life = ln 2 <b>divided</b> by k.
+de: Halbwertszeit = ln 2 <b>geteilt</b> durch k.
+
+en: For C0=100, k=0.5, t=2: half-life %s and C %s; got %s and %s.
+de: Für C0 = 100, k = 0,5, t = 2: Halbwertszeit %s und C %s; erhalten: %s und %s.
+
+en: Natural log: t½ = ln 2 / k (ln 2 ≈ 0.693).
+de: Natürlicher Logarithmus: t½ = ln 2 / k (ln 2 ≈ 0,693).
+
+en: t½ = ln 2 / k: ln 2 on top, k below.
+de: t½ = ln 2 / k: ln 2 oben, k unten.
+
+en: Set C(t½) = C0/2 in C0·e<sup>−k·t</sup>: that gives t½ = ln 2 / k.
+de: Setzen Sie C(t½) = C0/2 in C0·e<sup>−k·t</sup> ein: Das ergibt t½ = ln 2 / k.
+
+en: Right: t½ = %s h, and after %d h %s mg/L are left. That is %s half-lives, so a fraction (1/2)<sup>%s</sup>.
+de: Richtig: t½ = %s h, und nach %d h sind %s mg/L übrig. Das sind %s Halbwertszeiten, also ein Anteil (1/2)<sup>%s</sup>.
+
+en: The exponent is negative: C0·e<sup>−k·t</sup>.
+de: Der Exponent ist negativ: C0·e<sup>−k·t</sup>.
+
+en: That is a straight-line decrease. First-order elimination is exponential: C0·e<sup>−k·t</sup>.
+de: Das ist eine lineare Abnahme. Eine Elimination erster Ordnung ist exponentiell: C0·e<sup>−k·t</sup>.
+
+en: C(t) = C0·e<sup>−k·t</sup> with your three numbers.
+de: C(t) = C0·e<sup>−k·t</sup> mit Ihren drei Zahlen.
+
+en: <b>Two numbers every pharmacist asks for.</b>
+de: <b>Zwei Zahlen, nach denen jede Apothekerin fragt.</b>
+
+en: <div>After an intravenous dose the concentration starts at <b>C₀ = %g mg/L</b> and is eliminated with <b>k = %g h⁻¹</b>. What is the half-life, and what concentration is left after <b>%d h</b>? The sliders above let you check the curve.</div>
+de: <div>Nach einer intravenösen Dosis beginnt die Konzentration bei <b>C₀ = %g mg/L</b> und wird mit <b>k = %g h⁻¹</b> eliminiert. Wie groß ist die Halbwertszeit, und welche Konzentration ist nach <b>%d h</b> noch übrig? Mit den Schiebereglern oben können Sie die Kurve prüfen.</div>
+
+en: The half-life is the time after which the concentration has fallen to half of C₀. Put that into the model: C₀·e<sup>−k·t½</sup> = C₀/2, so e<sup>−k·t½</sup> = 1/2. Take the natural log: t½ = ln 2 / k. For the concentration left, put your time into C(t) = C₀·e<sup>−k·t</sup>.
+de: Die Halbwertszeit ist die Zeit, nach der die Konzentration auf die Hälfte von C₀ gefallen ist. Setzen Sie das ins Modell ein: C₀·e<sup>−k·t½</sup> = C₀/2, also e<sup>−k·t½</sup> = 1/2. Nehmen Sie den natürlichen Logarithmus: t½ = ln 2 / k. Für die verbleibende Konzentration setzen Sie Ihre Zeit in C(t) = C₀·e<sup>−k·t</sup> ein.
+
+en: With your numbers: t½ = ln 2 / %g, with ln 2 ≈ 0.693. The exponent for the second box is k · t = %g · %d; the concentration is %g times e to the power of minus that.
+de: Mit Ihren Zahlen: t½ = ln 2 / %g, mit ln 2 ≈ 0,693. Der Exponent für das zweite Feld ist k · t = %g · %d; die Konzentration ist %g mal e hoch minus diesem Wert.
+
+en: Write <code>pk_numbers(C0, k, t)</code> that returns, for first-order elimination C(t) = C0·e<sup>−kt</sup>, the half-life and the concentration left at time t, as a pair. Example: <code>pk_numbers(100, 0.5, 2)</code> → <code>(1.386…, 36.79…)</code>.
+de: Schreiben Sie <code>pk_numbers(C0, k, t)</code>, das für eine Elimination erster Ordnung C(t) = C0·e<sup>−kt</sup> die Halbwertszeit und die zum Zeitpunkt t verbleibende Konzentration als Paar zurückgibt. Beispiel: <code>pk_numbers(100, 0.5, 2)</code> → <code>(1.386…, 36.79…)</code>.
+
+en: Two parameters fix this model completely: the starting concentration and the elimination rate. Every pharmacokinetic quantity you need follows from them. The half-life is ln(2) over the rate. The area under the curve measures the total drug exposure; it is the initial concentration divided by the rate. In a good conceptual model, a few parameters carry a real, interpretable meaning.
+de: Zwei Parameter legen dieses Modell vollständig fest: die Anfangskonzentration und die Eliminationsrate. Jede pharmakokinetische Größe, die Sie brauchen, folgt aus ihnen. Die Halbwertszeit ist ln(2) geteilt durch die Rate. Die Fläche unter der Kurve misst die gesamte Arzneimittelexposition; sie ist die Anfangskonzentration geteilt durch die Rate. In einem guten konzeptionellen Modell tragen wenige Parameter eine echte, deutbare Bedeutung.
+
+en: The conceptual model: First-order elimination
+de: Das konzeptionelle Modell: Elimination erster Ordnung
+
+en: The elimination curve
+de: Die Eliminationskurve
+
+# m05.py
+en: <b>Key idea and link to the previous chapter.</b> In the last chapter you adjusted the two parameters by eye. That is calibration by hand. To calibrate objectively, we need one number that says how badly the model misses the data. This number is the <b>objective function</b>. The usual choice is the <b>sum of squared errors</b> (SSE) between the observed and the predicted concentrations. Calibration then means finding the parameters that make this sum as small as possible
+de: <b>Kernidee und Verbindung zum vorigen Kapitel.</b> Im letzten Kapitel haben Sie die beiden Parameter nach Augenmaß eingestellt. Das ist Kalibrierung von Hand. Um objektiv zu kalibrieren, brauchen wir eine Zahl, die sagt, wie stark das Modell die Daten verfehlt. Diese Zahl ist die <b>Zielfunktion</b>. Üblich ist die <b>Summe der quadrierten Fehler</b> (SSE) zwischen beobachteten und vorhergesagten Konzentrationen. Kalibrieren heißt dann, die Parameter zu finden, die diese Summe so klein wie möglich machen
+
+en: objective (sum of squared errors) for parameters &#952;
+de: Zielfunktion (Summe der quadrierten Fehler) für die Parameter &#952;
+
+en: observed concentration at time t&#7522; (mg/L)
+de: beobachtete Konzentration zur Zeit t&#7522; (mg/L)
+
+en: concentration predicted by the model at t&#7522;
+de: vom Modell vorhergesagte Konzentration zur Zeit t&#7522;
+
+en: the parameters being calibrated, here C&#8320; and k
+de: die zu kalibrierenden Parameter, hier C&#8320; und k
+
+en: smaller = better fit
+de: kleiner = bessere Anpassung
+
+en: Each amber stick is one residual: the gap between a measurement and the model at that time. The objective adds up the squares of all residuals. Move the two sliders and try to make the SSE below them smaller. You will notice that a better fit at one end often means a worse fit at the other. The best fit is a compromise that balances all residuals together. Because of the squaring, large misses count far more than small ones. That is why the curve is pulled towards the outlying points.
+de: Jeder bernsteinfarbene Strich ist ein Residuum: der Abstand zwischen einer Messung und dem Modell zu diesem Zeitpunkt. Die Zielfunktion addiert die Quadrate aller Residuen. Bewegen Sie die beiden Schieberegler und versuchen Sie, die SSE darunter kleiner zu machen. Sie werden merken, dass eine bessere Anpassung an einem Ende oft eine schlechtere am anderen bedeutet. Die beste Anpassung ist ein Kompromiss, der alle Residuen zusammen ausgleicht. Wegen des Quadrierens zählen große Abweichungen viel mehr als kleine. Deshalb wird die Kurve zu den ausreißenden Punkten hingezogen.
+
+en: Define a function called my_sse(y_true, y_pred).
+de: Definieren Sie eine Funktion namens my_sse(y_true, y_pred).
+
+en: Zero for a perfect fit, and the squares add up.
+de: Null bei perfekter Anpassung, und die Quadrate summieren sich.
+
+en: You are still returning the placeholder; combine y_true and y_pred.
+de: Sie geben noch den Platzhalter zurück; verrechnen Sie y_true und y_pred.
+
+en: Identical inputs must give 0: subtract y_pred from y_true first.
+de: Gleiche Eingaben müssen 0 ergeben: Ziehen Sie zuerst y_pred von y_true ab.
+
+en: That looks like the sum of absolute errors. Square each difference, do not take its size.
+de: Das sieht nach der Summe der absoluten Fehler aus. Quadrieren Sie jede Differenz, nehmen Sie nicht ihren Betrag.
+
+en: Expected 0 and 5; got %s and %s. Square each difference, then sum.
+de: Erwartet 0 und 5; erhalten %s und %s. Quadrieren Sie jede Differenz und summieren Sie dann.
+
+en: Right: the residuals are %s, and their squares add up to %s. Calibration searches for the C₀ and k that make this number as small as possible.
+de: Richtig: Die Residuen sind %s, und ihre Quadrate ergeben zusammen %s. Die Kalibrierung sucht die C₀ und k, die diese Zahl so klein wie möglich machen.
+
+en: That is the <b>mean</b> of the squares. The objective here is their <b>sum</b>, so do not divide by n.
+de: Das ist der <b>Mittelwert</b> der Quadrate. Die Zielfunktion ist hier ihre <b>Summe</b>, teilen Sie also nicht durch n.
+
+en: That is the sum of the absolute residuals. Square each residual, then add.
+de: Das ist die Summe der absoluten Residuen. Quadrieren Sie jedes Residuum und addieren Sie dann.
+
+en: You added the residuals before squaring, so their signs cancel. Square each residual on its own, then add.
+de: Sie haben die Residuen vor dem Quadrieren addiert, deshalb heben sich ihre Vorzeichen auf. Quadrieren Sie jedes Residuum für sich und addieren Sie dann.
+
+en: For each point, residual = observed − predicted. Square the three residuals and add them.
+de: Für jeden Punkt gilt: Residuum = beobachtet − vorhergesagt. Quadrieren Sie die drei Residuen und addieren Sie sie.
+
+en: <b>Compute the objective for one guess of the parameters.</b>
+de: <b>Berechnen Sie die Zielfunktion für eine Schätzung der Parameter.</b>
+
+en: <div>At three time points the assay measured <b>y = %s mg/L</b>; the model with the current guess of C₀ and k predicts <b>ŷ = %s mg/L</b>. What is F?</div>
+de: <div>An drei Zeitpunkten hat die Messung <b>y = %s mg/L</b> ergeben; das Modell mit der aktuellen Schätzung von C₀ und k sagt <b>ŷ = %s mg/L</b> voraus. Wie groß ist F?</div>
+
+en: The objective collects every miss in one number. For each time point, take the residual (observed minus predicted) and square it. Squaring makes misses up and down both count, and big misses count more. Then add the squares. Do not divide: this objective is a <i>sum</i>.
+de: Die Zielfunktion sammelt jede Abweichung in einer Zahl. Nehmen Sie für jeden Zeitpunkt das Residuum (beobachtet minus vorhergesagt) und quadrieren Sie es. Durch das Quadrieren zählen Abweichungen nach oben und unten gleichermaßen, und große zählen mehr. Addieren Sie dann die Quadrate. Teilen Sie nicht: Diese Zielfunktion ist eine <i>Summe</i>.
+
+en: Your three residuals y − ŷ are %s. Square each of them and add the three squares.
+de: Ihre drei Residuen y − ŷ sind %s. Quadrieren Sie jedes davon und addieren Sie die drei Quadrate.
+
+en: Write <code>my_sse(y_true, y_pred)</code> that returns the objective used for calibration: the sum of the squared differences between observed and predicted values. Example: <code>my_sse([0, 0], [1, 2])</code> → <code>5.0</code>.
+de: Schreiben Sie <code>my_sse(y_true, y_pred)</code>, das die Zielfunktion der Kalibrierung zurückgibt: die Summe der quadrierten Differenzen zwischen beobachteten und vorhergesagten Werten. Beispiel: <code>my_sse([0, 0], [1, 2])</code> → <code>5.0</code>.
+
+en: Calibration is now a precise task: choose the parameters that make the objective as small as possible. By hand, this works for two parameters, but it quickly becomes hopeless for many. So the next chapter hands the search to an algorithm. The objective you just computed is exactly the quantity that this algorithm will push downhill.
+de: Kalibrieren ist jetzt eine genaue Aufgabe: die Parameter wählen, die die Zielfunktion so klein wie möglich machen. Von Hand geht das für zwei Parameter, bei vielen wird es aber schnell aussichtslos. Das nächste Kapitel übergibt die Suche deshalb einem Algorithmus. Die Zielfunktion, die Sie gerade berechnet haben, ist genau die Größe, die dieser Algorithmus bergab schiebt.
+
+en: <b>Goodhart's law:</b> when a measure becomes a target, it stops being a good measure
+de: <b>Goodharts Gesetz:</b> Wenn ein Maß zum Ziel wird, hört es auf, ein gutes Maß zu sein
+
+en: . Optimising a single metric too hard can quietly damage the real goal.
+de: . Eine einzelne Kennzahl zu hart zu optimieren, kann das eigentliche Ziel unbemerkt beschädigen.
+
+en: Calibration: The objective function
+de: Kalibrierung: Die Zielfunktion
+
+en: Residuals and the objective
+de: Residuen und Zielfunktion
+
+# m06.py
+en: <b>Key idea and link to the previous chapter.</b> With the objective, calibration becomes a search for its lowest point. <b>Gradient descent</b> does this search automatically. Again and again, it moves each parameter a small step against the slope (gradient) of the objective, until the objective stops falling
+de: <b>Kernidee und Verbindung zum vorigen Kapitel.</b> Mit der Zielfunktion wird Kalibrieren zur Suche nach ihrem tiefsten Punkt. Der <b>Gradientenabstieg</b> erledigt diese Suche automatisch. Immer wieder bewegt er jeden Parameter um einen kleinen Schritt gegen die Steigung (den Gradienten) der Zielfunktion, bis die Zielfunktion nicht mehr fällt
+
+en: . Here it calibrates the elimination rate k of the pharmacokinetic model. At every step, the best initial concentration is solved for as well.
+de: . Hier kalibriert er die Eliminationsrate k des pharmakokinetischen Modells. In jedem Schritt wird außerdem die beste Anfangskonzentration bestimmt.
+
+en: the parameter being updated (here the rate k)
+de: der Parameter, der aktualisiert wird (hier die Rate k)
+
+en: learning rate, the step size
+de: Lernrate, die Schrittweite
+
+en: gradient: slope of the objective F
+de: Gradient: Steigung der Zielfunktion F
+
+en: conc. (mg/L)
+de: Konz. (mg/L)
+
+en: objective (MSE of ln C)
+de: Zielfunktion (MSE von ln C)
+
+en: fitted k
+de: angepasstes k
+
+en: fitted C₀
+de: angepasstes C₀
+
+en: final objective
+de: Zielfunktion am Ende
+
+en: Training starts from a flat line and steps downhill on the objective. The left panel shows how the fitted curve settles onto the data. The right panel shows how the objective falls with every step. The learning rate (the step size) matters most. With a tiny value near 0.01, the search crawls. With a moderate 0.1, it converges smoothly onto the true rate. With a large value near 0.5, the steps are so big that the search overshoots before it settles.
+de: Das Training beginnt bei einer flachen Linie und geht in Schritten auf der Zielfunktion bergab. Das linke Bild zeigt, wie sich die angepasste Kurve auf die Daten legt. Das rechte Bild zeigt, wie die Zielfunktion mit jedem Schritt fällt. Am wichtigsten ist die Lernrate (die Schrittweite). Mit einem winzigen Wert nahe 0,01 kriecht die Suche. Mit einem mittleren Wert von 0,1 läuft sie ruhig auf die wahre Rate zu. Mit einem großen Wert nahe 0,5 sind die Schritte so groß, dass die Suche übers Ziel hinausschießt, bevor sie sich beruhigt.
+
+en: Define a function called gd_step(p, g, lr).
+de: Definieren Sie eine Funktion namens gd_step(p, g, lr).
+
+en: One step against the gradient, scaled by the learning rate.
+de: Ein Schritt gegen den Gradienten, skaliert mit der Lernrate.
+
+en: You return p unchanged. Take one step away from it.
+de: Sie geben p unverändert zurück. Machen Sie einen Schritt davon weg.
+
+en: Wrong direction: move against the gradient, not with it.
+de: Falsche Richtung: Gehen Sie gegen den Gradienten, nicht mit ihm.
+
+en: The step size is missing. Scale the gradient by lr.
+de: Die Schrittweite fehlt. Skalieren Sie den Gradienten mit lr.
+
+en: For p=5, g=2, lr=0.1 the answer is 4.8; you got %s. Return p - lr*g.
+de: Für p = 5, g = 2, lr = 0,1 ist die Antwort 4,8; Sie haben %s erhalten. Geben Sie p - lr*g zurück.
+
+en: Right: %g − %g·(%g) = %s per hour. The objective falls with smaller k, so the step goes down.
+de: Richtig: %g − %g·(%g) = %s pro Stunde. Die Zielfunktion fällt mit kleinerem k, also geht der Schritt nach unten.
+
+en: Right: %g − %g·(%g) = %s per hour. The objective falls with larger k, so the step goes up.
+de: Richtig: %g − %g·(%g) = %s pro Stunde. Die Zielfunktion fällt mit größerem k, also geht der Schritt nach oben.
+
+en: Wrong direction: that step goes <i>uphill</i> on the objective. Subtract the gradient, don't add it.
+de: Falsche Richtung: Dieser Schritt geht auf der Zielfunktion <i>bergauf</i>. Ziehen Sie den Gradienten ab, statt ihn zu addieren.
+
+en: The learning rate is missing: scale the gradient by lr before subtracting.
+de: Die Lernrate fehlt: Skalieren Sie den Gradienten mit lr, bevor Sie ihn abziehen.
+
+en: That is the step alone. The new k is the old k minus that step.
+de: Das ist nur der Schritt. Das neue k ist das alte k minus diesen Schritt.
+
+en: New k = old k − lr · g. Mind the sign of g.
+de: Neues k = altes k − lr · g. Achten Sie auf das Vorzeichen von g.
+
+en: <b>Take one step of the search by hand.</b>
+de: <b>Machen Sie einen Schritt der Suche von Hand.</b>
+
+en: <div>The current guess is <b>k = %g h⁻¹</b>. At that k the objective has the slope <b>∂F/∂k = %g</b>, and the learning rate is <b>lr = %g</b>. Where does one step put k?</div>
+de: <div>Die aktuelle Schätzung ist <b>k = %g h⁻¹</b>. Bei diesem k hat die Zielfunktion die Steigung <b>∂F/∂k = %g</b>, und die Lernrate ist <b>lr = %g</b>. Wohin bringt ein Schritt das k?</div>
+
+en: new k =
+de: neues k =
+
+en: The slope ∂F/∂k points <i>uphill</i>, towards larger values of the objective. Gradient descent wants to go down. So it moves k the other way, by a small step equal to the learning rate times the slope. New k = old k − lr · slope.
+de: Die Steigung ∂F/∂k zeigt <i>bergauf</i>, zu größeren Werten der Zielfunktion. Der Gradientenabstieg will nach unten. Deshalb bewegt er k in die andere Richtung, um einen kleinen Schritt gleich Lernrate mal Steigung. Neues k = altes k − lr · Steigung.
+
+en: Your step is lr · slope = %s · (%s). Subtract it from k = %s. Mind the sign: with a positive slope, subtracting the step makes k smaller.
+de: Ihr Schritt ist lr · Steigung = %s · (%s). Ziehen Sie ihn von k = %s ab. Achten Sie auf das Vorzeichen: Bei positiver Steigung macht das Abziehen des Schritts k kleiner.
+
+en: Your step is lr · slope = %s · (%s). Subtract it from k = %s. Mind the sign: with a negative slope, subtracting the step makes k larger.
+de: Ihr Schritt ist lr · Steigung = %s · (%s). Ziehen Sie ihn von k = %s ab. Achten Sie auf das Vorzeichen: Bei negativer Steigung macht das Abziehen des Schritts k größer.
+
+en: Write <code>gd_step(p, g, lr)</code> that performs one gradient-descent update of a single parameter p, given the gradient g of the objective at p and the learning rate lr, and returns the new value. Example: <code>gd_step(5, 2, 0.1)</code> → <code>4.8</code>.
+de: Schreiben Sie <code>gd_step(p, g, lr)</code>, das eine Aktualisierung des Gradientenabstiegs für einen einzelnen Parameter p ausführt, gegeben den Gradienten g der Zielfunktion bei p und die Lernrate lr, und den neuen Wert zurückgibt. Beispiel: <code>gd_step(5, 2, 0.1)</code> → <code>4.8</code>.
+
+en: The same rule that fits this two-parameter model also trains models with millions of parameters. Only the number of parameters changes, not the idea. Watch the objective curve: it should fall smoothly to a plateau. A learning rate that is too small wastes steps. One that is too large makes the search unstable. So the step size is itself a modelling decision that you have to tune.
+de: Dieselbe Regel, die dieses Modell mit zwei Parametern anpasst, trainiert auch Modelle mit Millionen von Parametern. Nur die Zahl der Parameter ändert sich, nicht die Idee. Beobachten Sie die Kurve der Zielfunktion: Sie sollte ruhig auf ein Plateau fallen. Eine zu kleine Lernrate verschwendet Schritte. Eine zu große macht die Suche instabil. Die Schrittweite ist also selbst eine Modellierungsentscheidung, die Sie abstimmen müssen.
+
+en: Optimization: Searching the objective
+de: Optimierung: Die Zielfunktion absuchen
+
+en: Gradient descent on the rate
+de: Gradientenabstieg für die Rate
+
+# m07.py
+en: <b>Key idea and link to the previous chapters.</b> A model that fits its calibration data perfectly is not necessarily good. What matters is <b>generalisation</b>: how well it predicts new data. This depends on the balance between <b>model complexity</b> and <b>data availability</b>
+de: <b>Kernidee und Verbindung zu den vorigen Kapiteln.</b> Ein Modell, das seine Kalibrierungsdaten perfekt trifft, ist nicht unbedingt gut. Es kommt auf die <b>Verallgemeinerung</b> an: wie gut es neue Daten vorhersagt. Das hängt vom Gleichgewicht zwischen <b>Modellkomplexität</b> und <b>Datenverfügbarkeit</b> ab
+
+en: . A model that is too simple <b>underfits</b> and shows a systematic error (<b>bias</b>). A model that is too complex <b>overfits</b>: it follows the noise, and its predictions scatter strongly (high <b>variance</b>). A single fit can mislead. So generalisation is estimated on independent data, with a <b>train&ndash;test split</b>, or more robustly with <b>cross-validation</b> and <b>bootstrap</b> resampling. The visualisation fits polynomials of growing degree. It compares the error on the training half with the error on a held-out test half.
+de: . Ein zu einfaches Modell <b>passt sich zu wenig an</b> (Unteranpassung) und zeigt einen systematischen Fehler (<b>Bias</b>). Ein zu komplexes Modell <b>passt sich zu stark an</b> (Überanpassung): Es folgt dem Rauschen, und seine Vorhersagen streuen stark (hohe <b>Varianz</b>). Eine einzelne Anpassung kann täuschen. Deshalb schätzt man die Verallgemeinerung an unabhängigen Daten, mit einer <b>Aufteilung in Trainings- und Testdaten</b> oder robuster mit <b>Kreuzvalidierung</b> und <b>Bootstrap</b>-Stichproben. Die Visualisierung passt Polynome wachsenden Grades an. Sie vergleicht den Fehler auf der Trainingshälfte mit dem Fehler auf einer zurückgehaltenen Testhälfte.
+
+en: true process
+de: wahrer Prozess
+
+en: input x
+de: Eingabe x
+
+en: train MSE
+de: Trainings-MSE
+
+en: test MSE
+de: Test-MSE
+
+en: Blue points are the training half, red points the held-out test half. The green curve is a polynomial of the degree you choose, and the dotted line is the true process. Watch the two error numbers together. At degree 1 both are high: the model is too simple and biased (underfitting). Around degree 3 both are low and close to each other. This is the sweet spot. Push the degree towards 12, and the green curve wriggles through every training point. The training error collapses, but the test error climbs steeply. This is the typical sign of overfitting and high variance.
+de: Blaue Punkte sind die Trainingshälfte, rote Punkte die zurückgehaltene Testhälfte. Die grüne Kurve ist ein Polynom des Grades, den Sie wählen, und die gepunktete Linie ist der wahre Prozess. Beobachten Sie die beiden Fehlerzahlen zusammen. Bei Grad 1 sind beide hoch: Das Modell ist zu einfach und verzerrt (Unteranpassung). Um Grad 3 herum sind beide niedrig und nah beieinander. Das ist der günstigste Bereich. Treiben Sie den Grad gegen 12, und die grüne Kurve schlängelt sich durch jeden Trainingspunkt. Der Trainingsfehler bricht ein, aber der Testfehler steigt steil an. Das ist das typische Zeichen für Überanpassung und hohe Varianz.
+
+en: Define a function called test_mse(y, yhat).
+de: Definieren Sie eine Funktion namens test_mse(y, yhat).
+
+en: The mean of the squared errors, nothing else.
+de: Der Mittelwert der quadrierten Fehler, sonst nichts.
+
+en: That is the sum. The MSE is the <b>mean</b> of the squared errors.
+de: Das ist die Summe. Der MSE ist der <b>Mittelwert</b> der quadrierten Fehler.
+
+en: No square root: MSE, not RMSE.
+de: Keine Wurzel: MSE, nicht RMSE.
+
+en: Expected 0 and 2; got %s and %s.
+de: Erwartet 0 und 2; erhalten %s und %s.
+
+en: That is the sum of the squared errors. Divide by the number of test points, 3.
+de: Das ist die Summe der quadrierten Fehler. Teilen Sie durch die Zahl der Testpunkte, 3.
+
+en: That is the square root of the MSE. Leave the root off.
+de: Das ist die Wurzel des MSE. Lassen Sie die Wurzel weg.
+
+en: For each test point, error = observed − predicted. Square, add, and divide by 3.
+de: Für jeden Testpunkt gilt: Fehler = beobachtet − vorhergesagt. Quadrieren, addieren und durch 3 teilen.
+
+en: Right: test MSE %s against %s on the training half, a gap of %s. %s
+de: Richtig: Test-MSE %s gegenüber %s auf der Trainingshälfte, ein Abstand von %s. %s
+
+en: A gap this large shows that the model memorised the training noise.
+de: Ein so großer Abstand zeigt, dass das Modell das Trainingsrauschen auswendig gelernt hat.
+
+en: A small gap: the model generalises about as well as it fits.
+de: Ein kleiner Abstand: Das Modell verallgemeinert etwa so gut, wie es sich anpasst.
+
+en: The gap is test MSE <b>minus</b> training MSE.
+de: Der Abstand ist Test-MSE <b>minus</b> Trainings-MSE.
+
+en: Gap = your test MSE − the training MSE %g.
+de: Abstand = Ihr Test-MSE − der Trainings-MSE %g.
+
+en: <b>Judge a calibrated model on data it has not seen.</b>
+de: <b>Beurteilen Sie ein kalibriertes Modell an Daten, die es nicht gesehen hat.</b>
+
+en: <div>A polynomial reached <b>MSE = %g</b> on its training half. On three held-out points (simulated) it predicts <b>ŷ = %s</b>, where the observations were <b>y = %s</b>. Compute the test MSE and the gap.</div>
+de: <div>Ein Polynom erreichte <b>MSE = %g</b> auf seiner Trainingshälfte. Für drei zurückgehaltene Punkte (simuliert) sagt es <b>ŷ = %s</b> voraus, beobachtet wurden <b>y = %s</b>. Berechnen Sie den Test-MSE und den Abstand.</div>
+
+en: test MSE =
+de: Test-MSE =
+
+en: gap =
+de: Abstand =
+
+en: The test MSE is the <i>mean</i> of the squared errors on the held-out points. For each point, error = observed − predicted. Square each error, add, and divide by the number of points. The gap is test MSE minus training MSE. If the gap is large compared with the training error, the model has learned noise that does not come back on new data.
+de: Der Test-MSE ist der <i>Mittelwert</i> der quadrierten Fehler auf den zurückgehaltenen Punkten. Für jeden Punkt gilt: Fehler = beobachtet − vorhergesagt. Quadrieren Sie jeden Fehler, addieren Sie und teilen Sie durch die Zahl der Punkte. Der Abstand ist Test-MSE minus Trainings-MSE. Ist der Abstand groß im Vergleich zum Trainingsfehler, hat das Modell Rauschen gelernt, das bei neuen Daten nicht wiederkommt.
+
+en: Your three test errors y − ŷ are %s. Square each, add the three squares and divide by 3. Then subtract the training MSE given in the exercise.
+de: Ihre drei Testfehler y − ŷ sind %s. Quadrieren Sie jeden, addieren Sie die drei Quadrate und teilen Sie durch 3. Ziehen Sie dann den Trainings-MSE aus der Aufgabe ab.
+
+en: Write <code>test_mse(y, yhat)</code> that returns the mean squared error between observed values y and predicted values yhat (two lists of the same length). Example: <code>test_mse([0, 0, 0], [1, 1, 2])</code> → <code>2.0</code>.
+de: Schreiben Sie <code>test_mse(y, yhat)</code>, das den mittleren quadratischen Fehler zwischen beobachteten Werten y und vorhergesagten Werten yhat zurückgibt (zwei Listen gleicher Länge). Beispiel: <code>test_mse([0, 0, 0], [1, 1, 2])</code> → <code>2.0</code>.
+
+en: In practice, the gap between training and test error reveals overfitting. When the gap opens up, the model memorises noise instead of learning the process. The best model is the simplest one whose test error is still low. This is why a model is always judged on data it did not see. Cross-validation goes one step further: it rotates which part of the data is held out (the fold), and so gives a more stable estimate than a single split.
+de: In der Praxis verrät der Abstand zwischen Trainings- und Testfehler die Überanpassung. Wenn sich der Abstand öffnet, lernt das Modell Rauschen auswendig, statt den Prozess zu lernen. Das beste Modell ist das einfachste, dessen Testfehler noch niedrig ist. Deshalb beurteilt man ein Modell immer an Daten, die es nicht gesehen hat. Die Kreuzvalidierung geht einen Schritt weiter: Sie wechselt ab, welcher Teil der Daten zurückgehalten wird (der Fold), und liefert so eine stabilere Schätzung als eine einzelne Aufteilung.
+
+en: <b>A low calibration error does not guarantee good predictions.</b> Judge a model on held-out data that it did not see during calibration.
+de: <b>Ein kleiner Kalibrierungsfehler garantiert keine guten Vorhersagen.</b> Beurteilen Sie ein Modell an zurückgehaltenen Daten, die es bei der Kalibrierung nicht gesehen hat.
+
+en: Evaluation: Under- and overfitting
+de: Bewertung: Unter- und Überanpassung
+
+en: Train and test error
+de: Trainings- und Testfehler
+
+# m08.py
+en: <b>Key idea and link to the previous chapters.</b> Once a model is calibrated, we ask which parameters really matter. <b>Sensitivity analysis</b> measures how much the output changes when an input changes. The simplest form is <b>one-factor-at-a-time</b> (OFAT). You vary a single parameter around a baseline (its reference value) and hold the others fixed. A central difference, a slope taken from one point on each side, then estimates the local sensitivity. Here the model output is the total drug exposure, the area under the curve (AUC = C&#8320;/k). The varied parameter is the elimination rate k.
+de: <b>Kernidee und Verbindung zu den vorigen Kapiteln.</b> Ist ein Modell kalibriert, fragen wir, welche Parameter wirklich zählen. Die <b>Sensitivitätsanalyse</b> misst, wie stark sich die Ausgabe ändert, wenn sich eine Eingabe ändert. Die einfachste Form ist <b>ein Faktor nach dem anderen</b> (OFAT). Sie variieren einen einzelnen Parameter um einen Ausgangswert (seinen Referenzwert) und halten die anderen fest. Eine zentrale Differenz, eine Steigung aus je einem Punkt auf beiden Seiten, schätzt dann die lokale Sensitivität. Die Modellausgabe ist hier die gesamte Arzneimittelexposition, die Fläche unter der Kurve (AUC = C&#8320;/k). Variiert wird die Eliminationsrate k.
+
+en: local sensitivity of the output to the parameter
+de: lokale Sensitivität der Ausgabe gegenüber dem Parameter
+
+en: the model output as a function of the parameter
+de: die Modellausgabe als Funktion des Parameters
+
+en: baseline value of the parameter
+de: Ausgangswert des Parameters
+
+en: small perturbation around the baseline
+de: kleine Störung um den Ausgangswert
+
+en: local slope (sensitivity)
+de: lokale Steigung (Sensitivität)
+
+en: elimination rate k (1/h)
+de: Eliminationsrate k (1/h)
+
+en: sensitivity dAUC/dk
+de: Sensitivität dAUC/dk
+
+en: The blue curve is the model output (the total exposure) as a function of the elimination rate. The red point is the current baseline. The dashed line is the central-difference slope at that point: the local sensitivity. Move the rate and watch the slope. At small rates the curve is steep. The exposure then reacts strongly to k, and a small error in k badly distorts the prediction. At large rates the curve flattens, and the same absolute error in k barely matters. So sensitivity is local: it depends on where you stand.
+de: Die blaue Kurve ist die Modellausgabe (die gesamte Exposition) als Funktion der Eliminationsrate. Der rote Punkt ist der aktuelle Ausgangswert. Die gestrichelte Linie ist die Steigung der zentralen Differenz an diesem Punkt: die lokale Sensitivität. Bewegen Sie die Rate und beobachten Sie die Steigung. Bei kleinen Raten ist die Kurve steil. Die Exposition reagiert dann stark auf k, und ein kleiner Fehler in k verzerrt die Vorhersage erheblich. Bei großen Raten flacht die Kurve ab, und derselbe absolute Fehler in k spielt kaum eine Rolle. Sensitivität ist also lokal: Sie hängt davon ab, wo Sie stehen.
+
+en: Define a function called sensitivity(F, mu0, delta).
+de: Definieren Sie eine Funktion namens sensitivity(F, mu0, delta).
+
+en: A two-sided difference, divided by the full distance 2·delta.
+de: Eine zweiseitige Differenz, geteilt durch den ganzen Abstand 2·delta.
+
+en: You returned 0. Evaluate F at mu0+delta and at mu0-delta, and take the difference.
+de: Sie haben 0 zurückgegeben. Werten Sie F bei mu0+delta und bei mu0-delta aus und bilden Sie die Differenz.
+
+en: You divided by delta, not by 2·delta. This is a central (two-sided) difference.
+de: Sie haben durch delta geteilt, nicht durch 2·delta. Das ist eine zentrale (zweiseitige) Differenz.
+
+en: That is half the slope: divide by 2·delta once, not twice.
+de: Das ist die halbe Steigung: Teilen Sie einmal durch 2·delta, nicht zweimal.
+
+en: For F(x)=x^2 at mu0=3 the answer is ~6; you got %s. Use (F(mu0+d)-F(mu0-d))/(2*d).
+de: Für F(x)=x^2 bei mu0=3 ist die Antwort ~6; Sie haben %s erhalten. Nehmen Sie (F(mu0+d)-F(mu0-d))/(2*d).
+
+en: Right: S = %s. For F = a·μ² the central difference is exact: it equals the derivative 2aμ₀. That is why it is preferred over a one-sided one.
+de: Richtig: S = %s. Für F = a·μ² ist die zentrale Differenz exakt: Sie ist gleich der Ableitung 2aμ₀. Deshalb zieht man sie einer einseitigen vor.
+
+en: You divided by δ, not by 2δ: the two points are 2δ apart.
+de: Sie haben durch δ geteilt, nicht durch 2δ: Die beiden Punkte liegen 2δ auseinander.
+
+en: That is the one-sided (forward) difference. Use both sides: F(μ₀+δ) and F(μ₀−δ).
+de: Das ist die einseitige (Vorwärts-)Differenz. Nehmen Sie beide Seiten: F(μ₀+δ) und F(μ₀−δ).
+
+en: That is the difference of the two values. Divide it by 2δ to get a slope.
+de: Das ist die Differenz der beiden Werte. Teilen Sie sie durch 2δ, um eine Steigung zu bekommen.
+
+en: Evaluate F at μ₀+δ and μ₀−δ, subtract, and divide by 2δ.
+de: Werten Sie F bei μ₀+δ und μ₀−δ aus, ziehen Sie ab und teilen Sie durch 2δ.
+
+en: <b>Estimate a sensitivity by a central difference.</b>
+de: <b>Schätzen Sie eine Sensitivität über eine zentrale Differenz.</b>
+
+en: <div>A model output depends on a parameter as <b>F(μ) = %g·μ²</b>. At the baseline <b>μ₀ = %g</b> and with <b>δ = %g</b>, what is S?</div>
+de: <div>Eine Modellausgabe hängt von einem Parameter ab als <b>F(μ) = %g·μ²</b>. Wie groß ist S beim Ausgangswert <b>μ₀ = %g</b> und mit <b>δ = %g</b>?</div>
+
+en: A central difference measures a slope from two points placed symmetrically around the baseline. Evaluate F a little above (μ₀ + δ) and a little below (μ₀ − δ). Subtract the lower value from the upper one. Then divide by the distance between the two points, which is 2δ.
+de: Eine zentrale Differenz misst eine Steigung aus zwei Punkten, die symmetrisch um den Ausgangswert liegen. Werten Sie F ein wenig darüber (μ₀ + δ) und ein wenig darunter (μ₀ − δ) aus. Ziehen Sie den unteren Wert vom oberen ab. Teilen Sie dann durch den Abstand der beiden Punkte, also 2δ.
+
+en: Your two points are μ₀ + δ = %s and μ₀ − δ = %s. Evaluate %s·μ² at both, subtract, and divide by 2 · %s.
+de: Ihre beiden Punkte sind μ₀ + δ = %s und μ₀ − δ = %s. Werten Sie %s·μ² an beiden aus, ziehen Sie ab und teilen Sie durch 2 · %s.
+
+en: Write <code>sensitivity(F, mu0, delta)</code> that estimates the local slope of a function F at mu0 by a central difference with step delta. F is a function you can call. Example: <code>sensitivity(lambda x: x**2, 3, 0.001)</code> → <code>6.0…</code>.
+de: Schreiben Sie <code>sensitivity(F, mu0, delta)</code>, das die lokale Steigung einer Funktion F bei mu0 über eine zentrale Differenz mit der Schrittweite delta schätzt. F ist eine Funktion, die Sie aufrufen können. Beispiel: <code>sensitivity(lambda x: x**2, 3, 0.001)</code> → <code>6.0…</code>.
+
+en: OFAT is cheap and easy to interpret, so it is a natural first step. Its limitation: it is local and one-dimensional. It probes one parameter near one baseline. It therefore misses interactions between parameters and non-linear behaviour across the whole range. When several parameters matter at once, you need a global method that samples the whole parameter space, such as Monte-Carlo.
+de: OFAT ist billig und leicht zu deuten, deshalb ein natürlicher erster Schritt. Seine Grenze: Es ist lokal und eindimensional. Es tastet einen Parameter nahe einem Ausgangswert ab. Deshalb übersieht es Wechselwirkungen zwischen Parametern und nichtlineares Verhalten über den ganzen Bereich. Wenn mehrere Parameter zugleich zählen, brauchen Sie eine globale Methode, die den ganzen Parameterraum abtastet, etwa Monte-Carlo.
+
+en: <b>Local sensitivity is local.</b> A one-factor-at-a-time analysis probes one point in parameter space. It misses interactions between parameters and global non-linear behaviour.
+de: <b>Lokale Sensitivität ist lokal.</b> Eine Analyse „ein Faktor nach dem anderen“ tastet einen Punkt im Parameterraum ab. Sie übersieht Wechselwirkungen zwischen Parametern und globales nichtlineares Verhalten.
+
+en: Sensitivity analysis: One factor at a time
+de: Sensitivitätsanalyse: Ein Faktor nach dem anderen
+
+en: Local sensitivity of the exposure
+de: Lokale Sensitivität der Exposition
+
+# m09.py
+en: <b>Key idea and link to the previous chapter.</b> Some quantities cannot be worked out exactly, for example when many parameters vary at once. Then we estimate them by <b>repeated random sampling</b>. This is the Monte-Carlo method. It is the basis of global sensitivity analysis and of uncertainty quantification (stating how uncertain a prediction is). The classic example estimates &#960; from the fraction of random points that land inside a quarter circle. That fraction approximates &#960;/4, because the quarter circle fills exactly &#960;/4 of the unit square.
+de: <b>Kernidee und Verbindung zum vorigen Kapitel.</b> Manche Größen lassen sich nicht exakt ausrechnen, zum Beispiel wenn viele Parameter zugleich variieren. Dann schätzen wir sie durch <b>wiederholtes zufälliges Ziehen</b>. Das ist die Monte-Carlo-Methode. Sie ist die Grundlage der globalen Sensitivitätsanalyse und der Quantifizierung von Unsicherheit (der Angabe, wie unsicher eine Vorhersage ist). Das klassische Beispiel schätzt &#960; aus dem Anteil zufälliger Punkte, die in einem Viertelkreis landen. Dieser Anteil nähert &#960;/4 an, denn der Viertelkreis füllt genau &#960;/4 des Einheitsquadrats.
+
+en: the quantity being estimated
+de: die geschätzte Größe
+
+en: number of random points inside the quarter circle
+de: Zahl der zufälligen Punkte im Viertelkreis
+
+en: total number of random points sampled
+de: Gesamtzahl der gezogenen zufälligen Punkte
+
+en: Each dot is a random point in the unit square. It is blue if it falls inside the quarter circle and red if it falls outside. Four times the blue fraction estimates &#960;. With only 50 points the estimate jumps around. As you raise the count towards several thousand, it settles close to the true value. The error shrinks only slowly, roughly like one over the square root of the number of samples. This slow convergence is the typical price of Monte-Carlo methods.
+de: Jeder Punkt ist ein zufälliger Punkt im Einheitsquadrat. Er ist blau, wenn er in den Viertelkreis fällt, und rot, wenn er außerhalb liegt. Das Vierfache des blauen Anteils schätzt &#960;. Mit nur 50 Punkten springt die Schätzung hin und her. Wenn Sie die Zahl gegen mehrere Tausend erhöhst, pendelt sie sich nahe am wahren Wert ein. Der Fehler schrumpft nur langsam, ungefähr wie eins durch die Wurzel aus der Zahl der Stichproben. Diese langsame Konvergenz ist der typische Preis von Monte-Carlo-Methoden.
+
+en: n points
+de: n Punkte
+
+en: Define a function called estimate_pi(x, y).
+de: Definieren Sie eine Funktion namens estimate_pi(x, y).
+
+en: Four times the inside fraction: %s for 40 000 points.
+de: Das Vierfache des Anteils innen: %s für 40 000 Punkte.
+
+en: That is the fraction itself (π/4). Multiply by 4 to estimate π.
+de: Das ist der Anteil selbst (π/4). Multiplizieren Sie mit 4, um π zu schätzen.
+
+en: You seem to have returned the mean of the inside mask. Multiply this fraction by 4.
+de: Sie haben offenbar den Mittelwert der Innen-Maske zurückgegeben. Multiplizieren Sie diesen Anteil mit 4.
+
+en: Expected roughly π (3.14); got %s. Count x²+y² ≤ 1, take the mean, multiply by 4.
+de: Erwartet ungefähr π (3,14); erhalten %s. Zählen Sie x²+y² ≤ 1, nehmen Sie den Mittelwert, multiplizieren Sie mit 4.
+
+en: Right: 4 · %d / %d = %s, which differs from π by %s. With four times as many points, the typical error would only halve.
+de: Richtig: 4 · %d / %d = %s, das weicht um %s von π ab. Mit viermal so vielen Punkten würde sich der typische Fehler nur halbieren.
+
+en: That is the inside fraction, which estimates π/4. Multiply by 4.
+de: Das ist der Anteil innen, der π/4 schätzt. Multiplizieren Sie mit 4.
+
+en: The fraction is upside down: points inside divided by points thrown.
+de: Der Bruch steht auf dem Kopf: Punkte innen geteilt durch geworfene Punkte.
+
+en: That is π itself, not what <i>your</i> sample estimates. The exercise asks what these %d points say.
+de: Das ist π selbst, nicht das, was <i>Ihre</i> Stichprobe schätzt. Die Aufgabe fragt, was diese %d Punkte sagen.
+
+en: π ≈ 4 · (points inside) / (points thrown).
+de: π ≈ 4 · (Punkte innen) / (geworfene Punkte).
+
+en: <b>Estimate π from a sample.</b>
+de: <b>Schätzen Sie π aus einer Stichprobe.</b>
+
+en: <div>Of <b>n = %d</b> random points in the unit square, <b>r = %d</b> fell inside the quarter circle. What does this sample estimate for π?</div>
+de: <div>Von <b>n = %d</b> zufälligen Punkten im Einheitsquadrat sind <b>r = %d</b> in den Viertelkreis gefallen. Was schätzt diese Stichprobe für π?</div>
+
+en: The quarter circle covers the fraction π/4 of the unit square. So the fraction of your points that fell inside it estimates π/4, and four times that fraction estimates π. The answer here is what your sample says, not the π you know.
+de: Der Viertelkreis bedeckt den Anteil π/4 des Einheitsquadrats. Der Anteil Ihrer Punkte, die hineingefallen sind, schätzt also π/4, und das Vierfache dieses Anteils schätzt π. Gefragt ist hier, was Ihre Stichprobe sagt, nicht das π, das Sie kennen.
+
+en: Your fraction is r / n = %d / %d: points inside divided by points thrown. Multiply it by 4.
+de: Ihr Anteil ist r / n = %d / %d: Punkte innen geteilt durch geworfene Punkte. Multiplizieren Sie ihn mit 4.
+
+en: Write <code>estimate_pi(x, y)</code> that takes the coordinates of random points in the unit square (two arrays of the same length) and returns the Monte-Carlo estimate of π: four times the fraction with x² + y² ≤ 1. Example: 40 000 random points → about <code>3.14</code>.
+de: Schreiben Sie <code>estimate_pi(x, y)</code>, das die Koordinaten zufälliger Punkte im Einheitsquadrat nimmt (zwei Arrays gleicher Länge) und die Monte-Carlo-Schätzung von π zurückgibt: das Vierfache des Anteils mit x² + y² ≤ 1. Beispiel: 40 000 zufällige Punkte → etwa <code>3.14</code>.
+
+en: Monte-Carlo turns a hard integral into simple counting. It also works for problems with many uncertain parameters, where exact formulas are out of reach. Its weakness is the slow convergence: to halve the error, you need roughly four times as many samples. Used well, it lets you pass parameter uncertainty through a model. You can then report a prediction together with a credible range around it.
+de: Monte-Carlo macht aus einem schwierigen Integral einfaches Zählen. Es funktioniert auch bei Problemen mit vielen unsicheren Parametern, für die es keine exakten Formeln gibt. Seine Schwäche ist die langsame Konvergenz: Um den Fehler zu halbieren, brauchen Sie ungefähr viermal so viele Stichproben. Gut eingesetzt lässt es Sie die Unsicherheit der Parameter durch ein Modell schicken. Sie können dann eine Vorhersage zusammen mit einem glaubwürdigen Bereich darum angeben.
+
+en: Monte-Carlo estimation
+de: Monte-Carlo-Schätzung
+
+en: π from random points
+de: π aus zufälligen Punkten
+
+# conclusion_m.py (E21.13, vorher summary_m.py)
+en: <p style='margin:0 0 12px'>This notebook built the modelling workflow from the ground up on a small pharmacokinetic example. A <b>model</b> is a purpose-built, simplified representation of a real system. You build it in stages. The <b>perceptual</b> model captures which processes matter, the <b>conceptual</b> model writes them as equations, and the <b>procedural</b> model implements them in code. We only ever see noisy, incomplete observations. A model is therefore a parameterised abstraction, and its disagreement with the data shapes its parameters.</p><p style='margin:0 0 12px'>Models range from <b>event-driven</b> white boxes, built on mechanism, to <b>data-driven</b> black boxes, learned from data. Grey boxes lie in between. Mechanism gives trustworthy extrapolation beyond the data; flexibility gives a good fit within their range. Our running conceptual model was first-order elimination: the concentration falls exponentially with a single rate constant.</p><p style='margin:0 0 12px'><b>Calibration</b> turned fitting into the minimisation of an <b>objective function</b>, here the sum of squared errors. <b>Optimization</b> by gradient descent carried out that minimisation automatically. <b>Evaluation</b> then judged the result on held-out data that the fit never saw. This showed the balance between model complexity and the amount of data, known as the <b>bias&ndash;variance</b> trade-off. Cross-validation and bootstrap gave more stable estimates of how well the model works on new data.</p><p style='margin:0'>Finally, <b>sensitivity analysis</b> asked which parameters matter. A local one-factor-at-a-time difference gives a quick answer; <b>Monte-Carlo</b> sampling handles global questions and uncertainty. One warning holds throughout: all models are wrong, but some are useful. So calibrate, validate and quantify uncertainty. Document the data and code so that the whole analysis stays reproducible and <b>FAIR</b> (findable, accessible, interoperable, reusable)
+de: <p style='margin:0 0 12px'>Dieses Notebook hat den Arbeitsablauf der Modellbildung an einem kleinen pharmakokinetischen Beispiel von Grund auf aufgebaut. Ein <b>Modell</b> ist eine zweckgebundene, vereinfachte Darstellung eines realen Systems. Man baut es in Stufen. Das <b>wahrnehmende</b> Modell hält fest, welche Prozesse zählen, das <b>konzeptionelle</b> Modell schreibt sie als Gleichungen, und das <b>prozedurale</b> Modell setzt sie in Code um. Wir sehen immer nur verrauschte, unvollständige Beobachtungen. Ein Modell ist deshalb eine parametrisierte Abstraktion, und seine Abweichung von den Daten formt seine Parameter.</p><p style='margin:0 0 12px'>Modelle reichen von <b>ereignisgetriebenen</b> White Boxes, die auf Mechanismen beruhen, bis zu <b>datengetriebenen</b> Black Boxes, die aus Daten gelernt werden. Grey Boxes liegen dazwischen. Ein Mechanismus liefert vertrauenswürdige Extrapolation über die Daten hinaus; Flexibilität liefert eine gute Anpassung innerhalb ihres Bereichs. Unser durchgehendes konzeptionelles Modell war die Elimination erster Ordnung: Die Konzentration fällt exponentiell mit einer einzigen Geschwindigkeitskonstante.</p><p style='margin:0 0 12px'>Die <b>Kalibrierung</b> hat das Anpassen zur Minimierung einer <b>Zielfunktion</b> gemacht, hier der Summe der quadrierten Fehler. Die <b>Optimierung</b> per Gradientenabstieg hat diese Minimierung automatisch ausgeführt. Die <b>Bewertung</b> hat das Ergebnis dann an zurückgehaltenen Daten beurteilt, die die Anpassung nie gesehen hat. Das zeigte das Gleichgewicht zwischen Modellkomplexität und Datenmenge, bekannt als Zielkonflikt zwischen <b>Bias und Varianz</b>. Kreuzvalidierung und Bootstrap lieferten stabilere Schätzungen dafür, wie gut das Modell auf neuen Daten funktioniert.</p><p style='margin:0'>Schließlich fragte die <b>Sensitivitätsanalyse</b>, welche Parameter zählen. Eine lokale Differenz „ein Faktor nach dem anderen“ liefert eine schnelle Antwort; <b>Monte-Carlo</b>-Stichproben bewältigen globale Fragen und Unsicherheit. Eine Warnung gilt durchgehend: Alle Modelle sind falsch, aber manche sind nützlich. Also kalibrieren, validieren und Unsicherheit beziffern. Dokumentieren Sie Daten und Code so, dass die ganze Analyse reproduzierbar und <b>FAIR</b> bleibt (auffindbar, zugänglich, interoperabel, wiederverwendbar)
+
+en: Conclusion
+de: Fazit
+
+en: <b>The locks in this notebook set your pace; they are not an assessment.</b> Everything runs in your browser, the check functions sit in the same cell as the exercises, and the <b>Skip for now</b> button is there on purpose. Treat the timeline as a note to yourself about what to revisit.
+de: <b>Die Sperren in diesem Notebook geben Ihr Tempo vor; sie sind keine Bewertung.</b> Alles läuft in Ihrem Browser, die Prüffunktionen stehen in derselben Zelle wie die Aufgaben, und der Knopf <b>Vorerst überspringen</b> ist mit Absicht da. Nehmen Sie die Zeitleiste als Notiz an sich selbst, was Sie sich noch einmal ansehen wollen.
+
+# conclusion_m.py (E21.13, vorher glossary_m.py)
+en: Model
+de: Modell
+
+en: A simplified, purpose-built representation of a real system, used to explain and predict.
+de: Eine vereinfachte, zweckgebundene Darstellung eines realen Systems, zum Erklären und Vorhersagen.
+
+en: Perceptual model
+de: Wahrnehmendes Modell
+
+en: What you understand about the system from observation: which processes matter.
+de: Was Sie aus Beobachtung über das System verstehen: welche Prozesse zählen.
+
+en: Conceptual model
+de: Konzeptionelles Modell
+
+en: The formal equations that link the system's state variables.
+de: Die formalen Gleichungen, die die Zustandsgrößen des Systems verbinden.
+
+en: Procedural model
+de: Prozedurales Modell
+
+en: The code and numerical solver that simulate the conceptual model.
+de: Der Code und der numerische Löser, die das konzeptionelle Modell simulieren.
+
+en: Event-driven (white box)
+de: Ereignisgetrieben (White Box)
+
+en: A mechanistic model built from known laws. It explains why something happens.
+de: Ein mechanistisches Modell aus bekannten Gesetzen. Es erklärt, warum etwas geschieht.
+
+en: Data-driven (black box)
+de: Datengetrieben (Black Box)
+
+en: A model learned from data with little mechanism. It captures what tends to happen.
+de: Ein aus Daten gelerntes Modell mit wenig Mechanismus. Es erfasst, was typischerweise geschieht.
+
+en: Parameter
+de: Parameter
+
+en: A number inside the model that calibration adjusts, such as the rate k.
+de: Eine Zahl im Modell, die die Kalibrierung einstellt, etwa die Rate k.
+
+en: Objective function
+de: Zielfunktion
+
+en: A single number that measures how much the model disagrees with the data. Calibration minimises it.
+de: Eine einzelne Zahl, die misst, wie stark das Modell von den Daten abweicht. Die Kalibrierung minimiert sie.
+
+en: Calibration
+de: Kalibrierung
+
+en: Choosing the parameters that best fit the observed data.
+de: Die Wahl der Parameter, die am besten zu den beobachteten Daten passen.
+
+en: Validation
+de: Validierung
+
+en: Testing the calibrated model on independent, held-out data.
+de: Das Prüfen des kalibrierten Modells an unabhängigen, zurückgehaltenen Daten.
+
+en: Overfitting / underfitting
+de: Überanpassung / Unteranpassung
+
+en: Overfitting chases the noise (high variance); underfitting is too simple to fit the data (high bias).
+de: Überanpassung jagt dem Rauschen nach (hohe Varianz); Unteranpassung ist zu einfach, um die Daten zu treffen (hoher Bias).
+
+en: Cross-validation
+de: Kreuzvalidierung
+
+en: Rotating which part of the data (the fold) is held out, to estimate more stably how well the model works on new data.
+de: Abwechseln, welcher Teil der Daten (der Fold) zurückgehalten wird, um stabiler zu schätzen, wie gut das Modell auf neuen Daten funktioniert.
+
+en: Sensitivity analysis
+de: Sensitivitätsanalyse
+
+en: Quantifying how much the output changes when an input changes.
+de: Beziffern, wie stark sich die Ausgabe ändert, wenn sich eine Eingabe ändert.
+
+en: Estimating a quantity by repeated random sampling of the inputs.
+de: Eine Größe durch wiederholtes zufälliges Ziehen der Eingaben schätzen.
+
+en: Findable, Accessible, Interoperable, Reusable: principles for reproducible data.
+de: Findable, Accessible, Interoperable, Reusable (auffindbar, zugänglich, interoperabel, wiederverwendbar): Grundsätze für reproduzierbare Daten.
+
+en: <b>Glossary</b>
+de: <b>Glossar</b>
+
+# refs_m.py
+en: Content in this notebook is backed by the following sources; the [n] markers in the text link here and are numbered in the order they first appear. The lecture's own references are reused.<ol style='margin:12px 0 0;padding-left:24px;line-height:1.7'>%s</ol><div style='margin-top:14px;font-size:.92em;opacity:.85'>Based on the lecture <b>Vertiefende Methoden der Bioinformatik &mdash; Introduction to Modeling</b> (Prof. Dr. Stefan G&uuml;nther / Sinclair Rockwell-Kollmann, Universit&auml;t Freiburg, WS&nbsp;2025/26). All sources were checked against their DOIs / URLs.</div>
+de: Die Inhalte dieses Notebooks stützen sich auf die folgenden Quellen; die Marken [n] im Text verweisen hierher und sind in der Reihenfolge ihres ersten Auftretens nummeriert. Die Literatur der Vorlesung wird übernommen.<ol style='margin:12px 0 0;padding-left:24px;line-height:1.7'>%s</ol><div style='margin-top:14px;font-size:.92em;opacity:.85'>Nach der Vorlesung <b>Vertiefende Methoden der Bioinformatik &mdash; Introduction to Modeling</b> (Prof. Dr. Stefan G&uuml;nther / Sinclair Rockwell-Kollmann, Universit&auml;t Freiburg, WS&nbsp;2025/26). Alle Quellen wurden an ihren DOIs / URLs geprüft.</div>
+
+en: References and licence
+de: Quellen und Lizenz
+
+# quiz_m.py
+en: I have worked through the quiz
+de: Ich habe das Quiz durchgearbeitet
+
+# byod_m.py
+en: This closing section applies everything to a <b>dataset</b>. It uses the same steps as the rest of the notebook: load the data, choose what to fit, explore it, calibrate the first-order model C(t) = C0&#183;exp(&minus;k t), evaluate the fit, and interpret it. Upload your own CSV file with a time column and a concentration column. Or keep the built-in <b>simulated</b> pharmacokinetic data (a one-compartment IV profile, i.e. a drug injected into a single well-mixed volume, modelled on the cefazolin analysis
+de: Dieser abschließende Abschnitt wendet alles auf einen <b>Datensatz</b> an. Er nutzt dieselben Schritte wie der Rest des Notebooks: Daten laden, wählen, was angepasst wird, die Daten erkunden, das Modell erster Ordnung C(t) = C0&#183;exp(&minus;k t) kalibrieren, die Anpassung bewerten und sie deuten. Laden Sie Ihre eigene CSV-Datei mit einer Zeit- und einer Konzentrationsspalte hoch. Oder behalten Sie die eingebauten <b>simulierten</b> pharmakokinetischen Daten (ein IV-Profil mit einem Kompartiment, also ein Arzneimittel, das in ein einziges gut durchmischtes Volumen gespritzt wird, nach dem Vorbild der Cefazolin-Analyse
+
+en: ⎵and clearly marked as simulated). Whatever data you use, record its source, licence and DOI, so that the analysis stays reproducible and <b>FAIR</b>
+de: ⎵und deutlich als simuliert gekennzeichnet). Welche Daten Sie auch nutzen: Halten Sie Quelle, Lizenz und DOI fest, damit die Analyse reproduzierbar und <b>FAIR</b> bleibt
+
+en: <div style='max-width:760px;margin:8px auto 0;text-align:center'><div style='color:var(--nbskin-acc,#2c6e91);font-weight:800;font-size:1.06em'>Step %s &middot; %s</div>%s</div>
+de: <div style='max-width:760px;margin:8px auto 0;text-align:center'><div style='color:var(--nbskin-acc,#2c6e91);font-weight:800;font-size:1.06em'>Schritt %s &middot; %s</div>%s</div>
+
+en: Load the data
+de: Daten laden
+
+en: Upload a CSV with at least two numeric columns (time and concentration) with the button below. Or keep the built-in simulated profile and follow a worked example.
+de: Laden Sie mit dem Knopf unten eine CSV-Datei mit mindestens zwei Zahlenspalten (Zeit und Konzentration) hoch. Oder behalten Sie das eingebaute simulierte Profil und folgen Sie einem ausgearbeiteten Beispiel.
+
+en: Choose what to fit
+de: Wählen, was angepasst wird
+
+en: Pick the time column and the concentration column, then press Analyse.
+de: Wählen Sie die Zeitspalte und die Konzentrationsspalte und drücken Sie dann Analysieren.
+
+en: <div style='background:var(--nbskin-surf,#eef4fb);border:2px solid var(--nbskin-line,#7fb0cd);border-radius:14px;padding:14px 22px;margin:8px auto;max-width:520px;text-align:center;font-family:monospace;font-size:1.02em;line-height:1.9;color:var(--nbskin-ink,#1a1a1a)'>k = %s /h &nbsp;·&nbsp; C0 = %s mg/L<br>half-life = %s h &nbsp;·&nbsp; R&sup2; = %s</div>
+de: <div style='background:var(--nbskin-surf,#eef4fb);border:2px solid var(--nbskin-line,#7fb0cd);border-radius:14px;padding:14px 22px;margin:8px auto;max-width:520px;text-align:center;font-family:monospace;font-size:1.02em;line-height:1.9;color:var(--nbskin-ink,#1a1a1a)'>k = %s /h &nbsp;·&nbsp; C0 = %s mg/L<br>Halbwertszeit = %s h &nbsp;·&nbsp; R&sup2; = %s</div>
+
+en: <div class='nberr' style='text-align:center;color:var(--nbskin-bad,#a3352b);font-weight:600'>Please pick two different columns for time and concentration.</div>
+de: <div class='nberr' style='text-align:center;color:var(--nbskin-bad,#a3352b);font-weight:600'>Bitte wählen Sie zwei verschiedene Spalten für Zeit und Konzentration.</div>
+
+en: Explore the data
+de: Die Daten erkunden
+
+en: First look at the %d measurements as a concentration&ndash;time scatter plot. It shows the overall decay and the noise before you fit anything.
+de: Sehen Sie sich die %d Messungen zuerst als Konzentrations&ndash;Zeit-Streudiagramm an. Es zeigt den Gesamtabfall und das Rauschen, bevor Sie irgendetwas anpassen.
+
+en: Calibrate the model
+de: Das Modell kalibrieren
+
+en: Now calibrate C(t) = C0&#183;exp(&minus;k t) by least squares. The fit works on the logarithm, which makes the model linear. The red curve is the fitted model. Its two parameters are the initial concentration and the elimination rate.
+de: Kalibrieren Sie jetzt C(t) = C0&#183;exp(&minus;k t) mit der Methode der kleinsten Quadrate. Die Anpassung arbeitet mit dem Logarithmus, der das Modell linear macht. Die rote Kurve ist das angepasste Modell. Seine beiden Parameter sind die Anfangskonzentration und die Eliminationsrate.
+
+en: fitted model
+de: angepasstes Modell
+
+en: calibrated fit
+de: kalibrierte Anpassung
+
+en: Evaluate the fit
+de: Die Anpassung bewerten
+
+en: R&sup2; tells you how well the model reproduces the data (1 is perfect, 0 is no better than the mean). Also read off the derived half-life.
+de: R&sup2; sagt Ihnen, wie gut das Modell die Daten wiedergibt (1 ist perfekt, 0 ist nicht besser als der Mittelwert). Lesen Sie außerdem die abgeleitete Halbwertszeit ab.
+
+en: Interpret the result
+de: Das Ergebnis deuten
+
+en: The fitted model has an elimination rate of %s per hour, which gives a half-life of about %s hours. It explains an R&sup2; of %s of the variation in these %d points. This clearance is slower than the notebook's baseline of 0.35 per hour.
+de: Das angepasste Modell hat eine Eliminationsrate von %s pro Stunde, was eine Halbwertszeit von etwa %s Stunden ergibt. Es erklärt ein R&sup2; von %s der Streuung in diesen %d Punkten. Diese Ausscheidung ist langsamer als der Ausgangswert des Notebooks von 0,35 pro Stunde.
+
+en: The fitted model has an elimination rate of %s per hour, which gives a half-life of about %s hours. It explains an R&sup2; of %s of the variation in these %d points. This clearance is faster than the notebook's baseline of 0.35 per hour.
+de: Das angepasste Modell hat eine Eliminationsrate von %s pro Stunde, was eine Halbwertszeit von etwa %s Stunden ergibt. Es erklärt ein R&sup2; von %s der Streuung in diesen %d Punkten. Diese Ausscheidung ist schneller als der Ausgangswert des Notebooks von 0,35 pro Stunde.
+
+en: ⎵Remember that this one-compartment model assumes a single well-mixed volume and purely first-order elimination. If the data curve downward on a log scale or show an early distribution phase, you need a richer multi-compartment model. Treat this fit as a first hypothesis and check it against measured data and domain knowledge.
+de: ⎵Denken Sie daran, dass dieses Ein-Kompartiment-Modell ein einziges gut durchmischtes Volumen und eine reine Elimination erster Ordnung annimmt. Wenn die Daten auf einer logarithmischen Skala nach unten abknicken oder eine frühe Verteilungsphase zeigen, brauchen Sie ein reicheres Mehr-Kompartiment-Modell. Nehmen Sie diese Anpassung als erste Hypothese und prüfen Sie sie an Messdaten und Fachwissen.
+
+en: Upload CSV
+de: CSV hochladen
+
+en: Analyse ▶
+de: Analysieren ▶
+
+en: <div style='text-align:center;opacity:.85'>Press <b>Analyse ▶</b> to work through the steps with the data chosen above.</div>
+de: <div style='text-align:center;opacity:.85'>Drücken Sie <b>Analysieren ▶</b>, um die Schritte mit den oben gewählten Daten durchzugehen.</div>
+
+en: Bring your own data
+de: Eigene Daten mitbringen
+
+en: I have analysed a data set
+de: Ich habe einen Datensatz analysiert
+
+# E23.1 (2026-10-06) — the ⚙ language row: in a German run only German
+en: Language · Sprache:
+de: Sprache:
+
+en: ▶  Rebuild now · Jetzt neu aufbauen
+de: ▶  Jetzt neu aufbauen
+
+en: Saved: %s from the next run.
+de: Gespeichert: ab dem nächsten Lauf %s.
+
+en: Could not save this choice here.
+de: Diese Wahl ließ sich hier nicht speichern.

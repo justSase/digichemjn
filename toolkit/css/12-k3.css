@@ -1,0 +1,411 @@
+  /* ======================================================================
+     2026-09-28d — OBERFLAECHE K3 (built 28.09. early by Werkstatt Bau on
+     28b, rebased onto 28c by the Hauptwerkstatt). Every rule below is
+     measured in tests/lab_k3.py; the numbers are in OBERFLAECHE.md.
+     K3.8 ("no tail") is NOT here: the user replaced it with the trail
+     behind the movement, which 28c built.
+
+     K3.1 — THE TIMELINE READS FROM A DISTANCE. The two pips under a
+     chapter's name 9 → 12 px, times --nbk (K4), so that past the standard
+     width they grow like everything else. The marks keep their size, so
+     markFloor is unchanged. The names keep their 28c size: with +2 px, two
+     of them ("Chapter 4: Multiplication and conjugation", "Chapter 7: The
+     geometry of multiplication") no longer fit in two lines at 100 %%
+     (lab_k3 N, 1400 px, all skins) — STOP.md: +2 px only if none is cut. */
+  html body #nbpanel-root.vert.nbnames .nbchapstat .ps{
+      width:calc(12px * var(--nbk,1))!important;
+      height:calc(12px * var(--nbk,1))!important;}
+  /* the pips hang under the name's last line (--nblabh, 28c); a 12-px
+     diamond reaches 8.5 px from its middle instead of 6.4, so the strip
+     steps down by that difference (7.5 → 9.6 px, times --nbk) */
+  html body #nbpanel-root.vert.nbnames .nbchapstat{
+      transform:translateY(calc(-50%% + var(--nblabh,6.24px) + 9.6px * var(--nbk,1)))!important;}
+
+  /* K3.2 — THE XP LANE STEPS BACK SO THE MARKER CAN BE SEEN ON IT. A lane
+     segment was the route's colour at full strength, and the marker running
+     over it drowned: marker against fill 1.0–2.6 : 1 (measured 28b). Each
+     fill is now its colour mixed into the panel's own surface — opaque, so
+     what is drawn does not depend on the page under the panel. The share is
+     the middle of the range in which, in all four skins, the marker stands
+     ≥ 3 : 1 on the fill AND the fill still stands ≥ 1.5 : 1 on the panel.
+     The coding stretch loses its glow for the same reason. */
+  html body #nbpanel-root#nbpanel-root.vert .nbseg[data-s="done"]{
+      background:color-mix(in srgb,#3aa06f 46.7%%,var(--nbpanel-surf))!important;}
+  html body #nbpanel-root#nbpanel-root.vert .nbseg[data-s="skip"]{
+      background:color-mix(in srgb,#d99b2b 64.1%%,var(--nbpanel-surf))!important;}
+  html body #nbpanel-root#nbpanel-root.vert .nbseg[data-s="fail"]{
+      background:color-mix(in srgb,#c0392b 31.6%%,var(--nbpanel-surf))!important;}
+  html body #nbpanel-root#nbpanel-root.vert .nbseg[data-s="code"]{
+      background:color-mix(in srgb,#8b4ff2 35.6%%,var(--nbpanel-surf))!important;
+      box-shadow:none!important;}
+  html body.nbdark #nbpanel-root#nbpanel-root.vert .nbseg[data-s="done"]{
+      background:color-mix(in srgb,#4fbf8b 26.8%%,var(--nbpanel-surf))!important;}
+  html body.nbdark #nbpanel-root#nbpanel-root.vert .nbseg[data-s="skip"]{
+      background:color-mix(in srgb,#e0ad4a 24.6%%,var(--nbpanel-surf))!important;}
+  html body.nbdark #nbpanel-root#nbpanel-root.vert .nbseg[data-s="fail"]{
+      background:color-mix(in srgb,#d4584a 38%%,var(--nbpanel-surf))!important;}
+  html body.nbdark #nbpanel-root#nbpanel-root.vert .nbseg[data-s="code"]{
+      background:color-mix(in srgb,#b896ff 26.3%%,var(--nbpanel-surf))!important;
+      box-shadow:none!important;}
+  /* …and on the light rails of cyber, retro and fairy the marker's band is
+     its hue at READING strength (--nbmark-ink, the colour the name under it
+     already wears): the marker's light colour stood 1.8–3.1 : 1 on the panel
+     itself, so no fill could have stood 3 : 1 against it. The light around
+     it stays --nbglow. */
+  html body:not(.nbdark) #nbpanel-root#nbpanel-root.vert .nbmap-here::before{
+      background:var(--nbmark-ink,var(--nbmark,#0d63e0))!important;
+      border-color:var(--nbmark-ink,var(--nbring,#0d63e0))!important;}
+
+  /* K3.3 — THE PULL TAB IS PART OF THE PANEL. It wore minimal's grey in
+     every skin (#f6f8fa / #cbd5de, measured) next to a panel of the skin's
+     own colour, and its own drop shadow. Now it is cut from the panel: the
+     same surface, the same share of it, the same blur behind it, the same
+     edge colour as the panel's left border, no shadow of its own. One token
+     for that edge so the two cannot drift apart. */
+  body{--nbrail-edge:#e4e9ee;}
+  body.nbdark{--nbrail-edge:#252c35;}
+  body[class*="nbskin-"]{--nbrail-edge:var(--nbskin-line);}
+  html body #nbpanel-root#nbpanel-root.vert .nbrail{
+      border-left:1px solid var(--nbrail-edge)!important;}
+  html body #nbpanel-root#nbpanel-root.vert .nbgrip,
+  html body #nbpanel-root#nbpanel-root.vert .nbgrip:hover,
+  html body #nbpanel-root#nbpanel-root.vert .nbgrip.nbdragging{
+      background:var(--nbpanel-surf)!important;
+      background:color-mix(in srgb,var(--nbpanel-surf) var(--nbpanel-a,82%%),transparent)!important;
+      -webkit-backdrop-filter:blur(var(--nbpanel-blur,8px));backdrop-filter:blur(var(--nbpanel-blur,8px));
+      border-color:var(--nbrail-edge)!important;
+      box-shadow:none!important;filter:none!important;}
+  html body #nbpanel-root#nbpanel-root.vert .nbgrip span{
+      background:var(--nbskin-quiet)!important;opacity:.8!important;
+      box-shadow:-4px 0 0 0 var(--nbskin-quiet),4px 0 0 0 var(--nbskin-quiet)!important;}
+
+  /* K3.4 — A LOCKED CHAPTER SAYS SO IN WORDS AND IN A SIGN. Its pill was
+     only quieter than an open one. The caret (which promised a fold that
+     does not open) becomes the drawn padlock of the timeline (§3a: shackle
+     and body, two pseudo-elements in currentColor), the name steps back to
+     600, and a small "LOCKED" follows it. An exercise or coding fold that
+     waits for the one before it (K1, acc-tasklock) says the same, and the
+     pointer says it cannot be opened. Open chapters are not touched. */
+  html body .acc-locked>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header,
+  html body .acc-locked>.lm-Collapse>.lm-Collapse-header,
+  html body .acc-tasklock>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header,
+  html body .acc-tasklock>.lm-Collapse>.lm-Collapse-header{
+      color:var(--nbskin-quiet)!important;}
+  html body .acc-tasklock>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header,
+  html body .acc-tasklock>.lm-Collapse>.lm-Collapse-header{
+      cursor:not-allowed!important;}
+  html body .acc-locked>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header>span,
+  html body .acc-locked>.lm-Collapse>.lm-Collapse-header>span,
+  html body .acc-tasklock>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header>span,
+  html body .acc-tasklock>.lm-Collapse>.lm-Collapse-header>span{
+      color:var(--nbskin-quiet)!important;font-weight:600!important;}
+  html body .acc-locked>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header>i,
+  html body .acc-locked>.lm-Collapse>.lm-Collapse-header>i,
+  html body .acc-tasklock>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header>i,
+  html body .acc-tasklock>.lm-Collapse>.lm-Collapse-header>i{
+      position:relative!important;display:inline-block!important;
+      width:.78em!important;height:1em!important;margin-right:.5em!important;
+      vertical-align:-.12em!important;color:var(--nbskin-quiet)!important;}
+  html body .acc-locked>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header>i::before,
+  html body .acc-locked>.lm-Collapse>.lm-Collapse-header>i::before,
+  html body .acc-tasklock>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header>i::before,
+  html body .acc-tasklock>.lm-Collapse>.lm-Collapse-header>i::before{
+      content:''!important;position:absolute;left:.15em;top:.04em;
+      width:.48em;height:.46em;box-sizing:border-box;
+      border:.12em solid currentColor;border-bottom:0;
+      border-radius:.26em .26em 0 0;}
+  html body .acc-locked>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header>i::after,
+  html body .acc-locked>.lm-Collapse>.lm-Collapse-header>i::after,
+  html body .acc-tasklock>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header>i::after,
+  html body .acc-tasklock>.lm-Collapse>.lm-Collapse-header>i::after{
+      content:''!important;position:absolute;left:0;top:.46em;
+      width:.78em;height:.5em;border-radius:.1em;background:currentColor;}
+  html body .acc-locked>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header::after,
+  html body .acc-locked>.lm-Collapse>.lm-Collapse-header::after,
+  html body .acc-tasklock>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header::after,
+  html body .acc-tasklock>.lm-Collapse>.lm-Collapse-header::after{
+      content:'Locked'!important;display:inline-block;margin-left:.75em;
+      padding:.12em .55em;border:1px solid currentColor;border-radius:999px;
+      font-size:.7em;font-weight:700;letter-spacing:.12em;
+      text-transform:uppercase;line-height:1.3;vertical-align:.15em;
+      color:var(--nbskin-quiet)!important;}
+  /* py-E23.1 (Inhalt) — "Locked" in German when the run is German ([data-nblang], 19-rail dcMark) */
+  html body [data-nblang="de"] .acc-locked>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header::after,
+  html body [data-nblang="de"] .acc-locked>.lm-Collapse>.lm-Collapse-header::after,
+  html body [data-nblang="de"] .acc-tasklock>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header::after,
+  html body [data-nblang="de"] .acc-tasklock>.lm-Collapse>.lm-Collapse-header::after{content:'Gesperrt'!important;}
+
+  /* K3.4 (Befund K1) — "SKIP FOR NOW" IS A BUTTON. It wore the skin's button
+     coat but at weight 400 beside its 700-weight siblings, behind a 1-px edge
+     in the skin's faint line (1.4–2 : 1 on the page, measured 28c): it read
+     as a caption. Same coat as the Check button, same weight, and an edge in
+     the skin's quiet ink so the box itself stands >= 3 : 1 (WCAG 1.4.11).
+     Nothing else changes: its place, its word, its colour stay. */
+  html body .jp-OutputArea button.widget-button.nbskipnow,
+  html body .jp-OutputArea button.jupyter-button.nbskipnow{
+      font-weight:700!important;
+      border:1.5px solid var(--nbskin-quiet,#5b6b7b)!important;}
+
+  /* K3.6 — THE HINT BUTTON IS NOT THE SOLUTION BUTTON. hint_steps() (Inhalt,
+     arrives with A) gives its button `sol-btn nbhint-btn`, so until now it
+     would have worn the green of "show me the solution". Asking for a hint
+     is a different act: it wears the skin's second accent, in the same
+     outline shape as the quiet buttons. */
+  html body .sol-btn.nbhint-btn.nbhint-btn,
+  html body.nbquiet .sol-btn.nbhint-btn.nbhint-btn{
+      color:var(--nbskin-acc2)!important;
+      background:transparent!important;background-image:none!important;
+      border:1.5px solid currentColor!important;box-shadow:none!important;
+      text-shadow:none!important;}
+  html body .sol-btn.nbhint-btn.nbhint-btn:hover{
+      background:color-mix(in srgb,var(--nbskin-acc2) 10%%,transparent)!important;
+      filter:none!important;}
+
+  /* ======================================================================
+     2026-09-28 (Paket 8, Skizze) — FOUR KINDS, FOUR SHAPES, AND THEY TURN.
+
+     Figure, exercise, multiple choice and bring-your-own-data were one shape
+     (a small diamond) in every skin. Now each kind has its own outline, the
+     same in every skin; a skin only changes the corners:
+       exercise          a diamond              (square turned 45°)
+       figure            a lying bar / capsule  (1.3 × .72 of the mark)
+       multiple choice   a circle               (cyber: dashed ring)
+       own data          an upright tile        (square, rounded by the skin)
+     Radius and rotation only, never clip-path (OBERFLAECHE §3: a clip cuts
+     the glow). The coding mark keeps its skin's shape.
+
+     …AND THE MARKS WITH A SIGN TURN AGAIN, THE SIGN STAYS LEVEL (rule 27c).
+     27c stopped them turning because the sign could only be turned back at
+     the end of the turn, not during it (up to 169° off, measured). Now the
+     turn is ONE registered angle, --nbspin, animated on the mark; the sign
+     inherits it every frame and turns back by exactly base + spin. Grow is a
+     registered number too, so no transform transition runs beside it (a
+     transform transition would freeze the angle it started with).
+     Retro still never turns (26c) — it only grows. */
+  @property --nbspin{syntax:'<angle>';inherits:true;initial-value:0deg;}
+  @property --nbgrow{syntax:'<number>';inherits:true;initial-value:1;}
+  html body #nbpanel-root#nbpanel-root.vert .nbmap-node :is(.nbrail-dot,.nbvizmark,.nbcodemark){
+      --nbS:calc(24px * var(--nbthick,1) * var(--nbsym,1) * var(--nbcirc,1));
+      --nbbase:45deg;--nbturn:90deg;
+      transform:translate(-50%%,-50%%) rotate(calc(var(--nbbase) + var(--nbspin))) scale(var(--nbgrow))!important;
+      transition:--nbspin .5s cubic-bezier(.22,.61,.36,1),--nbgrow .26s ease,
+                 background .3s ease,border-color .3s ease!important;}
+  html body.nbskin-retro #nbpanel-root#nbpanel-root.vert .nbmap-node :is(.nbrail-dot,.nbvizmark,.nbcodemark){
+      --nbbase:0deg;}
+  html body #nbpanel-root#nbpanel-root.vert .nbmap-node:is(:hover,:focus,.nbpop,.nbsel) :is(.nbrail-dot,.nbvizmark,.nbcodemark){
+      --nbspin:var(--nbturn);--nbgrow:1.14;}
+  html body.nbskin-fairy #nbpanel-root#nbpanel-root.vert .nbmap-node:is(:hover,:focus,.nbpop,.nbsel) :is(.nbrail-dot,.nbvizmark,.nbcodemark),
+  html body.nbskin-retro #nbpanel-root#nbpanel-root.vert .nbmap-node:is(:hover,:focus,.nbpop,.nbsel) :is(.nbrail-dot,.nbvizmark,.nbcodemark){
+      --nbgrow:1.2;}
+  html body.nbskin-retro #nbpanel-root#nbpanel-root.vert .nbmap-node:is(:hover,:focus,.nbpop,.nbsel) :is(.nbrail-dot,.nbvizmark,.nbcodemark){
+      --nbspin:0deg;}
+  html body #nbpanel-root#nbpanel-root.vert .nbmap-node :is(.nbrail-dot,.nbcodemark) .nbdotg{
+      transform:rotate(calc(-1 * (var(--nbbase) + var(--nbspin))))!important;}
+  /* exercise: the diamond */
+  html body #nbpanel-root#nbpanel-root.vert .nbmap-node.task:not([data-task^="q"]):not([data-task^="b"]) .nbrail-dot{
+      border-radius:3px!important;}
+  html body.nbskin-cyber #nbpanel-root#nbpanel-root.vert .nbmap-node.task:not([data-task^="q"]):not([data-task^="b"]) .nbrail-dot{
+      border-radius:0!important;}
+  html body.nbskin-fairy #nbpanel-root#nbpanel-root.vert .nbmap-node.task:not([data-task^="q"]):not([data-task^="b"]) .nbrail-dot{
+      border-radius:28%%!important;}
+  html body.nbskin-retro #nbpanel-root#nbpanel-root.vert .nbmap-node.task:not([data-task^="q"]):not([data-task^="b"]) .nbrail-dot{
+      border-radius:0!important;}
+  /* figure: the lying bar */
+  html body #nbpanel-root#nbpanel-root.vert .nbmap-node .nbvizmark{
+      --nbbase:0deg;--nbturn:180deg;
+      width:calc(var(--nbS) * 1.3)!important;height:calc(var(--nbS) * .72)!important;
+      border-radius:999px!important;}
+  html body.nbskin-cyber #nbpanel-root#nbpanel-root.vert .nbmap-node .nbvizmark{border-radius:1px!important;}
+  html body.nbskin-retro #nbpanel-root#nbpanel-root.vert .nbmap-node .nbvizmark{border-radius:0!important;}
+  /* multiple choice: the circle */
+  html body #nbpanel-root#nbpanel-root.vert .nbmap-node.task[data-task^="q"] .nbrail-dot{
+      --nbbase:0deg;--nbturn:360deg;border-radius:50%%!important;}
+  html body.nbskin-cyber #nbpanel-root#nbpanel-root.vert .nbmap-node.task[data-task^="q"] .nbrail-dot{
+      border-style:dashed!important;}
+  /* own data: the upright tile */
+  html body #nbpanel-root#nbpanel-root.vert .nbmap-node.task[data-task^="b"] .nbrail-dot{
+      --nbbase:0deg;--nbturn:90deg;
+      width:calc(var(--nbS) * .9)!important;height:calc(var(--nbS) * .9)!important;
+      border-radius:22%%!important;}
+  html body.nbskin-cyber #nbpanel-root#nbpanel-root.vert .nbmap-node.task[data-task^="b"] .nbrail-dot{border-radius:0!important;}
+  html body.nbskin-fairy #nbpanel-root#nbpanel-root.vert .nbmap-node.task[data-task^="b"] .nbrail-dot{border-radius:36%%!important;}
+  /* retro's exercise is its upright block, so its own-data tile stands on a corner */
+  html body.nbskin-retro #nbpanel-root#nbpanel-root.vert .nbmap-node.task[data-task^="b"] .nbrail-dot{
+      --nbbase:45deg;border-radius:0!important;}
+  @media (prefers-reduced-motion:reduce){
+    html body #nbpanel-root#nbpanel-root.vert .nbmap-node :is(.nbrail-dot,.nbvizmark,.nbcodemark){
+      transition:none!important;}
+  }
+
+  /* 2026-09-28 (Eilauftrag E4.1, Oberfläche) — NO BOX AROUND A LOCKED CHAPTER.
+     The reader asked the box away: the dashed edge and the dark surface a
+     locked chapter's pill wore since the quiet sweep (print sheet, "a flat
+     pill"). What says "locked" is the drawn padlock and the word LOCKED
+     (K3.4 above); both stay. The heading stands on the page like text.
+     Specificity (0,7,2): above every rule that paints that pill, the
+     heaviest being body.nbdark.nbquiet[class*="nbskin-"] … at (0,6,1). */
+  html body .acc-locked.acc-locked.acc-locked.acc-locked.acc-locked>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header,
+  html body .acc-locked.acc-locked.acc-locked.acc-locked.acc-locked>.lm-Collapse>.lm-Collapse-header{
+      background:transparent!important;background-image:none!important;
+      border-color:transparent!important;box-shadow:none!important;}
+
+  /* ======================================================================
+     2026-09-29 (Eilauftrag E6.2, Oberfläche, Skizze) — EVERY MARK TURNS.
+     Hover, focus and the picked mark (.nbsel) turn EVERY mark on the lane,
+     not only the chapters: exercise, figure, quiz, own data, coding, the
+     section bars, title, end, "Your own cell" and the own cells. One angle
+     for all, --nbspin (28f), so the sign inside stays level every frame.
+     A turn has to be SEEN, so the angle follows the shape's symmetry:
+       square / diamond / tile   +45°  (square ↔ diamond)
+       figure (lying capsule)    +90°  (it stands up)
+       circle (quiz, title, end, cells)  +45° and the circle becomes a
+                                  rounded square on the way, so the turn shows
+     While the mark is picked it stays turned. Retro still never turns (26c). */
+  html body:not(.nbskin-retro) #nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-node :is(.nbsect,.nbsubdot,.nbchapdot){
+      --nbbase:0deg;--nbturn:45deg;
+      transform:translate(-50%%,-50%%) rotate(calc(var(--nbbase) + var(--nbspin))) scale(var(--nbgrow))!important;
+      transition:--nbspin var(--nbm-spin-dur,.5s) var(--nbm-spin-ease,cubic-bezier(.22,.61,.36,1)),
+                 --nbgrow var(--nbm-grow-dur,.26s) var(--nbm-spin-ease,ease),
+                 border-radius .3s ease,background .3s ease,border-color .3s ease!important;}
+  /* the section bars stand as diamonds at rest */
+  html body:not(.nbskin-retro) #nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-node.sect:not(.title):not(.end):not(.cell):not(.own) .nbsect{
+      --nbbase:45deg;}
+  html body:not(.nbskin-retro) #nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-node:is(:hover,:focus,.nbpop,.nbsel) :is(.nbsect,.nbsubdot,.nbchapdot){
+      --nbspin:var(--nbturn);--nbgrow:1.14;}
+  html body.nbskin-fairy #nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-node:is(:hover,:focus,.nbpop,.nbsel) :is(.nbsect,.nbsubdot,.nbchapdot){
+      --nbgrow:1.2;}
+  /* the round ones become a rounded square while they are turned */
+  html body:not(.nbskin-retro) #nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-node:is(.title,.end,.cell,.own):is(:hover,:focus,.nbpop,.nbsel) .nbsect,
+  html body:not(.nbskin-retro) #nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-node.task[data-task^="q"]:is(:hover,:focus,.nbpop,.nbsel) .nbrail-dot{
+      border-radius:26%%!important;}
+  /* marks of 28f whose turn could not be seen: square turned 90° is the
+     same square, a capsule turned 180° the same capsule, a circle turned
+     360° the same circle */
+  html body #nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-node.task:not([data-task^="q"]) .nbrail-dot,
+  html body #nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-node .nbcodemark,
+  html body #nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-node.task[data-task^="q"] .nbrail-dot{
+      --nbturn:45deg;}
+  html body #nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-node .nbvizmark{
+      --nbturn:90deg;}
+  /* the drawn padlock on a locked chapter turns back about the MARK's
+     middle (its two strokes are placed around that middle, 09-skin-controls) */
+  html body:not(.nbskin-retro) #nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-node.locked .nbchapdot::before{
+      transform-origin:50%% calc(var(--nblk) * .5);
+      transform:rotate(calc(-1 * (var(--nbbase) + var(--nbspin))))!important;transition:none!important;}
+  html body:not(.nbskin-retro) #nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-node.locked .nbchapdot::after{
+      transform-origin:50%% calc(var(--nblk) * .04);
+      transform:rotate(calc(-1 * (var(--nbbase) + var(--nbspin))))!important;transition:none!important;}
+  @media (prefers-reduced-motion:reduce){
+    html body #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-node :is(.nbsect,.nbsubdot,.nbchapdot){
+      transition:none!important;}
+  }
+
+  /* ======================================================================
+     2026-09-29 — EILAUFTRAG E8.27 (Struktur, Skizze). THE TEXT UNDER „END
+     OF THE GUIDED PART“ LINES UP WITH THE TITLE PILL. The title card sized
+     itself to its text (inline-block, ≈ 714 px at 1400 × 900) and the note
+     under the end ran across the whole cell (1050 px). Both now take the
+     same column, --nbcolw8 (720 px), centred: the title card at exactly
+     that width, the end's note (and its heading) at most that width — same
+     left and right edge. Inside the zoomed cell wrappers, so both follow
+     the lens together. */
+  html body .nbtitle-card{
+      width:min(94%%,var(--nbcolw8,720px))!important;max-width:none!important;}
+  html body .jp-NotebookPanel .jp-Cell .jp-OutputArea .nbend,
+  html body.nbvert .jp-NotebookPanel .jp-Cell .jp-OutputArea .nbend{
+      max-width:min(94%%,var(--nbcolw8,720px))!important;
+      margin-left:auto!important;margin-right:auto!important;}
+  html body .jp-OutputArea .nbend .nbend-note{text-align:justify;text-align-last:center;}
+
+  /* ======================================================================
+     2026-10-02 — EILAUFTRAG E18.2 (Oberfläche; Zustand JS). DIE HÖCHSTE
+     FREIGESCHALTETE AUFGABE = NUR UMRANDUNG: Rechnen grün #1e7a4c, Coding
+     lila #6b3fd1, innen die Fläche des Panels bzw. der Timeline (keine
+     Füllung); das offene Schloss in der Randfarbe. Panel: `.is-current`
+     (Rechnen) und `.cd-current` (Coding) — in „both“ je Spur eine. Cover:
+     `data-st="open"` (die freie, noch nicht bearbeitete Aufgabe). */
+  html body #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-node:not(:hover,.nbsel,.here) :is(.nbmap-node.is-current .nbrail-dot.st-open,.nbcodemark.cd-current){
+      --nbsc:#1e7a4c;border-color:var(--nbsc)!important;border-style:solid!important;
+      background:var(--nbrail-bg,#f6f8fa)!important;background-image:none!important;opacity:1!important;}
+  html body #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-node:not(:hover,.nbsel,.here) .nbcodemark.cd-current{--nbsc:#6b3fd1!important;}
+  html body #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-node:not(:hover,.nbsel,.here) :is(.nbmap-node.is-current .nbrail-dot.st-open,.nbcodemark.cd-current) .nbdotg{color:var(--nbsc)!important;}
+  html body .nbcover-tl .nbtl-row:not(:hover,.nbtl-hov,.nbtl-pin)[data-st="open"] .nbtl-mk{
+      --nbsc:#1e7a4c;border-color:var(--nbsc)!important;border-style:solid!important;
+      background:var(--nbpanel-surf,#fff)!important;opacity:1!important;}
+  html body .nbcover-tl .nbtl-row.nbtl-code[data-st="open"] .nbtl-mk{--nbsc:#6b3fd1!important;}
+  /* 2026-10-02 — EILAUFTRAG E21.12 (Oberfläche; Zustand JS). COVER-
+     TIMELINE: KAPITEL UND ABBILDUNGEN OHNE EIGENE FARBE. Gemessen v1.61:
+     ein freies Kapitel (`data-st="open"` von JS) bekam die grüne Umrandung
+     der Aufgabe (Regel oben, galt für jede Zeile), jede Abbildung Rand +
+     Leuchten in ihrer Inline-Farbe (grün). Jetzt in Ruhe: Kapitel wie vor
+     JS (Rand und Fläche neutral, --nbtl-b/--nbtl-f), Abbildung leer mit
+     neutralem Rand — wie die Punkte unter Introduction/Appendix, ohne
+     Leuchten. Gesperrt bleibt E18.3 (grau gestrichelt). Farbig sind nur
+     noch die Aufgaben (E18.1–4); Zeiger/Anheften wie E15.4. */
+  html body .nbcover-tl .nbtl-row.nbtl-chapter:not(:hover,.nbtl-hov,.nbtl-pin,[data-st="locked"]) .nbtl-mk{
+      border-color:var(--nbtl-b)!important;border-style:solid!important;background:var(--nbtl-f)!important;
+      box-shadow:none!important;opacity:1!important;}
+  html body .nbcover-tl .nbtl-row.nbtl-figure:not(:hover,.nbtl-hov,.nbtl-pin) .nbtl-mk{
+      color:var(--nbtl-b)!important;border-color:var(--nbtl-b)!important;box-shadow:none!important;}
+
+  /* 2026-10-02 E19.8 (Oberfläche) — HINWEISFARBEN. Grün nur für die
+     Kernaussage (`.nbbox-interp.nbkey`, `.nbbox-key`, inline `span.nbkey`), Rot für
+     Warnung/Grenze/Fallstrick (`.nbbox-warn`, inline `.nbwarn`; Python
+     liefert das Markup). Je Stil × hell/dunkel eigene Töne, Schrift in der
+     Farbe ≥ 4,5 : 1 auf der getönten Fläche. Ohne Kästen (minimal, retro,
+     fairy): Hervorhebung = Randstrich links + leichte Tönung; cyber: dezenter
+     Kasten mit farbigem Rand und Leuchten. */
+  body.nb-dc-active{--nbk-g:#18693f;--nbk-r:#b42318;}
+  body.nb-dc-active.nbdark{--nbk-g:#4cc38a;--nbk-r:#f2837a;}
+  body.nb-dc-active.nbskin-cyber{--nbk-g:#086643;--nbk-r:#a8183f;}
+  body.nb-dc-active.nbskin-cyber.nbdark{--nbk-g:#3dffb0;--nbk-r:#ff6b93;}
+  body.nb-dc-active.nbskin-retro{--nbk-g:#335a1f;--nbk-r:#a3261a;}
+  body.nb-dc-active.nbskin-retro.nbdark{--nbk-g:#a6cc84;--nbk-r:#ee917a;}
+  body.nb-dc-active.nbskin-fairy{--nbk-g:#1d6645;--nbk-r:#a3264f;}
+  body.nb-dc-active.nbskin-fairy.nbdark{--nbk-g:#82e3b8;--nbk-r:#ff94b4;}
+  body.nb-dc-active.nbskin-digi{--nbk-g:#1a7a4c;--nbk-r:#b3263a;}
+  body.nb-dc-active.nbskin-digi.nbdark{--nbk-g:#6be3a0;--nbk-r:#ff6b7a;}
+  html body .jp-Notebook .nbbox:is(.nbbox-interp,.nbbox-key){--nbk:var(--nbk-g);}
+  html body .jp-Notebook .nbbox.nbbox-warn{--nbk:var(--nbk-r);}
+  html body .jp-Notebook .nbbox.nbbox:is(.nbbox-interp,.nbbox-key,.nbbox-warn){
+      background:color-mix(in srgb,var(--nbk) 8%%,transparent)!important;
+      border:0!important;border-left:4px solid var(--nbk)!important;border-radius:0 10px 10px 0!important;
+      box-shadow:none!important;}
+  html body.nbskin-cyber .jp-Notebook .nbbox.nbbox:is(.nbbox-interp,.nbbox-key,.nbbox-warn){
+      border:1px solid color-mix(in srgb,var(--nbk) 55%%,transparent)!important;border-radius:10px!important;
+      box-shadow:0 0 16px color-mix(in srgb,var(--nbk) 18%%,transparent),inset 3px 0 0 var(--nbk)!important;}
+  html body .jp-Notebook .nbbox.nbbox:is(.nbbox-interp,.nbbox-key,.nbbox-warn) :is(b,strong){color:var(--nbk)!important;}
+  html body .jp-Notebook .nbkey:not(.nbbox){--nbk:var(--nbk-g);}
+  html body .jp-Notebook .nbwarn:not(.nbbox){--nbk:var(--nbk-r);}
+  html body .jp-Notebook :is(.nbkey,.nbwarn):not(.nbbox){color:var(--nbk)!important;font-weight:700;
+      background:color-mix(in srgb,var(--nbk) 8%%,transparent);border-radius:3px;padding:0 .2em;}
+
+  /* ======================================================================
+     2026-10-06 — EILAUFTRAG E23.2 (Oberfläche; Lage der Lane bleibt JS,
+     E13). DIE COVER-TIMELINE GRÖSSER UND LESBAR. Gemessen v1.63 (1400 ×
+     900, kaltes Cover nach dem ersten Play): Namen 9 px (Gruppen, Titel,
+     Ende, YOC) und 10 px (Kapitel); der Titelname („Introduction to
+     Modeling“, linksbündig, 2 Zeilen) lag über „Content“; die Spalte
+     (--nbtl-u) 13,1 px ließ zwei Namen derselben Seite nur 157 px Abstand.
+     Jetzt:
+       * jeder Name auf der Lane ≥ 11 px (Kapitel 11,5 px fett, Gruppen/
+         Titel/Ende/YOC 11 px Versalien mit .8 px Sperrung), höchstens
+         zwei Zeilen (bis 160 px breit);
+       * Spalte 16 px (benannt ×3 = 48 px), die Titelspalte ×5, damit sein
+         Name bis „Content“ Platz hat; zwei Namen derselben Seite stehen
+         ≥ 192 px auseinander, keine zwei Namen schneiden sich (0 px²);
+       * die Lane bekommt oben und unten 48 px, damit zwei Zeilen nicht
+         abgeschnitten werden;
+       * Überlauf bleibt E13: Rand-Verlauf + Leiste darunter (JS misst
+         scrollWidth wie bisher).
+     Hover-Namen (die übrigen Zeilen) bleiben Schildchen, auch ≥ 11 px.
+     Sieben IDs: schlägt die Regeln aus 02-dark (E12.6/E13). */
+  html body:not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz) .nbcover-tl{--nbtl-u:16px;}
+  html body:not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz) .nbcover-tl .nbcover-tl-list{padding-top:48px!important;padding-bottom:48px!important;}
+  html body:not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz) .nbcover-tl .nbtl-grp>.nbtl-row.nbtl-title:first-child{
+      flex:5 0 calc(5 * var(--nbtl-u))!important;min-width:calc(5 * var(--nbtl-u))!important;}
+  html body:not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz) .nbcover-tl .nbtl-nm{
+      font-size:11.5px!important;line-height:1.2!important;max-width:160px!important;}
+  html body:not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz) .nbcover-tl :is(.nbtl-group,.nbtl-title,.nbtl-end,.nbtl-cell) .nbtl-nm{
+      font-size:11px!important;letter-spacing:.8px!important;}
+  html body:not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz) .nbcover-tl .nbtl-row:not(:first-child) .nbtl-nm{max-width:none!important;}

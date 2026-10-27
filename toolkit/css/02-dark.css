@@ -1,0 +1,328 @@
+  /* ==================================================================
+     DARK MODE — every rule below is scoped to JupyterLab's dark theme
+     (body[data-jp-theme-light="false"]).  Light mode is untouched.
+     The boxes carry inline styles, so the overrides need !important.
+     ================================================================== */
+  body[data-jp-theme-light="false"] .nbbox,
+  body[data-jp-theme-name*="Dark"]  .nbbox{
+      box-shadow:0 1px 3px rgba(0,0,0,.45)!important;}
+  /* text: one readable ink for everything inside a box … */
+  body[data-jp-theme-light="false"] .nbbox,
+  body[data-jp-theme-light="false"] .nbbox *,
+  body[data-jp-theme-name*="Dark"]  .nbbox,
+  body[data-jp-theme-name*="Dark"]  .nbbox *{color:#dbe2e9!important;}
+  /* … surfaces: the hue of each box kind is kept, the luminance is flipped */
+  body[data-jp-theme-light="false"] .nbbox-concept,
+  body[data-jp-theme-name*="Dark"]  .nbbox-concept{
+      background:linear-gradient(180deg,#1b2128,#1f262e)!important;border-color:#33414f!important;}
+  body[data-jp-theme-light="false"] .nbbox-grey,
+  body[data-jp-theme-name*="Dark"]  .nbbox-grey{
+      background:linear-gradient(180deg,#21262c,#272d34)!important;border-color:#4a545e!important;}
+  body[data-jp-theme-light="false"] .nbbox-viz,
+  body[data-jp-theme-name*="Dark"]  .nbbox-viz{
+      background:linear-gradient(90deg,#2a1d25,#231a1f)!important;border-color:#5b3a4b!important;}
+  body[data-jp-theme-light="false"] .nbbox-ex,
+  body[data-jp-theme-name*="Dark"]  .nbbox-ex{
+      background:linear-gradient(90deg,#2b1c1b,#241818)!important;border-color:#5e3a35!important;}
+  body[data-jp-theme-light="false"] .nbbox-interp,
+  body[data-jp-theme-name*="Dark"]  .nbbox-interp{
+      background:linear-gradient(90deg,#16241e,#1a2a23)!important;border-color:#37624f!important;}
+  /* accent inks that must stay coloured — placed AFTER the blanket ink rule */
+  body[data-jp-theme-light="false"] .nbbox .nbaccent,
+  body[data-jp-theme-name*="Dark"]  .nbbox .nbaccent{color:#8fc7e8!important;}
+  body[data-jp-theme-light="false"] .cite-link,
+  body[data-jp-theme-name*="Dark"]  .cite-link{color:#7fb8dc!important;}
+  body[data-jp-theme-light="false"] .nbok,   body[data-jp-theme-name*="Dark"] .nbok{color:#6ed7a6!important;}
+  body[data-jp-theme-light="false"] .nbwarn, body[data-jp-theme-name*="Dark"] .nbwarn{color:#f0b95c!important;}
+  body[data-jp-theme-light="false"] .nberr,  body[data-jp-theme-name*="Dark"] .nberr{color:#f08d80!important;}
+  /* formulas are monochrome, transparent PNGs → one invert makes them light-on-dark */
+  body[data-jp-theme-light="false"] :where([data-digichem],.nbrail-own) img.imath,
+  body[data-jp-theme-light="false"] :where([data-digichem],.nbrail-own) img.dmath,
+  body[data-jp-theme-light="false"] img.nbmath,
+  body[data-jp-theme-name*="Dark"]  :where([data-digichem],.nbrail-own) img.imath,
+  body[data-jp-theme-name*="Dark"]  :where([data-digichem],.nbrail-own) img.dmath,
+  body[data-jp-theme-name*="Dark"]  img.nbmath{filter:invert(1) brightness(1.06);}
+  /* plots are NOT inverted — that would falsify the data colours. They are drawn
+     transparent with a neutral ink (theme_axes) that carries on both grounds. */
+  /* the "— section —" group headers */
+  body[data-jp-theme-light="false"] .acc-group>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header,
+  body[data-jp-theme-light="false"] .acc-group>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header *,
+  body[data-jp-theme-light="false"] .acc-group>.lm-Collapse>.lm-Collapse-header,
+  body[data-jp-theme-light="false"] .acc-group>.lm-Collapse>.lm-Collapse-header *,
+  body[data-jp-theme-name*="Dark"]  .acc-group>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header,
+  body[data-jp-theme-name*="Dark"]  .acc-group>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header *{
+      color:#aebdc9!important;}
+  /* quiz cards */
+  body[data-jp-theme-light="false"] :where([data-digichem],.nbrail-own) .MultipleChoiceQn,
+  body[data-jp-theme-light="false"] :where([data-digichem],.nbrail-own) .ManyChoiceQn,
+  body[data-jp-theme-light="false"] :where([data-digichem],.nbrail-own) .NumericQn,
+  body[data-jp-theme-light="false"] :where([data-digichem],.nbrail-own) .StringQn{
+      background:linear-gradient(180deg,#241b33,#1d1729)!important;border-color:#7a5bb5!important;
+      /* 2026-09-26b — the question itself. Only its <p> children were given a
+         dark-page ink; jupyterquiz writes the question as a bare text node in
+         the card, so it kept the light-page #1a1a1a on the dark card — 1.0:1,
+         invisible, in every skin (found by the hit-testing sweep,
+         tests/lab_contrast.py). */
+      color:#dbe2e9!important;}
+  body[data-jp-theme-light="false"] :where([data-digichem],.nbrail-own) .MultipleChoiceQn p,
+  body[data-jp-theme-light="false"] :where([data-digichem],.nbrail-own) .ManyChoiceQn p,
+  body[data-jp-theme-light="false"] :where([data-digichem],.nbrail-own) .NumericQn p,
+  body[data-jp-theme-light="false"] :where([data-digichem],.nbrail-own) .StringQn p,
+  body[data-jp-theme-light="false"] :where([data-digichem],.nbrail-own) .Quiz .MCButton,
+  body[data-jp-theme-light="false"] :where([data-digichem],.nbrail-own) .Quiz .MCButton p{color:#dbe2e9!important;}
+  body[data-jp-theme-light="false"] :where([data-digichem],.nbrail-own) .Quiz .MCButton{
+      background:linear-gradient(180deg,#2b2340,#231d33)!important;border-color:#6d55a0!important;}
+  body[data-jp-theme-light="false"] :where([data-digichem],.nbrail-own) .Quiz .MCButton.correctButton{
+      background:linear-gradient(180deg,#17402f,#1b4a37)!important;border-color:#3fa877!important;}
+  body[data-jp-theme-light="false"] :where([data-digichem],.nbrail-own) .Quiz .MCButton.correctButton p{color:#9ae6c2!important;}
+  body[data-jp-theme-light="false"] :where([data-digichem],.nbrail-own) .Quiz .MCButton.incorrectButton{
+      background:linear-gradient(180deg,#432020,#4d2525)!important;border-color:#c0392b!important;}
+  body[data-jp-theme-light="false"] :where([data-digichem],.nbrail-own) .Quiz .MCButton.incorrectButton p{color:#f3b1a8!important;}
+  body[data-jp-theme-light="false"] .nbink,
+  body[data-jp-theme-name*="Dark"]  .nbink{color:#dbe2e9!important;}
+  /* ---------- soft lock + progress ---------- */
+  .nblock{max-width:820px;margin:12px auto;padding:22px 24px;border-radius:14px;text-align:center;
+      background:linear-gradient(180deg,#f3f5f7,#fbfcfd);border:2px dashed #b8c1c9;}
+  body[data-jp-theme-light="false"] .nblock{
+      background:linear-gradient(180deg,#1d2228,#22282f)!important;border-color:#4a545e!important;}
+  body[data-jp-theme-light="false"] .nblock *{color:#dbe2e9!important;}
+  .nbprog{max-width:820px;margin:10px auto;padding:12px 18px;border-radius:12px;
+      background:linear-gradient(180deg,#f3f5f7,#fbfcfd);border:1px solid #d6e2ec;}
+  body[data-jp-theme-light="false"] .nbprog{
+      background:linear-gradient(180deg,#1d2228,#22282f)!important;border-color:#33414f!important;}
+  body[data-jp-theme-light="false"] .nbprog *{color:#dbe2e9!important;}
+  .nbchip{display:inline-block;margin:3px 4px;padding:4px 11px;border-radius:999px;
+      font-size:.86em;font-weight:700;border:1px solid transparent;}
+  .nbchip-open{background:#eceff2;color:#5b6b7b;border-color:#d3dae0;}
+  .nbchip-done{background:#dff2e7;color:#12694a;border-color:#a8ddc3;}
+  .nbchip-skip{background:#fdf0d8;color:#8a5b00;border-color:#eccf95;}
+  body[data-jp-theme-light="false"] .nbchip-open{background:#262c33!important;color:#9aa7b3!important;border-color:#3b444d!important;}
+  body[data-jp-theme-light="false"] .nbchip-done{background:#183d2d!important;color:#7fdcb0!important;border-color:#2f6b50!important;}
+  body[data-jp-theme-light="false"] .nbchip-skip{background:#3d3119!important;color:#f0c274!important;border-color:#6b5427!important;}
+  .nbunlock{background:linear-gradient(180deg,#8a94a0,#767f8a)!important;color:#fff!important;}
+  .nbgiveup{background:linear-gradient(180deg,#c08a84,#a8736d)!important;color:#fff!important;}
+
+
+  /* ======================================================================
+     2026-10-01 — EILAUFTRAG E12.6 (Oberfläche; ersetzt E8.21 Oberfläche).
+     DIE COVER-TIMELINE IST EIN DURCHGEHENDER STRAHL WIE IM PANEL — LIEGEND.
+     Bild des Nutzers (Cover v1.41, cyber dunkel): drei Reihen, ein Strahl
+     aus kurzen Stücken, Lücken um jede Marke. Gilt, sobald unser Stylesheet
+     auf der Seite ist (vor Play zählt nur Pythons Inline-Stil). Jetzt:
+       * eine Reihe: die Cluster (`.nbtl-grp`) lösen sich auf (contents),
+         jede Spalte ist ein Flex-Element der Lane, kein Umbruch; benannte
+         Spalten bekommen dreimal so viel Platz (Größe seit E13: unten);
+       * der Strahl: jede Spalte malt ihr Stück (6 px, je 1 px überlappend)
+         auf der Mitte — von der Titelmarke bis zur YOC-Marke, in der
+         Lane-Farbe des Stils wie `.nbmap-inner::before` im Panel; die
+         Inline-Stücke `.nbtl-ln` sind aus;
+       * die Marken sind Formen wie im Panel, ohne Hof/Scheibe: Titel =
+         leuchtendes Quadrat in --nbmark, Kapitel = Quadrat, Gruppe/Ende =
+         Raute in Lane-Farbe, Abschnitt = Ring, Aufgabe/Coding = Raute mit
+         Rand in der Inline-/Zustandsfarbe (JS, data-st) und deren Leuchten,
+         gelöst = gefüllt; YOC = gestricheltes Quadrat;
+       * Namen abwechselnd unter/über dem Strahl (gerade Cluster oben).
+     Klassen (Python): .nbcover-tl · .nbcover-tl-list · .nbtl-grp ·
+     .nbtl-row.nbtl-<kind> · .nbtl-mk · .nbtl-nm · .nbtl-ln.
+     2026-10-02 (E14-Rest): kein `max-width:none; width:100%%` mehr — die
+     Lane behält Pythons Inline-Maß (max-width 640 px, margin auto) und ist
+     so breit wie der Textblock (.nbtitle-facts), wie vor Play; ist die Reihe
+     breiter, greifen Verlauf und Leiste aus E13. */
+  html body .nbcover-tl{--nbtl-l:#46535f;--nbtl-f:#46535f;--nbtl-b:#46535f;--nbtl-r:3px;--nbtl-u:13.1px;
+      --nbtl-sbg:color-mix(in srgb,var(--nbskin-line,#c3ced8) 60%%,transparent);
+      margin-top:22px!important;
+      font-family:var(--nbskin-font,inherit);}
+  body.nbdark .nbcover-tl{--nbtl-l:#39424d;--nbtl-f:var(--nbpanel-surf,#1d2228);--nbtl-b:var(--nbskin-quiet,#9fb0bd);}
+  body.nbskin-cyber .nbcover-tl{--nbtl-l:#3a2a6b;--nbtl-r:0;}
+  body.nbskin-retro .nbcover-tl{--nbtl-l:#8a6b45;--nbtl-r:0;}
+  body.nbskin-fairy .nbcover-tl{--nbtl-l:#c9a8e8;--nbtl-r:50%%;}
+  body.nbskin-digi .nbcover-tl{--nbtl-l:#d5d9e6;--nbtl-r:50%%;}
+  body.nbdark.nbskin-digi .nbcover-tl{--nbtl-l:#2a3050;}
+  html body .nbcover-tl .nbcover-tl-list{
+      display:flex!important;flex-flow:row nowrap!important;align-items:center!important;
+      justify-content:flex-start!important;gap:0!important;margin:14px 0 0!important;
+      padding:40px 10px!important;border:0!important;background:none!important;
+      overflow-x:auto!important;overflow-y:hidden!important;overscroll-behavior-x:contain;
+      scrollbar-width:thin;scrollbar-color:var(--nbskin-quiet,#55636f) var(--nbtl-sbg);}
+  html body .nbcover-tl .nbtl-grp,html body .nbcover-tl .nbtl-row>div{display:contents!important;}
+  html body .nbcover-tl .nbtl-ln{display:none!important;}
+  html body .nbcover-tl .nbtl-row{
+      flex:1 0 var(--nbtl-u)!important;min-width:var(--nbtl-u)!important;width:auto!important;height:30px;margin:0!important;
+      padding:0!important;display:flex!important;align-items:center!important;
+      justify-content:center!important;position:relative;}
+  html body .nbcover-tl .nbtl-grp>.nbtl-row:first-child{flex:3 0 calc(3 * var(--nbtl-u))!important;min-width:calc(3 * var(--nbtl-u))!important;}
+  html body .nbcover-tl .nbtl-row::before{content:'';position:absolute;left:-1px;right:-1px;top:50%%;
+      height:6px;margin-top:-3px;background:var(--nbtl-l);}
+  html body .nbcover-tl .nbtl-title::before{left:50%%;}
+  /* E16.6: zwischen „End“ und YOC kein Strahl — er endet auf der Endmarke */
+  html body .nbcover-tl .nbtl-end::before{right:50%%;}
+  html body .nbcover-tl .nbtl-cell::before{display:none;}
+  html body .nbcover-tl .nbtl-mk{
+      position:relative;z-index:1;flex:none!important;display:block!important;
+      box-sizing:border-box;width:12px;height:12px;min-width:0!important;padding:0!important;
+      font-size:0!important;line-height:0!important;text-shadow:none!important;
+      border:2.5px solid currentColor;border-radius:2px;background:var(--nbpanel-surf,#fff);
+      transform:rotate(45deg);box-shadow:0 0 7px 1px color-mix(in srgb,currentColor 55%%,transparent);}
+  html body .nbcover-tl .nbtl-code .nbtl-mk{border-radius:4px;}
+  html body .nbcover-tl .nbtl-row[data-st="solved"] .nbtl-mk{background:currentColor;}
+  html body .nbcover-tl :is(.nbtl-quiz,.nbtl-byod,.nbtl-figure,.nbtl-sub,.nbtl-cell,.nbtl-chapter,.nbtl-title) .nbtl-mk{transform:none;}
+  html body .nbcover-tl .nbtl-quiz .nbtl-mk{border-radius:50%%;}
+  html body .nbcover-tl .nbtl-figure .nbtl-mk{width:11px;height:9px;border-width:2px;}
+  html body .nbcover-tl :is(.nbtl-sub,.nbtl-group,.nbtl-end,.nbtl-chapter,.nbtl-cell) .nbtl-mk{border-color:var(--nbtl-b);border-radius:var(--nbtl-r);box-shadow:none;}
+  html body .nbcover-tl .nbtl-sub .nbtl-mk{width:10px;height:10px;border-width:2px;border-radius:50%%;}
+  html body .nbcover-tl :is(.nbtl-group,.nbtl-end) .nbtl-mk{width:14px;height:14px;border-width:2px;background:var(--nbtl-f);}
+  html body .nbcover-tl .nbtl-chapter .nbtl-mk{width:18px;height:18px;border-width:2px;background:var(--nbtl-f);}
+  html body .nbcover-tl .nbtl-cell .nbtl-mk{width:14px;height:14px;border:2px dashed var(--nbtl-b);}
+  html body .nbcover-tl .nbtl-title .nbtl-mk{width:16px;height:16px;border-radius:4px;border-color:var(--nbmark,#0d63e0);
+      background:var(--nbmark,#0d63e0);box-shadow:0 0 10px 3px var(--nbglow,rgba(13,99,224,.55));}
+  html body .nbcover-tl .nbtl-nm{
+      position:absolute;left:50%%;top:calc(50%% + 15px);transform:translateX(-50%%);
+      width:max-content;max-width:110px;margin:0!important;font-size:10px!important;font-weight:700;
+      line-height:1.2!important;text-align:center;white-space:normal;
+      color:var(--nbskin-ink,#33475b);pointer-events:none;}
+  html body .nbcover-tl .nbtl-grp:nth-child(even)>.nbtl-row:first-child .nbtl-nm{top:auto;bottom:calc(50%% + 15px);}
+  html body .nbcover-tl .nbtl-title .nbtl-nm{left:0;transform:none;text-align:left;}
+  html body .nbcover-tl .nbtl-cell .nbtl-nm{left:auto;right:0;transform:none;text-align:right;}
+  html body .nbcover-tl :is(.nbtl-group,.nbtl-title,.nbtl-end,.nbtl-cell) .nbtl-nm{
+      font-size:9px!important;letter-spacing:1.4px;text-transform:uppercase;color:var(--nbskin-quiet,#55636f);}
+  html body .nbcover-tl .nbtl-row:not(:first-child) .nbtl-nm{
+      display:none!important;white-space:nowrap;max-width:none;padding:3px 7px;border-radius:6px;
+      background:var(--nbskin-surf,#fff);border:1px solid var(--nbskin-line,#c3ced8);
+      box-shadow:0 4px 12px rgba(0,0,0,.15);z-index:2;}
+  html body .nbcover-tl .nbtl-row:not(:first-child):hover .nbtl-nm{display:block!important;}
+  /* 2026-10-01 — EILAUFTRAG E13 (Oberfläche; Rand-Zustand, Leiste, Daumen
+     und Startausschnitt macht JS). DIE COVER-TIMELINE BLEIBT EINE REIHE IN
+     NATÜRLICHER GRÖSSE (ersetzt E12.6 „zu schmal → zusammenrücken“). Eine
+     Spalte ist nie schmaler als bei 1920 px im Modus both: --nbtl-u (13,1 px,
+     benannte ×3; 70 Einheiten = die 920 px der Karte); ist Platz, wachsen
+     sie wie bisher. Passt die Reihe nicht, scrollt die Lane waagerecht:
+       * Rand-Verlauf (mask-image) nur an der Seite, an der noch Punkte
+         kommen — JS setzt `data-fade="l|r|lr|"` an `.nbtl-lane`;
+       * darunter die Leiste im Aussehen der Dokument-Scrollbar (E12.3):
+         Rinne `.nbtl-sb` (Geschwister nach der Lane) mit Daumen `.nbtl-sb-th`;
+         Länge --nbtl-th, Lage --nbtl-tx (px, JS), beim Ziehen `.nbdragging`.
+         Ohne Überlauf (`data-fade=""`) keine Leiste. Solange JS keine Leiste
+         zeichnet, trägt die Lane die eigene, gleich gefärbte (thin). */
+  .nbcover-tl .nbtl-lane[data-fade="r"]{
+      -webkit-mask-image:linear-gradient(to right,#000 calc(100%% - 48px),transparent);
+      mask-image:linear-gradient(to right,#000 calc(100%% - 48px),transparent);}
+  .nbcover-tl .nbtl-lane[data-fade="l"]{
+      -webkit-mask-image:linear-gradient(to left,#000 calc(100%% - 48px),transparent);
+      mask-image:linear-gradient(to left,#000 calc(100%% - 48px),transparent);}
+  .nbcover-tl .nbtl-lane[data-fade="lr"]{
+      -webkit-mask-image:linear-gradient(to right,transparent,#000 48px,#000 calc(100%% - 48px),transparent);
+      mask-image:linear-gradient(to right,transparent,#000 48px,#000 calc(100%% - 48px),transparent);}
+  html body .nbcover-tl:has(.nbtl-sb) .nbtl-lane{scrollbar-width:none;}
+  html body .nbcover-tl:has(.nbtl-sb) .nbtl-lane::-webkit-scrollbar{display:none;}
+  html body .nbcover-tl .nbtl-sb{position:relative;display:block;box-sizing:border-box;height:10px;
+      margin:0 10px 4px;border-radius:5px;background:var(--nbtl-sbg);
+      box-shadow:inset 0 0 0 1px var(--nbskin-line,#c3ced8);cursor:pointer;}
+  html body .nbcover-tl :is(.nbtl-lane[data-fade=""],.nbtl-lane:not([data-fade]))~.nbtl-sb{display:none;}
+  .nbcover-tl .nbtl-sb-th{position:absolute;top:0;bottom:0;left:var(--nbtl-tx,0px);
+      width:var(--nbtl-th,48px);border-radius:5px;background:var(--nbskin-quiet,#55636f);cursor:grab;}
+  .nbcover-tl .nbtl-sb-th:is(:hover,.nbdragging){background:var(--nbskin-ink,#1f2933);}
+  .nbcover-tl .nbtl-sb-th.nbdragging{cursor:grabbing;}
+
+  /* ======================================================================
+     2026-10-02 — EILAUFTRAG E15.4 (Oberfläche; Verhalten JS, Texte Python).
+     COVER-TIMELINE: HOVER UND KLICK. Eine Marke unter dem Zeiger — oder die
+     angeheftete — wird wie im Panel markiert: sie dreht eine Achtel-Drehung
+     weiter (Raute → Quadrat, Quadrat → Raute), wächst um 1,2 und leuchtet in
+     der Farbe des Stils (--nbmark/--nbglow). Darunter steht die Beschreibung.
+     Vertrag mit JS (17-rail-marker, E15.4): Zeile unter dem Zeiger
+     `.nbtl-hov`, angeheftet `.nbtl-pin`; `.nbtl-desc` ist das letzte Kind
+     von `.nbcover-tl` (`b` Name, `span` Text), `hidden`, solange nichts zu
+     sagen ist. Angeheftet: ihr Rand in der Stilfarbe. */
+  html body .nbcover-tl .nbtl-mk{transition:transform .26s cubic-bezier(.22,.61,.36,1),box-shadow .2s ease,border-color .2s ease;}
+  html body .nbcover-tl .nbtl-row:is(:hover,.nbtl-hov,.nbtl-pin) .nbtl-mk{transform:rotate(90deg) scale(1.2);
+      border-color:var(--nbmark,#0d63e0);box-shadow:0 0 9px 2px var(--nbglow,rgba(13,99,224,.55));}
+  html body .nbcover-tl :is(.nbtl-quiz,.nbtl-byod,.nbtl-figure,.nbtl-sub,.nbtl-cell,.nbtl-chapter,.nbtl-title):is(:hover,.nbtl-hov,.nbtl-pin) .nbtl-mk{transform:rotate(45deg) scale(1.2);}
+  html body .nbcover-tl .nbtl-row:is(:hover,.nbtl-hov,.nbtl-pin){cursor:pointer;z-index:3;}
+  .nbcover-tl .nbtl-desc{margin:8px 0 2px;padding:8px 12px;
+      box-sizing:border-box;border:1px solid var(--nbskin-line,#c3ced8);border-radius:min(var(--nbskin-r,10px),12px);
+      background:var(--nbskin-surf,#fff);color:var(--nbskin-ink,#1f2933);
+      font-size:12.5px;text-align:left;}
+  .nbcover-tl .nbtl-desc:is(:empty,[hidden]){display:none;}
+  .nbcover-tl:has(.nbtl-pin):not(:has(.nbtl-hov:not(.nbtl-pin))) .nbtl-desc{border-color:var(--nbmark,#0d63e0);}
+
+  /* ======================================================================
+     2026-10-06 — EILAUFTRAG E24.3 (CSS-Anteil). DAS COVER BRAUCHT KEINEN
+     INLINE-STIL MEHR. Vor dem ersten Lauf gibt es kein Cover mehr (Titelzelle
+     = eine Textzeile); die Vorschau steht erst da, wenn unser Stylesheet auf
+     der Seite ist. Pythons Inline-Look (E13/E14: `style=` an jedem Element,
+     die gezeichneten Stücke `.nbtl-ln`) ist damit tot — hier steht, was er
+     trug, sodass Python ihn streichen kann (Complex: 42 616 B der Titelzelle).
+     Gleiche Werte wie inline; `:not(#nbcov)` hebt die Regeln über die
+     Klassenregeln, die bisher am Inline-Stil scheiterten, und lässt alles
+     mit !important (dunkel, Stil, E12–E23) wie bisher gewinnen. Nur auf dem
+     Cover (`.nbtitle` mit `.nbcover`), nicht auf der Titelkarte im Dokument.
+     Ohne die Anzeige-Sperren vor Play (`.nbacct`/`.nbacct-me` display:none):
+     die setzt seither das Skript. */
+  html body:not(#nbcov) .nbtitle:has(>.nbcover){text-align:center;margin:26px 0 8px;}
+  html body:not(#nbcov) .nbtitle:has(>.nbcover) .nbtitle-card{display:inline-block;background:transparent;
+      border:1px solid rgba(127,140,153,.4);border-radius:16px;padding:32px 56px;max-width:94%%;box-sizing:border-box;}
+  html body:not(#nbcov) .nbtitle:has(>.nbcover) .nbtitle-h{font-size:2.05em;font-weight:800;color:inherit;line-height:1.15;letter-spacing:.2px;}
+  html body:not(#nbcov) .nbtitle:has(>.nbcover) .nbtitle-rule{width:62px;height:2px;border-radius:2px;
+      background:rgba(127,140,153,.5);margin:13px auto 11px;}
+  html body:not(#nbcov) .nbtitle:has(>.nbcover) :is(.nbtitle-sub,.nbtitle-facts-h,.nbcover-play-lab,.nbcover-tl-h){
+      font-weight:800;letter-spacing:2px;text-transform:uppercase;}
+  html body:not(#nbcov) .nbtitle:has(>.nbcover) .nbtitle-sub{color:#7a8794;font-size:.78em;font-weight:700;letter-spacing:2.4px;line-height:1.5;}
+  html body:not(#nbcov) .nbtitle:has(>.nbcover) .nbtitle-lead{color:#5b6b7b;max-width:720px;margin:18px auto 0;font-style:italic;font-size:1.06em;}
+  html body:not(#nbcov) .nbtitle:has(>.nbcover) .nbtitle-facts{max-width:640px;margin:20px auto 0;color:#5b6b7b;font-size:.95em;}
+  html body:not(#nbcov) .nbtitle:has(>.nbcover) .nbtitle-facts-h{font-size:.74em;margin:16px 0 6px;}
+  html body:not(#nbcov) .nbtitle:has(>.nbcover) .nbtitle-facts-h:first-child{margin-top:0;}
+  html body:not(#nbcov) .nbtitle:has(>.nbcover) :is(.nbtitle-goals,.nbtitle-chaps){text-align:left;margin:0 auto;line-height:1.45;}
+  html body:not(#nbcov) .nbtitle:has(>.nbcover) .nbtitle-goals{padding-left:20px;max-width:620px;}
+  html body:not(#nbcov) .nbtitle:has(>.nbcover) .nbtitle-goal{margin:3px 0;}
+  html body:not(#nbcov) .nbtitle:has(>.nbcover) .nbtitle-k{font-size:.8em;font-weight:700;opacity:.75;}
+  html body:not(#nbcov) .nbtitle:has(>.nbcover) .nbtitle-chaps{list-style:none;padding:0;max-width:420px;columns:2;column-gap:28px;}
+  html body:not(#nbcov) .nbtitle:has(>.nbcover) .nbtitle-chap{margin:2px 0;}
+  html body:not(#nbcov) .nbtitle:has(>.nbcover) .nbtitle-time{margin-top:14px;font-weight:700;letter-spacing:.3px;}
+  html body:not(#nbcov) .nbtitle:has(>.nbcover) .nbcover{max-width:940px;margin:26px auto 0;}
+  html body:not(#nbcov) .nbtitle:has(>.nbcover) .nbacct{max-width:640px;margin:0 auto 18px;text-align:center;}
+  html body:not(#nbcov) .nbtitle:has(>.nbcover) .nbcover-play{display:block;margin:0 auto;width:74px;height:74px;
+      border-radius:50%%;border:2px solid #8b98a5;background:transparent;color:#8b98a5;cursor:pointer;
+      font-size:26px;line-height:1;padding:0 0 0 6px;}
+  html body:not(#nbcov) .nbtitle:has(>.nbcover) .nbcover-play-lab{margin-top:10px;font-size:.82em;letter-spacing:2.4px;color:#8b98a5;}
+  html body:not(#nbcov) .nbtitle:has(>.nbcover) .nbcover-hint{color:#8b98a5;font-size:.86em;margin-top:9px;}
+  html body:not(#nbcov) .nbtitle:has(>.nbcover) .nbcover-gone{max-width:620px;margin:18px auto 0;padding:9px 16px;
+      border:1px dashed rgba(139,152,165,.6);border-radius:10px;color:#8b98a5;font-size:.84em;line-height:1.5;}
+  html body:not(#nbcov) .nbtitle:has(>.nbcover) .nbcover-gone>div+div{margin-top:5px;}
+  html body:not(#nbcov) .nbtitle:has(>.nbcover) .nbcover-map{margin:26px auto 0;text-align:center;}
+  html body:not(#nbcov) .nbtitle:has(>.nbcover) .nbcover-room{height:1400px;}
+  html body:not(#nbcov) .nbtitle:has(>.nbcover) .nbcover-tl{max-width:640px;margin:30px auto 0;text-align:left;}
+  html body:not(#nbcov) .nbtitle:has(>.nbcover) .nbcover-tl-h{cursor:pointer;text-align:center;font-size:.8em;
+      color:#8b98a5;list-style-position:inside;}
+  html body:not(#nbcov) .nbtitle:has(>.nbcover) .nbtl-row{flex-direction:column;}
+  html body:not(#nbcov) .nbtitle:has(>.nbcover) .nbtl-figure .nbtl-mk{color:#3f8f6b;}
+  html body:not(#nbcov) .nbtitle:has(>.nbcover) .nbtl-calc .nbtl-mk{color:#c07a12;}
+  html body:not(#nbcov) .nbtitle:has(>.nbcover) .nbtl-code .nbtl-mk{color:#7b4fb3;}
+  html body:not(#nbcov) .nbtitle:has(>.nbcover) .nbtl-nm{max-width:110px;text-align:center;}
+  html body:not(#nbcov) .nbtitle:has(>.nbcover) :is(.nbtl-group,.nbtl-title,.nbtl-end,.nbtl-cell) .nbtl-nm{font-weight:800;}
+
+  /* ======================================================================
+     2026-10-19 — E35 C3 (CSS). KEIN AUFBLITZEN. Nutzer 19.10. (Bild): erst
+     eine helle minimal-Fläche auf Schwarz, dann der Wechsel zu digi. Gemessen
+     v1.80 (Lab dunkel, frisches Profil, ein Bild je Malvorgang nach Run All,
+     tests/regress/css_e35.py C3): das Stylesheet ist da, body hat noch keine
+     Klasse des Stils — die Werte von minimal hell (body:not(.nbdark):
+     --nbskin-surf #f8fafb) malen die Ladeansicht (#nbload) weiß, bis das
+     Skript nbdark und nbskin-digi setzt (Vorlage: 7,3 → 10,9 s). Solange
+     body.nb-dc-active fehlt (das Skript lief noch nicht), gelten darum die
+     Werte von digi dunkel — der Standard (E34). Die Lücke danach (das Skript
+     setzt nb-dc-active ~3 s vor Stil und hell/dunkel) schließt J1 (JS). Nur
+     unsere Variablen und unsere Ladeansicht; nichts von JupyterLab. Danach
+     entscheidet die Wahl des Lesers wie bisher. Nur in der Oberfläche von
+     JupyterLab / Notebook 7 / Lite (body > #main) — nicht im Lesefenster, in
+     nbconvert-HTML oder den Ausgaben von VS Code/PyCharm, wo nie ein
+     body.nb-dc-active kommt. */
+  html body:has(>#main):not(.nb-dc-active):not(#nbz){
+      --nbmark:#ffd36b;--nbglow:rgba(255,211,107,.62);--nbring:#ffd36b;
+      --nbskin-page:#04050b;--nbskin-surf:#0b0e1c;--nbskin-ink:#e9ecf6;--nbskin-line:#ffffff1c;--nbskin-track:#1d2342;
+      --nbskin-acc:#ffd36b;--nbskin-acc2:#7fb4ff;--nbskin-quiet:#c3c9de;--nbpanel-surf:#0b0e1c;
+      --nbcov-acc:#ffd36b;--nbcov-face:#0b0e1c;--nbcov-ink:#c3c9de;
+      --nbskin-font:"Instrument Sans",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","DejaVu Sans",sans-serif;}
+  /* die Ladeansicht in digi (vor dem Skript und in digi dunkel): der Grund
+     der Seite, Schrift hell, der Balken Gold → Blau */
+  html body:has(>#main):is(:not(.nb-dc-active),.nbskin-digi.nbdark):not(#nbz) #nbload{
+      background:#04050b!important;color:#e9ecf6!important;}

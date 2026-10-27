@@ -1,0 +1,33 @@
+# E16.5 (2026-10-02, Inhalt) — the cover's cards: one per timeline mark, 2–3 sentences,
+# what the chapter or exercise contains and teaches. Read at build time by
+# toolkit/card_facts.py (card_desc); it never reaches the reader's cell.
+# One line per card:  <key>: <text>
+# Keys: ch<n> chapter · fig<n> its figure · <task> its exercise (t1 … q1 b1) ·
+# code_<task> its coding exercise · sub_<slug of the section's name> · end · cell.
+# Title and the groups (Introduction, Content, Appendix) have no card.
+# Vorlage
+sub_how_to_use_this_notebook: How the notebook works: idea, visualisation, one exercise per chapter; coding is optional.
+sub_what_you_will_be_able_to_do: The learning goals in one table (placeholder).
+sub_the_route_through_this_notebook: The route through the notebook (placeholder).
+ch1: Chapter 1 in two sentences (placeholder).
+fig1: What the figure of chapter 1 shows (placeholder).
+t1: What exercise 1 asks (placeholder).
+code_t1: What the coding exercise 1 asks (placeholder).
+ch2: Chapter 2 in two sentences (placeholder).
+fig2: What the figure of chapter 2 shows (placeholder).
+t2: What exercise 2 asks (placeholder).
+code_t2: What the coding exercise 2 asks (placeholder).
+ch3: Chapter 3 in two sentences (placeholder).
+fig3: What the figure of chapter 3 shows (placeholder).
+t3: What exercise 3 asks (placeholder).
+code_t3: What the coding exercise 3 asks (placeholder).
+ch4: Chapter 4 in two sentences (placeholder).
+fig4: What the figure of chapter 4 shows (placeholder).
+t4: What exercise 4 asks (placeholder).
+code_t4: What the coding exercise 4 asks (placeholder).
+ch5: Chapter 5 in two sentences (placeholder).
+fig5: What the figure of chapter 5 shows (placeholder).
+t5: What exercise 5 asks (placeholder).
+code_t5: What the coding exercise 5 asks (placeholder).
+sub_conclusion: The chapters in one text, their place and an outlook (placeholder).
+sub_references_and_licence: Sources, licence and the OER record.

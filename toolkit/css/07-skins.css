@@ -1,0 +1,991 @@
+  /* ======================================================================
+     2026-09-24bg — SKINS.
+     Light and dark say how bright the page is. A skin says what it is made
+     of. They are independent on purpose: every skin has to work in both, so a
+     skin sets HUE and MATERIAL — surfaces, borders, the accent the rail
+     glows in, the typeface of the headings — and never the brightness.
+     "minimal" is the notebook as it has been, and is written as no rules at
+     all rather than a copy of them, so it can never drift from the default.
+     Everything else is a small, complete palette: a reader who picks one
+     should see the whole instrument change, not three boxes. */
+  /* ---------------------------------------------------------------------
+     Each skin is written as four things, in this order: the TOKENS the rail
+     glows in, the SURFACES (boxes, title card, pills, panel, drawer), the
+     SHAPES (corner radius, and what a mark on the timeline is), and the
+     TYPE. A skin that only recolours is a palette swatch; the reader asked
+     for retro to look retro, so the geometry and the letterforms move too.
+     Fonts are system stacks on purpose — a notebook that has to run in a
+     lecture room with no network cannot wait for a web font. */
+
+  /* ---- 2026-10-19 — E34 C2 (CSS). EINE EINGEBETTETE SCHRIFT: UNBOUNDED.
+     Für die Überschriften von „digi“ (wie Webseite und App). Die Regel oben
+     „keine Webfonts aus dem Netz“ bleibt: die Schrift steht HIER, als
+     data:-URL (WOFF2, Lateinisch-Teilmenge U+0000-00FF und Satzzeichen, nur
+     Gewicht 400, 19 980 B), nichts wird nachgeladen; ein Zeichen außerhalb
+     der Teilmenge und jede Umgebung ohne @font-face fällt auf den Text-Stack
+     des Stils zurück. Quelle: @fontsource/unbounded 5.3.0,
+     files/unbounded-latin-400-normal.woff2 (Google Fonts v12).
+     Lizenz: SIL Open Font License 1.1 — Copyright 2022 The Unbounded Project
+     Authors (https://github.com/googlefonts/unbounded). Die OFL erlaubt das
+     Einbetten und Weitergeben mit Software; die Schrift wird nicht einzeln
+     verkauft, der Name ist unverändert. Text: https://openfontlicense.org */
+  @font-face{font-family:"Unbounded";font-style:normal;font-weight:400;font-display:swap;
+      src:url(data:font/woff2;base64,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) format("woff2");
+      unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+
+  /* ---- CYBERPUNK: hard edges, machine type, neon on ink --------------- */
+  body.nbskin-cyber{--nbmark:#00e5ff;--nbglow:rgba(0,229,255,.70);--nbring:#00e5ff;
+      --nbpick:#ff2fd0;--nbpickglow:rgba(255,47,208,.45);
+      --nbskin-font:ui-monospace,"Cascadia Mono","Consolas","DejaVu Sans Mono",monospace;
+      --nbskin-r:2px;--nbskin-pill-r:2px;}
+  body.nbskin-cyber .nbbox,body.nbskin-cyber .nblock,
+  body.nbskin-cyber .nbtitle-card{
+      background:linear-gradient(160deg,#141a2e,#1b1330)!important;
+      border-color:#3a2a6b!important;color:#d8e6ff!important;
+      box-shadow:0 0 0 1px rgba(0,229,255,.16),0 6px 26px rgba(0,229,255,.10)!important;}
+  body.nbskin-cyber .nbbox *,body.nbskin-cyber .nblock *{color:#d8e6ff!important;}
+  body.nbskin-cyber .nbbox b,body.nbskin-cyber .nbbox strong,
+  body.nbskin-cyber .nbtitle-h{color:#00e5ff!important;}
+  body.nbskin-cyber .nbtitle-sub,body.nbskin-cyber .nbtitle-lead{color:#ff2fd0!important;}
+  body.nbskin-cyber .nbtitle-rule{background:#00e5ff!important;}
+  body.nbskin-cyber :where([data-digichem],.nbrail-own) .jupyter-widget-Collapse-header *,
+  body.nbskin-cyber :where([data-digichem],.nbrail-own) .lm-Collapse-header *{color:#c9f7ff!important;}
+  body.nbskin-cyber :where([data-digichem],.nbrail-own) .jupyter-widget-Collapse-header,
+  body.nbskin-cyber :where([data-digichem],.nbrail-own) .lm-Collapse-header{
+      background:linear-gradient(90deg,#241a52,#3a2a6b)!important;color:#c9f7ff!important;
+      letter-spacing:2.2px!important;text-transform:uppercase!important;
+      box-shadow:0 0 0 1px rgba(0,229,255,.35),0 0 18px rgba(0,229,255,.12)!important;}
+  body.nbskin-cyber #nbpanel-root .nbrail,body.nbskin-cyber #nbpanel-root .nbdock,
+  body.nbskin-cyber #nbpanel-root .nbdrawer{
+      background:#12162a!important;border-color:#3a2a6b!important;color:#c9f7ff!important;}
+  body.nbskin-cyber #nbpanel-root .nbmap-inner::before{background:#3a2a6b!important;}
+  body.nbskin-cyber #nbpanel-root .nbmap-fill{
+      background:linear-gradient(180deg,#00e5ff,#7cf7ff)!important;}
+
+  /* ---- RETRO: squared off, warm paper, a serif and a hard shadow ------ */
+  body.nbskin-retro{--nbmark:#ff8c1a;--nbglow:rgba(255,140,26,.62);--nbring:#ff8c1a;
+      --nbpick:#2e8b7a;--nbpickglow:rgba(46,139,122,.42);
+      --nbskin-font:Georgia,"Times New Roman","Nimbus Roman",serif;
+      --nbskin-r:0px;--nbskin-pill-r:0px;}
+  body.nbskin-retro .nbbox,body.nbskin-retro .nblock,
+  body.nbskin-retro .nbtitle-card{
+      background:#f6ecd8!important;border-color:#c8a878!important;color:#3a2f22!important;
+      box-shadow:5px 5px 0 0 #d9c3a0!important;}
+  body.nbskin-retro .nbbox *,body.nbskin-retro .nblock *{color:#3a2f22!important;}
+  body.nbskin-retro .nbbox b,body.nbskin-retro .nbbox strong{color:#a8460f!important;}
+  /* 2026-10-01 E10 Teil 4 (Oberfläche, Kriterium 7) — MODELING, RETRO HELL.
+     Two kinds of text that Complex does not have stayed under 4.5 : 1: bold
+     in a faded line of a box (refs, `opacity:.85` → #a8460f reads #b45f2d,
+     3.89 on #f6ecd8) and a heading inked with the accent straight on the
+     Leinen page (`color:var(--nbskin-acc)`, 4.41 on its darkest thread
+     #ebddc2). Both take a deeper shade of the same brown: #8f3b0c, 4.70
+     faded / 5.59 on the thread. */
+  body.nbskin-retro:not(.nbdark) :is(.nbbox [style*=opacity] b,[data-digichem] [style*="color:var(--nbskin-acc"]){color:#8f3b0c!important;}
+  body.nbskin-retro .nbtitle-h,body.nbskin-retro .nbtitle-sub,
+  body.nbskin-retro .nbtitle-lead{color:#a8460f!important;}
+  body.nbskin-retro .nbtitle-rule{background:#a8460f!important;}
+  body.nbskin-retro :where([data-digichem],.nbrail-own) .jupyter-widget-Collapse-header *,
+  body.nbskin-retro :where([data-digichem],.nbrail-own) .lm-Collapse-header *{color:#fdf3e2!important;}
+  body.nbskin-retro :where([data-digichem],.nbrail-own) .jupyter-widget-Collapse-header,
+  body.nbskin-retro :where([data-digichem],.nbrail-own) .lm-Collapse-header{
+      background:linear-gradient(90deg,#a8460f,#d1793b)!important;color:#fdf3e2!important;
+      box-shadow:4px 4px 0 0 rgba(0,0,0,.22)!important;
+      letter-spacing:.6px!important;}
+  body.nbskin-retro #nbpanel-root .nbrail,body.nbskin-retro #nbpanel-root .nbdock,
+  body.nbskin-retro #nbpanel-root .nbdrawer{
+      background:#f0e2c8!important;border-color:#c8a878!important;color:#3a2f22!important;}
+  body.nbskin-retro #nbpanel-root .nbmap-inner::before{background:#8a6b45!important;}
+  body.nbskin-retro #nbpanel-root .nbmap-fill{
+      background:linear-gradient(180deg,#2e8b7a,#5cc2ad)!important;}
+
+  /* ---- FAIRY: everything round, soft light, a friendly sans ----------- */
+  body.nbskin-fairy{--nbmark:#b06cff;--nbglow:rgba(176,108,255,.58);--nbring:#b06cff;
+      --nbpick:#ff8fc4;--nbpickglow:rgba(255,143,196,.42);
+      --nbskin-font:"Trebuchet MS","Segoe UI",system-ui,"DejaVu Sans",sans-serif;
+      --nbskin-r:24px;--nbskin-pill-r:999px;}
+  body.nbskin-fairy .nbbox,body.nbskin-fairy .nblock,
+  body.nbskin-fairy .nbtitle-card{
+      background:linear-gradient(160deg,#fbf3ff,#f2f7ff)!important;
+      border-color:#e2cdf5!important;color:#4a3a63!important;
+      box-shadow:0 8px 28px rgba(176,108,255,.16)!important;}
+  body.nbskin-fairy .nbbox *,body.nbskin-fairy .nblock *{color:#4a3a63!important;}
+  body.nbskin-fairy .nbbox b,body.nbskin-fairy .nbbox strong{color:#8a3fd1!important;}
+  body.nbskin-fairy .nbtitle-h{color:#8a3fd1!important;}
+  body.nbskin-fairy .nbtitle-sub,body.nbskin-fairy .nbtitle-lead{color:#c06ba8!important;}
+  body.nbskin-fairy .nbtitle-rule{
+      background:linear-gradient(90deg,#b06cff,#ff8fc4)!important;}
+  body.nbskin-fairy :where([data-digichem],.nbrail-own) .jupyter-widget-Collapse-header *,
+  body.nbskin-fairy :where([data-digichem],.nbrail-own) .lm-Collapse-header *{color:#ffffff!important;}
+  body.nbskin-fairy :where([data-digichem],.nbrail-own) .jupyter-widget-Collapse-header,
+  body.nbskin-fairy :where([data-digichem],.nbrail-own) .lm-Collapse-header{
+      background:linear-gradient(90deg,#b06cff,#ff8fc4)!important;color:#fff!important;
+      box-shadow:0 6px 18px rgba(176,108,255,.30)!important;}
+  body.nbskin-fairy #nbpanel-root .nbrail,body.nbskin-fairy #nbpanel-root .nbdock,
+  body.nbskin-fairy #nbpanel-root .nbdrawer{
+      background:#fbf5ff!important;border-color:#e2cdf5!important;color:#4a3a63!important;}
+  body.nbskin-fairy #nbpanel-root .nbmap-inner::before{background:#c9a8e8!important;}
+  body.nbskin-fairy #nbpanel-root .nbmap-fill{
+      background:linear-gradient(180deg,#b06cff,#ff8fc4)!important;}
+
+  /* ---- THE DARK HALF OF EACH SKIN ------------------------------------
+     A skin is not a theme: it says what the page is made of, and it has to
+     work on a dark page as well as a light one. MEASURED after 24bg: the
+     drawer was left out of these lists, so in the dark fairy notebook a
+     white settings window opened over a near-black page. Every surface that
+     has a light rule above it needs its dark twin here — rail, dock AND
+     drawer, prose boxes, title card. */
+  body[data-jp-theme-light="false"].nbskin-fairy .nbbox,
+  body[data-jp-theme-light="false"].nbskin-fairy .nblock,
+  body[data-jp-theme-light="false"].nbskin-fairy .nbtitle-card,
+  body.nbdark.nbskin-fairy .nbbox,body.nbdark.nbskin-fairy .nblock,
+  body.nbdark.nbskin-fairy .nbtitle-card{
+      background:linear-gradient(160deg,#241c33,#1b2033)!important;
+      border-color:#4a3a63!important;color:#e6d9f7!important;}
+  body[data-jp-theme-light="false"].nbskin-fairy .nbbox *,
+  body.nbdark.nbskin-fairy .nbbox *,
+  body[data-jp-theme-light="false"].nbskin-fairy .nblock *,
+  body.nbdark.nbskin-fairy .nblock *{color:#e6d9f7!important;}
+  body[data-jp-theme-light="false"].nbskin-fairy #nbpanel-root .nbrail,
+  body[data-jp-theme-light="false"].nbskin-fairy #nbpanel-root .nbdock,
+  body[data-jp-theme-light="false"].nbskin-fairy #nbpanel-root .nbdrawer,
+  body.nbdark.nbskin-fairy #nbpanel-root .nbrail,
+  body.nbdark.nbskin-fairy #nbpanel-root .nbdock,
+  body.nbdark.nbskin-fairy #nbpanel-root .nbdrawer{
+      background:#1b1426!important;border-color:#4a3a63!important;color:#e6d9f7!important;}
+  body[data-jp-theme-light="false"].nbskin-retro .nbbox,
+  body[data-jp-theme-light="false"].nbskin-retro .nblock,
+  body[data-jp-theme-light="false"].nbskin-retro .nbtitle-card,
+  body.nbdark.nbskin-retro .nbbox,body.nbdark.nbskin-retro .nblock,
+  body.nbdark.nbskin-retro .nbtitle-card{
+      background:#2a2318!important;border-color:#6b5638!important;color:#efdfc4!important;
+      box-shadow:5px 5px 0 0 #1a150e!important;}
+  body[data-jp-theme-light="false"].nbskin-retro .nbbox *,
+  body.nbdark.nbskin-retro .nbbox *,
+  body[data-jp-theme-light="false"].nbskin-retro .nblock *,
+  body.nbdark.nbskin-retro .nblock *{color:#efdfc4!important;}
+  body[data-jp-theme-light="false"].nbskin-retro #nbpanel-root .nbrail,
+  body[data-jp-theme-light="false"].nbskin-retro #nbpanel-root .nbdock,
+  body[data-jp-theme-light="false"].nbskin-retro #nbpanel-root .nbdrawer,
+  body.nbdark.nbskin-retro #nbpanel-root .nbrail,
+  body.nbdark.nbskin-retro #nbpanel-root .nbdock,
+  body.nbdark.nbskin-retro #nbpanel-root .nbdrawer{
+      background:#241e14!important;border-color:#6b5638!important;color:#efdfc4!important;}
+  /* cyber is a dark skin by nature; on a LIGHT page it keeps its ink and
+     lifts the surface, so the two brightnesses stay honestly different */
+  body:not([data-jp-theme-light="false"]):not(.nbdark).nbskin-cyber .nbbox,
+  body:not([data-jp-theme-light="false"]):not(.nbdark).nbskin-cyber .nblock,
+  body:not([data-jp-theme-light="false"]):not(.nbdark).nbskin-cyber .nbtitle-card{
+      background:linear-gradient(160deg,#eef2ff,#fbeeff)!important;
+      border-color:#9b7fe0!important;
+      box-shadow:0 0 0 1px rgba(0,150,190,.14),0 6px 22px rgba(120,60,200,.10)!important;}
+  body:not([data-jp-theme-light="false"]):not(.nbdark).nbskin-cyber .nbbox *,
+  body:not([data-jp-theme-light="false"]):not(.nbdark).nbskin-cyber .nblock *{
+      color:#231a3d!important;}
+  body:not([data-jp-theme-light="false"]):not(.nbdark).nbskin-cyber #nbpanel-root .nbrail,
+  body:not([data-jp-theme-light="false"]):not(.nbdark).nbskin-cyber #nbpanel-root .nbdock,
+  body:not([data-jp-theme-light="false"]):not(.nbdark).nbskin-cyber #nbpanel-root .nbdrawer{
+      background:#f2eeff!important;border-color:#9b7fe0!important;color:#231a3d!important;}
+  body:not([data-jp-theme-light="false"]):not(.nbdark).nbskin-cyber{
+      --nbmark:#0096be;--nbglow:rgba(0,150,190,.55);--nbring:#0096be;}
+
+  /* ---- SHAPE: the corner radius is the skin's, everywhere ------------- */
+  body[class*="nbskin-"] .nbbox,body[class*="nbskin-"] .nblock,
+  body[class*="nbskin-"] .nbtitle-card,
+  body[class*="nbskin-"] #nbpanel-root .nbrail,
+  body[class*="nbskin-"] #nbpanel-root .nbdock,
+  body[class*="nbskin-"] #nbpanel-root .nbdrawer,
+  body[class*="nbskin-"] #nbpanel-root .nbcell,
+  body[class*="nbskin-"] #nbpanel-root .nbbtn{
+      border-radius:var(--nbskin-r,14px)!important;}
+  /* the pill keeps its own radius and — this is what went wrong in 24bg —
+     its own WIDTH. A chapter's pill is the width of its name; the skins said
+     nothing about width and something else stretched them across the column,
+     so it is stated here where the skin's shape is stated. */
+  body[class*="nbskin-"] :where([data-digichem],.nbrail-own) .jupyter-widget-Collapse-header,
+  body[class*="nbskin-"] :where([data-digichem],.nbrail-own) .p-Collapse-header,
+  body[class*="nbskin-"] :where([data-digichem],.nbrail-own) .lm-Collapse-header,
+  body[class*="nbskin-"] .acc-chapter>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header,
+  body[class*="nbskin-"] .acc-chapter>.lm-Collapse>.lm-Collapse-header,
+  body[class*="nbskin-"] .acc-viz>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header,
+  body[class*="nbskin-"] .acc-practice>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header{
+      border-radius:var(--nbskin-pill-r,12px)!important;
+      width:fit-content!important;max-width:94%%!important;
+      margin-left:auto!important;margin-right:auto!important;
+      padding-left:30px!important;padding-right:30px!important;}
+
+  /* ---- SHAPE: what a mark on the timeline IS -------------------------- */
+  /* The marks are squares turned 45° — a diamond — and the glyph inside them
+     is turned back. A skin that squares them off has to un-turn both, or the
+     tick inside comes out diagonal (the same trap as 24bb). */
+  body.nbskin-retro #nbpanel-root.vert .nbrail-dot,
+  body.nbskin-retro #nbpanel-root.vert .nbcodemark,
+  body.nbskin-retro #nbpanel-root.vert .nbvizmark,
+  body.nbskin-retro #nbpanel-root.vert .nbchapdot,
+  body.nbskin-retro #nbpanel-root.vert .nbsubdot{
+      /* MEASURED: `transform:none` threw the centring away with the rotation —
+         a mark is placed at top:0 of its node and pulled back by half its own
+         size, and all of that lives in the SAME transform. Every mark in this
+         skin sat 22px below and right of its own line. Only the rotation goes. */
+      transform:translate(-50%%,-50%%)!important;border-radius:0!important;}
+  /* ...including the two OPEN DOORS. They carry an extra class each
+     (`is-current`, `cd-current`) and therefore their own, more specific
+     rules — which is why they stayed diamonds while every other mark squared
+     off. Named here so the skin reaches them as well. */
+  body.nbskin-retro #nbpanel-root.vert .nbmap-node.is-current .nbrail-dot,
+  body.nbskin-retro #nbpanel-root.vert .nbcodemark.cd-current,
+  body.nbskin-retro #nbpanel-root.vert .nbcodemark.cd-done,
+  body.nbskin-retro #nbpanel-root.vert .nbrail-dot.st-code{
+      transform:translate(-50%%,-50%%)!important;border-radius:0!important;}
+  body.nbskin-retro #nbpanel-root.vert .nbmap-node:hover .nbrail-dot,
+  body.nbskin-retro #nbpanel-root.vert .nbmap-node:hover .nbcodemark,
+  body.nbskin-retro #nbpanel-root.vert .nbmap-node:hover .nbvizmark{
+      transform:translate(-50%%,-50%%) scale(1.2)!important;}
+  /* 2026-09-26c — C2 · RETRO DOES NOT TURN, NOT EVEN FOR A MOMENT.
+     User video 26.09. (Firefox, retro, dark): as the timeline jumped, the
+     chapter-1 mark stood tilted by about 30°. Measured: the general "every
+     mark turns under the pointer" rules (#nbpanel-root.vert .nbmap-node:hover
+     .nbchapdot, specificity 1,4,0) outrank retro's upright rule (1,3,1), so on
+     :hover and :focus a retro chapter or sub-chapter square turned to 45° —
+     and a timeline sliding under a resting pointer starts and breaks off that
+     .26s turn, which shows the in-between angle (sampled 7.9° ... 37.1°). The
+     same for :focus on the circle, code and figure marks (a 360° spin). Retro
+     answers the pointer and the keyboard by growing only. (1,5,1) beats both. */
+  body.nbskin-retro #nbpanel-root.vert .nbmap-node:hover .nbchapdot,
+  body.nbskin-retro #nbpanel-root.vert .nbmap-node:hover .nbsubdot,
+  body.nbskin-retro #nbpanel-root.vert .nbmap-node:focus .nbchapdot,
+  body.nbskin-retro #nbpanel-root.vert .nbmap-node:focus .nbsubdot,
+  body.nbskin-retro #nbpanel-root.vert .nbmap-node:focus .nbrail-dot,
+  body.nbskin-retro #nbpanel-root.vert .nbmap-node:focus .nbcodemark,
+  body.nbskin-retro #nbpanel-root.vert .nbmap-node:focus .nbvizmark{
+      transform:translate(-50%%,-50%%) scale(1.2)!important;}
+  body.nbskin-fairy #nbpanel-root.vert .nbrail-dot,
+  body.nbskin-fairy #nbpanel-root.vert .nbcodemark,
+  body.nbskin-fairy #nbpanel-root.vert .nbvizmark,
+  body.nbskin-fairy #nbpanel-root.vert .nbchapdot,
+  body.nbskin-fairy #nbpanel-root.vert .nbsubdot{
+      /* MEASURED: `transform:none` threw the centring away with the rotation —
+         a mark is placed at top:0 of its node and pulled back by half its own
+         size, and all of that lives in the SAME transform. Every mark in this
+         skin sat 22px below and right of its own line. Only the rotation goes. */
+      transform:translate(-50%%,-50%%)!important;border-radius:50%%!important;}
+  body.nbskin-fairy #nbpanel-root.vert .nbmap-node.is-current .nbrail-dot,
+  body.nbskin-fairy #nbpanel-root.vert .nbcodemark.cd-current,
+  body.nbskin-fairy #nbpanel-root.vert .nbcodemark.cd-done,
+  body.nbskin-fairy #nbpanel-root.vert .nbrail-dot.st-code{
+      transform:translate(-50%%,-50%%)!important;border-radius:50%%!important;}
+  body.nbskin-fairy #nbpanel-root.vert .nbmap-node:hover .nbrail-dot,
+  body.nbskin-fairy #nbpanel-root.vert .nbmap-node:hover .nbcodemark,
+  body.nbskin-fairy #nbpanel-root.vert .nbmap-node:hover .nbvizmark{
+      transform:translate(-50%%,-50%%) scale(1.2)!important;}
+  body.nbskin-fairy #nbpanel-root.vert .nbsect{border-radius:999px!important;}
+  body.nbskin-cyber #nbpanel-root.vert .nbrail-dot,
+  body.nbskin-cyber #nbpanel-root.vert .nbcodemark,
+  body.nbskin-cyber #nbpanel-root.vert .nbvizmark,
+  body.nbskin-cyber #nbpanel-root.vert .nbchapdot,
+  body.nbskin-cyber #nbpanel-root.vert .nbsubdot{border-radius:0!important;}
+  body.nbskin-cyber #nbpanel-root.vert .nbmap-node.is-current .nbrail-dot,
+  body.nbskin-cyber #nbpanel-root.vert .nbcodemark.cd-current,
+  body.nbskin-cyber #nbpanel-root.vert .nbcodemark.cd-done,
+  body.nbskin-cyber #nbpanel-root.vert .nbrail-dot.st-code{border-radius:0!important;}
+  body.nbskin-cyber #nbpanel-root.vert .nbsect{border-radius:0!important;}
+  body.nbskin-retro #nbpanel-root.vert .nbsect{border-radius:0!important;}
+  body[class*="nbskin-"] #nbpanel-root .nbmap-cursor::before{
+      border-radius:var(--nbskin-pill-r,7px)!important;}
+  /* the grip keeps its left-only rounding in every skin — it is the panel's
+     edge, and an edge is not rounded on the side it is attached to */
+  body[class*="nbskin-"] #nbpanel-root .nbgrip{
+      border-radius:var(--nbskin-r,8px) 0 0 var(--nbskin-r,8px)!important;}
+
+  /* ---- TYPE: the letterforms follow the skin -------------------------- */
+  /* Everything the READER reads, and the panel with it. The code folds are
+     left alone on purpose — a monospace stub is monospace in every skin,
+     because its alignment carries meaning. */
+  body[class*="nbskin-"] .nbbox,body[class*="nbskin-"] .nblock,
+  body[class*="nbskin-"] .nbbox *,body[class*="nbskin-"] .nblock *,
+  body[class*="nbskin-"] .nbtitle-card,body[class*="nbskin-"] .nbtitle-card *,
+  body[class*="nbskin-"] .nbtitle-lead,
+  body[class*="nbskin-"] :where([data-digichem],.nbrail-own) .jupyter-widget-Collapse-header,
+  body[class*="nbskin-"] :where([data-digichem],.nbrail-own) .lm-Collapse-header,
+  body[class*="nbskin-"] :where([data-digichem],.nbrail-own) .jupyter-widget-Collapse-header *,
+  body[class*="nbskin-"] :where([data-digichem],.nbrail-own) .lm-Collapse-header *,
+  body[class*="nbskin-"] #nbpanel-root,
+  body[class*="nbskin-"] #nbpanel-root *{
+      font-family:var(--nbskin-font,inherit)!important;}
+  body[class*="nbskin-"] .nbbox code,body[class*="nbskin-"] .nbbox pre,
+  body[class*="nbskin-"] .nblock code,body[class*="nbskin-"] .nblock pre,
+  body[class*="nbskin-"] :where([data-digichem],.nbrail-own) .cm-editor,body[class*="nbskin-"] :where([data-digichem],.nbrail-own) .cm-editor *,
+  body[class*="nbskin-"] .nbcodefold code,body[class*="nbskin-"] .nbcodefold pre{
+      font-family:var(--jp-code-font-family,ui-monospace,monospace)!important;}
+  /* the skin button says which skin is on */
+  #nbpanel-root .nbbtn.nbskin{letter-spacing:0!important;}
+
+  /* ======================================================================
+     2026-09-25 — EVERY SKIN IS A FULL PALETTE, IN BOTH BRIGHTNESSES.
+
+     Until now a skin stated a handful of colours and stopped. The accents —
+     bold text, chapter headings, the subtitle — were written ONCE, for the
+     brightness the skin was drawn in, and kept for the other one. Measured,
+     that produced exactly the unreadable pairs the reader reported:
+
+       cyber, LIGHT page : bold text #00e5ff on #eef2ff  → 1.4:1
+       retro, DARK page  : bold text #a8460f on #2a2318  → 2.1:1
+       fairy, DARK page  : bold text #8a3fd1 on #241c33  → 2.0:1
+
+     Anything under 4.5:1 is not a style choice, it is text nobody can read.
+     So every skin now carries a NAMED set, twice — a light half and a dark
+     half of the same hue family, which is also the answer to "light and dark
+     of one design should belong together": they are not two designs any more,
+     they are one palette at two brightnesses.
+
+       --nbskin-surf   the background of a control the reader types into
+       --nbskin-ink    text on that surface
+       --nbskin-line   its border
+       --nbskin-track  an unfilled slider track
+       --nbskin-acc    the accent: bold text, headings
+       --nbskin-acc2   the second accent: subtitles
+
+     Every rule below takes its colour from these and from nowhere else, so a
+     new skin is six values and inherits all of this. */
+  body{--nbskin-surf:#ffffff;--nbskin-ink:#1f2933;--nbskin-line:#c3ced8;
+       --nbskin-track:#d7dfe7;--nbskin-acc:#1d5c8a;--nbskin-acc2:#2c6e91;
+       --nbskin-quiet:#55636f;}
+  body.nbdark{--nbskin-surf:#1f252c;--nbskin-ink:#dbe2e9;--nbskin-line:#3b444d;
+       --nbskin-track:#39424d;--nbskin-acc:#8fc7e8;--nbskin-acc2:#7fb8dc;
+       --nbskin-quiet:#9fb0bd;}
+  body:not(.nbdark).nbskin-cyber{--nbskin-surf:#f2eeff;--nbskin-ink:#231a3d;
+       --nbskin-line:#9b7fe0;--nbskin-track:#d9cdf5;
+       --nbskin-acc:#00647f;--nbskin-acc2:#a3128c;--nbskin-quiet:#54437e;}
+  body.nbdark.nbskin-cyber{--nbskin-surf:#141a2e;--nbskin-ink:#d8e6ff;
+       --nbskin-line:#3a2a6b;--nbskin-track:#2b2154;
+       --nbskin-acc:#00e5ff;--nbskin-acc2:#ff2fd0;--nbskin-quiet:#8fa8d8;}
+  body:not(.nbdark).nbskin-retro{--nbskin-surf:#fdf6e8;--nbskin-ink:#3a2f22;
+       --nbskin-line:#c8a878;--nbskin-track:#dcc8a4;
+       --nbskin-acc:#a8460f;--nbskin-acc2:#6d4f22;--nbskin-quiet:#6d5a3e;}
+  body.nbdark.nbskin-retro{--nbskin-surf:#2a2318;--nbskin-ink:#efdfc4;
+       --nbskin-line:#6b5638;--nbskin-track:#4a3d28;
+       --nbskin-acc:#ffa451;--nbskin-acc2:#e0c48a;--nbskin-quiet:#b9a582;}
+  body:not(.nbdark).nbskin-fairy{--nbskin-surf:#fdf8ff;--nbskin-ink:#4a3a63;
+       --nbskin-line:#e2cdf5;--nbskin-track:#ead9fa;
+       --nbskin-acc:#7b32c2;--nbskin-acc2:#a8306f;--nbskin-quiet:#655377;
+       --nbsb-c:#a48fc4;}
+  body.nbdark.nbskin-fairy{--nbskin-surf:#241c33;--nbskin-ink:#e6d9f7;
+       --nbskin-line:#4a3a63;--nbskin-track:#3a2d52;
+       --nbskin-acc:#c79cff;--nbskin-acc2:#ff9fd0;--nbskin-quiet:#b3a2c8;}
+
+  /* ---- 2026-09-26b · B · THE PAGE BEHIND THE CELLS FOLLOWS THE SKIN ----
+     Until 26b the skin coloured every box and stopped at the cell edge: the
+     page behind the boxes stayed JupyterLab's white (or our #111820). Now the
+     page is part of the skin — ONE colour and ONE quiet texture per skin and
+     brightness, as four more tokens beside the others:
+
+       --nbskin-page      the page colour behind the cells
+       --nbskin-tex       the texture: CSS gradients only, never an image —
+                          a lecture hall without a network cannot fetch one
+       --nbskin-tex-size  its tile size(s)   --nbskin-tex-pos  its offset(s)
+
+       minimal    nothing at all — minimal is the ABSENCE of a skin class, so
+                  there is no rule for it here and none can drift
+       cyber      fine scanlines: a 1px line every 3px, 5-6 %% ink
+       retro      paper grain: two dot lattices of coprime pitch (5px, 7px),
+                  so the eye finds no grid
+       fairy      a soft three-stop wash across the page
+
+     2026-09-28c (K3.5) — THE TEXTURE ZOOMS WITH THE MAGNIFIER. Its pitch is
+     written as a multiple of --nbtexz, which applyZoom() sets on <body> to
+     the lens's factor: the scroller itself is not zoomed (the lens zooms
+     what is inside it), so a fixed pitch stood still while the page grew.
+     cyber's lines are a 3-px tile now instead of a repeating gradient, so
+     the tile can be sized; at 100 %% it draws the same 1-px line every 3 px.
+
+     WHERE, and only there: the notebook's own scroller
+     (.jp-WindowedPanel-outer) inside the notebook this panel belongs to
+     (.nbrail-own). Never <body>, never JupyterLab's toolbar, tab bar or side
+     bar — those stay light/dark (measured: body, menu bar, tab bar, toolbar,
+     side bar, status bar and our dock have the same computed background in
+     25h and 26b, 4 skins x light/dark). The cells over it are made
+     transparent, because nbforce-dark paints every .jp-Cell #111820 and would
+     hide the page again.
+
+     Readability (OBERFLAECHE §6): text on the page is checked against the
+     WORST point of the texture — every stop of every layer, laid over the
+     page colour — not against --nbskin-page. Minimum measured: see the
+     stand document; every pair >= 4.5:1. Print shows no texture. */
+  /* 2026-09-28 (Paket 7, Skizze) — THE TEXTURE IS SEEN. The pitch is 3–8 ×
+     what it was (cyber 3 → 24 px, a grid instead of scanlines; retro grain
+     5/7 → 17/23 px with bigger grains; fairy gets a sparse dust of dots,
+     34 px, over its wash). Still gradients only, still × --nbtexz. The
+     worst point for text is not re-measured (sketch). */
+  body:not(.nbdark).nbskin-cyber{--nbskin-page:#f3f1fb;
+       --nbskin-tex:linear-gradient(0deg,rgba(58,42,107,.09) 0 1px,transparent 1px),
+                    linear-gradient(90deg,rgba(58,42,107,.09) 0 1px,transparent 1px);
+       --nbskin-tex-size:calc(24px * var(--nbtexz,1)) calc(24px * var(--nbtexz,1)),calc(24px * var(--nbtexz,1)) calc(24px * var(--nbtexz,1));--nbskin-tex-pos:0 0,0 0;}
+  body.nbdark.nbskin-cyber{--nbskin-page:#0c1020;
+       --nbskin-tex:linear-gradient(0deg,rgba(0,229,255,.08) 0 1px,transparent 1px),
+                    linear-gradient(90deg,rgba(0,229,255,.08) 0 1px,transparent 1px);
+       --nbskin-tex-size:calc(24px * var(--nbtexz,1)) calc(24px * var(--nbtexz,1)),calc(24px * var(--nbtexz,1)) calc(24px * var(--nbtexz,1));--nbskin-tex-pos:0 0,0 0;}
+  body:not(.nbdark).nbskin-retro{--nbskin-page:#f8f0e0;
+       --nbskin-tex:radial-gradient(circle,rgba(109,79,34,.13) 0 calc(1.4px * var(--nbtexz,1)),transparent calc(2.2px * var(--nbtexz,1))),
+                    radial-gradient(circle,rgba(109,79,34,.09) 0 calc(1.4px * var(--nbtexz,1)),transparent calc(2.2px * var(--nbtexz,1)));
+       --nbskin-tex-size:calc(17px * var(--nbtexz,1)) calc(17px * var(--nbtexz,1)),calc(23px * var(--nbtexz,1)) calc(23px * var(--nbtexz,1));
+       --nbskin-tex-pos:0 0,calc(6px * var(--nbtexz,1)) calc(9px * var(--nbtexz,1));}
+  body.nbdark.nbskin-retro{--nbskin-page:#1f1a12;
+       --nbskin-tex:radial-gradient(circle,rgba(255,217,176,.11) 0 calc(1.4px * var(--nbtexz,1)),transparent calc(2.2px * var(--nbtexz,1))),
+                    radial-gradient(circle,rgba(255,217,176,.08) 0 calc(1.4px * var(--nbtexz,1)),transparent calc(2.2px * var(--nbtexz,1)));
+       --nbskin-tex-size:calc(17px * var(--nbtexz,1)) calc(17px * var(--nbtexz,1)),calc(23px * var(--nbtexz,1)) calc(23px * var(--nbtexz,1));
+       --nbskin-tex-pos:0 0,calc(6px * var(--nbtexz,1)) calc(9px * var(--nbtexz,1));}
+  body:not(.nbdark).nbskin-fairy{--nbskin-page:#fbf6ff;
+       --nbskin-tex:radial-gradient(circle,rgba(200,90,170,.16) 0 calc(1.6px * var(--nbtexz,1)),transparent calc(2.6px * var(--nbtexz,1))),
+                    linear-gradient(160deg,#fbf6ff 0,#fdf0f7 55%%,#f3efff 100%%);
+       --nbskin-tex-size:calc(34px * var(--nbtexz,1)) calc(34px * var(--nbtexz,1)),100%% 100%%;--nbskin-tex-pos:0 0,0 0;}
+  body.nbdark.nbskin-fairy{--nbskin-page:#1c1629;
+       --nbskin-tex:radial-gradient(circle,rgba(230,160,255,.12) 0 calc(1.6px * var(--nbtexz,1)),transparent calc(2.6px * var(--nbtexz,1))),
+                    linear-gradient(160deg,#1c1629 0,#241828 55%%,#191a2e 100%%);
+       --nbskin-tex-size:calc(34px * var(--nbtexz,1)) calc(34px * var(--nbtexz,1)),100%% 100%%;--nbskin-tex-pos:0 0,0 0;}
+  body.nbskin-cyber .nbrail-own .jp-WindowedPanel-outer,
+  body.nbskin-retro .nbrail-own .jp-WindowedPanel-outer,
+  body.nbskin-fairy .nbrail-own .jp-WindowedPanel-outer,
+  body.nbskin-digi .nbrail-own .jp-WindowedPanel-outer{
+       background-color:var(--nbskin-page)!important;
+       background-image:var(--nbskin-tex)!important;
+       background-size:var(--nbskin-tex-size)!important;
+       background-position:var(--nbskin-tex-pos)!important;
+       background-repeat:repeat!important;}
+  body.nbskin-cyber .nbrail-own .jp-WindowedPanel-outer .jp-Cell,
+  body.nbskin-retro .nbrail-own .jp-WindowedPanel-outer .jp-Cell,
+  body.nbskin-fairy .nbrail-own .jp-WindowedPanel-outer .jp-Cell,
+  body.nbskin-digi .nbrail-own .jp-WindowedPanel-outer .jp-Cell{
+       background-color:transparent!important;}
+  /* print: no texture. Same selectors as above — a lighter one lost to them
+     even with !important (measured: the grain was still in the print view). */
+  @media print{
+    body.nbskin-cyber .nbrail-own .jp-WindowedPanel-outer,
+    body.nbskin-retro .nbrail-own .jp-WindowedPanel-outer,
+    body.nbskin-fairy .nbrail-own .jp-WindowedPanel-outer,
+    body.nbskin-digi .nbrail-own .jp-WindowedPanel-outer{
+       background-image:none!important;}
+  }
+
+
+  /* ======================================================================
+     2026-09-28 (Paket 11, Skizze) — EACH SKIN MOVES IN ITS OWN WAY.
+     Four motions, one set of numbers per skin: LIGHT-UP (a mark the marker
+     reaches, and a mark's turn/grow on hover), JUMP (the place a click lands
+     on flashes), FOLD (a fold's body coming in) and the TRAIL (how long it
+     takes to catch up with the marker). The keyframes are ONE name each and
+     read the skin's variables, so switching the skin never restarts a
+     running animation — only its numbers change.
+       minimal  calm: short ease-out, a soft brighten, the fold slides 6 px
+       cyber    machine: fast, stepped flicker, the fold scans in sideways
+       retro    mechanical: slow steps, a warm sepia flash, the fold drops
+       fairy    soft: long overshoot, a bloom in the skin's glow, the fold floats up
+     Nothing runs longer than 1.5 s; prefers-reduced-motion switches all of it
+     off. The trail's catch-up is drawn by the script (TR_DUR in
+     17-rail-marker.js); --nbm-trail-ms is the number it should read. */
+  body{--nbm-glow-dur:.36s;--nbm-glow-ease:ease-out;
+       --nbm-spin-dur:.5s;--nbm-spin-ease:cubic-bezier(.22,.61,.36,1);--nbm-grow-dur:.26s;
+       --nbm-fold-dur:.22s;--nbm-fold-ease:cubic-bezier(.34,.9,.35,1);
+       --nbm-fold-from:translateY(-6px);
+       --nbm-land-dur:1.2s;--nbm-land-ease:ease-out;
+       --nbm-trail-ms:1000;}
+  body.nbskin-cyber{--nbm-glow-dur:.24s;--nbm-glow-ease:steps(4,jump-end);
+       --nbm-spin-dur:.2s;--nbm-spin-ease:cubic-bezier(.2,1.5,.4,1);--nbm-grow-dur:.12s;
+       --nbm-fold-dur:.18s;--nbm-fold-ease:steps(5,jump-end);
+       --nbm-fold-from:translateX(-10px) skewX(-8deg);
+       --nbm-land-dur:.6s;--nbm-land-ease:steps(6,jump-end);
+       --nbm-trail-ms:450;}
+  body.nbskin-retro{--nbm-glow-dur:.48s;--nbm-glow-ease:steps(3,jump-end);
+       --nbm-spin-dur:.3s;--nbm-spin-ease:steps(3,jump-end);--nbm-grow-dur:.3s;
+       --nbm-fold-dur:.32s;--nbm-fold-ease:steps(4,jump-end);
+       --nbm-fold-from:translateY(-14px);
+       --nbm-land-dur:.9s;--nbm-land-ease:steps(4,jump-end);
+       --nbm-trail-ms:1300;}
+  body.nbskin-fairy{--nbm-glow-dur:.72s;--nbm-glow-ease:cubic-bezier(.34,1.56,.64,1);
+       --nbm-spin-dur:.7s;--nbm-spin-ease:cubic-bezier(.34,1.56,.64,1);--nbm-grow-dur:.5s;
+       --nbm-fold-dur:.46s;--nbm-fold-ease:cubic-bezier(.34,1.56,.64,1);
+       --nbm-fold-from:translateY(10px) scale(.97);
+       --nbm-land-dur:1.4s;--nbm-land-ease:ease-in-out;
+       --nbm-trail-ms:1400;}
+  /* E18.6: das Aufleuchten bei Ankunft ist ein kurzes Wachsen (--nbgrow
+     treibt die Transform der Marke, 12-k3) statt eines filter-Verlaufs */
+  @keyframes nbm-glow{0%%{--nbgrow:1;}45%%{--nbgrow:1.16;}100%%{--nbgrow:1;}}
+  @keyframes nbm-fold{from{opacity:0;transform:var(--nbm-fold-from);}to{opacity:1;transform:none;}}
+  @keyframes nbm-land{0%%{opacity:.45;}100%%{opacity:1;}}
+  /* LIGHT-UP: the mark the marker has just reached (`.here` is set the frame
+     it arrives, so the animation runs once per arrival) */
+  html body #nbpanel-root.vert .nbmap-node.here :is(.nbrail-dot,.nbchapdot,.nbsubdot,.nbsect,.nbvizmark,.nbcodemark){
+      animation:nbm-glow var(--nbm-glow-dur) var(--nbm-glow-ease) 1;}
+  /* …and the turn/grow on hover and pick (Paket 8) at the skin's pace */
+  html body #nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-node :is(.nbrail-dot,.nbvizmark,.nbcodemark){
+      transition:--nbspin var(--nbm-spin-dur) var(--nbm-spin-ease),
+                 --nbgrow var(--nbm-grow-dur) var(--nbm-spin-ease),
+                 background .3s ease,border-color .3s ease!important;}
+  /* FOLD: a fold's body comes in (replaces the one `nbopen` for all skins) */
+  html body :where([data-digichem],.nbrail-own) .jupyter-widget-Collapse-contents,html body :where([data-digichem],.nbrail-own) .lm-Collapse-contents,
+  html body :where([data-digichem],.nbrail-own) .p-Collapse-contents{
+      animation:nbm-fold var(--nbm-fold-dur) var(--nbm-fold-ease) backwards;}
+  /* JUMP: the header a click lands on, and a reference that is jumped to */
+  html body .nbjump-land > :is(.jupyter-widget-Collapse-header,.lm-Collapse-header),
+  html body .nbjump-land > * > :is(.jupyter-widget-Collapse-header,.lm-Collapse-header){
+      animation:nbm-land var(--nbm-land-dur) var(--nbm-land-ease) 1;}
+  html body .ref-flash{animation:refflash var(--nbm-land-dur) var(--nbm-land-ease) 1;}
+  @media (prefers-reduced-motion:reduce){
+    html body #nbpanel-root.vert .nbmap-node.here :is(.nbrail-dot,.nbchapdot,.nbsubdot,.nbsect,.nbvizmark,.nbcodemark),
+    html body :where([data-digichem],.nbrail-own) .jupyter-widget-Collapse-contents,html body :where([data-digichem],.nbrail-own) .lm-Collapse-contents,
+    html body :where([data-digichem],.nbrail-own) .p-Collapse-contents,html body .ref-flash,
+    html body .nbjump-land > :is(.jupyter-widget-Collapse-header,.lm-Collapse-header),
+    html body .nbjump-land > * > :is(.jupyter-widget-Collapse-header,.lm-Collapse-header){
+        animation:none!important;}
+    html body #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-node :is(.nbrail-dot,.nbvizmark,.nbcodemark){
+        transition:none!important;}
+    body{--nbm-trail-ms:0;}
+    /* 2026-09-30 (E10.M3, Paket 11) — "prefers-reduced-motion switches all of
+       it off" galt nur für die Keyframes. Gemessen v1.38 unter reduce: 0
+       Animationen, aber 23 Arten Transition bis .55 s (Panelbreite, Falten,
+       Pillen, Namen). Jetzt: nichts bewegt sich in diesem Notebook, seinem
+       Panel und seinen Fenstern. Kein Skript wartet auf transitionend. */
+    html body :is([data-digichem],.nbrail-own,#nbpanel-root,.nbhelp,.nbhelp-back,.nbtip),
+    html body :is([data-digichem],.nbrail-own,#nbpanel-root,.nbhelp,.nbhelp-back,.nbtip) *,
+    html body :is([data-digichem],.nbrail-own,#nbpanel-root,.nbhelp,.nbhelp-back,.nbtip) *::before,
+    html body :is([data-digichem],.nbrail-own,#nbpanel-root,.nbhelp,.nbhelp-back,.nbtip) *::after,
+    html body #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root *,
+    html body #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root *::before,
+    html body #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root *::after{
+        transition:none!important;animation:none!important;}
+  }
+
+  /* ======================================================================
+     2026-09-29 (Eilauftrag E6.13, Oberfläche, Skizze) — EVERY TEXT IN THE
+     STYLE, ALSO WHAT THE WIDGETS WRITE. ipywidgets and jupyterquiz bring
+     their own type and ink (JupyterLab's UI font, #1a1a1a / --jp-ui-font-
+     color*, the quiz's black), so a slider's label, its readout, an answer
+     field, a radio list or a quiz stayed minimal in cyber, retro and fairy
+     and dark-on-dark in some dark skins. Now all of it takes the skin's
+     font and ink (quiet ink for readouts and hints, surface and line for
+     fields). Code keeps its code font: the text of an output <pre> takes
+     the ink only. Inline styles are Python's (E6.13 py); formulas are
+     images and stay as drawn. */
+  html body[class*="nbskin-"] :where([data-digichem],.nbrail-own) .jp-Notebook .jp-Cell :is(.widget-label,.widget-label-basic,
+      .jupyter-widget-label,.widget-readout,.widget-inline-hbox label,.widget-radio-box label,
+      .widget-checkbox label,.widget-html-content,.widget-htmlmath-content,
+      .widget-radio-box,.widget-toggle-buttons,.jupyter-widgets label,
+      .Quiz,.Quiz p,.Quiz span,.Quiz div,.Quiz .MCButton,.Quiz .MCButton p,
+      .MultipleChoiceQn,.ManyChoiceQn,.NumericQn,.QuizFeedback),
+  html body[class*="nbskin-"] :where([data-digichem],.nbrail-own) .jp-Notebook .jp-Cell :is(.widget-text,.widget-textarea,
+      .widget-dropdown,.jupyter-widget-text,.jupyter-widget-dropdown) :is(input,select,textarea),
+  html body[class*="nbskin-"] :where([data-digichem],.nbrail-own) .jp-Notebook .jp-Cell :is(.widget-button,.jupyter-button,
+      .widget-toggle-button,.jupyter-widget-Button,.Quiz button,.Quiz input),
+  html body[class*="nbskin-"] :where([data-digichem],.nbrail-own) .jp-Notebook .jp-Cell .jp-RenderedHTMLCommon :is(p,li,td,th,span,label,div){
+      font-family:var(--nbskin-font,inherit)!important;}
+  html body[class*="nbskin-"] :where([data-digichem],.nbrail-own) .jp-Notebook .jp-Cell :is(.widget-label,.widget-label-basic,
+      .jupyter-widget-label,.widget-inline-hbox label,.widget-radio-box label,
+      .widget-checkbox label,.widget-html-content,.widget-htmlmath-content,
+      .jupyter-widgets label,.Quiz,.Quiz p,.Quiz span,.Quiz .MCButton p,
+      .MultipleChoiceQn,.ManyChoiceQn,.NumericQn){
+      color:var(--nbskin-ink,#1f2933)!important;}
+  html body[class*="nbskin-"] :where([data-digichem],.nbrail-own) .jp-Notebook .jp-Cell :is(.widget-readout,.QuizFeedback,
+      .jp-OutputArea-output[data-mime-type="text/plain"] pre,
+      .jp-OutputArea-output[data-mime-type="application/vnd.jupyter.stdout"] pre){
+      color:var(--nbskin-quiet,var(--nbskin-ink,#46535f))!important;}
+  /* the fields: the skin's surface, ink, edge and corner */
+  html body[class*="nbskin-"] :where([data-digichem],.nbrail-own) .jp-Notebook .jp-Cell :is(.widget-text,.widget-textarea,
+      .widget-dropdown,.jupyter-widget-text,.jupyter-widget-dropdown,.widget-hbox) :is(input[type="text"],input[type="number"],select,textarea),
+  html body[class*="nbskin-"] :where([data-digichem],.nbrail-own) .jp-Notebook .jp-Cell .Quiz input{
+      background:var(--nbskin-surf,#ffffff)!important;color:var(--nbskin-ink,#1f2933)!important;
+      border:1px solid var(--nbskin-line,#c3ced8)!important;
+      border-radius:min(var(--nbskin-r,6px),10px)!important;
+      caret-color:var(--nbskin-acc,#1d5c8a);}
+  html body.nbskin-retro :where([data-digichem],.nbrail-own) .jp-Notebook .jp-Cell :is(.widget-text,.widget-dropdown,.jupyter-widget-text,.jupyter-widget-dropdown,.widget-hbox) :is(input,select,textarea){
+      border-radius:0!important;}
+  html body[class*="nbskin-"] :where([data-digichem],.nbrail-own) .jp-Notebook .jp-Cell :is(.widget-text,.widget-dropdown,.jupyter-widget-text,.jupyter-widget-dropdown,.widget-hbox) :is(input,select,textarea):focus{
+      outline:2px solid color-mix(in srgb,var(--nbskin-acc,#1d5c8a) 55%%,transparent)!important;outline-offset:1px;}
+  /* the radio dots and check boxes take the accent */
+  html body[class*="nbskin-"] :where([data-digichem],.nbrail-own) .jp-Notebook .jp-Cell :is(.widget-radio-box,.widget-checkbox) input{
+      accent-color:var(--nbskin-acc,#1d5c8a);}
+  /* the ink of a plain output (print, repr) — its font stays the code font */
+  html body[class*="nbskin-"] :where([data-digichem],.nbrail-own) .jp-Notebook .jp-Cell .jp-OutputArea-output :is(pre,code){
+      color:var(--nbskin-ink,#1f2933);}
+
+  /* ======================================================================
+     2026-09-29 — EILAUFTRAG E8.2 (Oberfläche, Skizze). THE TEXTURE KEEPS
+     ITS LARGEST SIZE; ZOOMING GIVES THE PAGE DEPTH INSTEAD.
+     K3.5 let the texture's pitch follow the lens (--nbtexz on <body>). Now it
+     stays at the pitch it has fully zoomed in (the lens's ceiling, 200 %% →
+     2): an !important custom property beats the inline one applyZoom()
+     writes, so nothing in the script has to change for the size.
+     The depth: the page behind the reading matter darkens and softens
+     towards its edges the further the reader zooms OUT — the text seems to
+     float up off a deeper page. It reads the lens factor from --nbzf
+     (contract for JS: `document.body.style.setProperty('--nbzf', pct/100)`
+     next to --nbtexz; without it the depth stays 0 and nothing changes).
+     --nbdepth = 0 at 200 %%, 1 at the floor (60 %%). Inset shadow on the
+     scroller: painted on its box, so it stands still while the page scrolls
+     under it — a window onto the page, not a sticker on it. */
+  body[class*="nbskin-"]{--nbtexz:2!important;}
+  body.nbskin-cyber .nbrail-own .jp-WindowedPanel-outer,
+  body.nbskin-retro .nbrail-own .jp-WindowedPanel-outer,
+  body.nbskin-fairy .nbrail-own .jp-WindowedPanel-outer,
+  body.nbskin-digi .nbrail-own .jp-WindowedPanel-outer{
+       --nbdepth:clamp(0, calc((2 - var(--nbzf,2)) / 1.4), 1);
+       box-shadow:inset 0 0 calc(160px * var(--nbdepth)) calc(40px * var(--nbdepth))
+                  color-mix(in srgb,var(--nbskin-ink,#1f2933) 16%%,transparent)!important;
+       transition:box-shadow .45s ease;}
+  body.nbdark.nbskin-cyber .nbrail-own .jp-WindowedPanel-outer,
+  body.nbdark.nbskin-retro .nbrail-own .jp-WindowedPanel-outer,
+  body.nbdark.nbskin-fairy .nbrail-own .jp-WindowedPanel-outer,
+  body.nbdark.nbskin-digi .nbrail-own .jp-WindowedPanel-outer{
+       box-shadow:inset 0 0 calc(160px * var(--nbdepth)) calc(40px * var(--nbdepth))
+                  rgba(0,0,0,.55)!important;}
+  @media print{
+    body.nbskin-cyber .nbrail-own .jp-WindowedPanel-outer,
+    body.nbskin-retro .nbrail-own .jp-WindowedPanel-outer,
+    body.nbskin-fairy .nbrail-own .jp-WindowedPanel-outer,
+    body.nbskin-digi .nbrail-own .jp-WindowedPanel-outer{box-shadow:none!important;}
+  }
+
+
+  /* ======================================================================
+     2026-09-30 — EILAUFTRAG E9.12 (Oberfläche, Skizze). RETRO BEKOMMT EIN
+     PAPIER STATT PUNKTEN. Nutzer: die Textur ist „hässlich“ — zwei
+     Punktgitter (17/23 px, mit --nbtexz:2 also 34/46 px) lasen sich als
+     Tupfenmuster, nicht als Papier. Zwei Varianten zur Wahl, beide nur
+     Verläufe, beide × --nbtexz (steht in Stilen auf 2: die Zahlen hier sind
+     die halben Bildschirm-Pixel), beide hell und dunkel:
+       A  BÜTTEN (Standard)  geschöpftes Papier: feine waagrechte Rippen
+          (alle 3 px), senkrechte Kettlinien (alle 88 px), zwei große,
+          kaum sichtbare Wolken — ruhig, warm, keine Tupfen.
+       B  LEINEN             Buchleinen: feines Kreuzgewebe (2 × 3 px) und
+          schräg laufende, lose Fäden — gröber, handfester.
+     Gewählt (E10.1): hell B, dunkel A — je Hälfte eine Variante. Die
+     Akkordeon-Köpfe werden Papierstreifen wie die Karten. Das Panel
+     (Rail, Dock, Schublade) trägt dieselbe Textur, damit Panel und Seite
+     aus einem Papier sind. Lesbarkeit (OBERFLAECHE §6): die dunkelste Stelle
+     jeder Variante liegt unter 7 %% Tinte über der Seite — nicht gemessen
+     (Skizze). */
+  /* 2026-09-30 — EILAUFTRAG E10.1 (Oberfläche). DIE WAHL DES NUTZERS:
+     hell = B LEINEN, dunkel = A BÜTTEN. Der Schalter html[data-nbretro]
+     ist weg; es gibt je Hälfte genau eine Textur. */
+  body:not(.nbdark).nbskin-retro{--nbskin-page:#f3e6cc;
+       --nbskin-tex:
+         linear-gradient(0deg,rgba(110,78,34,.06) 0 .5px,transparent .5px),
+         linear-gradient(90deg,rgba(110,78,34,.05) 0 .5px,transparent .5px),
+         repeating-linear-gradient(63deg,rgba(110,78,34,.035) 0 1px,transparent 1px 9px),
+         repeating-linear-gradient(-27deg,rgba(255,252,240,.35) 0 1px,transparent 1px 13px);
+       --nbskin-tex-size:
+         100%% calc(1.5px * var(--nbtexz,1)),
+         calc(1px * var(--nbtexz,1)) 100%%,
+         calc(160px * var(--nbtexz,1)) calc(160px * var(--nbtexz,1)),
+         calc(220px * var(--nbtexz,1)) calc(220px * var(--nbtexz,1));
+       --nbskin-tex-pos:0 0,0 0,0 0,calc(30px * var(--nbtexz,1)) calc(70px * var(--nbtexz,1));}
+  /* dunkel · A Bütten */
+  body.nbdark.nbskin-retro{--nbskin-page:#211b12;
+       --nbskin-tex:
+         linear-gradient(0deg,rgba(255,222,176,.045) 0 calc(.5px * var(--nbtexz,1)),transparent calc(.5px * var(--nbtexz,1))),
+         linear-gradient(90deg,rgba(255,222,176,.06) 0 calc(.5px * var(--nbtexz,1)),transparent calc(.5px * var(--nbtexz,1))),
+         radial-gradient(ellipse at 30%% 40%%,rgba(255,196,120,.05),transparent 60%%),
+         radial-gradient(ellipse at 70%% 60%%,rgba(0,0,0,.22),transparent 55%%);
+       --nbskin-tex-size:
+         100%% calc(1.5px * var(--nbtexz,1)),
+         calc(44px * var(--nbtexz,1)) 100%%,
+         calc(310px * var(--nbtexz,1)) calc(230px * var(--nbtexz,1)),
+         calc(470px * var(--nbtexz,1)) calc(390px * var(--nbtexz,1));
+       --nbskin-tex-pos:0 0,calc(13px * var(--nbtexz,1)) 0,0 0,calc(90px * var(--nbtexz,1)) calc(40px * var(--nbtexz,1));}
+  /* die Akkordeon-Köpfe: bisher weiße Pillen (eine spätere Regel schlug
+     retros Orange-Verlauf), jetzt Papierstreifen wie die Karten — heller
+     Grund, Sepia-Kante, harter Sepia-Schatten */
+  html body.nbskin-retro :is([data-digichem],.nbrail-own) .jp-Notebook .jupyter-widget-Accordion .jupyter-widget-Collapse-header{
+       background:#fbf3e1!important;border:1px solid #c8a878!important;
+       box-shadow:3px 3px 0 0 #d9c3a0!important;}
+  html body.nbskin-retro :is([data-digichem],.nbrail-own) .jp-Notebook .jupyter-widget-Accordion .jupyter-widget-Collapse-header *{
+       color:#8a3c0e!important;}
+  html body.nbdark.nbskin-retro :is([data-digichem],.nbrail-own) .jp-Notebook .jupyter-widget-Accordion .jupyter-widget-Collapse-header{
+       background:#2e261a!important;border-color:#6b5534!important;box-shadow:3px 3px 0 0 #120e08!important;}
+  html body.nbdark.nbskin-retro :is([data-digichem],.nbrail-own) .jp-Notebook .jupyter-widget-Accordion .jupyter-widget-Collapse-header *{
+       color:#f0b27a!important;}
+  /* das Panel aus demselben Papier: seine Farbe bleibt, die Textur kommt dazu */
+  body.nbskin-retro #nbpanel-root .nbrail,body.nbskin-retro #nbpanel-root .nbdock,
+  body.nbskin-retro #nbpanel-root .nbdrawer{
+       background-image:var(--nbskin-tex)!important;
+       background-size:var(--nbskin-tex-size)!important;
+       background-position:var(--nbskin-tex-pos)!important;
+       background-repeat:repeat!important;}
+  @media print{
+    body.nbskin-retro #nbpanel-root .nbrail,body.nbskin-retro #nbpanel-root .nbdock,
+    body.nbskin-retro #nbpanel-root .nbdrawer{background-image:none!important;}
+  }
+
+  /* ======================================================================
+     2026-09-30 — EILAUFTRAG E11.13 (Oberfläche). RETRO-TEXTUREN GRÖSSER,
+     IM MASSSTAB VON CYBER UND FAIRY. Gemessen (v1.39, --nbtexz = 2):
+     cyber zeichnet ein Gitter von 48 px, fairy Staub alle 68 px — Retros
+     Leinen (hell) ein Kreuzgewebe von 3 × 2 px mit 0.5-px-Fäden und
+     Schrägfäden alle 9/13 px, das Bütten (dunkel) Rippen alle 3 px: aus
+     Leseabstand ein grauer Schleier statt Papier. Wie bei der E7-Politur
+     (Paket 7: „3–8 ×“) jetzt × 4 im Raster und × 2 in der Fadenstärke,
+     die großen Formen (Kettlinien, Wolken) × 2. Farben und Deckkraft
+     bleiben — der schlechteste Punkt unter dem Text ist derselbe
+     Farbstopp über derselben Seite (lab_contrast misst ihn). */
+  body:not(.nbdark).nbskin-retro{
+       --nbskin-tex:
+         linear-gradient(0deg,rgba(110,78,34,.06) 0 calc(.5px * var(--nbtexz,1)),transparent calc(.5px * var(--nbtexz,1))),
+         linear-gradient(90deg,rgba(110,78,34,.05) 0 calc(.5px * var(--nbtexz,1)),transparent calc(.5px * var(--nbtexz,1))),
+         repeating-linear-gradient(63deg,rgba(110,78,34,.035) 0 calc(1px * var(--nbtexz,1)),transparent calc(1px * var(--nbtexz,1)) calc(18px * var(--nbtexz,1))),
+         repeating-linear-gradient(-27deg,rgba(255,252,240,.35) 0 calc(1px * var(--nbtexz,1)),transparent calc(1px * var(--nbtexz,1)) calc(26px * var(--nbtexz,1)));
+       --nbskin-tex-size:
+         100%% calc(6px * var(--nbtexz,1)),
+         calc(4px * var(--nbtexz,1)) 100%%,
+         calc(320px * var(--nbtexz,1)) calc(320px * var(--nbtexz,1)),
+         calc(440px * var(--nbtexz,1)) calc(440px * var(--nbtexz,1));
+       --nbskin-tex-pos:0 0,0 0,0 0,calc(60px * var(--nbtexz,1)) calc(140px * var(--nbtexz,1));}
+  body.nbdark.nbskin-retro{
+       --nbskin-tex:
+         linear-gradient(0deg,rgba(255,222,176,.045) 0 calc(1px * var(--nbtexz,1)),transparent calc(1px * var(--nbtexz,1))),
+         linear-gradient(90deg,rgba(255,222,176,.06) 0 calc(.5px * var(--nbtexz,1)),transparent calc(.5px * var(--nbtexz,1))),
+         radial-gradient(ellipse at 30%% 40%%,rgba(255,196,120,.05),transparent 60%%),
+         radial-gradient(ellipse at 70%% 60%%,rgba(0,0,0,.22),transparent 55%%);
+       --nbskin-tex-size:
+         100%% calc(6px * var(--nbtexz,1)),
+         calc(88px * var(--nbtexz,1)) 100%%,
+         calc(620px * var(--nbtexz,1)) calc(460px * var(--nbtexz,1)),
+         calc(940px * var(--nbtexz,1)) calc(780px * var(--nbtexz,1));
+       --nbskin-tex-pos:0 0,calc(26px * var(--nbtexz,1)) 0,0 0,calc(180px * var(--nbtexz,1)) calc(80px * var(--nbtexz,1));}
+
+  /* ======================================================================
+     2026-10-02 — EILAUFTRAG E18.5 (Oberfläche). FAIRY: JEDE ART HAT IHRE
+     EIGENE SILHOUETTE (Panel und Cover gleich) — bisher waren Titel,
+     Gruppen, Abschnitte, Kapitel, Quiz und Ende in fairy alle Kreise.
+       Titel  Bogen (oben rund, unten fast eckig)   Gruppe  runde Raute
+       Abschnitt  Tropfen (Spitze unten)            Kapitel  Kissen (30 %%)
+       Aufgabe  Blatt (zwei Ecken rund)             Coding  Quadrat, stehend
+       Abbildung  liegende Kapsel                   Quiz  Kreis
+       BYOD  spitze Raute                           Ende  D (rechts rund)
+       YOC  gestrichelter Kreis
+     Die Marken mit Zeichen (Aufgabe, Coding, Kapitel, Quiz, BYOD, YOC)
+     bleiben punktsymmetrisch — ihr Zeichen sitzt weiter mittig (E15.1). */
+  html body.nbskin-fairy #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-node.title .nbsect{--nbbase:0deg;border-radius:50%% 50%% 15%% 15%%!important;}
+  html body.nbskin-fairy #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-node.sect:not(.title,.end,.cell,.own) .nbsect{--nbbase:45deg;border-radius:30%%!important;}
+  html body.nbskin-fairy #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-node .nbsubdot{--nbbase:45deg;border-radius:50%% 50%% 0 50%%!important;}
+  html body.nbskin-fairy #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-node .nbchapdot{--nbbase:0deg;border-radius:30%%!important;}
+  html body.nbskin-fairy #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-node.task:not([data-task^="q"],[data-task^="b"]) .nbrail-dot{border-radius:50%% 0!important;}
+  html body.nbskin-fairy #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-node .nbcodemark{--nbbase:0deg;border-radius:2px!important;}
+  html body.nbskin-fairy #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-node.task[data-task^="b"] .nbrail-dot{--nbbase:45deg;border-radius:2px!important;}
+  html body.nbskin-fairy #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-node.end .nbsect{--nbbase:0deg;border-radius:0 50%% 50%% 0!important;}
+  html body.nbskin-fairy .nbcover-tl .nbtl-title .nbtl-mk{border-radius:50%% 50%% 15%% 15%%!important;}
+  html body.nbskin-fairy .nbcover-tl .nbtl-group .nbtl-mk{border-radius:30%%!important;}
+  html body.nbskin-fairy .nbcover-tl .nbtl-sub .nbtl-mk{border-radius:50%% 50%% 0 50%%!important;}
+  html body.nbskin-fairy .nbcover-tl .nbtl-chapter .nbtl-mk{border-radius:30%%!important;}
+  html body.nbskin-fairy .nbcover-tl .nbtl-task .nbtl-mk{border-radius:50%% 0!important;}
+  html body.nbskin-fairy .nbcover-tl .nbtl-coding .nbtl-mk,html body.nbskin-fairy .nbcover-tl .nbtl-byod .nbtl-mk{border-radius:2px!important;}
+  html body.nbskin-fairy .nbcover-tl .nbtl-end .nbtl-mk{border-radius:0 50%% 50%% 0!important;}
+  html body.nbskin-fairy .nbcover-tl :is(.nbtl-sub,.nbtl-byod):not(:hover,.nbtl-hov,.nbtl-pin) .nbtl-mk{transform:rotate(45deg);}
+  html body.nbskin-fairy .nbcover-tl :is(.nbtl-coding,.nbtl-end):not(:hover,.nbtl-hov,.nbtl-pin) .nbtl-mk{transform:none;}
+
+  /* 2026-10-02 E19.7 (Oberfläche) — TEXT OHNE KASTEN BLEIBT LESBAR. Seit E19.6
+     steht der Fließtext direkt auf der Seitentextur. Gemessen
+     (`lab_contrast --overlay`, ungünstigste Texturstelle): nur retro hell fiel
+     durch — das Rostorange `#a8460f` der Hervorhebungen (b, Zitat-Nummer,
+     Akzent) auf dem dunkelsten Streifen des Leinens `#ebddc2` = 4,41 : 1.
+     Eine Stufe dunkler, `#8f3b0c` (wie schon `[style*=opacity] b`): 5,6 : 1. */
+  html body.nbskin-retro:not(.nbdark) .jp-Notebook :is(.nbbox b,.nbbox strong,.nbaccent,.cite-link){color:#8f3b0c!important;}
+
+  /* ======================================================================
+     2026-10-06 — EILAUFTRAG E23.6 (Oberfläche). DAS PLAY-ZEICHEN MITTIG IM
+     KREIS. Gemessen v1.63 (kaltes Cover, 84-px-Kreis): das Zeichen ▶ ist
+     Text, mit Pythons Inline-Abstand links 6 px und der Schrift-Grundlinie
+     — Tinte 3 px rechts und ½ px unter der Kreismitte. Jetzt ist es
+     gezeichnet, nicht gesetzt (wie die Schlösser, 09): der Text ist aus
+     (font-size 0), ein Dreieck 26 × 30 px in der Akzentfarbe steht als
+     Pseudo-Element absolut genau in der Mitte des Knopfs, ohne Innen-
+     abstand. Die Mitte seiner Fläche ist die Mitte des Kreises
+     (Kriterium: Tinte − Kreismitte ≤ 1 px). Atmen und Hover (scale)
+     skalieren beide gemeinsam um die Mitte. */
+  html body:not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz) .nbcover .nbcover-play{
+      position:relative!important;padding:0!important;
+      font-size:0!important;line-height:0!important;text-indent:0!important;}
+  html body:not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz) .nbcover .nbcover-play::before{
+      content:'';position:absolute;left:50%%;top:50%%;width:26px;height:30px;margin:-15px 0 0 -13px;
+      background:currentColor;
+      -webkit-clip-path:polygon(0 0,100%% 50%%,0 100%%);clip-path:polygon(0 0,100%% 50%%,0 100%%);}
+
+  /* ======================================================================
+     2026-10-19 — E34 C1 (CSS). DER FÜNFTE STIL „digi“ — UND ER IST DER
+     STANDARD. Nutzer 19.10.: die Notebooks sollen zur digi-Webseite und zur
+     digi App passen. Werte aus server/static/zentrale.html und digi Mathe
+     (plan/AUFTRAG.md). Wie jeder Stil in vier Teilen — TOKENS · FLÄCHEN ·
+     FORMEN · SCHRIFT — und in beiden Helligkeiten (body.nbdark / sonst).
+       dunkel  Grund #05060c, Flächen #0b0e1c / #10142a, Linie #ffffff1c,
+               Text #e9ecf6, leise #c3c9de, sehr leise #8a91aa
+       hell    Grund #f5f6fa, Flächen #ffffff / #f7f8fc, Linie #dde1ec,
+               Text #141826, leise #454b63
+       Akzente Gold #ffd36b (Rail, Auswahl; als TEXT auf hell #9a6b00),
+               Blau #7fb4ff, Rosa #ff7bd5, Grün #6be3a0, Rot #ff6b7a
+     Formen: Karten 14 px mit 1-px-Linie, Pillen 999 px, Marken wie minimal.
+     Schrift: Überschriften "Unbounded" (die eingebettete Schrift, C2 — ohne
+     sie fällt es auf den Text-Stack zurück), Text ein System-Stack mit
+     "Instrument Sans" vorn (nur wenn installiert, nichts wird geladen),
+     Code und Kicker ein Mono-Stack mit "JetBrains Mono" vorn. Bewegung: die
+     ruhige von minimal (keine eigenen --nbm-*). */
+
+  /* ---- DIGI · TOKENS -------------------------------------------------- */
+  body.nbskin-digi{--nbmark:#ffd36b;--nbglow:rgba(255,211,107,.62);--nbring:#ffd36b;
+      --nbpick:#ff7bd5;--nbpickglow:rgba(255,123,213,.42);
+      --nbskin-font:"Instrument Sans",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","DejaVu Sans",sans-serif;
+      --nbskin-head:"Unbounded","Instrument Sans",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"DejaVu Sans",sans-serif;
+      --nbskin-mono:"JetBrains Mono",ui-monospace,"SF Mono","Cascadia Mono",Menlo,Consolas,"DejaVu Sans Mono",monospace;
+      --nbskin-r:14px;--nbskin-pill-r:999px;
+      --nbskin-lock:#ffe3a3;--nbskin-pill-ink:#e9ecf6;}
+  body:not(.nbdark).nbskin-digi{--nbmark:#f2b426;--nbglow:rgba(242,180,38,.55);--nbring:#e8a817;
+      --nbpick:#d23aa0;--nbpickglow:rgba(210,58,160,.32);
+      --nbskin-surf:#ffffff;--nbskin-ink:#141826;--nbskin-line:#dde1ec;--nbskin-track:#e3e6ef;
+      --nbskin-acc:#9a6b00;--nbskin-acc2:#2a5bc8;--nbskin-quiet:#454b63;--nbsb-c:#b5bbcc;
+      --nbskin-pill-ink:#141826;--nbmark-ink:#9a6b00;
+      --nbpanel-surf:#ffffff;--nbpanel-a:72%%;
+      --nbxp2:#c2338f;
+      --nbcov-acc:#9a6b00;--nbcov-face:#ffffff;--nbcov-ink:#454b63;
+      --nbcode-bg:#f7f8fc;--nbcode-line:#dde1ec;--nbcode-ink:#141826;
+      --nbcode-kw:#a3207a;--nbcode-str:#17703f;--nbcode-com:#5b6178;--nbcode-num:#7d5500;
+      --nbcode-def:#2a55bd;--nbcode-blt:#6a3fc0;--nbcode-op:#a8331f;}
+  body.nbdark.nbskin-digi{
+      --nbskin-surf:#0b0e1c;--nbskin-ink:#e9ecf6;--nbskin-line:#ffffff1c;--nbskin-track:#1d2342;
+      --nbskin-acc:#ffd36b;--nbskin-acc2:#7fb4ff;--nbskin-quiet:#c3c9de;--nbsb-c:#3a4166;
+      --nbpanel-surf:#0b0e1c;--nbpanel-a:70%%;
+      --nbxp2:#ff7bd5;
+      --nbcov-acc:#ffd36b;--nbcov-face:#0b0e1c;--nbcov-ink:#c3c9de;
+      --nbcode-bg:#080b17;--nbcode-line:#ffffff1c;--nbcode-ink:#e9ecf6;
+      --nbcode-kw:#ff7bd5;--nbcode-str:#6be3a0;--nbcode-com:#8a91aa;--nbcode-num:#ffd36b;
+      --nbcode-def:#7fb4ff;--nbcode-blt:#c7a6ff;--nbcode-op:#ff9b7a;}
+  /* die Seite (E35 C1, Nutzer 19.10.: „die Textur soll wie auf der Webseite
+     aussehen (Sterne), nicht die Punkte und der goldene Schein oben“): der
+     Sternenhimmel der Webseite als eingebettete SVG-Kachel 420 × 420 —
+     1 Stern je 2 600 px² (68), Radius 0,35–1,65 px, fester Zufall
+     (Park-Miller, Seed 7: je Stern x, y, Radius, Deckkraft); dunkel Sterne
+     #cfd6ff mit Deckkraft 0,20–0,65 auf #04050b, hell dieselben Orte als sehr
+     leise Punkte #3a4060 (0,05–0,15) auf #f6f7fb. Kein Punktraster, kein
+     Licht mehr. Die Kachel steht am Scroller mit background-attachment
+     scroll: sie liegt fest im Kasten, der Text zieht darüber — beim Scrollen
+     wird nichts neu gemalt (local malt die Kachel bei jedem Schritt mit,
+     fixed malt das ganze Fenster neu). Erzeugt mit dem Skript in
+     tests/regress/css_e35.py (stars()). In Originalgröße, nicht × --nbtexz
+     (das die Raster der anderen Stile verdoppelt): so dicht und so klein wie
+     auf der Webseite. */
+  body:not(.nbdark).nbskin-digi{--nbskin-page:#f6f7fb;
+       --nbskin-tex:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='420' height='420'><g fill='%%233a4060'><circle cx='0' cy='387' r='.73' fill-opacity='.07'/><circle cx='306' cy='224' r='.78' fill-opacity='.13'/><circle cx='317' cy='228' r='1.24' fill-opacity='.11'/><circle cx='343' cy='102' r='.84' fill-opacity='.12'/><circle cx='293' cy='23' r='1.24' fill-opacity='.10'/><circle cx='387' cy='339' r='.51' fill-opacity='.10'/><circle cx='388' cy='289' r='1.19' fill-opacity='.11'/><circle cx='383' cy='382' r='.83' fill-opacity='.08'/><circle cx='352' cy='140' r='.55' fill-opacity='.08'/><circle cx='180' cy='124' r='1.57' fill-opacity='.11'/><circle cx='306' cy='369' r='.43' fill-opacity='.08'/><circle cx='235' cy='214' r='.90' fill-opacity='.07'/><circle cx='382' cy='23' r='.83' fill-opacity='.08'/><circle cx='279' cy='388' r='1.02' fill-opacity='.07'/><circle cx='170' cy='119' r='.82' fill-opacity='.09'/><circle cx='140' cy='223' r='1.15' fill-opacity='.07'/><circle cx='381' cy='192' r='1.47' fill-opacity='.11'/><circle cx='266' cy='217' r='1.01' fill-opacity='.12'/><circle cx='395' cy='167' r='1.27' fill-opacity='.08'/><circle cx='246' cy='147' r='.78' fill-opacity='.09'/><circle cx='334' cy='369' r='.49' fill-opacity='.13'/><circle cx='33' cy='171' r='.55' fill-opacity='.06'/><circle cx='418' cy='92' r='1.17' fill-opacity='.06'/><circle cx='192' cy='249' r='.53' fill-opacity='.14'/><circle cx='372' cy='374' r='1.5' fill-opacity='.14'/><circle cx='320' cy='116' r='.36' fill-opacity='.07'/><circle cx='32' cy='1' r='1.15' fill-opacity='.07'/><circle cx='311' cy='206' r='1.24' fill-opacity='.07'/><circle cx='370' cy='99' r='.84' fill-opacity='.14'/><circle cx='50' cy='205' r='.35' fill-opacity='.14'/><circle cx='268' cy='387' r='.38' fill-opacity='.14'/><circle cx='79' cy='407' r='1.08' fill-opacity='.12'/><circle cx='112' cy='94' r='.62' fill-opacity='.11'/><circle cx='22' cy='323' r='1.26' fill-opacity='.12'/><circle cx='209' cy='14' r='.49' fill-opacity='.14'/><circle cx='55' cy='289' r='1.51' fill-opacity='.05'/><circle cx='371' cy='362' r='1.64' fill-opacity='.15'/><circle cx='321' cy='176' r='.67' fill-opacity='.12'/><circle cx='371' cy='167' r='.66' fill-opacity='.09'/><circle cx='373' cy='235' r='.81' fill-opacity='.11'/><circle cx='309' cy='141' r='1.29' fill-opacity='.09'/><circle cx='83' cy='131' r='1.63' fill-opacity='.15'/><circle cx='266' cy='366' r='1.54' fill-opacity='.07'/><circle cx='271' cy='57' r='1.00' fill-opacity='.11'/><circle cx='324' cy='397' r='.98' fill-opacity='.07'/><circle cx='188' cy='70' r='1.21' fill-opacity='.10'/><circle cx='236' cy='213' r='1.33' fill-opacity='.09'/><circle cx='315' cy='11' r='.74' fill-opacity='.10'/><circle cx='85' cy='304' r='.73' fill-opacity='.07'/><circle cx='277' cy='180' r='.45' fill-opacity='.13'/><circle cx='346' cy='384' r='1.53' fill-opacity='.12'/><circle cx='403' cy='11' r='1.34' fill-opacity='.11'/><circle cx='304' cy='377' r='.40' fill-opacity='.06'/><circle cx='34' cy='45' r='.46' fill-opacity='.05'/><circle cx='254' cy='397' r='.60' fill-opacity='.06'/><circle cx='85' cy='283' r='.67' fill-opacity='.10'/><circle cx='417' cy='177' r='1.23' fill-opacity='.13'/><circle cx='167' cy='175' r='.43' fill-opacity='.07'/><circle cx='339' cy='409' r='.55' fill-opacity='.14'/><circle cx='214' cy='51' r='.62' fill-opacity='.11'/><circle cx='72' cy='33' r='.70' fill-opacity='.11'/><circle cx='234' cy='202' r='1.64' fill-opacity='.06'/><circle cx='174' cy='132' r='.36' fill-opacity='.05'/><circle cx='174' cy='38' r='.65' fill-opacity='.14'/><circle cx='327' cy='321' r='.92' fill-opacity='.14'/><circle cx='404' cy='336' r='1.21' fill-opacity='.11'/><circle cx='146' cy='171' r='1.00' fill-opacity='.10'/><circle cx='238' cy='303' r='1.21' fill-opacity='.11'/></g></svg>");
+       --nbskin-tex-size:420px 420px;
+       --nbskin-tex-pos:0 0;}
+  body.nbdark.nbskin-digi{--nbskin-page:#04050b;
+       --nbskin-tex:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='420' height='420'><g fill='%%23cfd6ff'><circle cx='0' cy='387' r='.73' fill-opacity='.29'/><circle cx='306' cy='224' r='.78' fill-opacity='.54'/><circle cx='317' cy='228' r='1.24' fill-opacity='.49'/><circle cx='343' cy='102' r='.84' fill-opacity='.52'/><circle cx='293' cy='23' r='1.24' fill-opacity='.41'/><circle cx='387' cy='339' r='.51' fill-opacity='.43'/><circle cx='388' cy='289' r='1.19' fill-opacity='.46'/><circle cx='383' cy='382' r='.83' fill-opacity='.35'/><circle cx='352' cy='140' r='.55' fill-opacity='.33'/><circle cx='180' cy='124' r='1.57' fill-opacity='.45'/><circle cx='306' cy='369' r='.43' fill-opacity='.32'/><circle cx='235' cy='214' r='.90' fill-opacity='.29'/><circle cx='382' cy='23' r='.83' fill-opacity='.35'/><circle cx='279' cy='388' r='1.02' fill-opacity='.27'/><circle cx='170' cy='119' r='.82' fill-opacity='.39'/><circle cx='140' cy='223' r='1.15' fill-opacity='.30'/><circle cx='381' cy='192' r='1.47' fill-opacity='.49'/><circle cx='266' cy='217' r='1.01' fill-opacity='.51'/><circle cx='395' cy='167' r='1.27' fill-opacity='.31'/><circle cx='246' cy='147' r='.78' fill-opacity='.38'/><circle cx='334' cy='369' r='.49' fill-opacity='.57'/><circle cx='33' cy='171' r='.55' fill-opacity='.24'/><circle cx='418' cy='92' r='1.17' fill-opacity='.26'/><circle cx='192' cy='249' r='.53' fill-opacity='.61'/><circle cx='372' cy='374' r='1.5' fill-opacity='.61'/><circle cx='320' cy='116' r='.36' fill-opacity='.31'/><circle cx='32' cy='1' r='1.15' fill-opacity='.30'/><circle cx='311' cy='206' r='1.24' fill-opacity='.31'/><circle cx='370' cy='99' r='.84' fill-opacity='.60'/><circle cx='50' cy='205' r='.35' fill-opacity='.61'/><circle cx='268' cy='387' r='.38' fill-opacity='.61'/><circle cx='79' cy='407' r='1.08' fill-opacity='.51'/><circle cx='112' cy='94' r='.62' fill-opacity='.45'/><circle cx='22' cy='323' r='1.26' fill-opacity='.52'/><circle cx='209' cy='14' r='.49' fill-opacity='.61'/><circle cx='55' cy='289' r='1.51' fill-opacity='.22'/><circle cx='371' cy='362' r='1.64' fill-opacity='.63'/><circle cx='321' cy='176' r='.67' fill-opacity='.53'/><circle cx='371' cy='167' r='.66' fill-opacity='.38'/><circle cx='373' cy='235' r='.81' fill-opacity='.48'/><circle cx='309' cy='141' r='1.29' fill-opacity='.39'/><circle cx='83' cy='131' r='1.63' fill-opacity='.65'/><circle cx='266' cy='366' r='1.54' fill-opacity='.29'/><circle cx='271' cy='57' r='1.00' fill-opacity='.45'/><circle cx='324' cy='397' r='.98' fill-opacity='.28'/><circle cx='188' cy='70' r='1.21' fill-opacity='.43'/><circle cx='236' cy='213' r='1.33' fill-opacity='.36'/><circle cx='315' cy='11' r='.74' fill-opacity='.44'/><circle cx='85' cy='304' r='.73' fill-opacity='.31'/><circle cx='277' cy='180' r='.45' fill-opacity='.55'/><circle cx='346' cy='384' r='1.53' fill-opacity='.51'/><circle cx='403' cy='11' r='1.34' fill-opacity='.47'/><circle cx='304' cy='377' r='.40' fill-opacity='.26'/><circle cx='34' cy='45' r='.46' fill-opacity='.20'/><circle cx='254' cy='397' r='.60' fill-opacity='.26'/><circle cx='85' cy='283' r='.67' fill-opacity='.41'/><circle cx='417' cy='177' r='1.23' fill-opacity='.55'/><circle cx='167' cy='175' r='.43' fill-opacity='.30'/><circle cx='339' cy='409' r='.55' fill-opacity='.62'/><circle cx='214' cy='51' r='.62' fill-opacity='.47'/><circle cx='72' cy='33' r='.70' fill-opacity='.49'/><circle cx='234' cy='202' r='1.64' fill-opacity='.23'/><circle cx='174' cy='132' r='.36' fill-opacity='.20'/><circle cx='174' cy='38' r='.65' fill-opacity='.62'/><circle cx='327' cy='321' r='.92' fill-opacity='.58'/><circle cx='404' cy='336' r='1.21' fill-opacity='.46'/><circle cx='146' cy='171' r='1.00' fill-opacity='.42'/><circle cx='238' cy='303' r='1.21' fill-opacity='.48'/></g></svg>");
+       --nbskin-tex-size:420px 420px;
+       --nbskin-tex-pos:0 0;}
+  body.nbskin-digi .nbrail-own .jp-WindowedPanel-outer{background-attachment:scroll!important;}
+
+  /* ---- DIGI · FLÄCHEN ------------------------------------------------- */
+  /* `html body.nbskin-digi` (0,2,2): eine Stufe über den allgemeinen
+     Stil-Regeln weiter hinten (08: Titel = --nbskin-acc), damit der Titel
+     Text bleibt und das Gold dem Kicker gehört wie auf der Webseite */
+  html body.nbskin-digi .nbbox,html body.nbskin-digi .nblock,html body.nbskin-digi .nbtitle-card{
+      background:#ffffff!important;border:1px solid #dde1ec!important;color:#141826!important;
+      box-shadow:0 1px 0 rgba(20,24,38,.04),0 10px 30px rgba(20,24,38,.06)!important;}
+  html body.nbskin-digi .nbbox *,html body.nbskin-digi .nblock *{color:#141826!important;}
+  html body.nbskin-digi .nbtitle-h{color:#141826!important;}
+  html body.nbskin-digi .nbtitle-sub{color:#9a6b00!important;}
+  html body.nbskin-digi .nbtitle-lead{color:#454b63!important;}
+  html body.nbskin-digi .nbtitle-rule{background:linear-gradient(90deg,#ffd36b,#ff7bd5)!important;}
+  html body.nbdark.nbskin-digi .nbbox,html body.nbdark.nbskin-digi .nblock,html body.nbdark.nbskin-digi .nbtitle-card{
+      background:linear-gradient(180deg,#10142a,#0b0e1c)!important;border-color:#ffffff1c!important;color:#e9ecf6!important;
+      box-shadow:0 0 0 1px rgba(255,211,107,.035),0 18px 50px rgba(0,0,0,.45)!important;}
+  html body.nbdark.nbskin-digi .nbbox *,html body.nbdark.nbskin-digi .nblock *{color:#e9ecf6!important;}
+  html body.nbdark.nbskin-digi .nbtitle-h{color:#e9ecf6!important;}
+  html body.nbdark.nbskin-digi .nbtitle-sub{color:#ffd36b!important;}
+  html body.nbdark.nbskin-digi .nbtitle-lead{color:#c3c9de!important;}
+  /* fett und Akzent im Text kommen aus --nbskin-acc (08) — Gold */
+  /* die Kapitel-Pillen (und die kleinen Köpfe von Abbildung und Übung):
+     Fläche, 1-px-Linie, Text — kein Farbverlauf; das Gold kommt als Rand
+     beim Zeigen. Die Abschnitts-Trenner (.acc-group) bleiben ohne Fläche. */
+  html body.nbskin-digi :where([data-digichem],.nbrail-own) :is(.acc-chapter,.acc-viz,.acc-practice)>:is(.jupyter-widget-Collapse,.lm-Collapse)>:is(.jupyter-widget-Collapse-header,.lm-Collapse-header){
+      background:#ffffff!important;color:#141826!important;
+      border:1px solid #dde1ec!important;box-shadow:0 6px 20px rgba(20,24,38,.07)!important;}
+  html body.nbdark.nbskin-digi :where([data-digichem],.nbrail-own) :is(.acc-chapter,.acc-viz,.acc-practice)>:is(.jupyter-widget-Collapse,.lm-Collapse)>:is(.jupyter-widget-Collapse-header,.lm-Collapse-header){
+      background:#10142a!important;color:#e9ecf6!important;
+      border-color:#ffffff1c!important;box-shadow:0 10px 30px rgba(0,0,0,.40)!important;}
+  html body.nbskin-digi :where([data-digichem],.nbrail-own) :is(.acc-chapter,.acc-viz,.acc-practice)>:is(.jupyter-widget-Collapse,.lm-Collapse)>:is(.jupyter-widget-Collapse-header,.lm-Collapse-header):hover{
+      border-color:color-mix(in srgb,var(--nbmark) 75%%,transparent)!important;}
+  html body.nbskin-digi #nbpanel-root .nbrail,html body.nbskin-digi #nbpanel-root .nbdock,
+  html body.nbskin-digi #nbpanel-root .nbdrawer{
+      background:#ffffff!important;border-color:#dde1ec!important;color:#141826!important;}
+  html body.nbdark.nbskin-digi #nbpanel-root .nbrail,html body.nbdark.nbskin-digi #nbpanel-root .nbdock,
+  html body.nbdark.nbskin-digi #nbpanel-root .nbdrawer{
+      background:#0b0e1c!important;border-color:#ffffff1c!important;color:#e9ecf6!important;}
+  /* die leisen Namen der Rail (gesperrt, Titel, Ende, eigene Zelle): auf
+     hell eine Stufe dunkler, damit sie auf dem Panel ≥ 4,5 : 1 lesen */
+  html body.nbskin-digi:not(.nbdark) .nbmap-node:is(.locked,.sect.cell,.sect.title,.sect.end) .nbmap-lab{color:#5b6178;}
+  /* die Einstellungen (⚙): Köpfe als Kicker in Gold, die Versionszeile leise, aber lesbar */
+  html body.nbskin-digi:not(#nbz) #nbpanel-root .nbdrawer .nbcell-h{
+      font-family:var(--nbskin-mono)!important;letter-spacing:.12em!important;color:var(--nbskin-acc)!important;}
+  /* zwei Knöpfe, die in jedem Stil unter 4,5 : 1 lagen (gemessen, E34 R4c):
+     „Use this seed“ weiß auf Grau #8a94a0 (2,9) und der goldene Umriss-Knopf
+     #b07d08 auf Weiß (3,6). In digi: Schiefer mit Weiß, Gold #9a6b00. */
+  html body.nbskin-digi:not(#nbz) .nbunlock{background:#4a5068!important;color:#ffffff!important;}
+  html body.nbdark.nbskin-digi:not(#nbz) .nbunlock{background:#2a3050!important;color:#e9ecf6!important;}
+  html body.nbskin-digi:not(.nbdark):not(#nbz) .sc-btn{color:#9a6b00!important;}
+  html body.nbdark.nbskin-digi:not(#nbz) .sc-btn{color:#ffd36b!important;}
+  html body.nbskin-digi:not(#nbz):not(#nbz) .nbbuild{color:var(--nbskin-quiet)!important;opacity:1!important;}
+  html body.nbskin-digi #nbpanel-root .nbmap-inner::before{background:#d5d9e6!important;}
+  html body.nbdark.nbskin-digi #nbpanel-root .nbmap-inner::before{background:#2a3050!important;}
+  html body.nbskin-digi #nbpanel-root .nbmap-fill{
+      background:linear-gradient(180deg,#ffd36b,#ffb84a)!important;}
+  html body.nbskin-digi .nbtip{border-radius:12px!important;}
+  html body.nbskin-digi .nbcorner > :is(.nbbtn,.nbzoomgrp,.nbprofile,.nbwid){
+      box-shadow:0 0 0 1px var(--nbskin-line),0 6px 18px rgba(20,24,38,.10);}
+  html body.nbdark.nbskin-digi .nbcorner > :is(.nbbtn,.nbzoomgrp,.nbprofile,.nbwid){
+      box-shadow:0 0 0 1px var(--nbskin-line),0 8px 22px rgba(0,0,0,.45);}
+  html body.nbskin-digi #nbpanel-root .nbrail > .nbp-xp .nbp-xp-fill{
+      background:linear-gradient(90deg,#ffd36b,#ff7bd5)!important;}
+  /* die Titelkarte des Dokuments: ein leiser Goldschein wie die Karten der App */
+  html body.nbskin-digi.nbdark .nbtitle:not(:has(>.nbcover)) .nbtitle-card{
+      box-shadow:0 0 0 1px rgba(255,211,107,.08),0 20px 60px rgba(255,211,107,.06),0 18px 50px rgba(0,0,0,.45)!important;}
+  /* DAS COVER. Seit E15.2 ist es in jedem Stil minimal (06-marks.css,
+     (1,3,2)). digi ist der Standard und das Cover das Erste, was man sieht:
+     es bekommt die Farben von digi (Karte, Titel, Linie, Kicker, Play über
+     --nbcov-*), Aufbau und Maße bleiben die des Covers. (1,4,2). */
+  html body.nbskin-digi .nbtitle:has(>.nbcover):not(#nbz) .nbtitle-card{
+      background:#ffffff!important;border-color:#dde1ec!important;border-radius:14px!important;}
+  html body.nbskin-digi .nbtitle:has(>.nbcover):not(#nbz) .nbtitle-h{color:#141826!important;}
+  html body.nbskin-digi .nbtitle:has(>.nbcover):not(#nbz) .nbtitle-rule{background:linear-gradient(90deg,#ffd36b,#ff7bd5)!important;}
+  html body.nbskin-digi .nbtitle:has(>.nbcover):not(#nbz) .nbtitle-sub{color:#9a6b00!important;}
+  html body.nbskin-digi .nbtitle:has(>.nbcover):not(#nbz) .nbtitle-lead{color:#454b63!important;}
+  html body.nbdark.nbskin-digi .nbtitle:has(>.nbcover):not(#nbz) .nbtitle-card{
+      background:linear-gradient(180deg,#10142a,#0b0e1c)!important;border-color:#ffffff1c!important;}
+  html body.nbdark.nbskin-digi .nbtitle:has(>.nbcover):not(#nbz) .nbtitle-h{color:#e9ecf6!important;}
+  html body.nbdark.nbskin-digi .nbtitle:has(>.nbcover):not(#nbz) .nbtitle-sub{color:#ffd36b!important;}
+  html body.nbdark.nbskin-digi .nbtitle:has(>.nbcover):not(#nbz) .nbtitle-lead{color:#c3c9de!important;}
+  html body.nbdark.nbskin-digi .nbtitle:has(>.nbcover):not(#nbz) .nbmode{--nbskin-ink:#e9ecf6;}
+
+  /* ---- DIGI · FORMEN -------------------------------------------------- */
+  /* Karten 14 px und Pillen 999 px kommen aus --nbskin-r / --nbskin-pill-r
+     (Regeln „SHAPE“ oben); die Marken bleiben die von minimal. Die Kästen,
+     die seit E19 rahmenlos auf der Seite stehen (concept, grey, viz, ex),
+     bleiben rahmenlos — „Karte“ sind Titelkarte, Merk-/Warnkästen, Blöcke,
+     Rail, Dock und Schublade. */
+  html body.nbskin-digi #nbpanel-root .nbmap-cursor::before{border-radius:999px!important;}
+
+  /* ---- DIGI · SCHRIFT ------------------------------------------------- */
+  /* Überschriften: Unbounded 400 (Titel, Kapitel-Pillen, h1–h4, Hilfe) */
+  html body.nbskin-digi .nbtitle:not(#nbz):not(#nbz) .nbtitle-h,
+  html body.nbskin-digi .nbtitle:not(#nbz):not(#nbz) .nbtitle-h *,
+  html body.nbskin-digi :where([data-digichem],.nbrail-own) .acc-chapter>:is(.jupyter-widget-Collapse,.lm-Collapse)>:is(.jupyter-widget-Collapse-header,.lm-Collapse-header),
+  html body.nbskin-digi :where([data-digichem],.nbrail-own) .acc-chapter>:is(.jupyter-widget-Collapse,.lm-Collapse)>:is(.jupyter-widget-Collapse-header,.lm-Collapse-header) *,
+  html body.nbskin-digi :where([data-digichem],.nbrail-own) .jp-RenderedHTMLCommon :is(h1,h2,h3,h4),
+  html body.nbskin-digi .nbhelp-h{
+      font-family:var(--nbskin-head)!important;font-weight:400!important;letter-spacing:-.005em!important;}
+  /* Kicker: Mono, Großbuchstaben, Sperrung .12em (Untertitel der Karte,
+     die Abschnitts-Trenner, die kleinen Köpfe von Abbildung und Übung) */
+  html body.nbskin-digi .nbtitle:not(#nbz):not(#nbz) .nbtitle-sub,
+  html body.nbskin-digi :where([data-digichem],.nbrail-own) .acc-group>:is(.jupyter-widget-Collapse,.lm-Collapse)>:is(.jupyter-widget-Collapse-header,.lm-Collapse-header),
+  html body.nbskin-digi :where([data-digichem],.nbrail-own) .acc-group>:is(.jupyter-widget-Collapse,.lm-Collapse)>:is(.jupyter-widget-Collapse-header,.lm-Collapse-header) *,
+  html body.nbskin-digi :where([data-digichem],.nbrail-own) :is(.acc-viz,.acc-practice)>:is(.jupyter-widget-Collapse,.lm-Collapse)>:is(.jupyter-widget-Collapse-header,.lm-Collapse-header),
+  html body.nbskin-digi :where([data-digichem],.nbrail-own) :is(.acc-viz,.acc-practice)>:is(.jupyter-widget-Collapse,.lm-Collapse)>:is(.jupyter-widget-Collapse-header,.lm-Collapse-header) *{
+      font-family:var(--nbskin-mono)!important;text-transform:uppercase!important;letter-spacing:.12em!important;}
+  /* Code bleibt Code — mit dem Mono-Stack des Stils */
+  html body.nbskin-digi :is(.nbbox,.nblock,.nbcodefold) :is(code,pre),
+  html body.nbskin-digi :where([data-digichem],.nbrail-own) .cm-editor,
+  html body.nbskin-digi :where([data-digichem],.nbrail-own) .cm-editor *{
+      font-family:var(--nbskin-mono)!important;}

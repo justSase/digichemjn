@@ -1,0 +1,720 @@
+  /* ======================================================================
+     2026-09-25 — THE CONTROLS IN THE EXERCISES WEAR THE SKIN TOO.
+
+     A slider, a text field and a Check button inside an exercise came straight
+     from ipywidgets: white box, blue handle, system font, the same in all four
+     skins. They are the parts of the notebook the reader actually TOUCHES, so
+     they were also the parts that said loudest that the skin is a coat of
+     paint. They are built from the palette above now — track, handle, field,
+     button and readout — and change with it. */
+  /* MEASURED FIRST, WRITTEN SECOND. The obvious spelling for a slider is
+     `.ui-slider` — and it matches nothing: ipywidgets 8 draws its sliders with
+     nouislider, so the real names are `.slider.noUi-target`, `.noUi-base`,
+     `.noUi-connects`, `.noUi-handle`. A census of the running notebook says
+     what is actually in the document: 16 `button.widget-button`, 2
+     `.widget-text`, 2 `.widget-textarea`, 1 nouislider, and no `.ui-slider` and
+     no `<select>` at all. Guessing here is how a skin rule ends up styling
+     nothing and looking, from the outside, exactly like a skin that "does not
+     reach the widgets".
+     The scope is `.jp-OutputArea` — every notebook renderer has one, Lab and
+     Lite alike — and the `body[class*="nb"]` prefix is there for weight: the
+     dark widget rules further up are `body.nbdark .acc-chapter …`, and a rule
+     that loses to them is a rule that is not applied. */
+  body[class*="nb"] :where([data-digichem],.nbrail-own) .jp-OutputArea .slider.noUi-target,
+  body[class*="nb"] :where([data-digichem],.nbrail-own) .jp-OutputArea .noUi-target{
+      background:var(--nbskin-track)!important;
+      border:1px solid var(--nbskin-line)!important;
+      border-radius:var(--nbskin-pill-r,999px)!important;
+      box-shadow:none!important;}
+  body[class*="nb"] :where([data-digichem],.nbrail-own) .jp-OutputArea .noUi-connects,
+  body[class*="nb"] :where([data-digichem],.nbrail-own) .jp-OutputArea .noUi-connect{
+      background:var(--nbmark,#0d63e0)!important;
+      border-radius:var(--nbskin-pill-r,999px)!important;}
+  body[class*="nb"] :where([data-digichem],.nbrail-own) .jp-OutputArea .noUi-handle{
+      background:var(--nbmark,#0d63e0)!important;
+      border:2px solid var(--nbring,#ffffff)!important;
+      border-radius:var(--nbskin-r,50%%)!important;
+      box-shadow:0 0 6px 1px var(--nbglow,rgba(13,99,224,.45))!important;}
+  body[class*="nb"] :where([data-digichem],.nbrail-own) .jp-OutputArea .noUi-handle::before,
+  body[class*="nb"] :where([data-digichem],.nbrail-own) .jp-OutputArea .noUi-handle::after{display:none!important;}
+  body[class*="nb"] :where([data-digichem],.nbrail-own) .jp-OutputArea .widget-readout{
+      background:var(--nbskin-surf)!important;color:var(--nbskin-ink)!important;
+      border:1px solid var(--nbskin-line)!important;
+      border-radius:var(--nbskin-r,6px)!important;
+      font-family:var(--nbskin-font,inherit)!important;}
+  body[class*="nb"] :where([data-digichem],.nbrail-own) .jp-OutputArea .widget-label,
+  body[class*="nb"] :where([data-digichem],.nbrail-own) .jp-OutputArea label.widget-label{
+      color:var(--nbskin-ink)!important;
+      font-family:var(--nbskin-font,inherit)!important;}
+  body[class*="nb"] :where([data-digichem],.nbrail-own) .jp-OutputArea .widget-text input,
+  body[class*="nb"] :where([data-digichem],.nbrail-own) .jp-OutputArea .widget-textarea textarea,
+  body[class*="nb"] :where([data-digichem],.nbrail-own) .jp-OutputArea input[type="text"],
+  body[class*="nb"] :where([data-digichem],.nbrail-own) .jp-OutputArea input[type="number"],
+  body[class*="nb"] :where([data-digichem],.nbrail-own) .jp-OutputArea textarea,
+  body[class*="nb"] :where([data-digichem],.nbrail-own) .jp-OutputArea .widget-dropdown select{
+      background:var(--nbskin-surf)!important;color:var(--nbskin-ink)!important;
+      border:1px solid var(--nbskin-line)!important;
+      border-radius:var(--nbskin-r,6px)!important;
+      font-family:var(--nbskin-font,inherit)!important;}
+  body[class*="nb"] :where([data-digichem],.nbrail-own) .jp-OutputArea .widget-text input:focus,
+  body[class*="nb"] :where([data-digichem],.nbrail-own) .jp-OutputArea .widget-textarea textarea:focus,
+  body[class*="nb"] :where([data-digichem],.nbrail-own) .jp-OutputArea input[type="text"]:focus,
+  body[class*="nb"] :where([data-digichem],.nbrail-own) .jp-OutputArea textarea:focus{
+      border-color:var(--nbring,#0d63e0)!important;
+      box-shadow:0 0 0 2px var(--nbglow,rgba(13,99,224,.30))!important;
+      outline:none!important;}
+  body[class*="nb"] :where([data-digichem],.nbrail-own) .jp-OutputArea button.widget-button,
+  body[class*="nb"] :where([data-digichem],.nbrail-own) .jp-OutputArea button.jupyter-button,
+  body[class*="nb"] :where([data-digichem],.nbrail-own) .jp-OutputArea button.nbyoc-add{
+      background:var(--nbskin-surf)!important;color:var(--nbskin-ink)!important;
+      border:1px solid var(--nbskin-line)!important;
+      border-radius:var(--nbskin-pill-r,10px)!important;
+      font-family:var(--nbskin-font,inherit)!important;
+      box-shadow:none!important;
+      transition:background .15s ease,border-color .15s ease,box-shadow .15s ease;}
+  body[class*="nb"] :where([data-digichem],.nbrail-own) .jp-OutputArea button.widget-button:hover,
+  body[class*="nb"] :where([data-digichem],.nbrail-own) .jp-OutputArea button.jupyter-button:hover,
+  body[class*="nb"] :where([data-digichem],.nbrail-own) .jp-OutputArea button.nbyoc-add:hover{
+      border-color:var(--nbring,#0d63e0)!important;
+      box-shadow:0 0 8px 1px var(--nbglow,rgba(13,99,224,.30))!important;}
+  /* 2026-09-30 (E10.M2) — "＋ Your own cell" is a plain <button> from the
+     markup, not a widget: it was the browser's grey outset button in every
+     skin, and its note kept the widget's black ink in minimal dark (1.15 : 1,
+     lab_contrast). It now is a control of the skin like the widget buttons
+     above (face, ink, edge, corner, font, hover), at their size, and the note
+     takes the skin's quiet ink. */
+  body[class*="nb"] :where([data-digichem],.nbrail-own) .jp-OutputArea button.nbyoc-add{
+      height:38px;padding:0 18px;font-size:13px;line-height:36px;cursor:pointer;margin:2px 0 6px;}
+  body[class*="nb"] :where([data-digichem],.nbrail-own) .jp-OutputArea .nbyoc-note{
+      color:var(--nbskin-quiet,#55636f)!important;font-family:var(--nbskin-font,inherit)!important;
+      margin:0 0 10px;}
+  /* the panel's own controls are NOT these — the drawer borrows the real
+     widgets and has its own rules; this keeps our toolbar out of the way */
+  body[class*="nb"] #nbpanel-root button.widget-button{box-shadow:none!important;}
+  /* a native dropdown paints itself from the OS unless it is told which
+     brightness it is in — the same trap the settings drawer had */
+  body.nbdark :where([data-digichem],.nbrail-own) .jp-OutputArea select{color-scheme:dark;}
+  body:not(.nbdark) :where([data-digichem],.nbrail-own) .jp-OutputArea select{color-scheme:light;}
+
+  /* ======================================================================
+     2026-09-25 — EACH SKIN HAS ITS OWN MARKS, NOT THE SAME MARKS ROUNDED.
+
+     The shape language carries meaning: a section, a chapter, a thing you DO.
+     The skins were flattening it rather than translating it — retro turned
+     every mark into a square and fairy into a circle, so a chapter heading and
+     an exercise became the same sign. Each skin keeps THREE distinguishable
+     marks; what changes is the vocabulary they are drawn in.
+
+       minimal  soft diamond · rounded square · soft diamond
+       cyber    sharp diamond · sharp square  · LENS  (pointed along the line)
+       retro    hard block    · hard square   · hard block, upright
+       fairy    circle        · circle        · PETAL (a teardrop)
+
+     Nothing here uses clip-path: a clip cuts the box-shadow, and the box-shadow
+     is the glow that says which exercise is open. Corner radius and rotation
+     only — both of which a shadow follows. */
+  body.nbskin-cyber #nbpanel-root.vert .nbrail-dot,
+  body.nbskin-cyber #nbpanel-root.vert .nbcodemark,
+  body.nbskin-cyber #nbpanel-root.vert .nbvizmark,
+  body.nbskin-cyber #nbpanel-root.vert .nbmap-node.is-current .nbrail-dot,
+  body.nbskin-cyber #nbpanel-root.vert .nbcodemark.cd-current,
+  body.nbskin-cyber #nbpanel-root.vert .nbcodemark.cd-done,
+  body.nbskin-cyber #nbpanel-root.vert .nbrail-dot.st-code{
+      /* 2026-09-28 (Paket 7) — the lens read as an eye: a hard diamond now,
+         with a second, thin frame 2 px outside it (an outline follows the
+         turn and does not cut the glow) */
+      border-radius:0!important;
+      outline:1px solid currentColor;outline-offset:2px;}
+  body.nbskin-fairy #nbpanel-root.vert .nbrail-dot,
+  body.nbskin-fairy #nbpanel-root.vert .nbcodemark,
+  body.nbskin-fairy #nbpanel-root.vert .nbvizmark,
+  body.nbskin-fairy #nbpanel-root.vert .nbmap-node.is-current .nbrail-dot,
+  body.nbskin-fairy #nbpanel-root.vert .nbcodemark.cd-current,
+  body.nbskin-fairy #nbpanel-root.vert .nbcodemark.cd-done,
+  body.nbskin-fairy #nbpanel-root.vert .nbrail-dot.st-code{
+      /* 2026-09-28 (Paket 7) — the petal read as a drop: a soft diamond now,
+         all four corners equally round */
+      transform:translate(-50%%,-50%%) rotate(45deg)!important;
+      border-radius:30%%!important;}
+  /* (E15.1: the sign's turn back is 12-k3.css alone; this rule was always outranked there) */
+  body.nbskin-fairy #nbpanel-root.vert .nbmap-node:hover .nbrail-dot,
+  body.nbskin-fairy #nbpanel-root.vert .nbmap-node:hover .nbcodemark,
+  body.nbskin-fairy #nbpanel-root.vert .nbmap-node:hover .nbvizmark{
+      transform:translate(-50%%,-50%%) rotate(45deg) scale(1.2)!important;}
+  /* retro's section mark keeps its ring so it is not merely a bigger chapter */
+  body.nbskin-retro #nbpanel-root.vert .nbmap-node .nbsect{
+      border-radius:0!important;
+      transform:translate(-50%%,-50%%)!important;
+      box-shadow:0 0 0 max(1px, calc(2px * var(--nbthick,1))) var(--nbrail-bg,#f6f8fa),
+                 0 0 0 max(2px, calc(4px * var(--nbthick,1))) var(--nbskin-line)!important;}
+  /* 2026-09-28b (K2.9) — …and it lights up like every other mark. The ring
+     above is one element more specific than `.here`, so in retro the three
+     group bars, the title, the end and your own cell passed the reading line
+     without any light (measured 28a: box-shadow, fill and edge unchanged by
+     `.here`). The light takes the ring's place while it is there. */
+  body.nbskin-retro #nbpanel-root.vert .nbmap-node.here .nbsect{
+      background:var(--nbmark)!important;border-color:var(--nbmark)!important;
+      box-shadow:0 0 0 2px var(--nbring,#fff),
+                 0 0 12px 4px var(--nbglow,rgba(255,255,255,.65))!important;}
+
+  /* ======================================================================
+     2026-09-25 — STRUKTUR: the toolbar's controls sit on its middle.
+
+     The bar is a column box with 6px of padding at the top and 22px at the
+     bottom (the drawer hangs off the lower edge and needs the room). The row of
+     controls simply sat in that box, so every widget rode 8px above the middle
+     of the bar the reader sees. The row is centred in what is actually drawn
+     instead: the extra bottom padding is declared as the row's own bottom
+     margin offset, which moves the controls without moving the bar. */
+  #nbpanel-root .nbdock{padding-top:11px!important;padding-bottom:11px!important;}
+  #nbpanel-root.open .nbdock{padding-bottom:22px!important;}
+  #nbpanel-root .nbdock>.nbctrl{
+      align-items:center!important;min-height:34px!important;}
+  #nbpanel-root .nbdock .nbdock-l,#nbpanel-root .nbdock .nbdock-r,
+  #nbpanel-root .nbdock .nbzoomgrp,#nbpanel-root .nbdock .nbctl-diffslot{
+      align-items:center!important;align-self:center!important;}
+  #nbpanel-root .nbdock .nbbtn,#nbpanel-root .nbdock .nbslider,
+  #nbpanel-root .nbdock .nbslval{align-self:center!important;
+      vertical-align:middle!important;}
+  #nbpanel-root .nbdock .nbzoomgrp .nbslider{margin:0!important;display:block!important;}
+
+  /* ======================================================================
+     2026-09-25 — STRUKTUR: a box is the width of what is in it, always.
+
+     `width:fit-content` on the chapter pills was written inside the SKIN block,
+     so it only ever applied when a skin was on — in minimal, and in full
+     screen where the column is widest, the pills ran the whole way across. The
+     rule belongs to the layout, not to the paint, so it is stated here for
+     every body and every viewport. */
+  :where([data-digichem],.nbrail-own) .jupyter-widget-Collapse-header,:where([data-digichem],.nbrail-own) .lm-Collapse-header,:where([data-digichem],.nbrail-own) .p-Collapse-header,
+  .acc-chapter>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header,
+  .acc-chapter>.lm-Collapse>.lm-Collapse-header,
+  .acc-group>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header,
+  .acc-group>.lm-Collapse>.lm-Collapse-header,
+  .acc-viz>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header,
+  .acc-viz>.lm-Collapse>.lm-Collapse-header,
+  .acc-practice>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header,
+  .acc-practice>.lm-Collapse>.lm-Collapse-header{
+      width:fit-content!important;max-width:94%%!important;
+      margin-left:auto!important;margin-right:auto!important;}
+  /* and the prose boxes keep a reading measure instead of growing with the
+     screen — full screen is more room, not a longer line */
+  .nbbox,.nblock,.nbtitle-card{
+      max-width:min(100%%, var(--nbmeasure, 980px))!important;
+      margin-left:auto!important;margin-right:auto!important;}
+
+  /* ======================================================================
+     2026-09-25c — ONE PADLOCK, DRAWN, IN FOUR SKINS AND TWO STATES.
+
+     Every lock on the rail was a colour emoji: a CLOSED padlock written into
+     the markup for a locked exercise, an OPEN one swapped in by CSS on hover
+     and once a mark was armed. Three things are wrong with that and they are all the reader's
+     problem, not a matter of taste:
+
+       · an emoji cannot take the skin's colour. It is the same picture in
+         cyberpunk and in fairy, which is the one thing a skin is for.
+       · it cannot be centred. A glyph is placed on a baseline inside a line
+         box; the mark is a square turned 45°. The padlock rode low and left
+         of the middle of its own diamond, and no font-size fixes that.
+       · it is a different picture on every platform — Windows, macOS and
+         Android each draw their own padlock, at their own weight.
+
+     So the lock is DRAWN: two pseudo-elements, a shackle and a body, sized
+     from one variable and painted in `currentColor`. It centres because it is
+     positioned, not typeset; it follows the skin because the colour is a
+     token; and it is the same picture everywhere.
+
+     OPEN and CLOSED are the same drawing — the shackle swings to the right and
+     lifts. That is what "an open lock in the same style as the closed one"
+     has to mean: one shape with two positions, not two pictures. */
+  #nbpanel-root.vert .nbrail-dot.st-lock,
+  #nbpanel-root.vert .nbcodemark.cd-lock,
+  #nbpanel-root.vert .nbmap-node.is-current .nbrail-dot,
+  #nbpanel-root.vert .nbcodemark.cd-current{
+      /* flex ONLY in the lock states: the tick and the cross keep the
+         line-height centring they were tuned against */
+      display:flex!important;align-items:center!important;
+      justify-content:center!important;}
+  /* MEASURED, and this is why the size is a SHARE and not a length.
+     One absolute size for every mark put a 17px lock inside the 25px purple
+     code mark — and that mark is a square turned 45°, whose inscribed upright
+     square is only 25/√2 = 17.7px. The lock filled it corner to corner and its
+     own corners came out through the diamond's edges. The four marks are not
+     the same size either (31 · 29 · 31 · 25 px, measured), so any single
+     number is wrong for three of them.
+     A percentage is right for all four, at every panel size, for ever: .46 of
+     a turned mark is comfortably inside its inscribed square, and retro — the
+     one skin that does NOT turn its marks — has the whole square to use. */
+  #nbpanel-root.vert{--nblk-w:46%%;}
+  body.nbskin-retro #nbpanel-root.vert{--nblk-w:62%%;}
+  #nbpanel-root.vert .nbrail-dot.st-lock .nbdotg,
+  #nbpanel-root.vert .nbcodemark.cd-lock .nbdotg,
+  #nbpanel-root.vert .nbmap-node.is-current .nbrail-dot .nbdotg,
+  #nbpanel-root.vert .nbcodemark.cd-current .nbdotg{
+      position:relative!important;flex:0 0 auto!important;
+      width:var(--nblk-w,46%%)!important;height:var(--nblk-w,46%%)!important;
+      font-size:0!important;line-height:0!important;
+      text-shadow:none!important;-webkit-text-stroke:0!important;}
+  /* the shackle */
+  #nbpanel-root.vert .nbrail-dot.st-lock .nbdotg::before,
+  #nbpanel-root.vert .nbcodemark.cd-lock .nbdotg::before,
+  #nbpanel-root.vert .nbmap-node.is-current .nbrail-dot .nbdotg::before,
+  #nbpanel-root.vert .nbcodemark.cd-current .nbdotg::before,
+  #nbpanel-root.vert .nbmap-node.locked .nbchapdot::before{
+      content:'';position:absolute;left:50%%;top:0;
+      width:54%%;height:54%%;margin-left:-27%%;box-sizing:border-box;
+      /* the stroke follows the panel's size control, not one mark's size —
+         it is the same weight on every mark, which is what reads as one
+         drawing rather than five */
+      border:max(1.2px, calc(var(--nbthick,1) * var(--nbsym,1) * .9px))
+             solid currentColor;
+      border-bottom:0;border-radius:999px 999px 0 0;
+      transition:transform .18s ease;}
+  /* the body */
+  #nbpanel-root.vert .nbrail-dot.st-lock .nbdotg::after,
+  #nbpanel-root.vert .nbcodemark.cd-lock .nbdotg::after,
+  #nbpanel-root.vert .nbmap-node.is-current .nbrail-dot .nbdotg::after,
+  #nbpanel-root.vert .nbcodemark.cd-current .nbdotg::after,
+  #nbpanel-root.vert .nbmap-node.locked .nbchapdot::after{
+      content:'';position:absolute;left:0;bottom:0;
+      width:100%%;height:54%%;background:currentColor;
+      border-radius:18%%;}
+  /* OPEN: the same shackle, swung right and lifted */
+  #nbpanel-root.vert .nbmap-node.is-current .nbrail-dot .nbdotg::before,
+  #nbpanel-root.vert .nbcodemark.cd-current .nbdotg::before{
+      transform:translate(55%%, -14%%);}
+
+  /* the CHAPTER mark has no glyph element of its own, and is never turned —
+     so it is drawn on directly, with its own size */
+  #nbpanel-root.vert .nbmap-node.locked .nbchapdot{
+      --nblk:calc(9px * var(--nbthick,1) * var(--nbsym,1));
+      position:absolute;font-size:0!important;}
+  #nbpanel-root.vert .nbmap-node.locked .nbchapdot::before,
+  #nbpanel-root.vert .nbmap-node.locked .nbchapdot::after{
+      left:50%%;margin-left:calc(var(--nblk) * -.5);
+      width:var(--nblk);}
+  #nbpanel-root.vert .nbmap-node.locked .nbchapdot::before{
+      top:calc(50%% - var(--nblk) * .5);
+      width:calc(var(--nblk) * .54);
+      height:calc(var(--nblk) * .54);
+      margin-left:calc(var(--nblk) * -.27);}
+  /* the body starts .46 of the way down the lock's own box, and the box is
+     centred in the mark: top = 50%% - nblk/2 + .46·nblk = 50%% - .04·nblk */
+  #nbpanel-root.vert .nbmap-node.locked .nbchapdot::after{
+      bottom:auto;top:calc(50%% - var(--nblk) * .04);
+      height:calc(var(--nblk) * .54);}
+
+  /* ---- the ink. This is the part a skin actually changes --------------
+     A CLOSED lock sits on the mark's own dark fill, so it is a light tint of
+     the skin — measured against that fill: 7.0 · 6.3 · 5.9 · 6.2 to one, and
+     10.6 to 12.5 on the dark page. An OPEN lock sits on the open door, which
+     is filled with the rail's own light surface, so it is the route's colour
+     and it is DARKER than the tick was: #2f8f63 on #f6f8fa is 3.77:1, which
+     is under the bar for a small shape. */
+  body{--nbskin-lock:#eef2f6;}
+  body.nbskin-cyber{--nbskin-lock:#9ff4ff;}
+  body.nbskin-retro{--nbskin-lock:#ffd9b0;}
+  body.nbskin-fairy{--nbskin-lock:#f0dcff;}
+  #nbpanel-root.vert .nbrail-dot.st-lock .nbdotg,
+  #nbpanel-root.vert .nbcodemark.cd-lock .nbdotg,
+  #nbpanel-root.vert .nbmap-node.locked .nbchapdot{
+      color:var(--nbskin-lock,#eef2f6)!important;}
+  #nbpanel-root.vert .nbmap-node.is-current .nbrail-dot .nbdotg{
+      color:#27784f!important;}
+  #nbpanel-root.vert .nbcodemark.cd-current .nbdotg{
+      color:#7a37e6!important;}
+  body.nbdark #nbpanel-root.vert .nbmap-node.is-current .nbrail-dot .nbdotg{
+      color:#5fe0a8!important;}
+  body.nbdark #nbpanel-root.vert .nbcodemark.cd-current .nbdotg{
+      color:#c7a8ff!important;}
+  /* ARMED — the state the removed open padlock used to carry. It is said by the mark
+     itself now: the lock takes the skin's ring colour and the mark lights up.
+     A state, not a second picture. */
+  #nbpanel-root.vert .nbmap-node.nbkeyed .nbchapdot{
+      color:var(--nbring,#0d63e0)!important;
+      border-color:var(--nbring,#0d63e0)!important;
+      box-shadow:0 0 0 max(1px, calc(2px * var(--nbthick,1))) var(--nbrail-bg,#f6f8fa),
+                 0 0 10px 3px var(--nbglow,rgba(13,99,224,.55))!important;}
+
+  /* ---- and the same drawing in the box in the document ----------------
+     It was the last colour emoji in the lock language. The box's padlock is
+     the thing the reader PRESSES, so it is bigger and it keeps both states:
+     shut while the chapter is shut, swung open once the mark has armed it. */
+  .nblocked-lock{font-size:0!important;position:relative;display:block;
+      width:34px;height:34px;margin:0 auto 12px;--nblk:34px;
+      color:var(--nbskin-acc,#1d5c8a);}
+  .nblocked-lock::after{content:''!important;position:absolute;left:0;bottom:0;
+      width:100%%;height:54%%;background:currentColor;font-size:0!important;
+      border-radius:calc(var(--nblk) * .18);}
+  .nblocked-lock::before{content:'';position:absolute;left:50%%;top:0;
+      width:54%%;height:54%%;margin-left:-27%%;box-sizing:border-box;
+      border:max(2px, calc(var(--nblk) * .15)) solid currentColor;
+      border-bottom:0;border-radius:999px 999px 0 0;
+      transition:transform .18s ease;}
+  .nblocked-note.nbkeyed .nblocked-lock{color:#3fa877;}
+  body.nbdark .nblocked-note.nbkeyed .nblocked-lock{color:#4fd39b;}
+  .nblocked-note.nbkeyed .nblocked-lock::after{content:''!important;}
+  .nblocked-note.nbkeyed .nblocked-lock::before{
+      transform:translate(calc(var(--nblk) * .30), calc(var(--nblk) * -.08));}
+  .nblocked-note.nbkeyed .nblocked-lock:hover::after{
+      text-shadow:none;box-shadow:0 0 14px 3px rgba(63,168,119,.55);}
+  .nblocked-note.nbkeyed .nblocked-lock:hover::before{
+      transform:translate(calc(var(--nblk) * .34), calc(var(--nblk) * -.14));}
+
+
+  /* ======================================================================
+     2026-09-28 (Paket 16 · G3, Skizze) — CODE WEARS THE SKIN.
+     Every piece of code the notebook writes itself — the worked solution
+     (`solution_box`), the progress code (⚙), the stub in every code fold
+     (`.codearea`) — was coloured with JupyterLab's editor variables: one
+     palette in all four skins, and in retro the stub even took the serif,
+     because the skin rule for text fields (above) outranked `.codearea`.
+     highlight_code() colours each token with `var(--jp-mirror-editor-…)`, so
+     the scheme is set by redefining those variables on the <pre> alone —
+     JupyterLab's own editors keep theirs. Seven classes (keyword, string,
+     comment, number, def name, builtin, operator) plus ink on a code
+     surface, per skin × light/dark; worst token 4.95 : 1 (fairy light,
+     builtin), computed from the hex values, not measured on the page.
+     The choice field in ⚙ (script/Python, not here) sets
+     `body[data-nbcode]` = "light" | "dark" | "mono"; absent = like the skin. */
+  body{--nbcode-bg:#f5f7f9;--nbcode-line:#d6dee6;--nbcode-ink:#1f2933;
+       --nbcode-kw:#1d5c8a;--nbcode-str:#a13d1c;--nbcode-com:#5b6773;--nbcode-num:#0f6e6e;
+       --nbcode-def:#6a3fb5;--nbcode-blt:#2f6d4f;--nbcode-op:#8a2f7a;--nbcode-font:var(--jp-code-font-family,monospace);}
+  body.nbdark{--nbcode-bg:#182028;--nbcode-line:#34404b;--nbcode-ink:#dbe2e9;
+       --nbcode-kw:#8fc7e8;--nbcode-str:#f0a37e;--nbcode-com:#9aa7b3;--nbcode-num:#7fd4c6;
+       --nbcode-def:#c7a8ff;--nbcode-blt:#9fd9a8;--nbcode-op:#f29bd7;}
+  body:not(.nbdark).nbskin-cyber{--nbcode-bg:#f2eeff;--nbcode-line:#9b7fe0;--nbcode-ink:#231a3d;
+       --nbcode-kw:#00647f;--nbcode-str:#a3128c;--nbcode-com:#5d4f84;--nbcode-num:#0a6b4a;
+       --nbcode-def:#5b2bc4;--nbcode-blt:#7a4a00;--nbcode-op:#b0126b;}
+  body.nbdark.nbskin-cyber{--nbcode-bg:#0f1324;--nbcode-line:#3a2a6b;--nbcode-ink:#d8e6ff;
+       --nbcode-kw:#00e5ff;--nbcode-str:#ff6fe0;--nbcode-com:#8fa8d8;--nbcode-num:#7dffb0;
+       --nbcode-def:#c9a0ff;--nbcode-blt:#ffd166;--nbcode-op:#ff9f43;}
+  body:not(.nbdark).nbskin-retro{--nbcode-bg:#fdf6e8;--nbcode-line:#c8a878;--nbcode-ink:#3a2f22;
+       --nbcode-kw:#a8460f;--nbcode-str:#2e6b3a;--nbcode-com:#7a6548;--nbcode-num:#1d5f7a;
+       --nbcode-def:#7a2e62;--nbcode-blt:#6d4f22;--nbcode-op:#8a3a1a;}
+  body.nbdark.nbskin-retro{--nbcode-bg:#231d14;--nbcode-line:#6b5638;--nbcode-ink:#efdfc4;
+       --nbcode-kw:#ffa451;--nbcode-str:#b5d98a;--nbcode-com:#b9a582;--nbcode-num:#8fd0e0;
+       --nbcode-def:#f0a3c8;--nbcode-blt:#e0c48a;--nbcode-op:#ff8f6b;}
+  body:not(.nbdark).nbskin-fairy{--nbcode-bg:#fdf8ff;--nbcode-line:#e2cdf5;--nbcode-ink:#4a3a63;
+       --nbcode-kw:#7b32c2;--nbcode-str:#a8306f;--nbcode-com:#6e5f82;--nbcode-num:#1f6f86;
+       --nbcode-def:#5b3fc9;--nbcode-blt:#2f7a5a;--nbcode-op:#b0457a;}
+  body.nbdark.nbskin-fairy{--nbcode-bg:#1f1830;--nbcode-line:#4a3a63;--nbcode-ink:#e6d9f7;
+       --nbcode-kw:#c79cff;--nbcode-str:#ff9fd0;--nbcode-com:#b3a2c8;--nbcode-num:#8fe0e8;
+       --nbcode-def:#a9b8ff;--nbcode-blt:#a8e6c0;--nbcode-op:#ffb38f;}
+  /* the choice field wins over the skin: light / dark = minimal's schemes on
+     any skin, mono = ink only, comments in italic */
+  html body[data-nbcode="light"]{--nbcode-bg:#f5f7f9;--nbcode-line:#d6dee6;--nbcode-ink:#1f2933;
+       --nbcode-kw:#1d5c8a;--nbcode-str:#a13d1c;--nbcode-com:#5b6773;--nbcode-num:#0f6e6e;
+       --nbcode-def:#6a3fb5;--nbcode-blt:#2f6d4f;--nbcode-op:#8a2f7a;}
+  html body[data-nbcode="dark"]{--nbcode-bg:#182028;--nbcode-line:#34404b;--nbcode-ink:#dbe2e9;
+       --nbcode-kw:#8fc7e8;--nbcode-str:#f0a37e;--nbcode-com:#9aa7b3;--nbcode-num:#7fd4c6;
+       --nbcode-def:#c7a8ff;--nbcode-blt:#9fd9a8;--nbcode-op:#f29bd7;}
+  html body[data-nbcode="mono"]{--nbcode-bg:#f7f7f7;--nbcode-line:#cfcfcf;--nbcode-ink:#222222;
+       --nbcode-kw:#222222;--nbcode-str:#222222;--nbcode-com:#222222;--nbcode-num:#222222;
+       --nbcode-def:#222222;--nbcode-blt:#222222;--nbcode-op:#222222;}
+  html body.nbdark[data-nbcode="mono"]{--nbcode-bg:#1b1b1b;--nbcode-line:#3a3a3a;--nbcode-ink:#e6e6e6;
+       --nbcode-kw:#e6e6e6;--nbcode-str:#e6e6e6;--nbcode-com:#e6e6e6;--nbcode-num:#e6e6e6;
+       --nbcode-def:#e6e6e6;--nbcode-blt:#e6e6e6;--nbcode-op:#e6e6e6;}
+  html body[data-nbcode="mono"] :where([data-digichem],.nbrail-own) .jp-OutputArea pre span[style*="comment-color"]{font-style:italic;}
+  /* the listings: token variables re-pointed on the <pre>, surface and ink */
+  html body :where([data-digichem],.nbrail-own) .jp-OutputArea pre{
+      --jp-mirror-editor-keyword-color:var(--nbcode-kw);
+      --jp-mirror-editor-string-color:var(--nbcode-str);
+      --jp-mirror-editor-comment-color:var(--nbcode-com);
+      --jp-mirror-editor-number-color:var(--nbcode-num);
+      --jp-mirror-editor-def-color:var(--nbcode-def);
+      --jp-mirror-editor-builtin-color:var(--nbcode-blt);
+      --jp-mirror-editor-operator-color:var(--nbcode-op);
+      background:var(--nbcode-bg)!important;color:var(--nbcode-ink)!important;
+      border-color:var(--nbcode-line)!important;
+      border-radius:min(var(--nbskin-r,8px),10px)!important;}
+  html body :where([data-digichem],.nbrail-own) .jp-OutputArea pre code{color:inherit!important;background:none!important;}
+  /* retro's hard shadow and cyber's edge light, as on every box of theirs */
+  html body.nbskin-retro :where([data-digichem],.nbrail-own) .jp-OutputArea pre{box-shadow:3px 3px 0 var(--nbcode-line)!important;}
+  html body.nbskin-cyber :where([data-digichem],.nbrail-own) .jp-OutputArea pre{
+      box-shadow:0 0 0 1px color-mix(in srgb,var(--nbskin-acc) 30%%,transparent),
+                 0 0 14px color-mix(in srgb,var(--nbskin-acc) 14%%,transparent)!important;}
+  /* the code a reader edits in a fold: same surface and ink, monospace in
+     every skin (the text-field rule above had given it the skin's font) */
+  html body[class*="nb"] :where([data-digichem],.nbrail-own) .jp-OutputArea .codearea textarea{
+      background:var(--nbcode-bg)!important;color:var(--nbcode-ink)!important;
+      border:1px solid var(--nbcode-line)!important;
+      border-radius:min(var(--nbskin-r,8px),10px)!important;
+      font-family:var(--nbcode-font)!important;caret-color:var(--nbcode-kw);}
+  html body[class*="nb"] :where([data-digichem],.nbrail-own) .jp-OutputArea .codearea textarea:focus{
+      border-color:var(--nbring,#0d63e0)!important;}
+
+  /* ======================================================================
+     2026-09-28 (R3 · Paket 20, Skizze) — TYPED CODE IN THE SKIN'S COLOURS.
+     (a) The reader's own cells (`.jp-Cell ~ .jp-Cell ~ .jp-Cell`, Paket 6;
+         `.nbown-n` from JS 15): JupyterLab's editor colours its tokens with
+         `var(--jp-mirror-editor-…)`; re-pointed on those cells alone they
+         take the G3 scheme (--nbcode-*, skin × light/dark, choice field
+         `body[data-nbcode]`). Surface = the code surface, so a dark scheme
+         never sits on a light face. Pure CSS, works now.
+     (b) The code fold's answer field is a plain <textarea> and cannot
+         colour a token. Contract for the overlay (JS 20):
+           .nbedov            class on the `.codearea` widget
+           .nbedov-hl         a <pre> the script puts inside it, before the
+                              textarea, filled with highlight_code()'s spans
+                              (`style="color:var(--jp-mirror-editor-…)"`)
+                              and kept in step with its scrollTop (transform)
+           .nbedov.on         overlay live: the textarea's glyphs go
+                              transparent, caret and selection stay
+         Both boxes get the same font, size, line height, padding, border
+         and wrapping from here, so a glyph of the <pre> lies exactly under
+         the caret's; without `.on` the field is the plain field of G3. */
+  html body :where([data-digichem],.nbrail-own) .jp-Notebook .jp-Cell ~ .jp-Cell ~ .jp-Cell,
+  html body :where([data-digichem],.nbrail-own) .jp-Notebook .jp-Cell[class*="nbown-"]{
+      --jp-mirror-editor-keyword-color:var(--nbcode-kw);
+      --jp-mirror-editor-string-color:var(--nbcode-str);
+      --jp-mirror-editor-string-2-color:var(--nbcode-str);
+      --jp-mirror-editor-comment-color:var(--nbcode-com);
+      --jp-mirror-editor-number-color:var(--nbcode-num);
+      --jp-mirror-editor-def-color:var(--nbcode-def);
+      --jp-mirror-editor-builtin-color:var(--nbcode-blt);
+      --jp-mirror-editor-operator-color:var(--nbcode-op);
+      --jp-mirror-editor-variable-color:var(--nbcode-ink);
+      --jp-mirror-editor-variable-2-color:var(--nbcode-def);
+      --jp-mirror-editor-property-color:var(--nbcode-def);
+      --jp-mirror-editor-punctuation-color:var(--nbcode-ink);
+      --jp-mirror-editor-bracket-color:var(--nbcode-op);
+      --jp-mirror-editor-meta-color:var(--nbcode-op);
+      --jp-mirror-editor-attribute-color:var(--nbcode-kw);
+      --jp-content-font-color1:var(--nbcode-ink);}
+  html body .nbrail-own .jp-Cell ~ .jp-Cell ~ .jp-Cell .jp-InputArea-editor{
+      background:var(--nbcode-bg)!important;border-color:var(--nbcode-line)!important;}
+  html body .nbrail-own .jp-Cell ~ .jp-Cell ~ .jp-Cell .cm-content{
+      color:var(--nbcode-ink)!important;font-family:var(--nbcode-font)!important;
+      caret-color:var(--nbcode-kw);}
+  html body .nbrail-own .jp-Cell ~ .jp-Cell ~ .jp-Cell .cm-cursor{
+      border-left-color:var(--nbcode-kw)!important;}
+  html body .nbrail-own .jp-Cell ~ .jp-Cell ~ .jp-Cell .cm-selectionBackground,
+  html body .nbrail-own .jp-Cell ~ .jp-Cell ~ .jp-Cell .cm-focused .cm-selectionBackground{
+      background:color-mix(in srgb,var(--nbcode-kw) 22%%,transparent)!important;}
+  html body .nbrail-own .jp-Cell ~ .jp-Cell ~ .jp-Cell .cm-activeLine{
+      background:color-mix(in srgb,var(--nbcode-kw) 6%%,transparent)!important;}
+  html body .nbrail-own .jp-Cell ~ .jp-Cell ~ .jp-Cell .cm-matchingBracket{
+      background:color-mix(in srgb,var(--nbcode-op) 22%%,transparent)!important;
+      outline:1px solid color-mix(in srgb,var(--nbcode-op) 50%%,transparent);}
+  html body[data-nbcode="mono"] :where([data-digichem],.nbrail-own) .jp-Notebook .jp-Cell ~ .jp-Cell ~ .jp-Cell .cm-content .tok-comment{font-style:italic;}
+
+  /* (b) the overlay over a code fold's field */
+  html body .jp-OutputArea .codearea.nbedov{position:relative!important;}
+  html body .jp-OutputArea .codearea.nbedov :is(textarea,.nbedov-hl){
+      font-family:var(--nbcode-font)!important;font-size:13px!important;
+      line-height:1.5!important;padding:8px 10px!important;
+      letter-spacing:0!important;tab-size:4;white-space:pre-wrap!important;
+      overflow-wrap:break-word!important;word-break:normal!important;
+      border-width:1px!important;box-sizing:border-box!important;}
+  html body .jp-OutputArea .codearea.nbedov .nbedov-hl{
+      --jp-mirror-editor-keyword-color:var(--nbcode-kw);
+      --jp-mirror-editor-string-color:var(--nbcode-str);
+      --jp-mirror-editor-comment-color:var(--nbcode-com);
+      --jp-mirror-editor-number-color:var(--nbcode-num);
+      --jp-mirror-editor-def-color:var(--nbcode-def);
+      --jp-mirror-editor-builtin-color:var(--nbcode-blt);
+      --jp-mirror-editor-operator-color:var(--nbcode-op);
+      position:absolute!important;left:0;top:0;right:0;bottom:0;margin:0!important;
+      z-index:0;pointer-events:none;overflow:hidden!important;display:none;
+      background:transparent!important;border:1px solid transparent!important;
+      box-shadow:none!important;color:var(--nbcode-ink)!important;}
+  html body .jp-OutputArea .codearea.nbedov.on .nbedov-hl{display:block;}
+  html body .jp-OutputArea .codearea.nbedov.on textarea{position:relative;z-index:1;
+      color:transparent!important;-webkit-text-fill-color:transparent!important;
+      background:transparent!important;caret-color:var(--nbcode-kw)!important;}
+  html body .jp-OutputArea .codearea.nbedov.on{background:var(--nbcode-bg)!important;
+      border-radius:min(var(--nbskin-r,8px),10px)!important;}
+  html body .jp-OutputArea .codearea.nbedov.on textarea::selection{
+      background:color-mix(in srgb,var(--nbcode-kw) 28%%,transparent);
+      -webkit-text-fill-color:transparent;}
+  html body[data-nbcode="mono"] .codearea.nbedov .nbedov-hl span[style*="comment-color"]{font-style:italic;}
+
+  /* ======================================================================
+     2026-09-29 (Eilauftrag E6.4, Oberfläche, Skizze) — THE WIDGET WINDOWS
+     READ AT A GLANCE. Every window of the corner widgets — the drawer pages
+     (How-to, ⚙, 👤, 📚) and the help window (⌨ / ?) — had its text in ems of
+     ems (.72–.86em of a 13-px panel: 9.4–11.2 px measured on the 📚 legend).
+     Now ONE size for all running text, 15 px × K (the reader's guide value),
+     headings 17 px × K, and the line height to go with it. Sizes only: the
+     wording is Python's (E6.4 py) and JS's, the place is JS's. */
+  html body .nbdrawer,
+  html body .nbdrawer :is(p,div,span,li,td,th,label,a,b,strong,em,i:not(.ps),small,code,kbd,pre,
+      select,input,textarea,button,.widget-label,.nbink,.nm,.nbseries-key,.nbseries-chap),
+  html body :is(.nbhelp,.nbhelp-body) :is(p,div,span,li,td,th,label,a,b,strong,em,small,code,kbd,button),
+  html body .nbhelp{
+      font-size:calc(15px * var(--nbk,1))!important;line-height:1.45!important;}
+  html body .nbdrawer :is(h1,h2,h3,h4,h5,.nbseries-head,.nbdrawer-h),
+  html body .nbhelp :is(h1,h2,h3,h4,h5,.nbhelp-t){
+      font-size:calc(17px * var(--nbk,1))!important;line-height:1.3!important;}
+  /* the small print under the lists was a size step lower still */
+  html body .nbdrawer :is(.nbnote,.nbfoot,.nbhelp-f),html body .nbhelp .nbhelp-f{
+      font-size:calc(15px * var(--nbk,1))!important;opacity:.85;}
+
+  /* ======================================================================
+     2026-09-29 — EILAUFTRAG E8.4 (Oberfläche, Skizze). THE CODE IS ALWAYS
+     THERE. Video V2: the code in a coding fold vanished once the field lost
+     focus. With the overlay live (.nbedov.on) the field's own glyphs are
+     transparent and only the <pre> draws them — so any moment the <pre> is
+     behind, empty, scrolled away or one repaint late, the reader sees an
+     empty box. Now the transparent glyphs are the exception, not the rule:
+     only WHILE the field has focus does the coloured <pre> draw the code;
+     out of focus the field shows its own text in the code ink and the
+     <pre> steps aside. The worst case is plain, uncoloured code — never
+     none. Same specificity as Paket 20's rules plus :not(:focus), and
+     later in the sheet, so this wins without a new !important war. */
+  html body .jp-OutputArea .codearea.nbedov.on textarea:not(:focus){
+      color:var(--nbcode-ink,#1f2933)!important;
+      -webkit-text-fill-color:var(--nbcode-ink,#1f2933)!important;}
+  html body .jp-OutputArea .codearea.nbedov.on:not(:focus-within) .nbedov-hl{
+      visibility:hidden!important;}
+
+  /* ======================================================================
+     2026-10-02 — EILAUFTRAG E17.2 (Oberfläche; Verhalten JS). EIN
+     👤-FENSTER: Konto · Einstellungen · Fortschritt. 📚 geht darin auf, die
+     Werkzeugleiste hat einen Knopf weniger. Die Seite „code“ (👤) zeigt die
+     Zellen dieser drei Teile in fester Größe (das Fenster springt nicht,
+     wenn ein Teil auf- oder zugeht; was nicht passt, rollt im Fenster).
+     2026-10-03 (rebase v1.62): an das Markup von JS (PAUSE-js, E17.2)
+     angeglichen — dort tragen Konto und Einstellungen `pg-code`
+     (`.nbcell.nbacct-cell`, `.nbcell.nbprefs-cell` mit `.nbpref-row` =
+     <label> + select.nbpref[data-k]); der alte Vertrag (`.pg-acct`,
+     `.pg-set`, `.nbset-row`) gilt weiter. Die Seite „stats“ zeigt wieder
+     nur ihre Zelle (K2.7 in JS' test_js: „die anderen drei Seiten
+     unverändert“). Reihenfolge (über `order`, falls das DOM anders ist):
+       1 Konto · 2 alter Code · 3 Einstellungen · 4 Fortschritt · 5 Neustart */
+  html body #nbpanel-root .nbcorner .nbbtn.nbseries{display:none!important;}
+  html body #nbpanel-root[data-page="code"] .nbdrawer .nbcell:is(.pg-acct,.pg-code,.pg-set,.pg-stats){
+      display:block!important;}
+  html body #nbpanel-root[data-page="code"] .nbdrawer .nbdrawer-grid{
+      display:grid!important;grid-template-columns:minmax(0,1fr)!important;row-gap:0!important;}
+  html body #nbpanel-root .nbdrawer .nbcell:is(.pg-acct,.nbacct-cell){order:1;}
+  html body #nbpanel-root .nbdrawer .nbcell.pg-code{order:2;}
+  html body #nbpanel-root .nbdrawer .nbcell:is(.pg-set,.nbprefs-cell){order:3;}
+  html body #nbpanel-root .nbdrawer .nbcell.pg-stats{order:4;}
+  html body #nbpanel-root .nbdrawer .nbcell.pg-code:has([data-slot="nbctl-reset"]){order:5;}
+  html body #nbpanel-root.open[data-page="code"] .nbdrawer{
+      height:min(78vh,640px)!important;max-height:min(78vh,640px)!important;overflow-y:auto!important;
+      overscroll-behavior:contain;scrollbar-width:thin;
+      scrollbar-color:var(--nbskin-line,#c3ced8) transparent;}
+  html body #nbpanel-root[data-page="code"] .nbdrawer .nbserieslist{
+      max-height:none!important;overflow:visible!important;}
+  /* Einstellungen: Name links, Steuerung rechts — eine Zeile je Wahl */
+  html body #nbpanel-root .nbdrawer :is(.nbset-row,.nbpref-row):not(#nbz),
+  html body #nbpanel-root .nbdrawer .pg-code .nbrolerow{
+      display:grid!important;grid-template-columns:132px minmax(0,1fr);align-items:center;
+      column-gap:12px;min-height:40px;padding:3px 0;margin:0!important;}
+  html body #nbpanel-root .nbdrawer :is(.nbset-row,.nbpref-row) > label,
+  html body #nbpanel-root .nbdrawer .pg-code .nbrolerow > label{
+      font-size:14px!important;font-weight:700;color:var(--nbskin-ink,#1f2933)!important;margin:0!important;}
+  html body #nbpanel-root .nbdrawer :is(.nbset-row,.nbpref-row) > select{width:100%%!important;height:34px!important;}
+  html body #nbpanel-root .nbdrawer :is(.nbchoice,.nbset-row .nblang){
+      display:inline-flex;flex-wrap:wrap;gap:0;justify-self:start;max-width:100%%;
+      border:1.5px solid var(--nbskin-line,#c3ced8);border-radius:999px;padding:2px;
+      background:var(--nbskin-surf,#fff);margin:0!important;}
+  html body #nbpanel-root .nbdrawer :is(.nbchoice-opt,.nbset-row .nblang-opt){
+      all:unset;box-sizing:border-box;cursor:pointer;height:30px;padding:0 13px;border-radius:999px;
+      display:inline-flex;align-items:center;gap:5px;font-size:13px!important;font-weight:700;
+      color:var(--nbskin-ink,#1f2933)!important;background:transparent!important;border:0!important;
+      transition:transform .15s ease;}
+  html body #nbpanel-root .nbdrawer :is(.nbchoice-opt,.nbset-row .nblang-opt):hover{transform:translateY(-1px);}
+  html body #nbpanel-root .nbdrawer :is(.nbchoice-opt,.nbset-row .nblang-opt):focus-visible{
+      outline:2px solid var(--nbskin-acc,#1d5c8a);outline-offset:1px;}
+  html body #nbpanel-root .nbdrawer :is(.nbchoice-opt,.nbset-row .nblang-opt):is([aria-checked="true"],.on){
+      background:var(--nbskin-acc,#1d5c8a)!important;color:var(--nbskin-surf,#fff)!important;}
+  html body #nbpanel-root .nbdrawer .nbset-row .nblang-opt::after{content:none!important;}
+  html body #nbpanel-root .nbdrawer .nbset-row .nblang .nblang-t{display:none!important;}
+  /* das Konto im Fenster: Person-Id groß */
+  html body #nbpanel-root .nbdrawer :is(.pg-acct,.nbacct-cell) .nbacct:not(#nbz) .nbacct-id{font-size:16px!important;}
+  html body #nbpanel-root .nbdrawer .pg-acct .nbacct-me{row-gap:10px;}
+  @media (prefers-reduced-motion:reduce){
+      html body #nbpanel-root .nbdrawer :is(.nbchoice-opt,.nbset-row .nblang-opt){transition:none!important;}}
+
+  /* ======================================================================
+     2026-10-06 — EILAUFTRAG E23.7 + E23.3 (Oberfläche; Zustand JS). DIE
+     SCHLÖSSER DER COVER-TIMELINE. Gemessen v1.63 (kaltes Cover): gesperrte
+     Kapitel und Aufgaben nur gestrichelt und blass (E18.3), ohne Schloss;
+     die Abbildungen gesperrter Kapitel so kräftig wie die offenen; die
+     höchste freie Aufgabe (grün) und Coding-Aufgabe (lila, E18.2) ohne
+     Zeichen. Jetzt, gezeichnet wie im Panel (oben: ein Bild, kein Emoji,
+     in jeder Umgebung gleich), als Maske in einer Farbe:
+       * gesperrt (`data-st="locked"`: Kapitel, Aufgabe, Coding, Quiz,
+         BYOD) — ein geschlossenes Schloss, 11 px im Kapitel, 9 px in den
+         kleinen Marken, dunkelgrau (hell #4d5964, dunkel #b9c4cf); es
+         sitzt auf der Zeile, nicht in der Marke: die Marke bleibt blass
+         (.45, E18.3), das Schloss nicht, und es dreht nie mit (aufrecht,
+         auch beim Hovern);
+       * frei und als nächste dran (`data-st="open"`, Aufgabe/Coding) —
+         dasselbe Schloss offen (Bügel nach rechts oben), in der Randfarbe:
+         Rechnen grün, Coding lila. Welche Marke „open“ ist, sagt JS (E23.3:
+         nur die höchste je Spur);
+       * die Abbildungen eines gesperrten Kapitels blass (.4) wie seine
+         Aufgaben.
+     Beide Zeichnungen: Fläche mittig in ihrer Box (Tinte − Markenmitte
+     ≤ 1 px). */
+  html body:not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz) .nbcover-tl{
+      --nbtl-lock:url("data:image/svg+xml,%%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%%3E%%3Crect x='2' y='5' width='8' height='6' rx='1.3'/%%3E%%3Cpath d='M4 5V4a2 2 0 0 1 4 0v1' fill='none' stroke='%%23000' stroke-width='1.6'/%%3E%%3C/svg%%3E");
+      --nbtl-unlock:url("data:image/svg+xml,%%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%%3E%%3Crect x='1' y='5.4' width='8' height='6' rx='1.3'/%%3E%%3Cpath d='M6.5 5.4V3.4a2 2 0 0 1 4 0v1' fill='none' stroke='%%23000' stroke-width='1.6'/%%3E%%3C/svg%%3E");
+      --nbtl-lockc:#4d5964;--nbtl-calc:#1e7a4c;--nbtl-code:#6b3fd1;}
+  html body.nbdark:not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz) .nbcover-tl{
+      --nbtl-lockc:#b9c4cf;--nbtl-calc:#4fd39b;--nbtl-code:#c7a8ff;}
+  html body:not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz) .nbcover-tl .nbtl-row:is(.nbtl-chapter,.nbtl-task,.nbtl-coding,.nbtl-quiz,.nbtl-byod)[data-st="locked"]::after,
+  html body:not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz) .nbcover-tl .nbtl-row:is(.nbtl-task,.nbtl-coding)[data-st="open"]::after{
+      content:'';position:absolute;left:50%%;top:50%%;z-index:2;width:9px;height:9px;
+      transform:translate(-50%%,-50%%);pointer-events:none;background:var(--nbtl-lockc);
+      -webkit-mask:var(--nbtl-lock) center/100%% 100%% no-repeat;mask:var(--nbtl-lock) center/100%% 100%% no-repeat;}
+  html body:not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz) .nbcover-tl .nbtl-row.nbtl-chapter[data-st="locked"]::after{width:11px;height:11px;}
+  html body:not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz) .nbcover-tl .nbtl-row:is(.nbtl-task,.nbtl-coding)[data-st="open"]::after{
+      background:var(--nbtl-calc);-webkit-mask-image:var(--nbtl-unlock);mask-image:var(--nbtl-unlock);}
+  html body:not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz) .nbcover-tl .nbtl-row.nbtl-coding[data-st="open"]::after{background:var(--nbtl-code);}
+  /* E23.7b (06.10., Befund JS): nicht über die Gruppe (`.nbtl-grp:has(…)`
+     traf, wo alle Kapitel Geschwister einer Gruppe sind, auch die Abbildung
+     des offenen Kapitels), sondern die Abbildung direkt hinter ihrem
+     gesperrten Kapitel — oder die, die JS selbst gesperrt nennt. */
+  html body:not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz) .nbcover-tl :is(.nbtl-row.nbtl-chapter[data-st="locked"] + .nbtl-figure,.nbtl-figure[data-st="locked"]) .nbtl-mk{
+      opacity:.4!important;}
+
+  /* ======================================================================
+     2026-10-08 — EILAUFTRAG E25.n (Oberfläche; Text Python py-E25.n,
+     Knopf/Ringpuffer JS). FEHLER MELDEN / FEEDBACK. Vertrag:
+       ⚙-Fenster  .nbcell.pg-fb.nbfb[data-nbfeedback] (Python) mit
+                  .nbcell-h · a.nbfb-link (mailto:, geht ohne Skript) ·
+                  .nbcell-n; JS darf a.nbfb-link durch button.nbfb-btn
+                  ersetzen und label.nbfb-tick > input[type=checkbox]
+                  („letzte Fehlermeldungen anhängen“) dazusetzen.
+       Vorschau   dasselbe Paar (a.nbfb-link bzw. button.nbfb-btn, optional
+                  .nbfb-tick), von JS ins Cover gesetzt (.nbcover-out).
+     Gemessen v1.67 + Markup py-E25.n: die Zelle ist auf der ⚙-Seite
+     („diff“) unsichtbar — jede Seite blendet fremde Zellen aus (K2.7,
+     03-panel: `.nbcell:not(.pg-diff)`), und `.pg-fb` stand auf keiner Liste;
+     der Link ein nackter Textlink. Jetzt:
+       * ⚙: die Zelle steht sichtbar unten im Fenster (volle Breite), nur
+         dort (nicht auf 👤/📚/⌨);
+       * der Knopf: eine Pille wie die übrigen Knöpfe im Fenster (Rand,
+         Rundung, ≥ 30 px hoch, Tinte ≥ 4,5 : 1), Hover/Fokus in Akzent;
+       * Vorschau: ruhiger, kleiner Textknopf unter der Reihe, mittig. */
+  html body #nbpanel-root[data-page="diff"] .nbdrawer .nbcell.pg-fb{display:block!important;order:99;grid-column:1/-1;}
+  html body #nbpanel-root:not([data-page="diff"]) .nbdrawer .nbcell.pg-fb{display:none!important;}
+  html body :is(#nbpanel-root .nbdrawer,.nbcover-out) :is(a.nbfb-link,button.nbfb-btn){all:unset;box-sizing:border-box;
+      cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px;
+      min-height:30px;padding:5px 14px;margin:6px 0 2px;border-radius:999px;
+      border:1.5px solid color-mix(in srgb,var(--nbskin-ink,#1f2933) 35%%,transparent);
+      background:transparent;color:var(--nbskin-ink,#1f2933);
+      font-family:inherit;font-size:13px;font-weight:700;line-height:1.2;text-decoration:none;
+      transition:transform .15s ease,border-color .15s ease;}
+  html body :is(#nbpanel-root .nbdrawer,.nbcover-out) :is(a.nbfb-link,button.nbfb-btn):hover{
+      transform:translateY(-1px);border-color:var(--nbskin-acc,var(--nbcov-acc,#3fa877));}
+  html body :is(#nbpanel-root .nbdrawer,.nbcover-out) :is(a.nbfb-link,button.nbfb-btn):focus-visible{
+      outline:2px solid var(--nbring,#0d63e0);outline-offset:2px;}
+  html body :is(#nbpanel-root .nbdrawer,.nbcover-out) label.nbfb-tick{display:flex;align-items:center;gap:6px;
+      margin:4px 0 0;font-size:12px;color:var(--nbskin-ink,#1f2933);cursor:pointer;}
+  html body :is(#nbpanel-root .nbdrawer,.nbcover-out) label.nbfb-tick input{margin:0;accent-color:var(--nbskin-acc,var(--nbcov-acc,#3fa877));}
+  /* in der Vorschau: klein und ruhig, unter der Reihe */
+  html body .nbcover-out :is(a.nbfb-link,button.nbfb-btn){display:flex;width:fit-content;margin:18px auto 0;
+      min-height:26px;padding:3px 12px;font-size:12px;font-weight:600;color:var(--nbcov-ink,#55636f);
+      border-color:color-mix(in srgb,var(--nbcov-ink,#55636f) 30%%,transparent);background:transparent;}
+  html body .nbcover-out label.nbfb-tick{justify-content:center;color:var(--nbcov-ink,#55636f);}
+  html body.nbdark .nbcover-out :is(a.nbfb-link,button.nbfb-btn),
+  html body[data-jp-theme-light="false"] .nbcover-out :is(a.nbfb-link,button.nbfb-btn){color:var(--nbcov-ink,#9fb0bd);}
+  @media (prefers-reduced-motion:reduce){
+      html body :is(#nbpanel-root .nbdrawer,.nbcover-out) :is(a.nbfb-link,button.nbfb-btn){transition:none;}}

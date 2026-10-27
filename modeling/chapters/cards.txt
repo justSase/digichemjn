@@ -1,0 +1,84 @@
+# E16.5 (2026-10-02, Inhalt) — the cover's cards: one per timeline mark, 2–3 sentences,
+# what the chapter or exercise contains and teaches. Read at build time by
+# toolkit/card_facts.py (card_desc); it never reaches the reader's cell.
+# One line per card:  <key>: <text>
+# Keys: ch<n> chapter · fig<n> its figure · <task> its exercise (t1 … q1 b1) ·
+# code_<task> its coding exercise · sub_<slug of the section's name> · end · cell.
+# Title and the groups (Introduction, Content, Appendix) have no card.
+# Introduction to Modeling
+
+# howto_m.py
+sub_how_to_use_this_notebook: A short guide to how the notebook is built. Every chapter has an idea with its formula, a visualisation and one exercise, and the coding part is optional. You also learn how hints work and why the chapters open one after another.
+
+# teaches_m.py
+sub_what_you_will_be_able_to_do: The learning goals of this notebook in one table. Each goal belongs to an exercise or to the quiz, so you can check every one of them yourself.
+
+# roadmap_m.py
+sub_topic_roadmap: Where this notebook sits in a planned series on methods in bioinformatics. It lists the basic notebooks that are useful beforehand and the deeper ones that build on this one.
+
+# m01.py
+ch1: A model is a simplified description of a real system, built to answer one particular question. This chapter shows that a single model cannot cover every time scale on which a drug acts. The first decision in modelling is therefore which scale the question needs.
+fig1: Five processes of drug action on one time axis, from receptor binding to the slow adaptation of the body. Two sliders set the time step and the time span of a model. You see which processes the model can resolve and how many steps that would take.
+t1: You compute how many orders of magnitude lie between a fast and a slow time scale. This needs one unit conversion and a logarithm to base 10.
+code_t1: You write a function orders() that returns the number of orders of magnitude between a time in milliseconds and a time in hours. The conversion to a common unit is part of the task.
+
+# m02.py
+ch2: We never see the true process directly, only observations of it, and every observation carries noise. A model is shaped by how far it misses these observations, and it always leaves some detail out. The chapter uses the mean and the standard deviation as the first summary of repeated measurements.
+fig2: A hidden true process, a few noisy observations and a straight line whose slope you set. The sum of squared errors tells you how well the line fits. It can come close, but a straight line never matches the curve exactly.
+t2: You compute the mean and the sample standard deviation of four repeated readings of the same sample. The mean gives the typical value, the standard deviation tells you how much the readings scatter.
+code_t2: You write a function mean_sd() that returns the mean and the sample standard deviation of a list of readings. The standard deviation divides by n − 1, as in Exercise 2.
+
+# m03.py
+ch3: A mechanistic model, also called a white box, is built from assumptions about how the system works. A data-driven model, or black box, simply follows the data. The chapter compares the two and shows why the mechanistic model usually predicts better outside the measured range.
+fig3: The same data described by an exponential curve and by a polynomial whose degree you choose. Inside the measured range both fit well. Beyond the last point the polynomial swings away, while the exponential keeps falling sensibly.
+t3: From two measured concentrations you predict a later one with both kinds of model. The exponential decay and the straight line give clearly different answers.
+code_t3: You write a function predict_both() that returns the white-box and the black-box prediction from two measured points. It repeats the calculation of Exercise 3 for any input.
+
+# m04.py
+ch4: After a single intravenous dose the drug concentration often falls exponentially with time. This one-compartment model with first-order elimination is the basis of clinical pharmacokinetics. You learn its two parameters, the initial concentration and the elimination rate, and how the half-life follows from the rate.
+fig4: An elimination curve together with simulated measurements. You set the initial concentration and the elimination rate until the curve runs through the points. The half-life is marked as well.
+t4: You compute the half-life of a drug and the concentration that is left after a given time. Both follow directly from the exponential model of this chapter.
+code_t4: You write a function pk_numbers() that returns the half-life and the concentration at a time t. It uses the same two formulas as Exercise 4.
+
+# m05.py
+ch5: To fit a model objectively we need one number that measures how badly it misses the data. This number is called the objective function, and the usual choice is the sum of squared errors. Calibration then means finding the parameters that make it as small as possible.
+fig5: Each vertical bar is a residual, the gap between a measurement and the model. You adjust two parameters and watch the sum of squared errors rise and fall. Large misses count much more than small ones because they are squared.
+t5: You compute the objective function for one guess of the parameters. Three measured values and three predicted values are given.
+code_t5: You write a function my_sse() that returns the sum of the squared differences between observed and predicted values. This is the objective function of the chapter.
+
+# m06.py
+ch6: Gradient descent finds the lowest point of the objective function automatically. It moves a parameter in small steps against the slope until the objective stops falling. The learning rate decides how large these steps are.
+fig6: Gradient descent fits the elimination rate step by step. One panel shows the curve settling onto the data, the other shows the objective falling. You can try a small, a moderate and a large learning rate.
+t6: You take one step of gradient descent by hand. From the current value, the slope and the learning rate you compute the new value of the parameter.
+code_t6: You write a function gd_step() that performs one update of gradient descent for a single parameter. One line of code is enough.
+
+# m07.py
+ch7: A model has to be judged on data it has not seen during fitting. A model that is too simple underfits and misses the trend, a model that is too flexible overfits and copies the noise. Comparing the training error with the test error shows which of the two is happening.
+fig7: Polynomials of growing degree are fitted to training points and tested on points held back. As the degree grows the training error keeps falling. The test error falls at first and then rises again.
+t7: You compute the test error of a fitted model on three held-back points and its gap to the training error. A large gap is a sign of overfitting.
+code_t7: You write a function test_mse() that returns the mean squared error between observed and predicted values. It is the measure used in Exercise 7.
+
+# m08.py
+ch8: Sensitivity analysis asks how strongly the output of a model reacts when one of its parameters changes. In the simplest form you vary one parameter and keep all the others fixed. The local sensitivity is then estimated with a central difference.
+fig8: The total drug exposure as a function of the elimination rate, with the local slope at a point you choose. You see that the same error in the rate matters much more when the rate is small.
+t8: You estimate a sensitivity with a central difference. You evaluate the model a little above and a little below the baseline and divide the difference by twice the step.
+code_t8: You write a function sensitivity() that estimates the local slope of any function by a central difference. The function to be tested is passed in as an argument.
+
+# m09.py
+ch9: When a quantity cannot be calculated exactly, it can often be estimated by repeated random sampling. This is the Monte-Carlo method, which is used for example to study how uncertain a model's output is. The chapter estimates π from random points in a square.
+fig9: Random points in the unit square, coloured by whether they fall inside a quarter circle. Four times the fraction inside approaches π as the number of points grows. The estimate improves only slowly.
+t9: You estimate π from a given sample of random points. You need the number of points and how many of them fell inside the quarter circle.
+code_t9: You write a function estimate_pi() that estimates π from the coordinates of random points. It counts the points inside the quarter circle and scales the fraction by four.
+
+# conclusion_m.py
+sub_conclusion: The main ideas of this notebook on one page, from the purpose of a model to Monte-Carlo estimation, followed by short definitions of the terms. Use it for revision or to look up a term quickly. Two notes close it: the locks set your pace and are no assessment, and the data are simulated.
+
+
+# refs_m.py
+sub_references_and_licence: The sources cited in the chapters, together with the licence of this notebook. The licence allows you to use, share and change the notebook.
+
+# quiz_m.py
+q1: Ten multiple-choice questions on the whole notebook. They cover the steps of modelling from the conceptual model to calibration, overfitting and sensitivity, and each answer comes with a short explanation.
+
+# byod_m.py
+b1: You apply the whole workflow of the notebook to one dataset of drug concentrations over time. You can upload your own CSV file or use the simulated data, calibrate the elimination model and judge the fit.

@@ -1,0 +1,35 @@
+# E17.1 (2026-10-02, Inhalt) — die Karten der Cover-Zeitleiste auf Deutsch, Schlüssel wie in cards.txt.
+# Der Build gibt sie der Seite in der deutschen Titelkarte mit (.nbcover-de); vor Play bleibt das Cover Englisch.
+# Eine Zeile je Karte:  <Schlüssel>: <Text>
+
+# howto.py
+sub_how_to_use_this_notebook: Eine kurze Anleitung, wie das Notebook aufgebaut ist. Jedes Kapitel hat eine Idee mit ihrer Formel, eine Visualisierung und eine Aufgabe; der Programmierteil ist freiwillig. Sie erfahren auch, wie die Hinweise funktionieren und warum sich die Kapitel nacheinander öffnen.
+
+sub_how_to_use_this_notebook: (Platzhalter, Deutsch)
+sub_what_you_will_be_able_to_do: (Platzhalter, Deutsch)
+sub_the_route_through_this_notebook: (Platzhalter, Deutsch)
+ch1: (Platzhalter, Deutsch)
+fig1: (Platzhalter, Deutsch)
+t1: (Platzhalter, Deutsch)
+code_t1: (Platzhalter, Deutsch)
+ch2: (Platzhalter, Deutsch)
+fig2: (Platzhalter, Deutsch)
+t2: (Platzhalter, Deutsch)
+code_t2: (Platzhalter, Deutsch)
+ch3: (Platzhalter, Deutsch)
+fig3: (Platzhalter, Deutsch)
+t3: (Platzhalter, Deutsch)
+code_t3: (Platzhalter, Deutsch)
+ch4: (Platzhalter, Deutsch)
+fig4: (Platzhalter, Deutsch)
+t4: (Platzhalter, Deutsch)
+code_t4: (Platzhalter, Deutsch)
+ch5: (Platzhalter, Deutsch)
+fig5: (Platzhalter, Deutsch)
+t5: (Platzhalter, Deutsch)
+code_t5: (Platzhalter, Deutsch)
+sub_conclusion: Die Kapitel in einem Text, ihre Einordnung und ein Ausblick (Platzhalter).
+sub_references_and_licence: (Platzhalter, Deutsch)
+# E29 P1 (2026-10-12): Ende und eigene Zelle (sonst die englischen Vorgaben aus card_facts)
+end: Hier endet der geführte Teil des Notebooks. Alles darunter gehört Ihnen: Legen Sie eigene Zellen an und arbeiten Sie weiter.
+cell: Hier kommen Ihre eigenen Zellen hin. Ein Klick auf die Marke legt unter dem geführten Teil eine neue Codezelle an, um eigene Ideen auszuprobieren.

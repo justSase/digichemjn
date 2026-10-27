@@ -1,0 +1,4 @@
+_site/
+.jupyterlite.doit.db
+__pycache__/
+*.pyc

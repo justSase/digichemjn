@@ -1,0 +1,562 @@
+  /* ======================================================================
+     2026-09-25d — THE NAME COLUMN.
+
+     Between the bar on the panel's left edge and the marks on the lane there
+     is now a measured strip, `--nbvert-lab`, and the structure of the notebook
+     is written in it. Right-aligned against the lane, so every line ends on
+     the same edge the marks stand on and the column reads as one list rather
+     than a ragged pile. */
+  /* 2026-09-28b (K2.8) — centred between the cursor's end and the lane:
+     `--nbvert-labx` is the column's left edge, computed with its width. */
+  #nbpanel-root.vert.nbnames .nbmap-node .nbmap-lab,
+  #nbpanel-root.vert.nbnames .nbmap-node .nbtasklab,
+  #nbpanel-root.vert.nbnames .nbmap-node.sect .nbmap-lab{
+      display:block!important;
+      position:absolute!important;
+      left:var(--nbvert-labx,44px)!important;right:auto!important;
+      width:var(--nbvert-lab,0px)!important;
+      max-width:var(--nbvert-lab,0px)!important;
+      top:0!important;bottom:auto!important;
+      transform:translateY(-50%%)!important;
+      text-align:center!important;
+      white-space:nowrap!important;overflow:hidden!important;
+      text-overflow:ellipsis!important;
+      height:auto!important;line-height:1.2!important;
+      font-size:calc(.80em * var(--nbthick,1))!important;
+      font-variant-numeric:tabular-nums;
+      letter-spacing:.2px;
+      color:var(--nbskin-quiet,#55636f)!important;
+      transition:color .18s ease, text-shadow .18s ease;}
+  /* a section is the heading of the list it opens */
+  #nbpanel-root.vert.nbnames .nbmap-node.sect .nbmap-lab{
+      font-size:calc(.68em * var(--nbthick,1))!important;
+      letter-spacing:2px;text-transform:uppercase;
+      font-weight:800!important;
+      color:var(--nbskin-acc2,#2c6e91)!important;}
+  #nbpanel-root.vert.nbnames .nbmap-node.chap .nbmap-lab{
+      font-weight:700!important;color:var(--nbskin-ink,#1f2933)!important;}
+  /* THE LINE THE READER IS ON LIGHTS UP WITH THE MARKER.
+     Same colour and same light as the marker itself, so the name and the mark
+     are one statement and not two things to compare. */
+  /* 2026-09-26b — …but the LETTERS take the marker's hue at reading strength.
+     The marker's own colour is a light, not an ink: on the light rails it
+     measured 1.8:1 (retro #ff8c1a on #f0e2c8), 3.0:1 (cyber #0096be),
+     3.05:1 (fairy #b06cff) — the one name that says "you are here" was the
+     hardest to read. --nbmark-ink is the same hue darkened until it passes
+     4.5:1 on its rail; the glow stays --nbglow, so name and mark still carry
+     the same light. Where the marker colour already reads (minimal, and every
+     dark rail) --nbmark-ink is not set and the marker colour is used. */
+  body:not(.nbdark).nbskin-cyber{--nbmark-ink:#006d8a;}
+  body:not(.nbdark).nbskin-retro{--nbmark-ink:#9a4000;}
+  body:not(.nbdark).nbskin-fairy{--nbmark-ink:#7b32c2;}
+  #nbpanel-root.vert.nbnames .nbmap-node.here .nbmap-lab,
+  #nbpanel-root.vert.nbnames .nbmap-node.here .nbtasklab{
+      color:var(--nbmark-ink,var(--nbmark,#0d63e0))!important;font-weight:800!important;
+      text-shadow:0 0 10px var(--nbglow,rgba(13,99,224,.55)),
+                  0 0 22px var(--nbglow,rgba(13,99,224,.30))!important;}
+  #nbpanel-root.vert.nbnames .nbmap-node.nbsel .nbmap-lab,
+  #nbpanel-root.vert.nbnames .nbmap-node:hover .nbmap-lab,
+  #nbpanel-root.vert.nbnames .nbmap-node:hover .nbtasklab{
+      color:var(--nbmark-ink,var(--nbring,#0d63e0))!important;}
+  /* a locked chapter's name steps back exactly as its pill does */
+  /* 2026-09-26b — .76, not .72: fairy's ink at .72 on its light rail measured
+     4.37:1; .76 gives 4.86:1 and still reads as stepped back. */
+  #nbpanel-root.vert.nbnames .nbmap-node.locked .nbmap-lab{
+      opacity:.76;}
+  /* ...except while the marker stands on it: then it is the line you are on,
+     and a dimmed name under the marker measured 3.3:1 (minimal) to 3.45:1
+     (fairy, dark). */
+  #nbpanel-root.vert.nbnames .nbmap-node.locked.here .nbmap-lab{
+      opacity:1;}
+  /* the hover nudge pushed names 4px to the RIGHT, into the lane. With the
+     column on the left it has to push the other way. */
+  #nbpanel-root.vert.nbnames .nbmap-node:hover .nbmap-lab,
+  #nbpanel-root.vert.nbnames .nbmap-node:hover .nbtasklab,
+  #nbpanel-root.vert.nbnames .nbmap-node.nbpop .nbmap-lab,
+  #nbpanel-root.vert.nbnames .nbmap-node.nbpop .nbtasklab{
+      transform:translateY(-50%%) translateX(-3px)!important;
+      transform-origin:100%% 50%%;}
+
+  /* ---- the per-chapter tally, under its name -------------------------
+     Two pips, one per route: the written exercise and the coding one. They
+     say the same four states the rail says — done, skipped, given up, still
+     open — in the same colours, small enough to read as a footnote to the
+     chapter's name rather than as two more marks competing with the lane. */
+  #nbpanel-root.vert .nbchapstat{display:none;}
+  #nbpanel-root.vert.nbnames .nbchapstat{
+      display:flex!important;position:absolute!important;
+      left:var(--nbvert-labx,44px)!important;width:var(--nbvert-lab,0px)!important;
+      top:0!important;transform:translateY(calc(-50%% + 1.05em))!important;
+      justify-content:center!important;align-items:center!important;
+      gap:4px!important;pointer-events:none;}
+  #nbpanel-root.vert.nbnames .nbchapstat .ps{
+      width:calc(7px * var(--nbthick,1));height:calc(7px * var(--nbthick,1));
+      border-radius:2px;display:block;font-style:normal;
+      box-sizing:border-box;border:1px solid currentColor;
+      background:currentColor;}
+  /* the answer route is a diamond, the coding route a square — the same
+     two shapes the rail uses for the two routes */
+  #nbpanel-root.vert.nbnames .nbchapstat .ps.a{transform:rotate(45deg);}
+  #nbpanel-root.vert.nbnames .nbchapstat .ps.open{
+      background:transparent!important;opacity:.55;}
+  #nbpanel-root.vert.nbnames .nbchapstat .ps.done{color:#27784f;}
+  #nbpanel-root.vert.nbnames .nbchapstat .ps.skip{color:#b8860b;}
+  #nbpanel-root.vert.nbnames .nbchapstat .ps.fail{color:#b4432c;}
+  #nbpanel-root.vert.nbnames .nbchapstat .ps.open{color:var(--nbskin-quiet,#55636f);}
+  #nbpanel-root.vert.nbnames .nbchapstat .ps.c.done{color:#7a37e6;}
+  body.nbdark #nbpanel-root.vert.nbnames .nbchapstat .ps.done{color:#5fe0a8;}
+  body.nbdark #nbpanel-root.vert.nbnames .nbchapstat .ps.skip{color:#e8b95c;}
+  body.nbdark #nbpanel-root.vert.nbnames .nbchapstat .ps.fail{color:#f0907d;}
+  body.nbdark #nbpanel-root.vert.nbnames .nbchapstat .ps.c.done{color:#c7a8ff;}
+
+  /* ---- the same tally, chapter by chapter, in the statistics window ---- */
+  .nbseries-chap{display:flex;align-items:center;gap:8px;
+      padding:3px 0;font-size:.86em;}
+  .nbseries-chap .nm{flex:1 1 auto;min-width:0;overflow:hidden;
+      text-overflow:ellipsis;white-space:nowrap;}
+  .nbseries-chap .ps{width:9px;height:9px;border-radius:2px;flex:0 0 auto;
+      box-sizing:border-box;border:1px solid currentColor;background:currentColor;}
+  .nbseries-chap .ps.a{transform:rotate(45deg);}
+  .nbseries-chap .ps.open{background:transparent!important;opacity:.55;}
+  .nbseries-chap .ps.done{color:#27784f;}
+  .nbseries-chap .ps.skip{color:#b8860b;}
+  .nbseries-chap .ps.fail{color:#b4432c;}
+  .nbseries-chap .ps.open{color:var(--nbskin-quiet,#55636f);}
+  .nbseries-chap .ps.c.done{color:#7a37e6;}
+  body.nbdark .nbseries-chap .ps.done{color:#5fe0a8;}
+  body.nbdark .nbseries-chap .ps.skip{color:#e8b95c;}
+  body.nbdark .nbseries-chap .ps.fail{color:#f0907d;}
+  body.nbdark .nbseries-chap .ps.c.done{color:#c7a8ff;}
+  .nbseries-head{font-size:.78em;letter-spacing:1.6px;text-transform:uppercase;
+      font-weight:800;margin:10px 0 4px;color:var(--nbskin-quiet,#55636f);}
+  .nbseries-key{font-size:.74em;margin-top:8px;display:flex;gap:10px;
+      flex-wrap:wrap;color:var(--nbskin-quiet,#55636f);}
+  .nbseries-key span{display:inline-flex;align-items:center;gap:4px;}
+
+  /* ======================================================================
+     2026-09-25f — THE SECTION RULE FOLLOWS THE SKIN.
+
+     „— INTRODUCTION —" was the last thing on the page that looked identical in
+     all four skins: two flexing lines with `border-top:2px solid`, whatever the
+     notebook was made of. The colour already came from `--nbskin-quiet`; what
+     was missing was the LINE — and a rule is exactly the kind of element whose
+     character is its line.
+
+       minimal  one hairline, as before
+       cyber    a dashed bus, lit from behind
+       retro    a double rule — the letterpress mark for a section break
+       fairy    a soft band that fades away at the outer end
+
+     `currentColor` throughout, so the colour stays the skin's and only the
+     drawing changes. The outer ends are the ones that fade: `::before` is the
+     left arm, `::after` the right, so fairy needs the two written separately —
+     a symmetrical fade on both arms would put the soft end against the word. */
+  body.nbskin-cyber .acc-group>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header::before,
+  body.nbskin-cyber .acc-group>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header::after,
+  body.nbskin-cyber .acc-group>.lm-Collapse>.lm-Collapse-header::before,
+  body.nbskin-cyber .acc-group>.lm-Collapse>.lm-Collapse-header::after{
+      border-top:0!important;height:2px;opacity:.75!important;
+      background:repeating-linear-gradient(90deg,
+          currentColor 0 11px, transparent 11px 18px)!important;
+      box-shadow:0 0 9px var(--nbglow,rgba(0,229,255,.5));}
+  body.nbskin-retro .acc-group>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header::before,
+  body.nbskin-retro .acc-group>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header::after,
+  body.nbskin-retro .acc-group>.lm-Collapse>.lm-Collapse-header::before,
+  body.nbskin-retro .acc-group>.lm-Collapse>.lm-Collapse-header::after{
+      border-top:4px double currentColor!important;opacity:.60!important;}
+  body.nbskin-fairy .acc-group>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header::before,
+  body.nbskin-fairy .acc-group>.lm-Collapse>.lm-Collapse-header::before{
+      border-top:0!important;height:3px;border-radius:999px;opacity:.7!important;
+      background:linear-gradient(90deg,transparent,currentColor 78%%)!important;}
+  body.nbskin-fairy .acc-group>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header::after,
+  body.nbskin-fairy .acc-group>.lm-Collapse>.lm-Collapse-header::after{
+      border-top:0!important;height:3px;border-radius:999px;opacity:.7!important;
+      background:linear-gradient(90deg,currentColor 22%%,transparent)!important;}
+
+  /* ---- the keyboard window -------------------------------------------
+     One row per shortcut, built from the same table the handler reads, so a
+     key cannot exist without being written down here. */
+  .nbkeylist{display:flex;flex-direction:column;gap:2px;margin-top:2px;}
+  .nbkeyrow{display:grid;grid-template-columns:112px 1fr 1fr;align-items:center;
+      gap:10px;padding:3px 0;font-size:.84em;}
+  .nbkeyrow kbd{font-family:var(--jp-code-font-family,ui-monospace,monospace);
+      font-size:.92em;font-weight:700;text-align:center;
+      padding:3px 7px;border-radius:var(--nbskin-r,6px);
+      background:var(--nbskin-surf,#fff);color:var(--nbskin-acc,#1d5c8a);
+      border:1px solid var(--nbskin-line,#c3ced8);
+      box-shadow:0 1px 0 var(--nbskin-line,#c3ced8);}
+  .nbkeyrow .kt{font-weight:700;color:var(--nbskin-ink,#1f2933);}
+  .nbkeyrow .kd{color:var(--nbskin-quiet,#55636f);}
+  #nbpanel-root .nbdock .nbbtn.nbkeys{letter-spacing:0!important;}
+
+  /* ---- who is looking -------------------------------------------------- */
+  /* 2026-09-28b (K2.7) — 📚 IS BACK FOR EVERY READER. 25f hid the button
+     unless the role was "administrator" (the series totals were not a
+     student's business), and with it the reader lost the window with their
+     own chapter-by-chapter tally. The role decides what the window SHOWS
+     (seriesList: this notebook only, or the whole series), not whether it
+     can be opened. */
+  #nbpanel-root .nbbtn.nbseries{display:inline-flex;}
+  .nbrolerow{display:flex;align-items:center;gap:8px;margin:8px 0 2px;
+      font-size:.84em;}
+  .nbrolerow label{font-weight:700;color:var(--nbskin-ink,#1f2933);}
+  .nbrolerow select{flex:1 1 auto;min-width:0;
+      background:var(--nbskin-surf,#fff);color:var(--nbskin-ink,#1f2933);
+      border:1px solid var(--nbskin-line,#c3ced8);
+      border-radius:var(--nbskin-r,6px);padding:4px 6px;
+      font-family:var(--nbskin-font,inherit);font-size:1em;}
+  body.nbdark .nbrolerow select{color-scheme:dark;}
+  body:not(.nbdark) .nbrolerow select{color-scheme:light;}
+
+  /* ---- the lock window ------------------------------------------------ */
+  .nblockwin{text-align:center;padding:4px 6px 2px;}
+  .nblockwin .nbwin-head{font-weight:800;margin:8px 0 4px;
+      color:var(--nbskin-acc,#1d5c8a);}
+  .nblockwin .nbwin-say{line-height:1.5;font-size:.9em;max-width:480px;
+      margin:0 auto;color:var(--nbskin-ink,#1f2933);}
+  .nblockwin .nbwin-note{margin-top:10px;font-size:.78em;
+      color:var(--nbskin-quiet,#55636f);}
+  .nblockwin .nbwinkey{cursor:pointer;color:#3fa877;}
+  body.nbdark .nblockwin .nbwinkey{color:#4fd39b;}
+  .nblockwin .nbwinkey::before{transform:translate(calc(var(--nblk) * .30),
+      calc(var(--nblk) * -.08));}
+  .nblockwin .nbwinkey:hover::before{transform:translate(calc(var(--nblk) * .34),
+      calc(var(--nblk) * -.14));}
+  .nblockwin .nbwinkey:hover::after{box-shadow:0 0 14px 3px rgba(63,168,119,.55);}
+
+  /* ---- the restart dialog the ▶ button caused is never shown ---------- */
+  body.nbnodlg:where(.nb-dc-active) .jp-Dialog{opacity:0!important;pointer-events:none!important;}
+
+  /* ======================================================================
+     2026-09-27c — OBERFLAECHE Vorhaben 3: E-Teil · G1 · scs3.
+
+     E-TEIL — THE PANEL LETS THE PAGE THROUGH. Since 27b the panel lies OVER
+     the document (STRUKTUR §4). Three skins gave it an opaque face, minimal
+     none at all — names and marks stood straight on the text. Now every skin
+     has the same kind of face: its own rail colour at .82–.94 (below), over a 6-px blur of what
+     is underneath — the page can be sensed, not read.
+     The face is the rail's ::before, NOT the rail's background: a
+     backdrop-filter on .nbrail would make it the containing block of every
+     fixed or absolute part inside it (cursor, marker, grip) and move them.
+     The pseudo sits at z-index -1 in the rail's own stacking context (the
+     rail is positioned with z 1400), under the marks and names, which stay
+     fully opaque. Colours: the rail colours the skins already had (and that
+     --nbmark-ink etc. were measured against); minimal takes --nbrail-bg,
+     the colour its marks' rings were always cut from.
+     Contrast is measured over the WORST ground under the panel, not over
+     white: tests/lab_contrast.py --overlay composes the face over every
+     surface the document paints (boxes, pills, page, texture stops). */
+  /* How much of the face is face: .82 was the proposal, and it holds in
+     every DARK half. On the light halves a dark surface of the document
+     passing under the panel (a chapter pill, minimal's slate block) pulled
+     names below 4.5 : 1 at .82 — measured minimal 3.86, cyber 3.63, retro
+     3.94, fairy 4.07 (lab_contrast --overlay). Each light half takes the
+     smallest share, in steps of .02, at which every name on the panel clears
+     4.5 over the worst ground. */
+  /* 2026-09-28 (Paket 7, Skizze) — MUCH MORE SEE-THROUGH. Light .92–.94 →
+     .70, dark .82 → .62. What keeps the names readable is no longer the
+     face's cover but a slightly stronger blur (6 → 8 px, --nbpanel-blur) and a halo
+     in the face colour behind every name (below). Not measured (sketch):
+     the final pass checks >= 4.5 : 1 over the worst ground (lab_contrast). */
+  body{--nbpanel-surf:#f6f8fa;--nbpanel-a:70%%;--nbpanel-blur:8px;}
+  body.nbdark{--nbpanel-surf:#1d2228;--nbpanel-a:62%%;}
+  body:not(.nbdark).nbskin-cyber{--nbpanel-surf:#f2eeff;--nbpanel-a:70%%;}
+  body.nbdark.nbskin-cyber{--nbpanel-surf:#12162a;--nbpanel-a:62%%;}
+  body:not(.nbdark).nbskin-retro{--nbpanel-surf:#f0e2c8;--nbpanel-a:70%%;}
+  body.nbdark.nbskin-retro{--nbpanel-surf:#241e14;--nbpanel-a:62%%;}
+  body:not(.nbdark).nbskin-fairy{--nbpanel-surf:#fbf5ff;--nbpanel-a:70%%;}
+  body.nbdark.nbskin-fairy{--nbpanel-surf:#1b1426;--nbpanel-a:62%%;}
+  html body #nbpanel-root#nbpanel-root.vert .nbrail{
+      background:transparent!important;background-image:none!important;}
+  html body #nbpanel-root#nbpanel-root.vert .nbrail::before{
+      content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;
+      border-radius:inherit;
+      background:var(--nbpanel-surf);
+      background:color-mix(in srgb,var(--nbpanel-surf) var(--nbpanel-a,82%%),transparent);
+      -webkit-backdrop-filter:blur(var(--nbpanel-blur,8px));backdrop-filter:blur(var(--nbpanel-blur,8px));}
+  /* the halo: the face colour, full strength, right behind each letter —
+     the lit name (.here) keeps its own glow */
+  #nbpanel-root.vert.nbnames .nbmap-node:not(.here) :is(.nbmap-lab,.nbtasklab){
+      text-shadow:0 0 2px var(--nbpanel-surf),0 0 4px var(--nbpanel-surf),
+                  0 0 8px var(--nbpanel-surf);}
+  @media print{
+    html body #nbpanel-root#nbpanel-root.vert .nbrail::before{display:none!important;}
+  }
+
+  /* G1.1 — A SIGN STANDS LEVEL IN EVERY STATE, ALSO ON THE WAY THERE.
+     A mark that carries a sign (tick, cross, skip arrow, drawn padlock) no
+     longer TURNS when it is hovered, focused or passed by the marker — it
+     grows. It used to spin 45° → 360° in .26 s while its sign was turned back
+     at once, so the sign swung round with the mark (measured every frame:
+     up to 169° off level, and a padlock left at 45° on a hovered chapter).
+     A turn that is not there cannot be counter-turned wrong. Marks without a
+     sign (sections, sub-chapters, figures, open chapters) keep their turn.
+     Rest angles, measured: 45° for exercise and coding marks in minimal,
+     cyber and fairy; 0° for every chapter square; retro never turns (26c). */
+  body:not(.nbskin-retro) #nbpanel-root.vert .nbmap-node:is(:hover,:focus,.nbpop) :is(.nbrail-dot,.nbcodemark),
+  body:not(.nbskin-retro) #nbpanel-root.vert .nbcodemark:hover{
+      transform:translate(-50%%,-50%%) rotate(45deg) scale(1.14)!important;}
+  body.nbskin-fairy:not(.nbskin-retro) #nbpanel-root.vert .nbmap-node:is(:hover,:focus,.nbpop) :is(.nbrail-dot,.nbcodemark),
+  body.nbskin-fairy:not(.nbskin-retro) #nbpanel-root.vert .nbcodemark:hover{
+      transform:translate(-50%%,-50%%) rotate(45deg) scale(1.2)!important;}
+  /* (E15.1: the sign's turn back is 12-k3.css alone; this rule was always outranked there) */
+  body #nbpanel-root.vert .nbmap-node.locked:is(:hover,:focus,.nbpop) .nbchapdot{
+      transform:translate(-50%%,-50%%) scale(1.14)!important;}
+  /* retro never turns — 26c said so for hover, focus and .nbsel, and it was
+     measured for those; .nbpop (the marker passing a mark) was not among them,
+     and the generic spin (1,4,0) outranked retro's upright rule (1,3,1): the
+     marks swung round 360° and the tick with them (measured 174.8° off level
+     mid-way). Named here, all marks, all three states. */
+  body.nbskin-retro #nbpanel-root.vert .nbmap-node:is(:hover,:focus,.nbpop) :is(.nbrail-dot,.nbcodemark,.nbchapdot,.nbvizmark,.nbsubdot,.nbsect),
+  body.nbskin-retro #nbpanel-root.vert .nbcodemark:hover{
+      transform:translate(-50%%,-50%%) scale(1.2)!important;}
+  /* …and it fits: level, the two skip arrows (⤼ 1.09 em wide, ⤳ .79) stood
+     2.7 and 0.8 px out of their diamond (§3a asks for a share of the
+     INSCRIBED area). The mark is a size container, so the arrow can be
+     capped at a share of the mark's own inner square — 66 %%, which a 1.66-em
+     ink box (width + height) fits inside a diamond with room, and inside
+     retro's upright square too. Ticks and crosses (.55 em) are untouched. */
+  #nbpanel-root.vert .nbmap-node :is(.nbrail-dot,.nbcodemark){container-type:size;}
+  /* 2026-09-28 (Paket 7, Skizze) — THE SKIP SIGN IS DRAWN, NOT TYPED. The
+     glyph ⤼ has a lopsided ink box (1.09 em wide, its hook on one side), so
+     it never sat in the middle. Now the sign is a box of 64 %% of the mark,
+     centred like the padlock, and a mask draws an arc hopping over a dot in
+     it, in the skip amber #e9a820 (reads on grey and on dark). 64 %% vs. the glyph's ~46 %%:
+     ≈ 1.4 × bigger. The text stays in the DOM (screen readers, copy). */
+  html body #nbpanel-root.vert .nbmap-node:not(.is-current) :is(.nbrail-dot.st-skip,.nbcodemark.cd-skip) .nbdotg{
+      color:#e9a820!important;}
+  /* (box, place and mask: 14-e7.css, E15.1; the viewBox is moved so the
+     ink's middle — measured 11.80 · 13.75 — is the box's middle) */
+  #nbpanel-root.vert{--nbskip-sign:url("data:image/svg+xml,%%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-.2 1.75 24 24'%%3E%%3Cpath d='M3.5 17.5C4.5 9 13 5.5 19 10.5' fill='none' stroke='black' stroke-width='2.8' stroke-linecap='round'/%%3E%%3Cpath d='M21.5 6.2 20.8 13.6 14 11.4Z' fill='black'/%%3E%%3Ccircle cx='12.5' cy='19' r='2.3' fill='black'/%%3E%%3C/svg%%3E");}
+
+  /* G1.2 — THE PIPS ARE READ, NOT GUESSED. Two per chapter under its name
+     (answer route a diamond, coding route a square). They were 7 px and an
+     open one was drawn at .55 opacity — 1.7 : 1, gone in the screenshot. Now
+     9 px, fully opaque, and four states that differ in fill AND colour:
+     solved = filled green / purple, skipped = filled amber, given up =
+     filled red, open = a 1.5-px ring in the skin's quiet ink. The light
+     amber and red are darkened so each clears 3 : 1 over the panel's worst
+     ground (measured, tests/lab_marks.py). */
+  #nbpanel-root.vert.nbnames .nbchapstat{gap:6px!important;}
+  html body #nbpanel-root.vert.nbnames .nbchapstat .ps{
+      width:9px!important;height:9px!important;opacity:1!important;
+      border-width:1.5px!important;flex:0 0 auto;}
+  html body #nbpanel-root.vert.nbnames .nbchapstat .ps.open{
+      background:transparent!important;opacity:1!important;}
+  html body:not(.nbdark) #nbpanel-root.vert.nbnames .nbchapstat .ps.skip{color:#8a5b00!important;}
+  html body:not(.nbdark) #nbpanel-root.vert.nbnames .nbchapstat .ps.fail{color:#a5291b!important;}
+
+  /* scs3 — JUPYTERLAB'S ACTIVE-CELL FRAME IS NOT OURS. In a notebook with the
+     panel the document is one cell, so the blue 1-px ring of the selected
+     cell (a box-shadow; its left edge is the thin bar at the document's left)
+     and the collapser strip beside it only ever say "this is the cell" —
+     which is the whole page. Both go, in this notebook only. */
+  .jp-NotebookPanel.nbrail-own .jp-Notebook .jp-Cell,
+  .jp-Notebook.nbrail-own .jp-Cell{box-shadow:none!important;}
+  .jp-NotebookPanel.nbrail-own .jp-Cell .jp-Collapser,
+  .jp-Notebook.nbrail-own .jp-Cell .jp-Collapser{display:none!important;}
+
+
+  /* ======================================================================
+     2026-09-28 (R3 · Paket 19 C, Skizze) — THE HELP WINDOW AND THE KEYCAPS.
+     Contract for the script (JS 19, key H and the ? chip):
+       .nbhelp-back            the veil behind the window (optional)
+       .nbhelp                 the window, role=dialog; `.on` while open
+         .nbhelp-h             head: .nbhelp-t (title) + .nbhelp-x (close)
+         .nbhelp-body          scrolls; one .nbhelp-sec per topic, each with
+                               an <h4> and text; key lists as ul.nbhelp-keys
+                               > li > kbd + text
+         .nbhelp-f             foot line ("H or Esc closes")
+     Open/close = the class `.on` on window and veil; nothing else. The
+     window sits in front of panel and drawers (z 1480, drawers 1420, tip
+     1500). Keycaps: every <kbd> in the window, in the ⌨ list (.nbkeyrow)
+     and any kbd.nbcap is one cap per skin — minimal a flat key with a
+     deeper bottom edge, cyber a neon outline, retro a typewriter key with a
+     hard shadow, fairy a round pill with a soft glow. */
+  .nbhelp-back{position:fixed;inset:0;z-index:1470;pointer-events:none;opacity:0;
+      background:color-mix(in srgb,var(--nbskin-ink,#1f2933) 28%%,transparent);
+      backdrop-filter:blur(2px);transition:opacity .2s ease;}
+  .nbhelp-back.on{opacity:1;pointer-events:auto;}
+  .nbhelp{position:fixed;z-index:1480;left:50%%;top:50%%;
+      width:min(620px,calc(100vw - 48px));max-height:min(78vh,720px);
+      display:flex;flex-direction:column;box-sizing:border-box;
+      background:var(--nbskin-surf,#fff);color:var(--nbskin-ink,#1f2933);
+      border:1px solid var(--nbskin-line,#c3ced8);
+      border-radius:min(var(--nbskin-r,12px),18px);
+      font-family:var(--nbskin-font,inherit);font-size:14px;line-height:1.5;
+      box-shadow:0 18px 50px rgba(0,0,0,.22),0 2px 8px rgba(0,0,0,.10);
+      opacity:0;pointer-events:none;
+      transform:translate(-50%%,-46%%) scale(.98);
+      transition:opacity .2s ease,transform .24s cubic-bezier(.2,.8,.3,1);}
+  .nbhelp.on{opacity:1;pointer-events:auto;transform:translate(-50%%,-50%%);}
+  .nbhelp-h{display:flex;align-items:center;gap:10px;padding:14px 18px 10px;
+      border-bottom:1px solid var(--nbskin-line,#c3ced8);}
+  .nbhelp-t{flex:1;font-weight:800;font-size:1.12em;letter-spacing:.3px;
+      color:var(--nbskin-acc,#1d5c8a);}
+  .nbhelp-x{all:unset;cursor:pointer;width:28px;height:28px;line-height:28px;
+      text-align:center;border-radius:var(--nbskin-pill-r,50%%);font-size:18px;
+      color:var(--nbskin-quiet,#55636f);}
+  .nbhelp-x:hover,.nbhelp-x:focus-visible{background:var(--nbskin-track,#d7dfe7);
+      color:var(--nbskin-ink,#1f2933);}
+  .nbhelp-body{overflow:auto;padding:6px 18px 12px;overscroll-behavior:contain;}
+  .nbhelp-sec{padding:10px 0;border-bottom:1px dashed var(--nbskin-line,#c3ced8);}
+  .nbhelp-sec:last-child{border-bottom:0;}
+  .nbhelp-sec h4{margin:0 0 4px;font-size:.8em;font-weight:800;letter-spacing:1.6px;
+      text-transform:uppercase;color:var(--nbskin-acc2,#2c6e91);}
+  .nbhelp-sec p{margin:2px 0 6px;}
+  .nbhelp-keys{list-style:none;margin:4px 0 0;padding:0;display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:6px 18px;}
+  .nbhelp-keys li{display:flex;align-items:center;gap:8px;}
+  .nbhelp-keys li > kbd:last-of-type{margin-right:4px;}
+  .nbhelp-f{padding:9px 18px 12px;font-size:.82em;color:var(--nbskin-quiet,#55636f);
+      border-top:1px solid var(--nbskin-line,#c3ced8);text-align:center;}
+
+  /* the keycap, one rule for every place a key is written */
+  html body :is(.nbhelp kbd,.nbkeyrow kbd,kbd.nbcap){
+      display:inline-block;min-width:1.6em;box-sizing:border-box;
+      font-family:var(--jp-code-font-family,ui-monospace,monospace)!important;
+      font-size:.84em;font-weight:700;line-height:1.5;text-align:center;
+      padding:1px 7px 2px;border-radius:min(var(--nbskin-r,6px),7px);
+      background:var(--nbskin-surf,#fff);color:var(--nbskin-acc,#1d5c8a);
+      border:1px solid var(--nbskin-line,#c3ced8);
+      border-bottom-width:3px;box-shadow:none;
+      transition:transform .08s ease,border-bottom-width .08s ease;}
+  html body :is(.nbhelp kbd,.nbkeyrow kbd,kbd.nbcap).on{
+      transform:translateY(2px);border-bottom-width:1px;}
+  html body.nbskin-cyber :is(.nbhelp kbd,.nbkeyrow kbd,kbd.nbcap){
+      background:transparent;border:1px solid var(--nbskin-acc,#00647f);
+      color:var(--nbskin-acc,#00647f);text-transform:uppercase;letter-spacing:.8px;
+      box-shadow:0 0 6px color-mix(in srgb,var(--nbskin-acc) 45%%,transparent),
+                 inset 0 0 6px color-mix(in srgb,var(--nbskin-acc) 25%%,transparent);}
+  html body.nbskin-retro :is(.nbhelp kbd,.nbkeyrow kbd,kbd.nbcap){
+      border-radius:3px;background:var(--nbskin-track,#dcc8a4);color:var(--nbskin-ink,#3a2f22);
+      border:1px solid var(--nbskin-acc2,#6d4f22);border-bottom-width:1px;
+      box-shadow:2px 2px 0 var(--nbskin-acc2,#6d4f22);font-family:"Courier New",monospace!important;}
+  html body.nbskin-fairy :is(.nbhelp kbd,.nbkeyrow kbd,kbd.nbcap){
+      border-radius:999px;padding:1px 10px 2px;border-bottom-width:1px;
+      background:color-mix(in srgb,var(--nbskin-acc) 10%%,var(--nbskin-surf));
+      border-color:color-mix(in srgb,var(--nbskin-acc) 40%%,transparent);
+      box-shadow:0 2px 8px color-mix(in srgb,var(--nbskin-acc) 25%%,transparent);}
+  /* the window itself per skin */
+  html body.nbskin-cyber .nbhelp{border-color:var(--nbskin-acc);
+      box-shadow:0 0 0 1px color-mix(in srgb,var(--nbskin-acc) 40%%,transparent),
+                 0 0 28px color-mix(in srgb,var(--nbskin-acc) 28%%,transparent),
+                 0 18px 50px rgba(0,0,0,.35);}
+  html body.nbskin-cyber .nbhelp-t{text-transform:uppercase;letter-spacing:2px;}
+  html body.nbskin-retro .nbhelp{border:2px solid var(--nbskin-acc2);
+      box-shadow:6px 6px 0 var(--nbskin-line);}
+  html body.nbskin-retro .nbhelp-h{border-bottom:2px double var(--nbskin-acc2);}
+  html body.nbskin-fairy .nbhelp{border-color:color-mix(in srgb,var(--nbskin-acc) 30%%,transparent);
+      box-shadow:0 18px 60px color-mix(in srgb,var(--nbskin-acc) 30%%,transparent);}
+  html body.nbskin-fairy .nbhelp-sec{border-bottom-style:dotted;}
+  @media (prefers-reduced-motion:reduce){
+      .nbhelp,.nbhelp-back,html body :is(.nbhelp kbd,.nbkeyrow kbd,kbd.nbcap){transition:none!important;}}
+
+  /* ======================================================================
+     2026-09-29 (Eilauftrag E6.11, Oberfläche, Skizze) — THE PIPS, BIG AND
+     LABELLED. Contract E6 (STOP.md): Python writes one `.nbpip-row
+     [data-kind="calc|code"]` per route, each with its `.nbpip-lab`
+     ("Exercises" / "Coding") and one `i.ps[data-kind][data-st]`; JS places
+     the tally beside the chapter mark (left of the lane). CSS gives the
+     size and the rows only — no left/top here.
+       pip    18 px × K (was 12 × K; 9 × K before K3.1)
+       label  10.5 px × K, the skin's quiet ink and font, small caps
+       rows   one above the other, label left of its pip, right-aligned
+              so both pips stand in one column next to the lane */
+  html body #nbpanel-root#nbpanel-root.vert.nbnames .nbchapstat{
+      --nbpp:calc(18px * var(--nbk,1));
+      flex-direction:column!important;align-items:flex-end!important;
+      justify-content:center!important;gap:calc(4px * var(--nbk,1))!important;}
+  html body #nbpanel-root#nbpanel-root.vert .nbchapstat .nbpip-row{
+      display:flex;align-items:center;justify-content:flex-end;
+      gap:calc(6px * var(--nbk,1));white-space:nowrap;}
+  html body #nbpanel-root#nbpanel-root.vert .nbchapstat .nbpip-lab{
+      font-family:var(--nbskin-font,inherit);
+      font-size:calc(10.5px * var(--nbk,1));line-height:1;font-weight:700;
+      letter-spacing:.06em;text-transform:uppercase;
+      color:var(--nbskin-quiet,#55636f);}
+  html body #nbpanel-root#nbpanel-root.vert.nbnames .nbchapstat .ps[data-kind]{
+      width:var(--nbpp)!important;height:var(--nbpp)!important;
+      flex:0 0 auto;position:relative;
+      border-width:max(1.5px, calc(2px * var(--nbk,1)))!important;}
+  /* the diamond needs room for its corners: a turned square reaches
+     .21 of its side further out on each side */
+  html body #nbpanel-root#nbpanel-root.vert.nbnames .nbchapstat .ps[data-kind="calc"]{
+      margin:0 calc(var(--nbpp) * .21);}
+  /* 2026-09-29e (E7.1, Struktur + Oberfläche) — the tally stands RIGHT of
+     the chapter symbol (17-marker pipPlace): each row pip first, then its
+     label, left-aligned, so both pips stand in one column next to the
+     symbol and the words run away from the lane. */
+  html body #nbpanel-root#nbpanel-root.vert.nbnames .nbchapstat{
+      align-items:flex-start!important;}
+  html body #nbpanel-root#nbpanel-root.vert .nbchapstat .nbpip-row{
+      flex-direction:row-reverse;justify-content:flex-end;}
+  /* the same in the 📚 window: one line per chapter, the two pips at the
+     end, no labels (the legend under the list names them) */
+  html body .nbseries-chap .nbpip-row{display:inline-flex;align-items:center;flex:0 0 auto;}
+  html body .nbseries-chap .nbpip-lab{display:none;}
+  html body .nbseries-chap .ps[data-kind]{
+      width:16px!important;height:16px!important;position:relative;
+      margin:0 4px;border-width:2px!important;}
+
+  /* ======================================================================
+     2026-09-29 — EILAUFTRAG E8.26 (Struktur, Skizze). YOUR OWN CELLS ARE AS
+     WIDE AS THE REST OF THE DOCUMENT. The reader's own cells („Own cell n“,
+     every cell after the second) and the strip that adds one („Your own
+     cell“, .jp-Notebook-footer) spanned the whole notebook width while the
+     accordions above them keep to one column (the guided part's widgets:
+     720 px, max-width set by Python). Now both keep to the same column,
+     --nbcolw, centred. The cells' wrappers are what the lens zooms
+     (zoomTargets), so a max-width set on them shrinks and grows with the
+     lens by itself; the footer is not zoomed, so its column is multiplied
+     by the lens factor --nbzf (JS contract from E8.2; 1 without it). */
+  html body :is([data-digichem],.nbrail-own){--nbcolw:720px;}
+  html body :is([data-digichem],.nbrail-own) .jp-Notebook .jp-Cell:is([class*="nbown-"],.jp-Cell ~ .jp-Cell ~ .jp-Cell) > *{
+      max-width:var(--nbcolw)!important;margin-left:auto!important;margin-right:auto!important;
+      box-sizing:border-box;}
+  html body :is([data-digichem],.nbrail-own) .jp-Notebook-footer{
+      max-width:calc(var(--nbcolw) * var(--nbzf,1))!important;
+      margin-left:auto!important;margin-right:auto!important;}
+  /* 2026-09-30 — EILAUFTRAG E10.4 (Struktur). DER STREIFEN STEHT MITTIG.
+     Gemessen (v1.35, 1400 × 900): der Streifen „＋ Add your own coding
+     cell“ (= die Hover-Box, .jp-Notebook-footer) war 720 px breit, aber
+     links (291 statt Mitte 826): JupyterLab setzt ihn als inline-block
+     (Knopf) mit inline width:1050px/margin-left:10px — an einem
+     inline-block zentriert margin:auto nicht. Als Block steht er auf der
+     Mitte der Spalte, wie die eigenen Zellen, × Lupe über --nbzf. Breite
+     höchstens die der Zellen: der Scroller ist 20 px breiter als eine Zelle
+     (je 10 px Rand), sonst stand er bei 150 %% 1070 statt 1050 px breit. */
+  html body :is([data-digichem],.nbrail-own) .jp-Notebook-footer{
+      display:block!important;width:calc(100%% - 20px)!important;box-sizing:border-box!important;}
+
+  /* ======================================================================
+     2026-10-02 — EILAUFTRAG E18.3 (Oberfläche; Zustand JS). GESPERRT HAT
+     EINE EIGENE MARKIERUNG: gestrichelter grauer Rand #8a96a3, Fläche leer
+     (die des Panels bzw. der Timeline), gedämpft (Deckkraft .45); das
+     geschlossene Schloss grau. Kapitel ebenso, ihr Name gedämpft. Frei ist
+     durchgezogen und voll deckend — gesperrt ≠ frei in Rand-Stil UND
+     Deckkraft. Panel: `.st-lock`, `.cd-lock`, `.chap.locked`; Cover:
+     `data-st="locked"` an Aufgabe oder Kapitel. */
+  html body #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-node:not(:hover,.nbsel,.here) :is(.nbrail-dot.st-lock,.nbcodemark.cd-lock),
+  html body #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-node.chap.locked:not(:hover,.nbsel,.here) .nbchapdot{
+      border-color:#8a96a3!important;border-style:dashed!important;background:var(--nbrail-bg,#f6f8fa)!important;
+      background-image:none!important;box-shadow:none!important;color:#8a96a3!important;opacity:.45!important;}
+  html body #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-node:not(:hover,.nbsel,.here) :is(.st-lock,.cd-lock) .nbdotg{color:#8a96a3!important;}
+  html body #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-node.chap.locked .nbmap-lab{opacity:.45;}
+  html body .nbcover-tl .nbtl-row:not(:hover,.nbtl-hov,.nbtl-pin)[data-st="locked"] .nbtl-mk{
+      border-color:#8a96a3!important;border-style:dashed!important;background:var(--nbpanel-surf,#fff)!important;
+      box-shadow:none!important;opacity:.45!important;}
+  html body .nbcover-tl .nbtl-row[data-st="locked"] .nbtl-nm{opacity:.45;}
+
+  /* ======================================================================
+     2026-10-04 — EILAUFTRAG E22.8 (Struktur; Aussehen CSS). ALLES AUF DER
+     HAUPTACHSE. Gemessen v1.62 (1400 × 900, Lupe 100 %%): Pillen,
+     Akkordeons, Kästen, Ende-Karte, YOC-Streifen und eigene Zellen stehen
+     auf einer Mitte (der Ausgabe der Mega-Zelle) — nur die Titelkarte im
+     Dokument nicht: sie sitzt in einer HTML-Ausgabe, und JupyterLab gibt
+     `.jp-RenderedHTMLCommon` rechts 20 px Innenabstand, links keinen; ihre
+     Mitte lag damit 10 px links von allem anderen (der Streifen wirkte
+     gegen sie versetzt). Jetzt nimmt der Titelblock diese 20 px mit
+     (Rand −20 px rechts) und steht auf derselben Mitte. */
+  html body :is([data-digichem],.nbrail-own) .jp-OutputArea .nbtitle.nbtitle-doc{
+      margin-right:-20px!important;}

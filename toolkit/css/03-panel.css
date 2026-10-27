@@ -1,0 +1,1248 @@
+  /* ==================================================================
+     PROGRESS RAIL — pinned to the side of the viewport while you scroll.
+     Above 1180px the rail is shown and the inline strip is hidden; below
+     that the rail would collide with the content, so the two swap over.
+     ================================================================== */
+  /* ---------- pinned progress panel ----------------------------------
+     Re-hosted on <body> by nbrail_js(): inside the output area a transformed or
+     virtualised ancestor captures position:fixed and the panel drifts away. The
+     script also positions it BELOW JupyterLab's toolbar and centres it on the
+     notebook, so it never sits on top of the tab bar. */
+  /* The vertical panel's two numbers live on :root so the script can READ them —
+     a var() fallback is invisible to getComputedStyle. */
+  /* The colour of ATTENTION — where you are reading, and what you are pointing
+     at. It has to win against a dark locked circle on a pale card, so on a light
+     page it is a vivid blue, not the muted structural teal; on a dark page it is
+     white. Everything that marks attention reads it from here. */
+  /* 2026-09-24aj — THE HALO IS A VARIABLE, BECAUSE WHITE ONLY WORKS ON DARK.
+     A white glow on the light theme's #f6f8fa rail is invisible: it is the same
+     colour as the surface it is meant to stand out from. So the halo takes the
+     marker's own colour on light and stays white on dark, and both are read
+     from one pair of variables — the marker, the ring round a mark it is level
+     with, and the glow all use them. */
+  :root{--nbvert-w:300px;--nbvert-axis:30px;--nbmark:#0d63e0;
+        --nbglow:rgba(13,99,224,.55);--nbring:#0d63e0;
+        /* 2026-09-24al — WHERE YOU ARE AND WHAT YOU PICKED ARE TWO THINGS.
+           Both used to be --nbmark, so the mark under the marker and the mark
+           the reader last clicked were the same colour and said the same thing
+           twice. Picking gets a colour of its own: a highlighter magenta, which is none of
+           the four the rail already uses (blue = position, green = done, amber =
+           skipped, red = given up). */
+        --nbpick:#c2399a;--nbpickglow:rgba(194,57,154,.40);}
+  body[data-jp-theme-light="false"]{--nbmark:#ffffff;
+      --nbglow:rgba(255,255,255,.75);--nbring:#ffffff;
+      --nbpick:#ef8ad0;--nbpickglow:rgba(239,138,208,.40);}
+  body.nbdark{--nbmark:#ffffff;
+      --nbglow:rgba(255,255,255,.75);--nbring:#ffffff;
+      --nbpick:#ef8ad0;--nbpickglow:rgba(239,138,208,.40);}
+  /* The host is no longer the panel — it is a transparent LAYER over the page,
+     and it holds two things that are placed independently: the rail (the
+     timeline) and the dock (every control). It takes no clicks itself, only its
+     two children do, so the rest of the document is reachable straight through
+     it. */
+  .nbpanel-host{position:fixed;inset:0;z-index:1200;pointer-events:none;
+      opacity:0;transition:opacity .25s ease;isolation:isolate;
+      background:none;border-radius:0;transform:none;}
+  .nbpanel-host.ready{opacity:1;}
+  .nbrail{position:absolute;pointer-events:auto;
+      display:flex;flex-direction:column;gap:7px;min-width:380px;
+      width:var(--nbrail-w,min(96vw,1180px));
+      max-width:var(--nbrail-w,min(96vw,1180px));
+      padding:8px 14px 9px;border-radius:16px;
+      background:#f6f8fa;border:1px solid #d6e2ec;
+      box-shadow:0 6px 20px rgba(0,0,0,.20);}
+
+  /* ---- THE DOCK ---------------------------------------------------------
+     Pinned to the bottom-left corner of the document, at a size nothing
+     changes. The controls are what a reader reaches for when the timeline has
+     become hard to read — so they must not shrink with it, and they must not
+     move when the panel is turned on its side. The zoom is counter-scaled from
+     the script, so even Ctrl+wheel leaves them where and as they are. */
+  /* A toolbar, centred over the top of the document. position:fixed, not
+     absolute: the dock must not care what the layer around it is doing, so no
+     future change to the panel can take the controls away again. */
+  /* The toolbar is the front-most thing on the page: its drawer opens over the
+     document and over the rail, and covers them rather than moving them. */
+  .nbdock{position:fixed;pointer-events:auto;display:flex;z-index:40;
+      top:48px;left:0;box-sizing:border-box;
+      flex-direction:column;align-items:stretch;gap:0;
+      padding:6px 14px 7px;border-radius:13px;
+      background:#f6f8fa;border:1px solid #d6e2ec;
+      box-shadow:0 5px 18px rgba(0,0,0,.18);
+      transform-origin:0 0;z-index:1300;}
+  /* the tools live at the edges of that width, not huddled in the middle */
+  .nbdock .nbctrl{width:100%%;justify-content:space-between;}
+  .nbdock-l,.nbdock-c,.nbdock-r{display:flex;align-items:center;gap:4px;}
+  /* the difficulty dropdown sits in the toolbar now, so it has to behave like a
+     toolbar control: no full-width block, no margins of its own */
+  .nbctl-diffslot{display:inline-flex;align-items:center;}
+  .nbctl-diffslot .nbctl-difficulty{width:auto!important;margin:0!important;}
+  .nbctl-diffslot .widget-dropdown{width:auto!important;margin:0!important;}
+  .nbctl-diffslot select{height:28px!important;font-size:.82em!important;}
+  .nbctl-diffslot label{font-size:.82em!important;}
+  .nbprofile .nbpid{font-variant-numeric:tabular-nums;letter-spacing:.4px;
+      margin-left:3px;}
+  /* The document is drawn before the toolbar and is what the reader looks at,
+     so IT holds the axis: the middle group is nudged onto the centre of the
+     reading column rather than the centre of the bar. --nbaxis-dx is that
+     offset, written by the panel; it is 0 while nothing is reserved. */
+  /* Absolutely placed, not nudged: the left and right groups are not the same
+     width, so "centred in what is left over" was never the middle of anything.
+     --nbaxis-x is the middle of the bar, which is the axis the document is
+     built on. */
+  .nbctrl{position:relative;}
+  /* 2026-09-24al — the axis carries the PROFILE CHIP, not the pair.
+     The middle group holds two buttons, so centring the group put the chip 62px
+     to the left of the reading column's middle (measured: group 846, chip 786,
+     column 848). --nbdock-cdx is the difference between the group's middle and
+     the chip's, written by placeDock, so the chip lands on the axis and the
+     series button sits beside it. */
+  .nbdock-c{position:absolute;left:var(--nbaxis-x,50%%);top:50%%;
+      transform:translate(calc(-50%% + var(--nbdock-cdx,0px)),-50%%);
+      justify-content:center;flex:0 0 auto;pointer-events:auto;}
+  .nbdock-r{justify-content:flex-end;}
+  body[data-jp-theme-light="false"] .nbdock{
+      background:#1d2228;border-color:#2c3540;box-shadow:0 6px 22px rgba(0,0,0,.45);}
+  .nbdock .nbctrl{margin:0!important;}
+  /* the drawer opens UPWARDS out of the dock, so the corner it is pinned to
+     never moves */
+  .nbdock .nbdrawer{order:1;width:100%%;align-self:center;}
+  .nbrail-row{display:flex;align-items:flex-start;gap:10px;justify-content:space-between;}
+  .nbrail-row>.nbmap{flex:1 1 auto;min-width:0;}
+  /* ---- the chapter overview, drawn as a line of chapter nodes ----------
+     Each node is one chapter: its name sits above, the circle on the line is that
+     chapter's exercise. The connector is a ::after on every node but the last, so
+     the segments join into one continuous line at any number of chapters. */
+  /* The timeline is not squeezed to fit — it keeps its readable size and the
+     panel shows a WINDOW onto it, moved with its own slim scrollbar. */
+  .nbmap{display:flex;align-items:flex-start;gap:0;
+      overflow-x:auto;overflow-y:hidden;padding-bottom:13px;
+      scrollbar-width:auto;scrollbar-color:#94a3af rgba(138,148,160,.22);
+      scroll-behavior:auto;overscroll-behavior-x:contain;
+      /* no fade on the left any more: the first section starts flush there, and a
+         fade would eat its name */
+      -webkit-mask-image:linear-gradient(90deg,#000 0,
+          #000 calc(100%% - 14px),transparent 100%%);
+              mask-image:linear-gradient(90deg,#000 0,
+          #000 calc(100%% - 14px),transparent 100%%);}
+  .nbmap::-webkit-scrollbar{height:9px;}
+  .nbmap::-webkit-scrollbar-track{background:rgba(138,148,160,.22);border-radius:999px;}
+  .nbmap::-webkit-scrollbar-thumb{background:#94a3af;border-radius:999px;
+      border:1px solid rgba(255,255,255,.35);}
+  .nbmap::-webkit-scrollbar-thumb:hover{background:#7d8b98;}
+  body[data-jp-theme-light="false"] .nbmap{scrollbar-color:#5b6b78 rgba(255,255,255,.10);}
+  body[data-jp-theme-light="false"] .nbmap::-webkit-scrollbar-thumb{background:#5b6b78;
+      border-color:rgba(255,255,255,.12);}
+  body[data-jp-theme-light="false"] .nbmap::-webkit-scrollbar-track{background:rgba(255,255,255,.07);}
+  body[data-jp-theme-light="false"] .nbmap::-webkit-scrollbar-thumb:hover{background:#58656f;}
+  /* where you are now — the window follows this one */
+  /* Where you are now: the circle with the open padlock. Always a white ring, in
+     both themes — it is the one mark on the line that must never be mistaken for a
+     state. A purple glow says the coding route is what opened the way here. */
+  .nbmap-node.is-current .nbrail-dot{box-shadow:none;
+      border-color:#3fa877!important;background-color:#46535f!important;
+      color:#ffffff!important;}
+  .nbmap-node.is-current.via-code .nbrail-dot{
+      box-shadow:0 0 13px 6px rgba(123,79,189,.66)!important;}
+  /* the exercise you are on is a white circle in BOTH themes — it is the one
+     thing on the line that has to catch the eye */
+  body[data-jp-theme-light="false"] .nbmap-node.is-current .nbrail-dot{
+      box-shadow:none;border-color:#4fbf8b!important;
+      background-color:#39444e!important;background-image:none!important;
+      color:#ffffff!important;}
+  /* ONE axis at 29px: the label sits above it, every marker is centred ON it
+     (absolute + translate(-50%%,-50%%)), whatever its size. A node's width is pure
+     spacing — set per node from how much content that section holds. */
+  .nbmap-node{position:relative;display:block;height:calc(106px * var(--nbthick,1));flex:0 0 auto;
+      text-decoration:none!important;cursor:pointer;
+      transition:width .35s cubic-bezier(.22,.61,.36,1);}
+  .nbmap-node.sect{min-width:112px;margin-left:26px;} /* a section — gap before it */
+  /* The first bar used to be pushed flush against the left edge of its node, so
+     that the line and the scrollbar began at the same x. That is no longer what
+     sets the left end: pad() derives it from the bar's CENTRE, so the bar can sit
+     in the middle of its node like every other marker — centred under its own
+     name and in line with the rest of the Introduction block. */
+  .nbmap-node.sect.first{margin-left:0;min-width:112px;}
+  .nbmap-node.chap{min-width:164px;}                /* a numbered chapter, named  */
+  .nbmap-node.sub {min-width:22px;}                 /* setup, glossary, quiz, …   */
+  .nbmap-node.task{min-width:56px;}                 /* the fillable exercise      */
+  .nbmap-node.sect:first-child{margin-left:0;}
+  /* The gap between the three top-level sections. It is a bar of its own, placed
+     by the script from the CENTRE of the last marker of one block to the CENTRE of
+     the next section's bar, and it lives next to the fills rather than inside a
+     node: that way it paints over both lanes (z-index 2) but stays under every
+     marker (z-index 3), so it can reach a dot's centre without biting into it. */
+  /* tall enough to swallow the glow's blur as well, or the gap would show up as
+     a pale rectangle against the tinted panel */
+  .nbmap-gap{position:absolute;top:calc(32px * var(--nbthick,1));height:calc(62px * var(--nbthick,1));z-index:2;
+      background:#f6f8fa;pointer-events:none;}
+  body[data-jp-theme-light="false"] .nbmap-gap{background:#1d2228;}
+  /* Every chapter carries its NAME, not a number. Two rows, staggered, so a long
+     title never collides with its neighbour; each row is anchored at its BOTTOM,
+     so a title that needs a third line grows upwards instead of into the line. */
+  /* The name sits far enough above the line that even a marker at its hover size
+     never reaches it — and it still has room to rise by 6px without being clipped
+     at the top of the window. All names sit on ONE row. */
+  .nbmap-lab{position:absolute;bottom:calc(64px * var(--nbthick,1));left:50%%;
+      transform:translate(-50%%,0);transform-origin:50%% 100%%;
+      line-height:1.16;font-size:calc(.60em * var(--nbthick,1));font-weight:700;
+      letter-spacing:.2px;color:#46535f;white-space:normal;overflow-wrap:break-word;
+      text-align:center;max-width:158px;
+      transition:transform .18s cubic-bezier(.34,.9,.35,1),color .2s ease;}
+  .nbmap-node.task .nbmap-lab{display:none;}
+  /* every exercise circle carries its own short name BELOW the line, the mirror
+     image of the chapter names above it — and it lifts with the circle too */
+  .nbtasklab{position:absolute;top:calc(88px * var(--nbthick,1));left:50%%;transform:translate(-50%%,0);
+      transform-origin:50%% 0;font-size:calc(.58em * var(--nbthick,1));font-weight:700;letter-spacing:.2px;
+      color:#46535f;white-space:nowrap;
+      transition:transform .18s cubic-bezier(.34,.9,.35,1),color .2s ease;}
+  .nbmap-node:hover .nbtasklab,.nbmap-node:focus .nbtasklab,
+  .nbmap-node.nbpop .nbtasklab{
+      transform:translate(-50%%,7px) scale(1.20);}
+  body[data-jp-theme-light="false"] .nbtasklab{color:#a8b6c2;}
+  .nbmap-node.sect .nbmap-lab{bottom:calc(64px * var(--nbthick,1));white-space:nowrap;max-width:none;
+      color:#2c6e91;text-transform:uppercase;font-size:calc(.58em * var(--nbthick,1));}
+  /* Pointing at a node — or clicking it, which makes the state stick — lifts the
+     marker AND its name together: the name rises with the dot instead of being
+     covered by it, and grows a little so it reads as the one you are on. */
+  .nbmap-node:hover,.nbmap-node:focus,.nbmap-node.nbpop{z-index:7;}
+  .nbmap-node:hover .nbmap-lab,.nbmap-node:focus .nbmap-lab,
+  .nbmap-node.nbpop .nbmap-lab{
+      transform:translate(-50%%,-8px) scale(1.20);}
+  .nbmap-node:hover .nbrail-dot,.nbmap-node:focus .nbrail-dot,
+  .nbmap-node.nbpop .nbrail-dot{transform:translate(-50%%,-50%%) scale(1.24);}
+  .nbmap-node:hover .nbchapdot,.nbmap-node:focus .nbchapdot,.nbmap-node.nbpop .nbchapdot,
+  .nbmap-node:hover .nbsubdot,.nbmap-node:focus .nbsubdot,.nbmap-node.nbpop .nbsubdot{
+      transform:translate(-50%%,-50%%) scale(1.35);}
+  .nbmap-node:hover .nbsect,.nbmap-node:focus .nbsect,.nbmap-node.nbpop .nbsect{
+      transform:translate(-50%%,-50%%) scale(1.24);}
+  /* blue is the "this is a link" colour — but only where it does not paint over
+     the two lanes a marker already carries */
+  .nbmap-node:not(.passed):not(.passed-code):hover .nbchapdot,
+  .nbmap-node:not(.passed):not(.passed-code):hover .nbsubdot{background:#2c6e91;}
+  .nbmap-node .nbsect,.nbmap-node .nbchapdot,
+  .nbmap-node .nbsubdot,.nbmap-node .nbrail-dot{position:absolute;top:calc(62px * var(--nbthick,1));left:50%%;
+      transform:translate(-50%%,-50%%);margin:0;}
+  /* the size ladder makes the structure readable at a glance:
+     section bar (30px) > chapter dot (22px) > meta dot of intro/appendix (15px).
+     Every marker is clearly wider than the 8px track, so it reads as a marker
+     lying ON the line and stays visible once the line is filled in. */
+  .nbsect{width:calc(7px * var(--nbthick,1));height:calc(30px * var(--nbthick,1));border-radius:4px;background:#2c6e91;
+      transition:transform .18s ease;}
+  .nbchapdot{width:calc(13px * var(--nbthick,1));height:calc(13px * var(--nbthick,1));border-radius:50%%;background:#46535f;
+      font-size:calc(7px * var(--nbthick,1));line-height:calc(13px * var(--nbthick,1));text-align:center;color:#fff;
+      transition:transform .18s ease,background .18s ease;}
+  .nbmap-node.locked .nbchapdot{width:calc(16px * var(--nbthick,1));height:calc(16px * var(--nbthick,1));line-height:calc(16px * var(--nbthick,1));font-size:calc(8px * var(--nbthick,1));}
+  .nbsubdot{width:calc(9px * var(--nbthick,1));height:calc(9px * var(--nbthick,1));border-radius:50%%;background:#46535f;
+      transition:transform .18s ease,background .18s ease;}
+  /* the timeline is ONE continuous track and the progress fills its full
+     thickness — not a thinner strip lying on it */
+  /* ONE track, six pixels high, centred on the axis at 29px: its upper half is
+     the answered exercises, its lower half the optional coding ones. */
+  /* The track does not run edge to edge: it starts on the first marker and stops
+     on the last one, so no stub of line sticks out beyond the timeline. Both ends
+     are measured by the script and handed over as custom properties. */
+  .nbmap-inner::before{content:"";position:absolute;top:calc(58px * var(--nbthick,1));
+      left:var(--rail-x0,0px);width:var(--rail-w,100%%);height:calc(8px * var(--nbthick,1));
+      background:#dfe6ec;border-radius:999px;z-index:0;}
+  /* the stretch of the exercise block you have not reached yet, in the same ink as
+     a locked chapter — Introduction and Appendix keep the light grey above */
+  .nbmap-ahead{position:absolute;top:calc(58px * var(--nbthick,1));height:calc(8px * var(--nbthick,1));border-radius:999px;
+      background:#46535f;z-index:0;pointer-events:none;}
+  body[data-jp-theme-light="false"] .nbmap-ahead{background:#39424d;}
+  body[data-jp-theme-light="false"] .nbmap-inner::before{background:#39424d;}
+  /* The stack, bottom to top: grey track (0) · purple coding rail (1) · green
+     fill (2) · the nodes (3) and everything they carry. A node's own z-index
+     opens a stacking context, so ITS children can never outrank a sibling of the
+     node — which is why the fills used to paint straight over the dots and over
+     the numbers inside the circles. Inside a node: gap block (1) < marker (2). */
+  .nbmap-node{z-index:3;}
+  .nbmap-node .nbrail-dot,.nbmap-node .nbchapdot,
+  .nbmap-node .nbsubdot,.nbmap-node .nbsect{z-index:2;}
+  body[data-jp-theme-light="false"] .nbmap-lab{color:#a8b6c2;}
+  body[data-jp-theme-light="false"] .nbmap-node.sect .nbmap-lab{color:#8fc7e8;}
+  body[data-jp-theme-light="false"] .nbmap-node:hover .nbmap-lab{color:#8fc7e8;}
+  body[data-jp-theme-light="false"] .nbchapdot{background:#4b5763;}
+  body[data-jp-theme-light="false"] .nbsubdot{background:#4b5763;}
+  body[data-jp-theme-light="false"] .nbmap-inner::before{background:#39424d;}
+  body[data-jp-theme-light="false"] .nbrail-dot{border-color:#39424d;}
+  body[data-jp-theme-light="false"] .nbsect{background:#8fc7e8;}
+  /* ---- controls: the panel is the place where the notebook is steered ---- */
+  /* No thickness here any more: the dock has a size of its own. */
+  .nbctrl{display:flex;align-items:center;gap:4px;margin:0;flex:0 0 auto;}
+  /* zoom: the same thing Ctrl+wheel does, but it keeps the panel at its own size
+     and leaves the column centred */
+  .nbzoomgrp{display:inline-flex;align-items:center;gap:2px;}
+  /* Dragging beats clicking here: the panel scales with the zoom, so its right
+     end — and with it the buttons — moves under the pointer on every step. A drag
+     with pointer capture does not care where the handle went, it follows the
+     pointer. The wheel over the control does the same. */
+  /* ---- the two sliders --------------------------------------------------
+     One control each: a range input that drags itself. The number beside it is
+     a readout, not a button — it takes no clicks, so there is exactly one thing
+     to touch per slider. */
+  .nbslider{-webkit-appearance:none;appearance:none;height:4px;width:96px;
+      border-radius:999px;background:#d3dde6;outline:none;cursor:ew-resize;
+      margin:0 6px 0 2px;padding:0;vertical-align:middle;}
+  .nbslider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
+      width:13px;height:13px;border-radius:50%%;background:#4a9fd5;border:none;
+      cursor:ew-resize;box-shadow:0 1px 2px rgba(20,30,40,.30);}
+  .nbslider::-moz-range-thumb{width:13px;height:13px;border-radius:50%%;
+      background:#4a9fd5;border:none;cursor:ew-resize;}
+  .nbslider:focus-visible{box-shadow:0 0 0 2px rgba(74,159,213,.35);}
+  /* The control's axis is the axis it controls: lying flat, the panel's slider
+     sets how far the panel reaches DOWN, so the slider stands up. Turned on its
+     side, the panel's width is what changes, and the slider lies flat again. */
+  .nbzoomgrp.nbz-gui{display:inline-flex;align-items:center;height:46px;}
+  .nbpanel-host:not(.vert) .nbslider.nbgui-lab{
+      writing-mode:vertical-lr;direction:rtl;-webkit-appearance:slider-vertical;
+      width:4px;height:46px;margin:0 8px 0 4px;}
+  .nbslval{font-size:.72em;font-weight:700;color:#5b6b7b;
+      font-variant-numeric:tabular-nums;pointer-events:none;
+      min-width:64px;display:inline-block;}
+  .nbslval.on{color:#2c6e91;}
+  body[data-jp-theme-light="false"] .nbslider{background:#39424d;}
+  body[data-jp-theme-light="false"] .nbslider::-webkit-slider-thumb{background:#6fb6de;}
+  body[data-jp-theme-light="false"] .nbslider::-moz-range-thumb{background:#6fb6de;}
+  body[data-jp-theme-light="false"] .nbslval{color:#a8b6c2;}
+  body[data-jp-theme-light="false"] .nbslval.on{color:#8fc7e8;}
+  .nbzoomgrp .nbbtn.dragging{border-color:#4a9fd5;background:#e8f2f9;}
+  .nbzoomgrp .nbbtn.on{border-color:#4a9fd5;color:#2c6e91;background:#e8f2f9;}
+  body[data-jp-theme-light="false"] .nbzoomgrp .nbbtn.on{
+      color:#8fc7e8;background:#1d2b35;border-color:#4a9fd5;}
+  .nbbtn{border:1px solid #d3dae0;background:#eceff2;color:#5b6b7b;cursor:pointer;
+      border-radius:8px;min-width:24px;height:22px;line-height:1;font-size:.78em;
+      font-weight:800;padding:0 5px;display:inline-flex;align-items:center;
+      justify-content:center;transition:background .2s ease,transform .15s ease;}
+  .nbbtn:hover{background:#dde3e9;transform:translateY(-1px);}
+  .nbdiff{cursor:default;opacity:.85;}
+  body[data-jp-theme-light="false"] .nbbtn{background:#262c33;color:#aebdc9;border-color:#3b444d;}
+  body[data-jp-theme-light="false"] .nbbtn:hover{background:#2f363e;}
+  /* text size, cycled from the panel */
+  body.nbfont-l  .nbbox,body.nbfont-l  :where([data-digichem],.nbrail-own) .widget-html-content{font-size:1.07em;}
+  body.nbfont-xl .nbbox,body.nbfont-xl :where([data-digichem],.nbrail-own) .widget-html-content{font-size:1.15em;}
+  .nbrail-item{display:inline-flex;text-decoration:none!important;cursor:pointer;}
+  .nbrail-item:hover .nbrail-dot{transform:translateY(-2px) scale(1.06);}
+  /* the circle's ring IS the track going around it: grey by default, its upper
+     arc turns green and its lower arc purple as the two lanes reach it */
+  .nbrail-dot{display:inline-block;width:calc(24px * var(--nbthick,1));height:calc(24px * var(--nbthick,1));line-height:calc(21px * var(--nbthick,1));border-radius:50%%;
+      font-size:calc(.78em * var(--nbthick,1));font-weight:800;text-align:center;
+      border:max(1px, calc(2px * var(--nbthick,1))) solid #39444e;background-color:#46535f;color:#eef2f6;
+      transition:background-image .45s ease, background-color .45s ease,
+                 color .3s ease, border-color .3s ease, transform .18s ease;}
+  /* A solved exercise shows a TICK, the same way a given-up one shows a cross:
+     one green tick for the answer, a second purple one when the coding route is
+     solved as well. The circle itself stays light — the colour is in the mark. */
+  .nbrail-dot.st-ans,.nbrail-dot.st-both{
+      background-image:none;background-color:#eaf6f0;border-color:#3fa877;}
+  .nbrail-dot.st-code{
+      background-image:none;background-color:#efe9f9;border-color:#7b4fbd;}
+  /* the coding route glows around the circle, in the same light as its lane */
+  .nbmap-node .nbrail-dot.st-both,.nbmap-node .nbrail-dot.st-code{
+      box-shadow:0 0 12px 5px rgba(123,79,189,.62);}
+  .nbrail-dot.st-code{border-color:#cfd8e0;}
+  body[data-jp-theme-light="false"] .nbmap-node .nbrail-dot.st-both,
+  body[data-jp-theme-light="false"] .nbmap-node .nbrail-dot.st-code{
+      box-shadow:0 0 13px 6px rgba(139,79,242,.85);}
+  .nbrail-dot .ck{font-weight:900;font-size:1.26em;line-height:1;}
+  :where([data-digichem],.nbrail-own) .ck.ok{color:#2f8f63;} :where([data-digichem],.nbrail-own) .ck.co{color:#7b4fbd;}
+  .nbrail-dot.st-both{letter-spacing:-3px;padding-right:3px;}
+  /* still shut: a hollow, quiet circle with a lock in it — clearly not a state
+     you reached, and clearly not a failure either */
+  /* locked is DARK in both themes — a closed door, not a pale one */
+  .nbrail-dot.st-lock{background-color:#46535f;background-image:none;
+      border-color:#39444e;color:#eef2f6;font-size:.66em;line-height:34px;}
+  body[data-jp-theme-light="false"] .nbrail-dot.st-lock{
+      background-color:#39444e!important;border-color:#4b5763!important;color:#dfe6ec!important;}
+
+  .nbmap-node.locked .nbmap-lab{color:#7d8c99;}
+  body[data-jp-theme-light="false"] .nbmap-node.locked .nbmap-lab{color:#78848f;}
+  /* a skipped exercise rings yellow, a given-up one red — the ring is the state */
+  .nbrail-dot.st-skip{background-color:#fdf0d8;background-image:none;color:#8a5b00;
+      border-color:#e0a500!important;}
+  .nbrail-dot.st-fail{background-color:#fbe0dd;background-image:none;color:#a5291b;
+      border-color:#c0392b!important;}
+  body[data-jp-theme-light="false"] .nbrail-dot{background-color:#262c33;color:#9aa7b3;border-color:#3b444d;}
+  body[data-jp-theme-light="false"] .nbrail-dot.st-ans,
+  body[data-jp-theme-light="false"] .nbrail-dot.st-both{
+      background-color:#16271f!important;background-image:none!important;
+      border-color:#4fbf8b;}
+  body[data-jp-theme-light="false"] .nbrail-dot.st-code{
+      background-color:#211a2e!important;background-image:none!important;
+      border-color:#9b7ccb;}
+  body[data-jp-theme-light="false"] :where([data-digichem],.nbrail-own) .ck.ok{color:#6ed7a6;}
+  body[data-jp-theme-light="false"] :where([data-digichem],.nbrail-own) .ck.co{color:#b08fe0;}
+  body[data-jp-theme-light="false"] .nbrail-dot.st-skip{background-color:#3d3119!important;background-image:none!important;color:#f0c274!important;border-color:#e0a500!important;}
+  body[data-jp-theme-light="false"] .nbrail-dot.st-fail{background-color:#3d1f1b!important;background-image:none!important;color:#e05a48!important;border-color:#e05a48!important;}
+  body[data-jp-theme-light="false"] .nbmap-lab{color:#a8b6c2;}
+  body[data-jp-theme-light="false"] .nbmap-node:hover .nbmap-lab{color:#8fc7e8;}
+  .nbfull{border:1px solid #d3dae0;background:#eceff2;color:#5b6b7b;cursor:pointer;
+      border-radius:8px;width:26px;height:24px;line-height:1;font-size:.9em;padding:0;
+      transition:background .2s ease,transform .15s ease;}
+  .nbfull:hover{background:#dde3e9;transform:translateY(-1px);}
+  /* the two bars run in parallel under the numbers */
+  /* The ◐ button asks JupyterLab to switch its theme. Where that command is not
+     available, this block does the same job by hand: JupyterLab paints itself
+     from these variables, so overriding them turns the whole surface dark, not
+     just the notebook's own boxes. */
+  body.nbforce-dark:where(.nb-dc-active){
+      --jp-layout-color0:#111820; --jp-layout-color1:#161d26; --jp-layout-color2:#1d2530;
+      --jp-layout-color3:#273140; --jp-layout-color4:#2f3a4a;
+      --jp-inverse-layout-color0:#ffffff; --jp-inverse-layout-color1:#f3f6f9;
+      --jp-inverse-layout-color2:#dbe3ea; --jp-inverse-layout-color3:#c3ccd5;
+      --jp-ui-font-color0:#e8eef4; --jp-ui-font-color1:#d4dde6; --jp-ui-font-color2:#aab6c2;
+      --jp-ui-font-color3:#8795a3;
+      --jp-content-font-color0:#e8eef4; --jp-content-font-color1:#d4dde6;
+      --jp-content-font-color2:#aab6c2; --jp-content-font-color3:#8795a3;
+      --jp-border-color0:#39434f; --jp-border-color1:#2f3845; --jp-border-color2:#283039;
+      --jp-border-color3:#222932;
+      --jp-cell-editor-background:#1b222b; --jp-cell-editor-border-color:#2f3845;
+      --jp-toolbar-background:#161d26; --jp-toolbar-border-color:#2f3845;
+      --jp-rendermime-error-background:#3a1f1f;
+      background:#111820;}
+  body.nbforce-dark :where([data-digichem],.nbrail-own) .jp-Notebook,body.nbforce-dark .jp-NotebookPanel:where([data-digichem],.nbrail-own),
+  body.nbforce-dark :where([data-digichem],.nbrail-own) .jp-WindowedPanel-outer,body.nbforce-dark :where([data-digichem],.nbrail-own) .jp-Cell,
+  body.nbforce-dark:where(.nb-dc-active) #main,body.nbforce-dark :where([data-digichem],.nbrail-own) .jp-MainAreaWidget{
+      background-color:#111820!important;}
+  body.nbforce-dark :where([data-digichem],.nbrail-own) .jp-OutputArea-output{background:transparent!important;color:#d4dde6;}
+
+  /* ...and the same in the other direction (2026-09-24n). Without this, ◐ in a
+     dark JupyterLab turned the DOCUMENT light in one frame and left the
+     application dark until its theme file had loaded — the one asymmetry that
+     made the switch look unsynchronised. Now both directions are repainted by
+     us, in the same frame, and whatever the front end does afterwards lands on
+     the colours that are already on screen. */
+  body.nbforce-light:where(.nb-dc-active){
+      --jp-layout-color0:#ffffff; --jp-layout-color1:#ffffff; --jp-layout-color2:#f3f5f7;
+      --jp-layout-color3:#e7eaee; --jp-layout-color4:#d7dce2;
+      --jp-inverse-layout-color0:#111820; --jp-inverse-layout-color1:#161d26;
+      --jp-inverse-layout-color2:#273140; --jp-inverse-layout-color3:#3a4551;
+      --jp-ui-font-color0:#1c242d; --jp-ui-font-color1:#33475b; --jp-ui-font-color2:#5b6b7b;
+      --jp-ui-font-color3:#8b98a5;
+      --jp-content-font-color0:#1c242d; --jp-content-font-color1:#33475b;
+      --jp-content-font-color2:#5b6b7b; --jp-content-font-color3:#8b98a5;
+      --jp-border-color0:#c6ced6; --jp-border-color1:#dde5ec; --jp-border-color2:#e7eef4;
+      --jp-border-color3:#f0f4f8;
+      --jp-cell-editor-background:#f7f9fb; --jp-cell-editor-border-color:#dde5ec;
+      --jp-toolbar-background:#ffffff; --jp-toolbar-border-color:#dde5ec;
+      --jp-rendermime-error-background:#fdf0ef;
+      background:#ffffff;}
+  body.nbforce-light :where([data-digichem],.nbrail-own) .jp-Notebook,body.nbforce-light .jp-NotebookPanel:where([data-digichem],.nbrail-own),
+  body.nbforce-light :where([data-digichem],.nbrail-own) .jp-WindowedPanel-outer,body.nbforce-light :where([data-digichem],.nbrail-own) .jp-Cell,
+  body.nbforce-light:where(.nb-dc-active) #main,body.nbforce-light :where([data-digichem],.nbrail-own) .jp-MainAreaWidget{
+      background-color:#ffffff!important;}
+  body.nbforce-light :where([data-digichem],.nbrail-own) .jp-OutputArea-output{background:transparent!important;color:#33475b;}
+
+  /* FULL SCREEN: the notebook gets the whole window — no notebook toolbar, no
+     side padding, and nothing inside may be wider than the window, which is what
+     pushed the scrollbar off the right edge. */
+  body.nbfs .jp-NotebookPanel:where([data-digichem],.nbrail-own) > .jp-Toolbar,
+  body.nbfs .jp-NotebookPanel-toolbar:where([data-digichem],.nbrail-own){display:none!important;}
+  /* Full screen should USE the screen. Every rule here only RAISES a cap — the
+     column is allowed to grow, nothing is forced narrower. (Forcing widths on
+     JupyterLab's own containers, and a global max-width:100%%, is what collapsed
+     the layout the last time; that is deliberately not repeated.) */
+  /* A cap without auto margins pins the block to the LEFT: a VBox is width:100%%,
+     so capping it at 1560px inside a 3000px window left it hanging off centre
+     while the boxes beside it stayed centred. Cap and centre always travel
+     together. */
+  body.nbfs :where([data-digichem],.nbrail-own) .widget-html,body.nbfs :where([data-digichem],.nbrail-own) .jupyter-widget-html,
+  body.nbfs :where([data-digichem],.nbrail-own) .widget-vbox,body.nbfs :where([data-digichem],.nbrail-own) .jupyter-widget-vbox,
+  body.nbfs :where([data-digichem],.nbrail-own) .widget-output,body.nbfs :where([data-digichem],.nbrail-own) .jupyter-widgets-output-area{
+      max-width:1560px!important;margin-left:auto!important;margin-right:auto!important;}
+  body.nbfs .nbbox,body.nbfs .nbbox>div,body.nbfs .nblock,body.nbfs .nbprog,
+  body.nbfs :where([data-digichem],.nbrail-own) .Quiz,body.nbfs :where([data-digichem],.nbrail-own) .MultipleChoiceQn,body.nbfs :where([data-digichem],.nbrail-own) .ManyChoiceQn,
+  body.nbfs :where([data-digichem],.nbrail-own) .NumericQn,body.nbfs :where([data-digichem],.nbrail-own) .StringQn{
+      margin-left:auto!important;margin-right:auto!important;}
+  body.nbfs .acc-group>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header,
+  body.nbfs .acc-group>.p-Collapse>.p-Collapse-header,
+  body.nbfs .acc-group>.lm-Collapse>.lm-Collapse-header{
+      margin-left:auto!important;margin-right:auto!important;}
+  /* 2026-09-28b (K2.1) — the caps that stood here (.nbbox 1560px, .nbbox>div,
+     .nblock, the quiz 1400px, the group pills width:1400px) are gone: full
+     screen is more room, not a longer line (STRUKTUR §6). */
+  body.nbfs .nbrail{max-width:min(98vw,1900px);}
+  /* A wide figure is the one thing that can force a horizontal scrollbar and push
+     the vertical one off the right edge. ONLY the figure is capped — touching the
+     notebook's own widths collapses the column, which is exactly what happened. */
+  img.nbplot{max-width:100%%;height:auto;}
+  /* 2026-09-26b — the one-line readout under a plot ("q 4.0 · real roots 0").
+     Its labels were dimmed with an inline opacity:.75 over JupyterLab's
+     secondary ink: #84909c on white, 3.3:1, and 2.8:1 on the skinned pages.
+     Now two tokens instead of a dimmer — the value in ink, the label quiet —
+     so the readout follows the skin and the brightness like every other text. */
+  .nbread{color:var(--nbskin-ink)!important;}
+  .nbread .nbread-k{color:var(--nbskin-quiet)!important;}
+
+  /* a panel host from an older build of these notebooks, still pinned by a
+     stale kernel in another tab — hidden even before the script removes it */
+  body > #nbrail-host,body > .nbrail-host,body > #nbprog-host,
+  body > .nbprog-host,body > .nbrail-fixed{display:none!important;}
+  /* the settings drawer: the notebook's own controls are MOVED in here, so the
+     panel operates the real widgets instead of a copy of them */
+  .nbdrawer{max-height:0;overflow:hidden;opacity:0;
+      transition:max-height .35s cubic-bezier(.22,.61,.36,1),opacity .25s ease,
+                 margin-top .35s ease;margin-top:0;}
+  .nbpanel-host.open .nbdrawer{max-height:min(62vh,520px);opacity:1;
+      margin-top:10px;margin-bottom:0;overflow:auto;}
+  /* the settings need room: the panel widens while the drawer is open, and the
+     cells lay themselves out instead of being forced into two narrow columns */
+  .nbpanel-host.open .nbrail{max-width:var(--nbrail-w,min(98vw,1560px));}
+  .nbdrawer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:14px 28px;
+      border-top:1px solid #d9e0e6;padding:12px 4px 4px;}
+  body[data-jp-theme-light="false"] .nbdrawer-grid{border-top-color:#333c46;}
+  .nbcell{min-width:0;}
+  .nbcell-h{font-size:.66em;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;
+      color:#5b6b7b;margin-bottom:6px;}
+  body[data-jp-theme-light="false"] .nbcell-h{color:#8fa0b0;}
+  .nbslot{min-height:32px;}
+  .nbslot .widget-dropdown select,.nbslot select{max-width:100%%;width:100%%;}
+  .nbslot .widget-text input,.nbslot input[type="text"],.nbslot textarea{
+      width:100%%!important;max-width:100%%!important;}
+  .nbslot .widget-hbox,.nbslot .jupyter-widget-hbox{width:100%%!important;}
+  .nbslot>*{width:100%%!important;}
+  .nbslot .jupyter-widgets{max-width:100%%;}
+  .nbslot .widget-text input,.nbslot input[type="text"]{width:100%%!important;}
+  .nbslot .widget-button,.nbslot button{margin:2px 4px 2px 0;}
+  /* inside the drawer everything is compact — these are settings, not calls to
+     action, and the panel must stay small */
+  .nbdrawer .sc-btn,.nbdrawer .nbunlock,.nbdrawer .nbgiveup,.nbdrawer button,
+  .nbdrawer .widget-button button{font-size:.78em!important;padding:5px 12px!important;
+      height:auto!important;min-height:0!important;line-height:1.3!important;
+      box-shadow:none!important;border-radius:8px!important;width:auto!important;}
+  .nbdrawer .widget-label,.nbdrawer label{font-size:.8em!important;}
+  .nbdrawer .widget-dropdown,.nbdrawer .widget-text,
+  .nbdrawer .jupyter-widget-dropdown,.nbdrawer .jupyter-widget-text{width:100%%!important;}
+  .nbdrawer pre{font-size:.72em!important;max-height:70px;overflow:auto;}
+  /* the drawer has its own ink, so nothing in it depends on JupyterLab's theme
+     variables — that is what made the series list and the dropdown disappear */
+  .nbdrawer,.nbdrawer .nbcell,.nbdrawer .widget-label,.nbdrawer label,
+  .nbdrawer .nbink,.nbdrawer p,.nbdrawer div{color:#33475b;}
+  body[data-jp-theme-light="false"] .nbdrawer,
+  body[data-jp-theme-light="false"] .nbdrawer .nbcell,
+  body[data-jp-theme-light="false"] .nbdrawer .widget-label,
+  body[data-jp-theme-light="false"] .nbdrawer label,
+  body[data-jp-theme-light="false"] .nbdrawer .nbink,
+  body[data-jp-theme-light="false"] .nbdrawer div{color:#d4dde6;}
+  .nbdrawer select,.nbdrawer input[type="text"],.nbdrawer input[type="number"],
+  .nbdrawer .widget-dropdown select,.nbdrawer .widget-text input{
+      background:#ffffff!important;color:#243b53!important;
+      border:1px solid #c3ccd4!important;border-radius:8px!important;}
+  body[data-jp-theme-light="false"] .nbdrawer select,
+  body[data-jp-theme-light="false"] .nbdrawer input[type="text"],
+  body[data-jp-theme-light="false"] .nbdrawer input[type="number"],
+  body[data-jp-theme-light="false"] .nbdrawer .widget-dropdown select,
+  body[data-jp-theme-light="false"] .nbdrawer .widget-text input{
+      background:#222a33!important;color:#dbe5ee!important;
+      border-color:#3b444d!important;}
+  .nbdrawer pre{background:#f3f6f9;color:#243b53;border:1px solid #dde4ea;}
+  body[data-jp-theme-light="false"] .nbdrawer pre{
+      background:#1b222a;color:#cbd6e0;border-color:#2f3841;}
+  /* the three ways an exercise can end, in the colours they already have on
+     the timeline: green answered, amber skipped, red given up */
+  .nbstat{display:inline-block;font-variant-numeric:tabular-nums;font-weight:800;
+      margin:0 5px 0 0;letter-spacing:.2px;}
+  .nbstat.ok{color:#2f8f63;} .nbstat.skip{color:#b07d00;} .nbstat.fail{color:#b8392b;}
+  .nbstat.of{color:#7a8794;font-weight:700;}
+  body[data-jp-theme-light="false"] .nbstat.ok{color:#5fc794;}
+  body[data-jp-theme-light="false"] .nbstat.skip{color:#e3b342;}
+  body[data-jp-theme-light="false"] .nbstat.fail{color:#e2776a;}
+  body[data-jp-theme-light="false"] .nbstat.of{color:#93a1ad;}
+  .nbstat-sum{margin-top:5px;padding-top:5px;border-top:1px solid #dde5ec;}
+  body[data-jp-theme-light="false"] .nbstat-sum{border-top-color:#2c3540;}
+  .nbstat-row{display:flex;align-items:baseline;gap:2px;flex-wrap:wrap;}
+  .nblevels{margin-left:auto;display:inline-flex;gap:4px;}
+  .nblevel{font-size:.86em;font-weight:800;padding:0 6px;border-radius:999px;
+      border:1px solid transparent;letter-spacing:.2px;}
+  .nblevel.lv-g{color:#2c8f66;background:#e6f5ee;border-color:#bfe3d2;}
+  .nblevel.lv-s{color:#2c6e91;background:#e8f2f9;border-color:#c3dced;}
+  .nblevel.lv-t{color:#9c5a12;background:#fbf0e2;border-color:#ecd5b4;}
+  body[data-jp-theme-light="false"] .nblevel.lv-g{
+      color:#7fdcb0;background:#16271f;border-color:#2f6b50;}
+  body[data-jp-theme-light="false"] .nblevel.lv-s{
+      color:#8fc7e8;background:#1d2b35;border-color:#33414f;}
+  body[data-jp-theme-light="false"] .nblevel.lv-t{
+      color:#f0c274;background:#3d3119;border-color:#6b5427;}
+  .nbstat-note{margin-top:6px;font-size:.88em;color:#8b98a5;line-height:1.45;}
+  body[data-jp-theme-light="false"] .nbstat-note{color:#8896a2;}
+  .nbbtn.nbseries{gap:0;padding:0 9px;}
+  .nbserieslist{font-size:.82em;line-height:1.6;max-height:280px;overflow:auto;
+      color:#33475b;}
+  body[data-jp-theme-light="false"] .nbserieslist{color:#d4dde6;}
+  .nbserieslist b{font-weight:700;}
+  /* every jump target keeps the panel's height free above it, so ANY scroll —
+     ours, the browser's, JupyterLab's own — lands the pill under the panel */
+  .nbjump-land,.acc-chapter,.acc-group,.acc-viz,.acc-practice{
+      scroll-margin-top:var(--nbpanel-h,120px);}
+  /* the stash holds the notebook's settings widgets out of sight; the panel's
+     drawer adopts them from here, so they exist exactly once */
+  /* The controls are built here but shown in the panel's ⚙ drawer. They must not
+     be display:none: a widget inside a display:none box has no layout, and some
+     front ends never lay it out again once it is moved — which is how the drawer
+     ended up with empty slots. Parked off screen it is fully rendered, and the
+     moment the drawer adopts it, it simply appears there. */
+  .nbctl-stash{position:absolute!important;left:-10000px!important;top:0!important;
+      width:640px!important;height:1px!important;overflow:hidden!important;
+      opacity:0!important;pointer-events:none!important;}
+  /* …but once a slot has adopted it, it is a normal, visible control again */
+  .nbslot>.nbctl-difficulty,.nbslot>.nbctl-code,.nbslot>.nbctl-reset,
+  .nbslot>.nbctl-seed{
+      position:static!important;left:auto!important;top:auto!important;
+      width:100%%!important;height:auto!important;overflow:visible!important;
+      opacity:1!important;pointer-events:auto!important;}
+  .nbctl-moved{text-align:center;font-size:.9em;opacity:.8;margin:8px auto;padding:8px 14px;
+      border:1px dashed #c8d2db;border-radius:10px;max-width:520px;}
+  body[data-jp-theme-light="false"] .nbctl-moved{border-color:#39424b;}
+  .nbmap-inner{position:relative;display:flex;align-items:flex-start;gap:0;flex:0 0 auto;}
+  /* the green progress runs INSIDE the timeline, on the same line as the
+     connectors between the dots, and grows as exercises are answered */
+  /* a control that is ON says so: the gear while the drawer is open, the full
+     screen button while full screen is on, and the theme button lights the side
+     it would switch TO — left for dark, right for light. */
+  /* one drawer, two pages: the tile that opened it decides what is in it */
+  /* 2026-09-28b (K2.7) — …and the rest of the drawer is NOT in it. These four
+     selectors had lost their own `display:none` and shared the grid rule
+     below, so every tile opened the whole drawer: 📚 showed difficulty,
+     progress code and keyboard first and the statistics a screen further
+     down (measured 28a: all six cells display:block on page "stats"). */
+  .nbpanel-host[data-page="diff"] .nbdrawer .nbcell:not(.pg-diff),
+  .nbpanel-host[data-page="code"] .nbdrawer .nbcell:not(.pg-code),
+  .nbpanel-host[data-page="stats"] .nbdrawer .nbcell:not(.pg-stats),
+  .nbpanel-host[data-page="keys"] .nbdrawer .nbcell:not(.pg-keys){display:none!important;}
+  .nbpanel-host[data-page="diff"] .nbdrawer-grid,
+  .nbpanel-host[data-page="keys"] .nbdrawer-grid,
+  .nbpanel-host[data-page="lock"] .nbdrawer-grid,
+  .nbpanel-host[data-page="stats"] .nbdrawer-grid{
+      grid-template-columns:minmax(0,1fr)!important;max-width:560px;margin:0 auto;}
+  .nbcell-n{font-size:.82em;line-height:1.4;color:#6b7a88;margin-top:6px;}
+  body[data-jp-theme-light="false"] .nbcell-n{color:#9aa8b4;}
+  .nbpanel-host[data-page="diff"].open .nbgear,
+  .nbpanel-host[data-page="stats"].open .nbseries,
+  .nbpanel-host[data-page="keys"].open .nbkeys,
+  .nbpanel-host[data-page="code"].open .nbprofile,.nbpanel-host.fs .nbfull{
+      border-color:#4a9fd5!important;color:#2c6e91!important;
+      box-shadow:0 0 0 2px rgba(74,159,213,.30),0 0 8px rgba(74,159,213,.35)!important;
+      background:#e8f2f9!important;}
+  body[data-jp-theme-light="false"] .nbpanel-host[data-page="diff"].open .nbgear,
+  body[data-jp-theme-light="false"] .nbpanel-host[data-page="stats"].open .nbseries,
+  body[data-jp-theme-light="false"] .nbpanel-host[data-page="code"].open .nbprofile,
+  body[data-jp-theme-light="false"] .nbpanel-host.fs .nbfull{
+      color:#8fc7e8!important;background:#1d2b35!important;}
+  .nbbtn.nbtheme{box-shadow:inset -3px 0 0 0 #d9a53a;}      /* light is on  */
+  body.nbdark .nbbtn.nbtheme,
+  body[data-jp-theme-light="false"] .nbbtn.nbtheme{
+      box-shadow:inset 3px 0 0 0 #6fb6de;}                   /* dark is on   */
+  /* A marker the line has reached is filled SOLID green — no half-and-half. The
+     coding route keeps its own slim rail running along under the track, so the
+     markers stay one clear colour and the second progress reads as a background
+     line rather than a second skin on every dot. */
+  /* A chapter that is OPEN is filled green — that is the XP showing on the map;
+     a chapter still shut keeps the dark ink of its padlock. */
+  .nbmap-node.passed .nbsubdot{background:#3fa877;}
+  /* 2026-09-24aj — a chapter is never coloured. Green on the first chapter said
+     "passed", which is not a thing that happens to a chapter; it only ever meant
+     "not locked", and the absence of a padlock says that already. */
+  .nbmap-node.passed .nbrail-dot:not(.st-skip):not(.st-fail){border-color:#3fa877;}
+  body[data-jp-theme-light="false"] .nbmap-node.passed .nbsubdot{background:#4fbf8b;}
+  body[data-jp-theme-light="false"] .nbmap-node.passed
+      .nbrail-dot:not(.st-skip):not(.st-fail){border-color:#4fbf8b;}
+  .nbchapdot,.nbsubdot{transition:background .45s ease;}
+  /* The answered exercises fill the WHOLE track. The coding route is not a second
+     bar any more: it lies BEHIND the green one, a little taller and blurred, so it
+     shows as a faint purple glow around the green line — up to the exercise the
+     coding route has reached, and no further. */
+  .nbmap-fill{position:absolute;top:calc(58px * var(--nbthick,1));left:var(--fill-x0,var(--rail-x0,0px));height:calc(8px * var(--nbthick,1));
+      border-radius:999px;
+      background:linear-gradient(90deg,#3fa877,#6ed7a6);z-index:2;
+      transition:width .55s cubic-bezier(.22,.61,.36,1);pointer-events:none;}
+  /* Where you are in the DOCUMENT: a white notch that slides along the bar as you
+     scroll. It is not a state — it is a position, which is why it hangs on no
+     circle. */
+  /* White on a white page is invisible; the marker takes the blue that already
+     means "structure" here (Introduction, Content, Appendix) and keeps white for
+     the dark theme, where white is what reads. */
+  .nbmap-here{position:absolute;top:calc(58px * var(--nbthick,1));width:50px;
+      height:calc(8px * var(--nbthick,1));border-radius:999px;
+      background:var(--nbmark);z-index:2;pointer-events:none;opacity:0;
+      transition:opacity .2s ease;}
+  .nbmap-here.on{opacity:1;}
+  /* It runs BEHIND the markers (z-index 2 against the nodes' 3), and whatever it
+     is passing turns white with it — the piece of bar you are reading. */
+  .nbmap-node.here .nbrail-dot{border-color:#ffffff!important;}
+  .nbmap-node.here .nbchapdot,.nbmap-node.here .nbsubdot,
+  .nbmap-node.here .nbsect{background:#ffffff!important;}
+  /* the stretch a skip or a give-up opened: same colour as that circle's ring */
+  /* The green bar is the XP: it fills through to where you stand, whatever you
+     did on the way. A stretch you only skipped or gave up on is marked by a thin
+     stripe ON that green — it counts as travelled, not as earned. */
+  .nbmap-fill.tail{top:calc(63px * var(--nbthick,1));height:calc(3px * var(--nbthick,1));border-radius:999px;z-index:3;
+      background:linear-gradient(90deg,#e0a500,#f0c25a);
+      transition:width .45s ease,opacity .25s ease;pointer-events:none;}
+  .nbmap-fill.tail.gave-up{background:linear-gradient(90deg,#c0392b,#dc7365);}
+  .nbmap-fill.code{top:calc(54px * var(--nbthick,1));height:calc(16px * var(--nbthick,1));border-radius:999px;z-index:1;
+      background:rgba(123,79,189,.34);
+      box-shadow:0 0 calc(11px * var(--nbthick,1)) calc(4px * var(--nbthick,1))
+                 rgba(123,79,189,.62);}
+  /* the marker the coding route has reached is wrapped by the same glow, so the
+     lane ends AROUND a dot instead of stopping short of it */
+  .nbmap-node.code-end .nbrail-dot,.nbmap-node.code-end .nbchapdot,
+  .nbmap-node.code-end .nbsubdot,.nbmap-node.code-end .nbsect{
+      box-shadow:0 0 calc(11px * var(--nbthick,1)) calc(5px * var(--nbthick,1))
+                 rgba(123,79,189,.62);
+      transition:box-shadow .18s ease,transform .18s ease,background .18s ease;}
+  /* the glow grows with the marker you point at, exactly like the marker itself */
+  .nbmap-node.code-end:hover .nbrail-dot,.nbmap-node.code-end:focus .nbrail-dot,
+  .nbmap-node.code-end.nbpop .nbrail-dot,
+  .nbmap-node.code-end:hover .nbchapdot,.nbmap-node.code-end:focus .nbchapdot,
+  .nbmap-node.code-end.nbpop .nbchapdot,
+  .nbmap-node.code-end:hover .nbsubdot,.nbmap-node.code-end:focus .nbsubdot,
+  .nbmap-node.code-end.nbpop .nbsubdot{
+      box-shadow:0 0 16px 8px rgba(123,79,189,.72);}
+  body[data-jp-theme-light="false"] .nbmap-node.code-end .nbrail-dot,
+  body[data-jp-theme-light="false"] .nbmap-node.code-end .nbchapdot,
+  body[data-jp-theme-light="false"] .nbmap-node.code-end .nbsubdot,
+  body[data-jp-theme-light="false"] .nbmap-node.code-end .nbsect{
+      box-shadow:0 0 13px 6px rgba(139,79,242,.85);}
+  body[data-jp-theme-light="false"] .nbmap-node.code-end:hover .nbrail-dot,
+  body[data-jp-theme-light="false"] .nbmap-node.code-end:hover .nbchapdot,
+  body[data-jp-theme-light="false"] .nbmap-node.code-end:hover .nbsubdot{
+      box-shadow:0 0 18px 9px rgba(139,79,242,.95);}
+  body[data-jp-theme-light="false"] .nbmap-fill{
+      background:linear-gradient(90deg,#2f8f63,#63c396);}
+  /* on a dark panel a pale lavender washes out to grey — the coding lane needs a
+     saturated violet to stay readable as a colour */
+  body[data-jp-theme-light="false"] .nbmap-fill.code{
+      background:rgba(150,92,246,.55);
+      box-shadow:0 0 13px 5px rgba(139,79,242,.85);}
+  .nbbars{display:flex;flex-direction:column;gap:3px;margin-top:1px;}
+  .nbbar{display:block;height:3px;border-radius:999px;width:100%%;
+      background:rgba(138,148,160,.26);overflow:hidden;}
+  .nbbar>span{display:block;height:100%%;border-radius:999px;width:0;
+      transition:width .55s cubic-bezier(.34,.9,.35,1);}
+  :where([data-digichem],.nbrail-own) .fill-green {background:linear-gradient(90deg,#3fa877,#6ed7a6);}
+  :where([data-digichem],.nbrail-own) .fill-purple{background:linear-gradient(90deg,#7b4fbd,#b08fe0);}
+  .nbchip-fail{background:#fbe0dd;color:#9c2f22;border-color:#eca79c;}
+  /* 2026-09-25h — the keyboard mode focuses the LAYER (tabindex -1). A focus
+     ring on it would be drawn round the whole window. The ring belongs to
+     the mark the keyboard is on (Oberfläche, C), never to the layer. */
+  #nbpanel-root:focus, #nbpanel-root:focus-visible{outline:none!important;}
+  /* 2026-09-26c — C2 · …but the PANEL shows that the keyboard is in it. Until
+     26c nothing did: `.nbkbd` had no rule at all, and in the user's video
+     (retro, dark) there was no way to tell whether the mode was on. A 2px line
+     inside the panel's own edge (outline-offset -2px, so the window edge
+     cannot clip it), in the marker's hue at reading strength — >= 3:1 against
+     the panel surface in 4 skins x light/dark, measured (OBERFLAECHE §4). */
+  .nbpanel-host.nbkbd .nbrail{
+      outline:2px solid var(--nbmark-ink,var(--nbring,#0d63e0))!important;
+      outline-offset:-2px!important;}
+  /* NOT the host. #nbpanel-root is a transparent full-viewport LAYER; it used to
+     be the card itself, and this rule survived the split. In dark mode it
+     painted an opaque #1d2228 rectangle over the entire application — menu bar,
+     file browser, notebook and all — leaving only its own children visible.
+     Every surface that should be dark carries its own background below. */
+  body[data-jp-theme-light="false"] .nbrail,
+  body[data-jp-theme-name*="Dark"]  .nbrail{
+      --nbrail-bg:#1d2228;
+      background:#1d2228!important;border-color:#33414f!important;
+      box-shadow:0 6px 22px rgba(0,0,0,.75)!important;}
+  body[data-jp-theme-light="false"] .nbbar-num{color:#aebdc9!important;}
+  body[data-jp-theme-light="false"] .nbrail-dot{background-color:#262c33;color:#9aa7b3;border-color:#3b444d;}
+  body[data-jp-theme-light="false"] .nbrail-dot.st-ans,
+  body[data-jp-theme-light="false"] .nbrail-dot.st-both{
+      background-color:#16271f!important;background-image:none!important;
+      border-color:#4fbf8b;}
+  body[data-jp-theme-light="false"] .nbrail-dot.st-code{
+      background-color:#211a2e!important;background-image:none!important;
+      border-color:#9b7ccb;}
+  body[data-jp-theme-light="false"] :where([data-digichem],.nbrail-own) .ck.ok{color:#6ed7a6;}
+  body[data-jp-theme-light="false"] :where([data-digichem],.nbrail-own) .ck.co{color:#b08fe0;}
+  body[data-jp-theme-light="false"] .nbrail-dot.st-skip{background-color:#3d3119!important;background-image:none!important;color:#f0c274!important;border-color:#e0a500!important;}
+  body[data-jp-theme-light="false"] .nbrail-dot.st-fail{background-color:#3d1f1b!important;background-image:none!important;color:#e05a48!important;border-color:#e05a48!important;}
+  body[data-jp-theme-light="false"] .nbfull{background:#262c33;color:#aebdc9;border-color:#3b444d;}
+  body[data-jp-theme-light="false"] .nbchip-fail{background:#3d1f1b!important;color:#f2a99e!important;border-color:#6b342b!important;}
+  @media (max-width:820px){ .nbpanel-host{display:none!important;} }
+  /* Graceful degradation: the inline strip is hidden only when the script has
+     armed itself and added .nbrail-live to <body>. If the pinned panel cannot run
+     for any reason, the strip stays and the reader still sees their progress. */
+  @media (min-width:821px){ body.nbrail-live .nbprog{display:none!important;} }
+  /* ---------- motion: take the hard edges off every state change ---------- */
+  @keyframes nbopen{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:none;}}
+  :where([data-digichem],.nbrail-own) .jupyter-widget-Collapse-contents,:where([data-digichem],.nbrail-own) .lm-Collapse-contents,:where([data-digichem],.nbrail-own) .p-Collapse-contents{
+      animation:nbopen .22s cubic-bezier(.34,.9,.35,1) both;}
+  :where([data-digichem],.nbrail-own) .jupyter-widget-Collapse-header,:where([data-digichem],.nbrail-own) .lm-Collapse-header,:where([data-digichem],.nbrail-own) .p-Collapse-header{
+      transition:filter .18s ease, transform .18s ease;}
+  :where([data-digichem],.nbrail-own) .jupyter-widget-Collapse-header:hover{filter:brightness(1.06);}
+  :where([data-digichem],.nbrail-own) .jupyter-widget-Collapse-header:active{transform:translateY(1px);}
+  .nbbox{transition:background .3s ease,border-color .3s ease;}
+  @media (prefers-reduced-motion:reduce){
+      .nbpanel-host,.nbrail-dot,.nbbar>span,:where([data-digichem],.nbrail-own) .jupyter-widget-Collapse-contents{
+          transition:none!important;animation:none!important;}}
+  /* readout line under an interactive plot */
+  .nbread{color:#5b6b7b;}
+  body[data-jp-theme-light="false"] .nbread,
+  body[data-jp-theme-name*="Dark"]  .nbread{color:#aebdc9!important;}
+
+  /* ---- widgets inside a chapter, readable in the dark ------------------
+     Sliders, dropdowns and their readouts take their colour from JupyterLab's
+     own variables, which a notebook-level dark mode does not change — the slider
+     label and the value next to it came out dark grey on a dark card. */
+  body[data-jp-theme-light="false"] .acc-chapter .widget-label,
+  body[data-jp-theme-light="false"] .acc-chapter label,
+  body[data-jp-theme-light="false"] .acc-chapter .widget-readout,
+  body[data-jp-theme-light="false"] .acc-chapter .widget-html-content,
+  body[data-jp-theme-light="false"] .acc-group .widget-label,
+  body[data-jp-theme-light="false"] .acc-group label,
+  body[data-jp-theme-light="false"] .acc-group .widget-readout{color:#c3d0da!important;}
+  body[data-jp-theme-light="false"] .acc-chapter .widget-readout{
+      background:transparent!important;border-color:#3a444e!important;}
+  body[data-jp-theme-light="false"] .acc-chapter input,
+  body[data-jp-theme-light="false"] .acc-chapter textarea,
+  body[data-jp-theme-light="false"] .acc-chapter select{
+      background:#1f252b!important;color:#dbe4ec!important;border-color:#3a444e!important;}
+  body[data-jp-theme-light="false"] .acc-chapter .widget-slider .ui-slider,
+  body[data-jp-theme-light="false"] .acc-chapter .slider-container .ui-slider{
+      background:#39424d!important;border-color:#4b5763!important;}
+
+  /* ---- the title page, in the same language as everything else ----------
+     It lives in the notebook's markdown cell, so it carries classes instead of
+     inline colours — that is what lets it follow the theme. */
+  /* The title carries its light look as INLINE styles, so the notebook already
+     looks right on first open — before Run all cells, when this stylesheet does
+     not exist yet. These rules only need !important for the dark theme. */
+  body[data-jp-theme-light="false"] .nbtitle-card{
+      background:#20262c!important;border-color:#333d47!important;}
+  /* the cover's own button: the shape comes from the markdown cell's inline
+     style so it is there before anything has run; this is what it does when it
+     is pointed at, and what it looks like on a dark page */
+  /* JupyterLab's markdown sanitiser keeps `class` and most of `style`, but it
+     drops `min-height` — so the cover can only be told to fill the page from
+     here, which is the moment the notebook has run and the document exists. */
+  .nbcover{min-height:calc(100vh - 210px)!important;width:100%%!important;}
+  /* 2026-09-24ap — THE CARD IS THE WIDTH OF ITS TITLE.
+     The title PAGE spans the column; the box inside it holds two lines of text
+     and was stretched across all of it, which made a heading look like a
+     banner. It hugs its content now and sits centred, the way every other box
+     in the document does (24w). Three rules said 96%%, 74rem and 100%% in three
+     places — they all say fit-content now. */
+  .nbcover .nbtitle-card{width:fit-content!important;
+      max-width:min(94%%,70rem)!important;
+      display:block!important;margin:0 auto!important;box-sizing:border-box!important;}
+  .nbrunall{transition:filter .15s ease,transform .08s ease;user-select:none;}
+  .nbrunall:hover{filter:brightness(1.06);}
+  .nbrunall:active{transform:translateY(1px);}
+  .nbrunall-msg{transition:opacity .25s ease;}
+  body[data-jp-theme-light="false"] .nbtitle-card{
+      background:#1d2228!important;border-color:#33414f!important;}
+  body[data-jp-theme-light="false"] .nbrunall{
+      box-shadow:0 6px 18px rgba(0,0,0,.5)!important;}
+  body[data-jp-theme-light="false"] .nbrunall-msg{color:#a8b6c2!important;}
+  body[data-jp-theme-light="false"] .nbtitle-h{color:#dbe4ec!important;}
+  body[data-jp-theme-light="false"] .nbtitle-rule{background:#3b4652!important;}
+  body[data-jp-theme-light="false"] .nbtitle-sub{color:#8b98a5!important;}
+  body[data-jp-theme-light="false"] .nbtitle-lead{color:#a8b6c2!important;}
+  body[data-jp-theme-light="false"] .nbtitle-note{color:#c3d0da!important;}
+  body[data-jp-theme-light="false"] .nbtitle-fine{color:#78848f!important;}
+
+  /* ================= the quiet style =================================
+     The panel's language applied to the document: one surface, one hairline
+     border, one radius, no gradients, no shadows. Colour is kept for STATE —
+     green solved, amber skipped, red given up, purple coding route — and what
+     KIND of box something is, is said by a small caption instead of a colour.
+     Switched on with use_style("quiet") before inject_style(). */
+  body.nbquiet .nbbox{background:#f8fafb!important;border:1px solid #dde5ec!important;
+      box-shadow:none!important;border-radius:16px!important;}
+  body.nbquiet .nbbox-grey{background:#f2f5f8!important;}
+  body.nbquiet .nbbox-interp,body.nbquiet .nbbox-sol{
+      background:#f4f9f6!important;border-color:#cfe2d6!important;}
+  body.nbquiet .nbbox table th{border-bottom-color:#cfd8e0!important;}
+  body.nbquiet .nbbox table th,body.nbquiet .nbbox table td{
+      border-left-color:#e6ebf0!important;}
+  /* every pill becomes a quiet header on a hairline, like the section headers */
+  body.nbquiet :where([data-digichem],.nbrail-own) .jupyter-widget-Collapse-header,
+  body.nbquiet :where([data-digichem],.nbrail-own) .p-Collapse-header,
+  body.nbquiet :where([data-digichem],.nbrail-own) .lm-Collapse-header{
+      background:transparent!important;color:#33475b!important;
+      box-shadow:none!important;border-radius:0!important;border-bottom:0!important;
+      /* 2026-09-24bi — THE PILL IS THE WIDTH OF ITS NAME.
+         840px was harmless while the pill was a bare heading on a hairline;
+         the moment a skin gave it a background it became a coloured bar the
+         width of the column, which is what the reader saw in `fairy`. The
+         width belongs to the label in every style — the section separators
+         keep their own 520px further down, because those are rules with a
+         label in the middle and not headings. */
+      width:fit-content!important;max-width:94%%!important;
+      margin:16px auto 6px!important;padding:8px 0 6px!important;
+      font-size:1.16em!important;letter-spacing:.3px!important;}
+  body.nbquiet :where([data-digichem],.nbrail-own) .jupyter-widget-Collapse-header *,
+  body.nbquiet :where([data-digichem],.nbrail-own) .p-Collapse-header *,
+  body.nbquiet :where([data-digichem],.nbrail-own) .lm-Collapse-header *{color:#33475b!important;}
+  /* the two folds inside a chapter are captions, not headings */
+  /* The three folds inside a chapter are the only things here you have to OPEN,
+     so they say so: an outlined chip with a triangle that turns when it is open.
+     Quiet, but unmistakably a control rather than a heading. */
+  body.nbquiet .acc-viz .jupyter-widget-Collapse-header,
+  body.nbquiet .acc-viz .p-Collapse-header,
+  body.nbquiet .acc-practice .jupyter-widget-Collapse-header,
+  body.nbquiet .acc-practice .p-Collapse-header,
+  body.nbquiet .acc-code .jupyter-widget-Collapse-header,
+  body.nbquiet .acc-code .p-Collapse-header{
+      font-size:.76em!important;letter-spacing:1.7px!important;
+      text-transform:uppercase!important;color:#6b7a88!important;
+      width:fit-content!important;max-width:94%%!important;
+      border:1px solid #dde5ec!important;border-radius:999px!important;
+      padding:6px 20px!important;margin:14px auto 8px!important;
+      background:#f8fafb!important;cursor:pointer!important;
+      transition:background .18s ease,border-color .18s ease,color .18s ease;}
+  body.nbquiet .acc-viz .jupyter-widget-Collapse-header:hover,
+  body.nbquiet .acc-practice .jupyter-widget-Collapse-header:hover,
+  body.nbquiet .acc-code .jupyter-widget-Collapse-header:hover{
+      background:#eef3f7!important;border-color:#c3d0da!important;color:#33475b!important;}
+  body.nbquiet .acc-viz .jupyter-widget-Collapse-header *,
+  body.nbquiet .acc-viz .p-Collapse-header *,
+  body.nbquiet .acc-practice .jupyter-widget-Collapse-header *,
+  body.nbquiet .acc-practice .p-Collapse-header *,
+  body.nbquiet .acc-code .jupyter-widget-Collapse-header *,
+  body.nbquiet .acc-code .p-Collapse-header *{color:inherit!important;}
+  body.nbquiet .acc-viz .jupyter-widget-Collapse-header::before,
+  body.nbquiet .acc-viz .p-Collapse-header::before,
+  body.nbquiet .acc-practice .jupyter-widget-Collapse-header::before,
+  body.nbquiet .acc-practice .p-Collapse-header::before,
+  body.nbquiet .acc-code .jupyter-widget-Collapse-header::before,
+  body.nbquiet .acc-code .p-Collapse-header::before{
+      content:""!important;display:inline-block!important;
+      width:0!important;height:0!important;
+      border-left:6px solid currentColor;border-top:4.5px solid transparent;
+      border-bottom:4.5px solid transparent;
+      margin-right:11px!important;vertical-align:middle;
+      transform-origin:30%% 50%%;
+      transition:transform .2s cubic-bezier(.34,.9,.35,1);}
+  body.nbquiet .acc-viz .jupyter-widget-Collapse-open>.jupyter-widget-Collapse-header::before,
+  body.nbquiet .acc-viz .p-Collapse-open>.p-Collapse-header::before,
+  body.nbquiet .acc-practice .jupyter-widget-Collapse-open>.jupyter-widget-Collapse-header::before,
+  body.nbquiet .acc-practice .p-Collapse-open>.p-Collapse-header::before,
+  body.nbquiet .acc-code .jupyter-widget-Collapse-open>.jupyter-widget-Collapse-header::before,
+  body.nbquiet .acc-code .p-Collapse-open>.p-Collapse-header::before{
+      transform:rotate(90deg);}
+  body[data-jp-theme-light="false"].nbquiet .acc-viz .jupyter-widget-Collapse-header,
+  body[data-jp-theme-light="false"].nbquiet .acc-practice .jupyter-widget-Collapse-header,
+  body[data-jp-theme-light="false"].nbquiet .acc-code .jupyter-widget-Collapse-header{
+      background:#242b32!important;border-color:#3a444e!important;color:#9fb0bf!important;}
+  body[data-jp-theme-light="false"].nbquiet .acc-viz .jupyter-widget-Collapse-header:hover,
+  body[data-jp-theme-light="false"].nbquiet .acc-practice .jupyter-widget-Collapse-header:hover,
+  body[data-jp-theme-light="false"].nbquiet .acc-code .jupyter-widget-Collapse-header:hover{
+      background:#2d353d!important;border-color:#4b5763!important;color:#d4e0ea!important;}
+  body.nbquiet .acc-plain .jupyter-widget-Collapse-header,
+  body.nbquiet .acc-plain .p-Collapse-header{color:#6f7d8a!important;}
+  body.nbquiet .acc-plain .jupyter-widget-Collapse-header *,
+  body.nbquiet .acc-plain .p-Collapse-header *{color:#6f7d8a!important;}
+  /* the group headers keep their "— text —" rules, only quieter */
+  body.nbquiet .acc-group>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header,
+  body.nbquiet .acc-group>.p-Collapse>.p-Collapse-header,
+  body.nbquiet .acc-group>.lm-Collapse>.lm-Collapse-header{
+      border-bottom:0!important;font-size:1.02em!important;
+      text-transform:uppercase!important;letter-spacing:2px!important;
+      color:#7a8794!important;}
+  body.nbquiet .acc-group>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header *,
+  body.nbquiet .acc-group>.p-Collapse>.p-Collapse-header *,
+  body.nbquiet .acc-group>.lm-Collapse>.lm-Collapse-header *{color:#7a8794!important;}
+  body[data-jp-theme-light="false"].nbquiet .nbbox{
+      background:#20262c!important;border-color:#333d47!important;}
+  body[data-jp-theme-light="false"].nbquiet .nbbox-grey{background:#1c2127!important;}
+  body[data-jp-theme-light="false"].nbquiet .nbbox-interp,
+  body[data-jp-theme-light="false"].nbquiet .nbbox-sol{
+      background:#1a2621!important;border-color:#2f4a3c!important;}
+  /* 2026-09-30 (E10.M1) — these two rules were dropped by the browser until
+     now (the build's _dedupe cut `:where(a,b)` apart). Revived, they must not
+     outrank what came after them in practice: the skins' own header inks and
+     the chips' `inherit`. So the header is inside :where() — same weight as
+     the light rule above (0,2,1), later, so it wins over that one only. */
+  body[data-jp-theme-light="false"].nbquiet :where([data-digichem],.nbrail-own) :where(.jupyter-widget-Collapse-header,.p-Collapse-header,.lm-Collapse-header){
+      color:#c3d0da!important;}
+  body[data-jp-theme-light="false"].nbquiet :where([data-digichem],.nbrail-own) :where(.jupyter-widget-Collapse-header,.p-Collapse-header,.lm-Collapse-header) *{color:#c3d0da!important;}
+
+
+  /* ======================================================================
+     2026-09-28 (Paket 17 CSS, Skizze) — FREE WIDGETS, AND THEIR TOOLTIPS.
+     The toolbar goes (Paket 17 JS): every widget stands on its own in one
+     of two corners of the notebook area. The contract with the script:
+       .nbcorner.nbcorner-tl   top left, widgets from the top down
+       .nbcorner.nbcorner-bl   bottom left, widgets from the bottom up
+     Each child (.nbbtn, .nbzoomgrp, .nbprofile, .nbstat-chip or anything
+     with .nbwid) becomes a chip of its own: the skin's surface, edge,
+     corner and font, a soft shadow so it reads over the text, a lift on
+     hover. Retro: hard shadow, square. Cyber: neon edge. Fairy: round, glow.
+     The containers only place; the script positions them (left/top/bottom). */
+  .nbcorner{position:fixed;z-index:1300;display:flex;gap:6px;
+      align-items:flex-start;pointer-events:none;}
+  .nbcorner-tl{flex-direction:column;}
+  .nbcorner-bl{flex-direction:column-reverse;}
+  .nbcorner > *{pointer-events:auto;}
+  html body .nbcorner > :is(.nbbtn,.nbzoomgrp,.nbprofile,.nbwid){
+      box-sizing:border-box;min-width:34px;height:34px;padding:0 8px;
+      display:inline-flex;align-items:center;justify-content:center;gap:4px;
+      background:color-mix(in srgb,var(--nbskin-surf,#ffffff) 92%%,transparent)!important;
+      -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+      color:var(--nbskin-ink,#1f2933)!important;
+      border:1px solid var(--nbskin-line,#c3ced8)!important;
+      border-radius:min(var(--nbskin-pill-r,10px),17px)!important;
+      font-family:var(--nbskin-font,inherit);font-size:15px;font-weight:700;
+      box-shadow:0 2px 10px rgba(20,30,40,.16);
+      transition:transform var(--nbm-grow-dur,.18s) var(--nbm-spin-ease,ease),
+                 box-shadow .18s ease,border-color .18s ease;}
+  html body .nbcorner > .nbzoomgrp .nbbtn{background:transparent!important;border:0!important;
+      height:28px;color:inherit!important;}
+  html body .nbcorner > :is(.nbbtn,.nbwid):hover,
+  html body .nbcorner > :is(.nbbtn,.nbwid):focus-visible{
+      transform:translateX(2px);
+      border-color:var(--nbskin-acc2,#2c6e91)!important;
+      box-shadow:0 3px 14px rgba(20,30,40,.22),0 0 0 1px var(--nbskin-acc2,#2c6e91);
+      outline:none;}
+  html body .nbcorner > :is(.nbbtn,.nbwid).on,
+  html body .nbcorner > :is(.nbbtn,.nbwid)[aria-pressed="true"]{
+      border-color:var(--nbskin-acc,#1d5c8a)!important;
+      color:var(--nbskin-acc,#1d5c8a)!important;}
+  html body.nbdark .nbcorner > :is(.nbbtn,.nbzoomgrp,.nbprofile,.nbwid){
+      box-shadow:0 2px 12px rgba(0,0,0,.45);}
+  html body.nbskin-retro .nbcorner > :is(.nbbtn,.nbzoomgrp,.nbprofile,.nbwid){
+      border-radius:0!important;box-shadow:3px 3px 0 var(--nbskin-line,#c8a878);
+      -webkit-backdrop-filter:none;backdrop-filter:none;
+      background:var(--nbskin-surf)!important;}
+  html body.nbskin-retro .nbcorner > :is(.nbbtn,.nbwid):hover{
+      transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--nbskin-acc,#a8460f);}
+  html body.nbskin-cyber .nbcorner > :is(.nbbtn,.nbzoomgrp,.nbprofile,.nbwid){
+      box-shadow:0 0 0 1px color-mix(in srgb,var(--nbskin-acc) 35%%,transparent),
+                 0 0 12px color-mix(in srgb,var(--nbskin-acc) 18%%,transparent);}
+  html body.nbskin-fairy .nbcorner > :is(.nbbtn,.nbzoomgrp,.nbprofile,.nbwid){
+      box-shadow:0 4px 16px color-mix(in srgb,var(--nbmark,#b06cff) 22%%,transparent);}
+  /* the tooltip bubble (Paket 7, needs the script: title → data-nbtip, one
+     `.nbtip` element it moves and fills). Skin surface and ink, small,
+     never over the pointer; `data-side` = where it sits of its anchor. */
+  .nbtip{position:fixed;z-index:1500;pointer-events:none;max-width:260px;
+      padding:5px 9px;font-size:.8em;line-height:1.35;font-weight:600;
+      font-family:var(--nbskin-font,inherit);
+      background:var(--nbskin-ink,#1f2933);color:var(--nbskin-surf,#ffffff);
+      border:1px solid var(--nbskin-line,#c3ced8);
+      border-radius:min(var(--nbskin-r,6px),8px);
+      box-shadow:0 4px 14px rgba(20,30,40,.22);
+      opacity:0;transform:translateY(2px);
+      transition:opacity .12s ease,transform .12s ease;}
+  .nbtip.on{opacity:1;transform:none;}
+  body.nbskin-retro .nbtip{border-radius:0;box-shadow:3px 3px 0 var(--nbskin-line);}
+  body.nbskin-cyber .nbtip{background:var(--nbskin-surf);color:var(--nbskin-acc);
+      border-color:var(--nbskin-acc);box-shadow:0 0 10px color-mix(in srgb,var(--nbskin-acc) 35%%,transparent);}
+  body.nbskin-fairy .nbtip{border-radius:12px;}
+  @media (prefers-reduced-motion:reduce){ .nbtip,.nbcorner > *{transition:none!important;} }
+
+  /* ======================================================================
+     2026-09-28 (R3 · Befund R2, Skizze) — THE TOOLTIP BUBBLE WINS.
+     JS `tipBubble()` writes an inline look into `.nbtip` (cssText, no
+     !important); the rules above had none either and lost (R2 image: the
+     bubble in the script's grey). The skin's look now carries !important;
+     position (left/top) stays the script's. */
+  html body .nbtip{background:var(--nbskin-surf,#fff)!important;color:var(--nbskin-ink,#1f2933)!important;
+      border:1px solid var(--nbskin-line,#c3ced8)!important;
+      border-radius:min(var(--nbskin-r,8px),10px)!important;
+      font-family:var(--nbskin-font,inherit)!important;font-size:12px!important;line-height:1.4!important;
+      padding:5px 9px!important;box-shadow:0 6px 18px rgba(0,0,0,.16)!important;
+      max-width:260px!important;white-space:normal!important;}
+  html body.nbskin-retro .nbtip{border-radius:0!important;border-color:var(--nbskin-acc2)!important;
+      box-shadow:3px 3px 0 var(--nbskin-line)!important;}
+  html body.nbskin-cyber .nbtip{color:var(--nbskin-acc)!important;border-color:var(--nbskin-acc)!important;
+      box-shadow:0 0 12px color-mix(in srgb,var(--nbskin-acc) 40%%,transparent)!important;
+      letter-spacing:.4px!important;}
+  html body.nbskin-fairy .nbtip{border-radius:14px!important;
+      box-shadow:0 6px 20px color-mix(in srgb,var(--nbskin-acc) 28%%,transparent)!important;}
+
+  /* ======================================================================
+     2026-09-29 (Eilauftrag E6.6, Oberfläche, Skizze) — THE LENS LOOKS AS IT
+     DID BEFORE R3: A SLIDER WITH A MAGNIFIER, NOT A CHIP THAT GROWS.
+     R3 · 17 Teil 2 put the whole group into one chip (surface, edge, shadow)
+     and let the chip grow with its slider. The reader wants the old look
+     back: the magnifier is the widget's sign and wears the corner chip like
+     every other widget (34 × 34); the slider stands free beside it — no box,
+     a slim track in the skin's line colour, a round thumb in its accent.
+     WHERE it stands (top left, right of full screen) and which way the
+     slider lies is the script's (E6.6 JS); these rules hold either way. */
+  html body #nbpanel-root#nbpanel-root .nbcorner > .nbzoomgrp.nbz-doc{
+      background:transparent!important;border:0!important;box-shadow:none!important;
+      -webkit-backdrop-filter:none!important;backdrop-filter:none!important;
+      padding:0!important;min-width:0!important;gap:8px!important;
+      align-items:center!important;}
+  html body #nbpanel-root#nbpanel-root .nbcorner > .nbzoomgrp.nbz-doc > .nbslval{
+      box-sizing:border-box;display:inline-flex!important;align-items:center;justify-content:center;
+      width:34px!important;height:34px!important;min-width:34px!important;
+      font-size:15px!important;line-height:1!important;
+      background:color-mix(in srgb,var(--nbskin-surf,#ffffff) 92%%,transparent)!important;
+      border:1px solid var(--nbskin-line,#c3ced8)!important;
+      border-radius:min(var(--nbskin-pill-r,10px),17px)!important;
+      box-shadow:0 2px 10px rgba(20,30,40,.16);
+      pointer-events:none;}
+  html body.nbdark #nbpanel-root#nbpanel-root .nbcorner > .nbzoomgrp.nbz-doc > .nbslval{box-shadow:0 2px 12px rgba(0,0,0,.45);}
+  html body.nbskin-retro #nbpanel-root#nbpanel-root .nbcorner > .nbzoomgrp.nbz-doc > .nbslval{
+      border-radius:0!important;box-shadow:3px 3px 0 var(--nbskin-line,#c8a878);}
+  html body.nbskin-fairy #nbpanel-root#nbpanel-root .nbcorner > .nbzoomgrp.nbz-doc > .nbslval{
+      box-shadow:0 4px 16px color-mix(in srgb,var(--nbmark,#b06cff) 22%%,transparent);}
+  html body #nbpanel-root#nbpanel-root .nbcorner > .nbzoomgrp.nbz-doc .nbslider{
+      background:var(--nbskin-line,#cfd7de)!important;border-radius:999px!important;
+      box-shadow:none!important;}
+  html body #nbpanel-root#nbpanel-root .nbcorner > .nbzoomgrp.nbz-doc .nbslider:not([style*="vertical"]){
+      width:110px;height:4px!important;}
+  html body #nbpanel-root#nbpanel-root .nbcorner > .nbzoomgrp.nbz-doc .nbslider::-webkit-slider-thumb{
+      width:14px!important;height:14px!important;border-radius:50%%!important;
+      background:var(--nbskin-acc,#4a9fd5)!important;
+      box-shadow:0 1px 3px rgba(20,30,40,.30)!important;}
+  html body #nbpanel-root#nbpanel-root .nbcorner > .nbzoomgrp.nbz-doc .nbslider::-moz-range-thumb{
+      width:14px!important;height:14px!important;border-radius:50%%!important;
+      background:var(--nbskin-acc,#4a9fd5)!important;}
+  html body.nbskin-retro #nbpanel-root#nbpanel-root .nbcorner > .nbzoomgrp.nbz-doc .nbslider::-webkit-slider-thumb{border-radius:0!important;}
+  /* while the script still stands the slider up (16 px wide box), the
+     track is drawn slim in its middle instead of filling the box */
+  html body #nbpanel-root#nbpanel-root .nbcorner > .nbzoomgrp.nbz-doc .nbslider[style*="vertical"]{
+      background:linear-gradient(90deg,transparent calc(50%% - 2px),var(--nbskin-line,#cfd7de) calc(50%% - 2px),
+                 var(--nbskin-line,#cfd7de) calc(50%% + 2px),transparent calc(50%% + 2px))!important;}
+
+  /* ======================================================================
+     2026-09-29 — EILAUFTRAG E8.14 (Oberfläche, Skizze; Klick/Zustand macht
+     JS). THE PULL TAB IS VARIANT C: AN ARROW IN A CIRCLE. User's choice
+     (knopf-varianten.png). No ^, no grip lines: a round button in the
+     panel's surface with a ring and an arrow in the style's accent. Shut,
+     the arrow points left („pull the timeline out“); open (.nbnames, or
+     .nbpanel-open if the script sets one) it has turned 180° and points
+     right („push it back“). The turn is animated.
+     E12.1: it turns where the names go — on JS' `data-names="1"` (any
+     name readable: `nbnames` and not `nbnotext`); without the attribute
+     the same condition from the classes. So the arrow flips at the width
+     where the last text disappears. placeDock/placeCursor
+     still hang it flush on the panel's left edge and centre it vertically. */
+  html body #nbpanel-root#nbpanel-root#nbpanel-root.vert .nbgrip{
+      width:calc(28px * var(--nbk,1))!important;height:calc(28px * var(--nbk,1))!important;
+      min-height:0!important;padding:0!important;box-sizing:border-box!important;
+      border-radius:50%%!important;border:1.5px solid var(--nbskin-acc,#1d5c8a)!important;
+      background:var(--nbpanel-surf,var(--nbskin-surf,#fff))!important;
+      box-shadow:0 1px 4px rgba(0,0,0,.18)!important;cursor:pointer;
+      transition:background .15s ease,box-shadow .15s ease,transform .15s ease;}
+  html body #nbpanel-root#nbpanel-root#nbpanel-root.vert .nbgrip span{display:none!important;}
+  html body #nbpanel-root#nbpanel-root#nbpanel-root.vert .nbgrip::before{display:none!important;}
+  html body #nbpanel-root#nbpanel-root#nbpanel-root.vert .nbgrip::after{
+      content:''!important;position:absolute!important;left:50%%!important;top:50%%!important;
+      width:calc(8px * var(--nbk,1))!important;height:calc(8px * var(--nbk,1))!important;
+      margin:0!important;box-sizing:border-box;opacity:1!important;
+      border:0!important;border-left:2.5px solid var(--nbskin-acc,#1d5c8a)!important;
+      border-bottom:2.5px solid var(--nbskin-acc,#1d5c8a)!important;
+      transform:translate(-30%%,-50%%) rotate(45deg)!important;
+      transition:transform .32s cubic-bezier(.3,.7,.3,1)!important;}
+  html body #nbpanel-root#nbpanel-root#nbpanel-root.vert:is([data-names="1"],.nbnames:not(.nbnotext):not([data-names]),.nbpanel-open) .nbgrip::after{
+      transform:translate(-70%%,-50%%) rotate(225deg)!important;}
+  html body #nbpanel-root#nbpanel-root#nbpanel-root.vert .nbgrip:is(:hover,:focus-visible,.nbdragging){
+      background:var(--nbskin-acc,#1d5c8a)!important;
+      box-shadow:0 0 0 3px color-mix(in srgb,var(--nbskin-acc,#1d5c8a) 22%%,transparent),
+                 0 2px 6px rgba(0,0,0,.22)!important;}
+  html body #nbpanel-root#nbpanel-root#nbpanel-root.vert .nbgrip:is(:hover,:focus-visible,.nbdragging)::after{
+      border-color:var(--nbpanel-surf,var(--nbskin-surf,#fff))!important;}
+
+  /* ======================================================================
+     2026-09-30 — EILAUFTRAG E11.11 (Oberfläche; das Ziehen macht JS,
+     E11.4). DER AUFKLAPPKNOPF ZEIGT DEZENT ↑↓: zwei kleine Spitzen über
+     und unter dem Kreis sagen „senkrecht ziehbar“ (die Lesehöhe), der Pfeil
+     im Kreis weiter „auf/zu“. Gezeichnet mit ::before (bisher die
+     Haarlinie der Lesehöhe, E9.1 — die fällt damit weg, vgl. E11.9): ein
+     Streifen 7 px × (Kreis + 2 × 8 px), per clip-path auf zwei Dreiecke
+     geschnitten, verbunden durch eine Nulllinie (malt nichts). Farbe =
+     Lesefarbe, in Ruhe halb durchsichtig, beim Berühren/Ziehen voll.
+     Vier IDs: gewinnt gegen die Haarlinien-Regeln aus 14-e7 (drei IDs)
+     in jeder Reihenfolge. × --nbk wie der Knopf selbst. */
+  html body #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root.vert .nbgrip::before{
+      content:''!important;display:block!important;position:absolute!important;
+      left:50%%!important;right:auto!important;width:calc(7px * var(--nbk,1))!important;
+      margin:0 0 0 calc(-3.5px * var(--nbk,1))!important;
+      top:calc(-9px * var(--nbk,1))!important;bottom:calc(-9px * var(--nbk,1))!important;height:auto!important;
+      border:0!important;border-radius:0!important;box-shadow:none!important;mix-blend-mode:normal!important;
+      background:var(--nbread,var(--nbskin-acc,#1d5c8a))!important;
+      clip-path:polygon(50%% 0,100%% calc(5px * var(--nbk,1)),50%% calc(5px * var(--nbk,1)),
+                        50%% calc(100%% - 5px * var(--nbk,1)),100%% calc(100%% - 5px * var(--nbk,1)),50%% 100%%,
+                        0 calc(100%% - 5px * var(--nbk,1)),50%% calc(100%% - 5px * var(--nbk,1)),
+                        50%% calc(5px * var(--nbk,1)),0 calc(5px * var(--nbk,1)))!important;
+      opacity:.5!important;transform:none!important;pointer-events:none!important;
+      transition:opacity .15s ease!important;}
+  html body #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root.vert .nbgrip:is(:hover,:focus-visible,.nbdragging)::before,
+  html body #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root.vert.nbread-drag .nbgrip::before{
+      opacity:1!important;}
+  @media print{ html body #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root.vert .nbgrip::before{display:none!important;} }
+
+  /* ======================================================================
+     2026-10-06 — EILAUFTRAG E23.10 (Struktur; Lage der Zelle JS). EIGENE
+     ZELLEN AUF DER HAUPTACHSE, SO BREIT WIE DER YOC-STREIFEN — und die
+     Werkzeugecke anders frei. Gemessen v1.63 (1400 × 900): JS rückt jede
+     eigene Zelle um den Platz der Ecke nach rechts (E21.3c, margin-left
+     inline 190 px); ihr Inhalt (720 px, E8.26) steht damit 95 px rechts der
+     Achse; die E22.8-Lösung (Rand beidseitig) machte sie 409 px schmal.
+     „Hat mal funktioniert“: bis v1.59 stand die Zelle mittig (E8.26) — und
+     die Ecke lag über ihr (Befund Dirigent a, J3). Jetzt hält nicht die
+     Zelle Abstand von der Ecke, sondern das Dokument:
+       * die Zelle selbst ist die Spalte: so breit wie der YOC-Streifen
+         (720 px × Lupe, höchstens die Breite der Zellenspalte), auf
+         der Mitte (margin auto) — ihre Box reicht nicht mehr über die
+         ganze Breite, die Ecke links hat nichts von ihr unter sich;
+       * der Scroller des Dokuments bekommt links UND rechts 52 px
+         (Spalte der Zeichen ⛶ ◐ ○ … ⌨ ⚙ 👤 + Luft): wird die Spalte breiter
+         als der Platz (Lupe ≳ 135 %%), wird sie für ALLE Blöcke gleich
+         schmaler und bleibt auf derselben Mitte — bei 60–125 %% ändert sich
+         nichts;
+       * der Streifen der Lupe oben links (192 × 32 px) ist ausgespart
+         (clip-path): was darunter scrollt, ist dort nicht gezeichnet und
+         nimmt dort keinen Klick — die Ecke liegt über keinem Punkt einer
+         Zelle.
+     Dazu muss JS den Rand aus E21.3c weglassen (Inline-!important schlägt
+     jede Regel hier) — bis dahin bleibt C23.10 rot. Fremde Notebooks
+     unberührt ([data-digichem], .nbrail-own). */
+  html body:not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz) :is([data-digichem],.nbrail-own) .jp-WindowedPanel-outer{
+      padding-left:52px!important;padding-right:52px!important;box-sizing:border-box!important;
+      -webkit-clip-path:polygon(192px 0,100%% 0,100%% 100%%,0 100%%,0 32px,192px 32px);
+      clip-path:polygon(192px 0,100%% 0,100%% 100%%,0 100%%,0 32px,192px 32px);}
+  html body:not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz) :is([data-digichem],.nbrail-own) .jp-Notebook .jp-Cell[class*="nbown-"]{
+      box-sizing:border-box!important;
+      width:min(100%%,calc(var(--nbcolw,720px) * var(--nbzf,1)))!important;max-width:none!important;
+      margin-left:auto!important;margin-right:auto!important;}
+  html body:not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz) :is([data-digichem],.nbrail-own) .jp-Notebook .jp-Cell[class*="nbown-"] > *{
+      max-width:100%%!important;}
+
+  /* ======================================================================
+     2026-10-13 — E33 C1 (CSS; Verhalten und Lage JS 19-rail-title-sync
+     nbRailC1, claude/VERTRAG-E33-js.md). WIE IM LESEFENSTER: FORTSCHRITT OBEN,
+     KAPITELNAME UNTEN IM PANEL. JS legt `.nbp-xp` (> `.nbp-xp-t` + `.nbp-xp-bar`
+     > `.nbp-xp-fill`) als erstes und `.nbp-cur` als letztes Kind in
+     `#nbpanel-root .nbrail`, mit einem schlichten Inline-Rueckfall (Lage,
+     display, Systemschrift, Balken grau/gruen). Hier das Aussehen im Stil —
+     mit !important gegen den Rueckfall; Lage (top/bottom/left/right) und
+     display bleiben JS. Zeile wie im Fenster: Text links, Balken rechts. */
+  html body #nbpanel-root .nbrail > :is(.nbp-xp,.nbp-cur){box-sizing:border-box!important;
+      font-family:var(--nbskin-font,inherit)!important;font-size:calc(12px * var(--nbmkz,1))!important;line-height:1.3!important;
+      color:var(--nbskin-ink,#1f2933)!important;}
+  html body #nbpanel-root .nbrail > .nbp-xp{flex-direction:row!important;align-items:center!important;gap:8px!important;
+      padding:5px 10px!important;top:6px!important;
+      background:color-mix(in srgb,var(--nbskin-surf,#fff) 92%%,transparent)!important;border:1px solid var(--nbskin-line,#c3ced8)!important;
+      border-radius:min(var(--nbskin-r,10px),12px)!important;box-shadow:0 2px 10px rgba(20,30,40,.10)!important;}
+  html body #nbpanel-root .nbrail > .nbp-xp > .nbp-xp-t{flex:0 0 auto;font-weight:600!important;white-space:nowrap;color:var(--nbskin-quiet,#55636f)!important;}
+  html body #nbpanel-root .nbrail > .nbp-xp > .nbp-xp-bar{position:relative;flex:1 1 auto;min-width:24px;
+      height:calc(8px * var(--nbmkz,1))!important;border-radius:999px!important;background:var(--nbskin-track,#d7dfe7)!important;
+      box-shadow:inset 0 0 0 1px var(--nbskin-line,#c3ced8);}
+  html body #nbpanel-root .nbrail > .nbp-xp .nbp-xp-fill{border-radius:999px!important;background:#237a52!important;transition:width .3s;}
+  html body.nbskin-cyber #nbpanel-root .nbrail > .nbp-xp .nbp-xp-fill{background:var(--nbskin-acc)!important;box-shadow:0 0 8px var(--nbskin-acc);}
+  html body #nbpanel-root .nbrail[data-nbc1=shut] > .nbp-xp{padding:4px!important;gap:0!important;}
+  html body #nbpanel-root .nbrail > .nbp-cur{padding:4px 8px!important;bottom:4px!important;font-weight:700!important;
+      color:var(--nbskin-acc,#1d5c8a)!important;
+      background:color-mix(in srgb,var(--nbskin-surf,#fff) 92%%,transparent)!important;border-top:1px solid var(--nbskin-line,#c3ced8)!important;}
+  /* die Schiene blendet oben und unten 84 px aus (01-base E8.20, Maske auf .nbrail): die beiden Zeilen
+     liegen darin und waren blass. Ihr Band (--nbp-band) bleibt voll da; die Marken blenden darunter bzw.
+     darueber aus wie bisher am Rand */
+  /* Hauptwerkstatt E33 (Zusammenfuehren): nur bei offenem Panel ([data-nbc1=open], JS) — im schmalen/zugeklappten
+     Panel (Woerter weg, nur der Balken) machte das Band das Leuchten des Markers eckig (css_e25q C25.q "schmal
+     17 px" rot: 12x156 statt rund); dort gilt wieder die Maske von 01-base */
+  html body #nbpanel-root#nbpanel-root.vert .nbrail[data-nbc1=open]:has(> .nbp-xp, > .nbp-cur){
+      --nbp-band:42px;
+      -webkit-mask-image:linear-gradient(180deg,#000 0,#000 var(--nbp-band),transparent calc(var(--nbp-band) + 2px),
+          #000 calc(var(--nbp-band) + var(--nbfade,84px)),#000 calc(100%% - var(--nbp-band) - var(--nbfade,84px)),
+          transparent calc(100%% - var(--nbp-band) - 2px),#000 calc(100%% - var(--nbp-band)),#000 100%%);
+      mask-image:linear-gradient(180deg,#000 0,#000 var(--nbp-band),transparent calc(var(--nbp-band) + 2px),
+          #000 calc(var(--nbp-band) + var(--nbfade,84px)),#000 calc(100%% - var(--nbp-band) - var(--nbfade,84px)),
+          transparent calc(100%% - var(--nbp-band) - 2px),#000 calc(100%% - var(--nbp-band)),#000 100%%);}

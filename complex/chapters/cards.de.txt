@@ -1,0 +1,70 @@
+# E17.1 (2026-10-02, Inhalt) — die Karten der Cover-Zeitleiste auf Deutsch, Schlüssel wie in cards.txt.
+# Der Build gibt sie der Seite in der deutschen Titelkarte mit (.nbcover-de); vor Play bleibt das Cover Englisch.
+# Eine Zeile je Karte:  <Schlüssel>: <Text>
+
+# howto.py
+sub_how_to_use_this_notebook: Eine kurze Anleitung, wie das Notebook aufgebaut ist. Jedes Kapitel hat eine Idee mit ihrer Formel, eine Visualisierung und eine Aufgabe; der Programmierteil ist freiwillig. Sie erfahren auch, wie die Hinweise funktionieren und warum sich die Kapitel nacheinander öffnen.
+
+# teaches.py
+sub_what_you_will_be_able_to_do: Die Lernziele dieses Notebooks in einer Tabelle. Jedes Ziel gehört zu einer Aufgabe oder zum Quiz, so können Sie jedes davon selbst überprüfen.
+
+# roadmap.py
+sub_the_route_through_this_notebook: Ein Überblick über den Weg durch die sieben Kapitel. Er zeigt, wie eine einzige Definition, i² = −1, von der komplexen Ebene über die vier Grundrechenarten zur Polarform führt. Am Ende stellt sich die Multiplikation als Drehung mit Streckung heraus.
+
+# c01.py
+ch1: Manche Gleichungen, etwa x² + 1 = 0, haben keine Lösung in den reellen Zahlen. Dieses Kapitel führt die imaginäre Einheit i ein, definiert durch i² = −1, und zeigt, wie sie die fehlenden Nullstellen liefert. Sie lernen auch die beiden Teile jeder komplexen Zahl kennen, den Realteil und den Imaginärteil.
+fig1: Eine Parabel f(x) = x² + q, die Sie mit einem Schieberegler heben und senken. Reelle Nullstellen gibt es nur, solange die Kurve die waagerechte Achse schneidet. Sobald q positiv ist, verschwinden die Schnittpunkte, und die Nullstellen müssen anderswo gesucht werden.
+t1: Sie lösen die Gleichung z² + q = 0 für Ihren persönlichen Wert von q. Sie geben die Nullstelle mit positivem Imaginärteil an; dafür brauchen Sie nur eine Wurzel und die Definition von i.
+code_t1: Sie schreiben eine kurze Python-Funktion roots_of(q), die beide Nullstellen von z² + q = 0 zurückgibt. Sie macht aus der Rechnung von Aufgabe 1 Code, der für jedes positive q funktioniert.
+
+# c02.py
+ch2: Eine komplexe Zahl z = a + ib lässt sich als Punkt in einer Ebene zeichnen: der Realteil a auf der waagerechten Achse, der Imaginärteil b auf der senkrechten. So wird aus Algebra Geometrie, denn jede Zahl hat jetzt eine Lage, eine Länge und einen Winkel. Sie lernen auch, die vier Quadranten dieser Ebene zu benennen.
+fig2: Mit zwei Schiebereglern bewegen Sie einen Punkt durch die komplexe Ebene. Das Bild zeigt seinen Pfeil, seine Länge |z| und seinen Winkel φ. Mit b = 0 liegt der Punkt auf der waagerechten Achse und ist eine gewöhnliche reelle Zahl.
+t2: Sie entscheiden, in welchem Quadranten Ihre persönliche Zahl liegt. Die Vorzeichen von Realteil und Imaginärteil sind alles, was Sie brauchen.
+code_t2: Sie schreiben eine Funktion quadrant(a, b), die den Quadranten von z = a + ib zurückgibt. Sie muss auch eine Zahl erkennen, die auf einer der beiden Achsen liegt.
+
+# c03.py
+ch3: Komplexe Zahlen werden Teil für Teil addiert und subtrahiert: Realteil mit Realteil, Imaginärteil mit Imaginärteil. In der Ebene ist das die Addition von Pfeilen, bekannt als Parallelogrammregel. Die beiden Teile beeinflussen einander nie.
+fig3: Zwei Pfeile und ihre Summe oder Differenz in der komplexen Ebene. Die gestrichelten Linien schließen ein Parallelogramm. Die Subtraktion erweist sich als Addition des umgedrehten Pfeils.
+t3: Sie berechnen Summe und Differenz Ihrer beiden persönlichen Zahlen. Vier kleine Additionen und Subtraktionen füllen die vier Felder.
+code_t3: Sie schreiben eine Funktion add_sub(), die Summe und Differenz zweier komplexer Zahlen zurückgibt. Sie wendet die Regel aus Aufgabe 3 auf jedes Zahlenpaar an.
+
+# c04.py
+ch4: Um zwei komplexe Zahlen zu multiplizieren, multiplizieren Sie die Klammern aus und nutzen i² = −1. Dieser Schritt mischt Real- und Imaginärteil. Das Kapitel führt außerdem die konjugierte Zahl ein, die eine Zahl an der reellen Achse spiegelt, und zeigt, dass z mal seine konjugierte Zahl immer reell ist.
+fig4: Das obere Bild geht die Potenzen von i durch, und jeder Schritt ist eine Vierteldrehung. Das untere Bild zeigt eine Zahl mit ihrer konjugierten Zahl und ihrem Produkt, das immer reell bleibt.
+t4: Sie multiplizieren Ihre beiden persönlichen Zahlen von Hand. Am wichtigsten ist das Minuszeichen, das i·i = −1 in den Realteil bringt.
+code_t4: Sie schreiben eine Funktion mul(), die zwei komplexe Zahlen aus ihren vier Komponenten multipliziert. Die Prüfung probiert auch i·i, das Minuszeichen muss also stimmen.
+
+# c05.py
+ch5: Der Betrag |z| ist die Länge des Pfeils, und er folgt aus z mal seiner konjugierten Zahl. Die konjugierte Zahl macht auch die Division möglich: Sie erweitern Zähler und Nenner mit der konjugierten Zahl des Nenners, und der Nenner wird reell. Danach teilen Sie nur noch durch eine reelle Zahl.
+fig5: Jede Zahl liegt auf einem Kreis, dessen Radius ihr Betrag ist, und ihr Quotient ist daneben gezeichnet. Wie auch immer Sie die Punkte bewegen: Der Betrag des Quotienten ist gleich dem Quotienten der Beträge.
+t5: Sie teilen Ihre beiden persönlichen Zahlen mithilfe der konjugierten Zahl des Nenners. Die Zahlen sind so gewählt, dass das Ergebnis ganzzahlige Teile hat.
+code_t5: Sie schreiben eine Funktion divide(), die zwei komplexe Zahlen mit dem Trick der konjugierten Zahl teilt. Sie muss außerdem die Division durch null verweigern.
+
+# c06.py
+ch6: Jede komplexe Zahl lässt sich auch durch ihre Länge und ihren Winkel beschreiben: z = |z|·e^(iφ). Das ist die Polarform, und die Eulersche Formel verbindet sie mit Kosinus und Sinus. Das Kapitel zeigt auch, warum die einfache Formel arctan(b/a) in zwei der vier Quadranten den falschen Winkel liefert.
+fig6: Im oberen Bild läuft ein Pfeil um den Einheitskreis, und seine Schatten zeichnen Kosinus und Sinus. Das untere Bild vergleicht den wahren Winkel einer Zahl mit dem Winkel, den arctan(b/a) liefert.
+t6: Sie schreiben Ihre persönliche Zahl in Polarform, als Betrag und Winkel im Bogenmaß. Sehen Sie auf das Vorzeichen des Realteils, bevor Sie dem arctan trauen.
+code_t6: Sie schreiben eine Funktion to_polar(), die Betrag und Winkel einer Zahl zurückgibt. Der Winkel muss in allen vier Quadranten stimmen.
+
+# c07.py
+ch7: In Polarform wird die Multiplikation einfach: Die Beträge multiplizieren sich, die Winkel addieren sich. Jedes Produkt ist deshalb eine Streckung mit einer Drehung. Das ist die geometrische Bedeutung der komplexen Multiplikation, auf die sich Physik und Technik stützen.
+fig7: Zwei Zahlen, jede über ihre Länge und ihren Winkel eingestellt, mit ihrem Produkt oder Quotienten. Sie können eine reine Drehung oder eine reine Streckung erzeugen und beide Regeln bei der Arbeit sehen.
+t7: Sie steuern eine zweite Zahl mit zwei Schiebereglern, bis das Produkt auf einem Ziel landet. Sie tippen nichts ein, aber die Regel dieses Kapitels sagt Ihnen, wohin Sie zielen müssen.
+code_t7: Sie schreiben eine Funktion rotate(), die eine Zahl um einen gegebenen Winkel um den Ursprung dreht. Die Länge der Zahl muss gleich bleiben.
+
+# conclusion.py (E21.13)
+sub_conclusion: Alle Regeln dieses Notebooks auf einer Seite, von i² = −1 bis zur Multiplikation in Polarform, danach kurze Definitionen der Begriffe. Zum Wiederholen oder um schnell eine Formel nachzuschlagen. Zwei Hinweise schließen es ab: Die Sperren geben Ihr Tempo vor und sind keine Bewertung, und Ihre Zahlen kommen aus Ihrem eigenen Seed.
+
+# refs.py
+sub_references_and_licence: Die in den Kapiteln zitierten Quellen und die Lizenz dieses Notebooks. Die Lizenz erlaubt Ihnen, das Notebook zu nutzen, weiterzugeben und zu verändern.
+
+# quiz.py
+q1: Fünf Multiple-Choice-Fragen zum ganzen Notebook. Sie prüfen die zentralen Ideen, von i² = −1 bis zur arctan-Falle, und jede Antwort kommt mit einer kurzen Erklärung.
+
+# byod.py
+b1: Eine Zellmembran verhält sich wie ein Widerstand und ein Kondensator in Parallelschaltung, und ihre Impedanz ist eine komplexe Zahl. Sie führen ein kurzes Programm mit simulierten oder eigenen Werten aus und lesen Amplitude und Phase aus Betrag und Argument ab.
+
+# Ende und eigene Zellen (englisch: toolkit/card_facts.py _DEFAULT_DESC)
+end: Hier endet der geführte Teil des Notebooks. Alles darunter gehört Ihnen: Fügen Sie eigene Zellen hinzu und arbeiten Sie weiter.
+cell: Hier kommen Ihre eigenen Zellen hin. Klicken Sie auf die Marke, um unter dem geführten Teil eine neue Code-Zelle anzulegen und eigene Ideen auszuprobieren.

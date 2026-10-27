@@ -1,0 +1,23 @@
+build_chapter(None, "Remarks and limits", icon="⚠️", chapter_open=False, anchor="remarks",
+  info=note_box(
+    "<b>ℕ with or without 0 is a convention, not a fact.</b> This script uses "
+    "ℕ = {1, 2, 3, …} and writes ℕ₀ when zero is wanted" + cite(1) + "; a great many other "
+    "texts, and essentially all of computer science, start at 0. Neither is wrong. When a "
+    "formula involving ℕ is quoted, the convention has to be quoted with it.<br><br>"
+    "<b>A set has no order and no repeats</b> — which means a Python <code>list</code> is not "
+    "a set. <code>[2, 2, 5]</code> has three entries and a first element; <code>{2, 5}</code> "
+    "has two and neither. Most of the counting mistakes in the exercises above come from "
+    "treating one as the other, and that is exactly the distinction chapters 3 and 7 turn on: "
+    "a Cartesian product is ordered, a choice is not.<br><br>"
+    "<b>This notebook stops short of the subtleties.</b> Naive set theory, which is what is "
+    "used here and throughout the course, runs into trouble with sets that contain themselves; "
+    "avoiding that takes an axiom system nobody needs for biophysics" + cite(2) + ". "
+    "Similarly, 'uncountable' is stated here and not proved — the diagonal argument belongs to "
+    "a mathematics course.<br><br>"
+    "<b>The locks in this notebook are pacing, not assessment.</b> Everything runs in your "
+    "browser, the check functions sit in the same cell as the exercises, and the way past a "
+    "lock is deliberately left open. Treat the progress strip as a note to yourself about what "
+    "to revisit.<br><br>"
+    "<b>The exercise values are drawn from a seed.</b> That makes copying pointless, but it "
+    "also means your numbers are not your neighbour's — quote the seed when you ask someone "
+    "about a result" + cite(5) + ".", grey=True))

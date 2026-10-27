@@ -1,0 +1,206 @@
+  /* ======================================================================
+     2026-09-28c (K4) — PAST THE STANDARD WIDTH, EVERYTHING GROWS WITH IT.
+     applyGui sets --nbk = panel width / 560 (1 at and below the standard
+     width, at most 3). The marks and the names already scale with
+     --nbthick, which applyGui multiplies by the same factor; these are the
+     parts that were typed in pixels: the lane and its fills, the pips, the
+     marker and its trail, the cursor. At --nbk:1 every number here is the
+     one it replaces, so nothing below the standard width moves. */
+  html body #nbpanel-root.vert .nbmap-inner::before{
+      width:calc(8px * var(--nbk,1))!important;
+      margin-left:calc(-4px * var(--nbk,1))!important;}
+  html body #nbpanel-root.vert .nbmap-fill{
+      width:calc(8px * var(--nbk,1))!important;
+      margin-left:calc(-4px * var(--nbk,1))!important;}
+  html body #nbpanel-root.vert .nbmap-fill.tail{
+      width:calc(3px * var(--nbk,1))!important;
+      margin-left:calc(1px * var(--nbk,1))!important;}
+  html body #nbpanel-root.vert .nbmap-fill.code{
+      width:calc(16px * var(--nbk,1))!important;
+      margin-left:calc(-8px * var(--nbk,1))!important;}
+  html body #nbpanel-root.vert.nbnames .nbchapstat{
+      gap:calc(6px * var(--nbk,1))!important;
+      transform:translateY(calc(-50%% + var(--nblabh,6.24px) + 7.5px * var(--nbk,1)))!important;}
+  html body #nbpanel-root.vert.nbnames .nbchapstat .ps{
+      width:calc(9px * var(--nbk,1))!important;
+      height:calc(9px * var(--nbk,1))!important;
+      border-width:calc(1.5px * var(--nbk,1))!important;}
+  /* border-box: Chromium draws a border in whole pixels, so a 1-px border
+     scaled by 1.4 stays 1 px and the box would not grow in proportion. The
+     marker's own border is transparent (24at) — only its box counts. */
+  html body #nbpanel-root.vert .nbmap-here{
+      box-sizing:border-box!important;
+      width:calc(9px * var(--nbk,1))!important;
+      margin-left:calc(-3.5px * var(--nbk,1))!important;}
+  html body #nbpanel-root.vert .nbmap-here::before{
+      width:calc(7px * var(--nbk,1))!important;
+      margin-left:calc(-3.5px * var(--nbk,1))!important;
+      border-width:calc(1px * var(--nbk,1))!important;}
+  html body #nbpanel-root.vert .nbmap-cursor{
+      width:calc(30px * var(--nbk,1))!important;
+      height:calc(14px * var(--nbk,1))!important;}
+  html body #nbpanel-root.vert .nbmap-cursor::before{
+      right:calc(3px * var(--nbk,1))!important;
+      height:calc(6px * var(--nbk,1))!important;
+      margin-top:calc(-3px * var(--nbk,1))!important;
+      border-radius:calc(3px * var(--nbk,1))!important;}
+  html body #nbpanel-root.vert .nbmap-cursor:hover::before,
+  html body #nbpanel-root.vert .nbmap-cursor.nbdragging::before{
+      height:calc(10px * var(--nbk,1))!important;
+      margin-top:calc(-5px * var(--nbk,1))!important;}
+
+  /* 2026-09-28c (K3.1 Variante a, needed by K4) — A NAME THAT DOES NOT FIT
+     BREAKS AT A WORD INTO A SECOND LINE. The ellipsis only comes when two
+     lines are not enough. The column stays where K2.8 put it, centred. The
+     pips of a chapter hang under the name's LAST line: --nblabh is half the
+     name's height, set per node by fitNames(). */
+  html body #nbpanel-root.vert.nbnames .nbmap-node .nbmap-lab,
+  html body #nbpanel-root.vert.nbnames .nbmap-node .nbtasklab,
+  html body #nbpanel-root.vert.nbnames .nbmap-node.sect .nbmap-lab{
+      white-space:normal!important;overflow-wrap:normal!important;
+      word-break:normal!important;hyphens:manual!important;
+      display:-webkit-box!important;-webkit-box-orient:vertical!important;
+      -webkit-line-clamp:2!important;line-clamp:2;
+      overflow:hidden!important;text-overflow:ellipsis!important;}
+
+
+
+  /* ======================================================================
+     2026-09-29 (Eilauftrag E6.8, Oberfläche, Skizze) — THE SECOND XP BAR
+     HAS THE STYLE'S OWN COLOUR. JS (E6.8) draws the stretch from "Own
+     cell 1" down to "Your own cell" as .nbseg[data-s="own"] and fills it
+     with var(--nbxp2, var(--nbskin-acc2)). Here --nbxp2 is set per skin
+     and theme — a colour no other state on the lane uses (not green,
+     violet, amber, red, nor the marker's blue) — and the stretch wears a
+     light diagonal hatch, so it reads as "your own work", not as XP. */
+  body{--nbxp2:#1f9aa8;}
+  body.nbdark{--nbxp2:#4cc9d6;}
+  body.nbskin-cyber{--nbxp2:#ff4fd8;}
+  body.nbskin-cyber.nbdark{--nbxp2:#ff7be3;}
+  body.nbskin-retro{--nbxp2:#6f8a1f;}
+  body.nbskin-retro.nbdark{--nbxp2:#a9c24a;}
+  body.nbskin-fairy{--nbxp2:#e3649f;}
+  body.nbskin-fairy.nbdark{--nbxp2:#f59ac4;}
+  html body #nbpanel-root#nbpanel-root.vert .nbseg[data-s="own"]{
+      background-color:var(--nbxp2)!important;
+      background-image:repeating-linear-gradient(135deg,rgba(255,255,255,.28) 0 3px,transparent 3px 7px)!important;
+      box-shadow:none!important;}
+  /* the own cells' marks stand on that stretch and are nearly as tall as
+     their gaps, so they wear its colour too: the second bar reads as one
+     teal (cyber pink, retro olive, fairy rose) run from Own cell 1 down */
+  html body #nbpanel-root#nbpanel-root.vert .nbmap-node.own:not(:hover):not(.nbsel):not(.here) .nbsect{
+      background:var(--nbxp2)!important;
+      border-color:color-mix(in srgb,var(--nbxp2) 70%%,#000)!important;}
+
+
+  /* ======================================================================
+     2026-09-30 — EILAUFTRAG E9.3 (Struktur + Oberfläche, Skizze). ALLES IM
+     TIMELINE-PANEL SKALIERT MIT DER LUPE. Video des Nutzers: beim
+     Rauszoomen rücken die Dokument-Pillen zusammen, die Marken folgen ihnen,
+     aber Namen, Pips, Beschriftungen und Abstände behielten ihre Größe —
+     sie überlappten. Jetzt trägt jede Größe im Panel zwei Faktoren:
+       --nbk   Panelbreite / 560 (applyGui, wie bisher)
+       --nbzf  Faktor der Lupe (JS, Vertrag seit E8.2; ohne ihn 1)
+     Symbole und ihre Zeichen skalieren über --nbsym, das hier NUR innerhalb
+     von .nbmap mit --nbzf multipliziert wird (der Host behält 2.9, dort
+     liest applyGui es für die Passform). Namen, Pip-Größe, Pip-Beschriftung,
+     Lücken, Lane, Füllungen, Marker und Spur multiplizieren --nbzf direkt.
+     Bedienteile (Knopf, Scrollbar-Daumen, Ecken, Fenster) bleiben: sie
+     sind Werkzeug, nicht Dokument. Bei --nbzf:1 ist jede Zahl die alte. */
+  html body #nbpanel-root#nbpanel-root.vert .nbmap{
+      --nbz:var(--nbzf,1);
+      --nbkz:calc(var(--nbk,1) * var(--nbzf,1));
+      --nbsym:calc(2.9 * var(--nbzf,1));}
+  /* Namen und Aufgabennamen */
+  html body #nbpanel-root#nbpanel-root.vert .nbmap-node :is(.nbmap-lab,.nbtasklab){
+      font-size:calc(.80em * var(--nbthick,1) * var(--nbz,1))!important;}
+  html body #nbpanel-root#nbpanel-root.vert .nbmap-node.sect .nbmap-lab{
+      font-size:calc(.68em * var(--nbthick,1) * var(--nbz,1))!important;
+      letter-spacing:calc(2px * var(--nbz,1));}
+  /* Pips, ihre Reihen und Beschriftungen */
+  html body #nbpanel-root#nbpanel-root.vert.nbnames .nbchapstat{
+      --nbpp:calc(18px * var(--nbkz,1));
+      gap:calc(4px * var(--nbkz,1))!important;}
+  html body #nbpanel-root#nbpanel-root.vert .nbchapstat .nbpip-row{
+      gap:calc(6px * var(--nbkz,1));}
+  html body #nbpanel-root#nbpanel-root.vert .nbchapstat .nbpip-lab{
+      font-size:calc(10.5px * var(--nbkz,1));}
+  html body #nbpanel-root#nbpanel-root.vert.nbnames .nbchapstat .ps[data-kind]{
+      border-width:max(1px, calc(2px * var(--nbkz,1)))!important;}
+  /* Lane und Füllungen */
+  html body #nbpanel-root#nbpanel-root.vert .nbmap-inner::before,
+  html body #nbpanel-root#nbpanel-root.vert .nbmap-fill{
+      width:calc(8px * var(--nbkz,1))!important;
+      margin-left:calc(-4px * var(--nbkz,1))!important;}
+  html body #nbpanel-root#nbpanel-root.vert .nbmap-fill.tail{
+      width:calc(3px * var(--nbkz,1))!important;
+      margin-left:calc(1px * var(--nbkz,1))!important;}
+  html body #nbpanel-root#nbpanel-root.vert .nbmap-fill.code{
+      width:calc(16px * var(--nbkz,1))!important;
+      margin-left:calc(-8px * var(--nbkz,1))!important;}
+  /* Marker (Maße aus E8.13, 06-marks): die Breite; die Höhe setzt JS nach
+     der Marke; das Leuchten: E16.3, 06-marks */
+  html body #nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-here,
+  html body #nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-here::before{
+      width:calc(11px * var(--nbkz,1))!important;margin-left:calc(-5.5px * var(--nbkz,1))!important;}
+  /* das Lesezeichen (JS schreibt 12px × K inline, ohne !important) */
+  html body #nbpanel-root#nbpanel-root.vert .nbmap-node > .nbbm-ic{
+      font-size:calc(12px * var(--nbkz,1))!important;}
+
+  /* ======================================================================
+     2026-09-30 — EILAUFTRAG E10.3 (Struktur + Oberfläche). DIE SYMBOLE
+     SKALIEREN MIT DER LUPE — AUCH UNTER DEM BODEN. Gemessen im echten Lab
+     (v1.35, 1400 × 900, Lupe 60 %%): jede Marke nur × 0.737 statt × 0.6
+     (Kapitel 19.6 → 14.4 statt 11.8 px). Grund: applyGui hält die kleinste
+     Marke auf MARK_MIN_PX (markFloor) und misst das an Klonen IN .nbmap —
+     dort ist --nbsym schon × --nbzf, also hob der Boden --nbthick um 1/0.6
+     wieder an (0.52 → 0.639) und hob die Lupe auf. Der Boden ist eine Regel
+     für die PANELBREITE (bei Lupe 1, sein Cache-Schlüssel kennt die Lupe
+     nicht); die Lupe skaliert danach. Also misst die Sonde ohne Lupe:
+     --nbsym in `.nbprobe` = 2.9 wie am Host. Bei --nbzf:1 ändert sich nichts. */
+  html body #nbpanel-root#nbpanel-root.vert .nbmap .nbprobe{--nbsym:2.9;}
+
+  /* ======================================================================
+     2026-09-30 — EILAUFTRAG E11.10 (Struktur + Oberfläche). DIE
+     XP-FÜLLUNG SKALIERT MIT DER LUPE WIE DER REST DER TIMELINE. Gemessen
+     (v1.39, 1400 × 900): die Lane ist bei 60/100/150 %% 4.8/8.2/12.1 px
+     breit (E9.3, × --nbkz), die XP-Stücke (.nbseg, 05-document) blieben
+     8 px — bei 60 %% ragten sie 1.6 px je Seite über die Lane, bei 150 %%
+     ließen sie 2 px je Seite frei. Jetzt Breite, Versatz, Ecke und das
+     Schraffurmaß der eigenen Strecke (data-s="own") × --nbkz; bei
+     --nbkz:1 ist jede Zahl die alte. */
+  html body #nbpanel-root#nbpanel-root.vert .nbseg{
+      width:calc(8px * var(--nbkz,1))!important;
+      margin-left:calc(-4px * var(--nbkz,1))!important;
+      border-radius:calc(2px * var(--nbkz,1))!important;}
+  html body #nbpanel-root#nbpanel-root.vert .nbseg[data-s="own"]{
+      background-image:repeating-linear-gradient(135deg,rgba(255,255,255,.28) 0 calc(3px * var(--nbkz,1)),
+                       transparent calc(3px * var(--nbkz,1)) calc(7px * var(--nbkz,1)))!important;}
+
+  /* ======================================================================
+     2026-10-06 — EILAUFTRAG E23.8 (Oberfläche; Falten JS, E16.5). TITLE
+     ZUGEKLAPPT IM COVER: NUR TITEL- UND YOC-MARKE, KEINE LEISTE. Gemessen
+     v1.63 (Bild des Nutzers, Modeling hell): JS blendet alle Zeilen außer
+     Title und YOC aus; die beiden Spalten wuchsen dann (flex-grow) über die
+     ganze Lane — der Strahl der Titelspalte lief als dicke Leiste 150 px
+     nach rechts ins Leere, der Titelname stand 100 px links seiner Marke,
+     der YOC-Name 108 px rechts. Jetzt, solange `.nbtl-title.nbtl-shut`:
+       * beide Spalten fest (wachsen nicht), als Paar mittig in der Lane,
+         zwei benannte Spalten Abstand;
+       * kein Strahl, keine Leiste (::before aus; E13-Leiste und Rand-
+         Verlauf aus, unten);
+       * jeder Name mittig unter seiner Marke (wie die Kapitelnamen).
+     Die Höhe der Lane bleibt, die Marken bleiben auf ihrer Höhe. */
+  html body:not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz) .nbcover-tl:has(.nbtl-title.nbtl-shut) .nbcover-tl-list{
+      justify-content:center!important;gap:calc(6 * var(--nbtl-u,13.1px))!important;}
+  html body:not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz) .nbcover-tl:has(.nbtl-title.nbtl-shut) .nbtl-grp>.nbtl-row.nbtl-row:is(.nbtl-title,.nbtl-cell){
+      flex:0 0 calc(3 * var(--nbtl-u,13.1px))!important;min-width:0!important;}
+  html body:not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz) .nbcover-tl:has(.nbtl-title.nbtl-shut) .nbtl-row::before{display:none!important;}
+  html body:not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz) .nbcover-tl:has(.nbtl-title.nbtl-shut) :is(.nbtl-title,.nbtl-cell) .nbtl-nm{
+      left:50%%!important;right:auto!important;top:calc(50%% + 15px)!important;bottom:auto!important;
+      transform:translateX(-50%%)!important;text-align:center!important;}
+  /* … und die E13-Leiste mit ihrem Rand-Verlauf ist weg, auch wenn JS den
+     Rand-Zustand (data-fade) vom aufgeklappten Stand noch stehen hat. */
+  html body:not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz) .nbcover-tl:has(.nbtl-title.nbtl-shut) .nbtl-sb{display:none!important;}
+  html body:not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz) .nbcover-tl:has(.nbtl-title.nbtl-shut) .nbcover-tl-list{
+      -webkit-mask-image:none!important;mask-image:none!important;}

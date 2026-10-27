@@ -1,0 +1,421 @@
+<style data-nbstyle="__NBSTYLE__">
+  /* Hide the code-cell input ONLY for cells that have already rendered THIS
+     notebook's content (:has(.acc-group) / :has(.nb-runall)). This is scoped to
+     our own cells, so it can never hide an un-run cell or a cell in another
+     notebook/tab (that earlier global rule blocked opening the notebook). */
+  .jp-CodeCell:has(.acc-group) .jp-Cell-inputWrapper,
+  .jp-CodeCell:has(.acc-group) .jp-InputArea,
+  .jp-CodeCell:has(.acc-group) .jp-InputPlaceholder,
+  .jp-CodeCell:has(.nb-runall) .jp-Cell-inputWrapper,
+  .jp-CodeCell:has(.nb-runall) .jp-InputArea,
+  .jp-CodeCell:has(.nb-runall) .jp-InputPlaceholder{display:none!important;}
+  /* JupyterLab's left gutter — the [ ]: prompt and the blue collapser bar — is
+     what pushes the content column off the centre of the window. In a notebook
+     whose code is hidden it carries no information, so the prompt goes and the
+     blue bar becomes a hairline that still collapses the output when clicked.
+     With the gutter gone the content is centred in the notebook's own viewport,
+     which is exactly the axis the floating panel is placed on. */
+  :where([data-digichem],.nbrail-own) .jp-Cell .jp-InputPrompt,:where([data-digichem],.nbrail-own) .jp-Cell .jp-OutputPrompt{display:none!important;}
+  :where([data-digichem],.nbrail-own) .jp-Cell .jp-Collapser{width:4px!important;min-width:4px!important;flex:0 0 4px!important;
+      border-radius:2px;background:transparent!important;opacity:.5;
+      transition:opacity .2s ease,background .2s ease;}
+  :where([data-digichem],.nbrail-own) .jp-Cell.jp-mod-active .jp-Collapser{background:#c9d3db!important;}
+  :where([data-digichem],.nbrail-own) .jp-Cell .jp-Collapser:hover{opacity:1;background:#2c6e91!important;}
+  body[data-jp-theme-light="false"] :where([data-digichem],.nbrail-own) .jp-Cell.jp-mod-active .jp-Collapser{
+      background:#39424b!important;}
+  :where([data-digichem],.nbrail-own) .jp-Cell .jp-OutputArea-child .jp-OutputArea-output{width:100%%;}
+  :where([data-digichem],.nbrail-own) .widget-html-content p { margin:.35em 0; }
+  /* the action controls share ONE pill style; only the colour differs. The Solution
+     reveal (.sol-btn) is the SAME pill as the yellow self-check button, in green, so the
+     two read as one family (each keeps its own colour). */
+  .nb-runall,.sc-btn,.sol-btn{
+      display:inline-flex!important;align-items:center!important;justify-content:center!important;
+      line-height:1!important;border:none!important;border-radius:12px!important;
+      padding:11px 30px!important;font-weight:800!important;font-size:1.12em!important;
+      cursor:pointer!important;letter-spacing:.3px!important;
+      box-shadow:0 4px 12px rgba(0,0,0,.16)!important;width:auto!important;}
+  /* the play glyph / FA icon sits on the text's optical middle */
+  .nb-runall i,.sc-btn i{line-height:1!important;display:inline-flex!important;align-items:center!important;}
+  .nb-runall{background:linear-gradient(180deg,#3aa76d,#2c8f66)!important;color:#fff!important;}
+  .sc-btn{background:linear-gradient(180deg,#e6b52a,#d59e12)!important;color:#fff!important;
+      text-shadow:0 1px 2px rgba(90,60,0,.45)!important;}
+  .sol-btn{background:linear-gradient(180deg,#3fa877,#2f8f6f)!important;color:#fff!important;}
+  .nb-runall:hover,.sc-btn:hover,.sol-btn:hover{filter:brightness(1.05);}
+  .nb-runall:active,.sc-btn:active,.sol-btn:active{transform:translateY(1px);}
+
+  /* 2026-09-24ag — CHECK AND SOLUTION SPEAK THE DOCUMENT'S LANGUAGE.
+     Two filled, shadowed, gradient pills in the middle of a page whose whole
+     design is one quiet surface and colour only where it means something. They
+     were the loudest things on the page and they are not the point of it — the
+     question is. So: an outline, the colour in the line and the label, the
+     surface left alone. They keep their two colours, because those two colours
+     already mean "check" and "reveal" everywhere else in the notebook.
+     `.nb-runall` is deliberately NOT included: it is the one instruction a
+     first-time reader is given, and it may shout. */
+  body.nbquiet .sc-btn,body.nbquiet .sol-btn{
+      background:transparent!important;background-image:none!important;
+      box-shadow:none!important;text-shadow:none!important;
+      border:1.5px solid currentColor!important;border-radius:11px!important;
+      font-weight:700!important;font-size:1em!important;letter-spacing:.2px!important;
+      padding:9px 22px!important;}
+  body.nbquiet .sc-btn{color:#b07d08!important;}
+  /* 2026-09-24ai — THE ANSWER ROW GETS AIR.
+     The input boxes sat directly under whatever came before them — the hint
+     line, the code editor — so they read as part of that widget instead of as
+     the place where the reader does something. A clear gap in front of them,
+     and in front of the button that goes with them, is the whole fix. */
+  body.nbquiet .acc-practice .widget-inline-hbox,
+  body.nbquiet .acc-code .widget-inline-hbox,
+  body.nbquiet .acc-practice .widget-text,
+  body.nbquiet .acc-code .widget-text,
+  body.nbquiet .acc-practice .widget-textarea,
+  body.nbquiet .acc-code .widget-textarea{margin-top:16px!important;}
+  body.nbquiet .sc-btn,body.nbquiet .sol-btn{margin-top:16px!important;}
+  /* 2026-09-24ak — and a gap SIDEWAYS too. Two answer boxes in one row sat flush
+     against each other, so "Im(z) =" read as part of the box in front of it.
+     ipywidgets' own 2px margin was removed with the 880px cap it came with. */
+  /* No :last-child exception. ipywidgets wraps each inline widget in a box of
+     its own, so every one of them IS a last child and the exception cancelled
+     the rule for all of them — measured margin-right 0px. A trailing gap on the
+     last box costs nothing: the row is centred. */
+  /* 2026-09-28b (K2.4) — …on BOTH sides. "The row is centred" was true of
+     the margin box, not of what the reader sees: 20 px on the right only put
+     every answer row, every code field and every feedback line 9–10 px left
+     of the exercise's centre (measured 28a, lab_center). Half on each side
+     keeps the 20 px between two boxes and centres the ones that stand alone. */
+  body.nbquiet .acc-practice .widget-inline-hbox,
+  body.nbquiet .acc-code .widget-inline-hbox{
+      margin-left:10px!important;margin-right:10px!important;}
+  body.nbquiet .acc-practice .widget-label,
+  body.nbquiet .acc-code .widget-label{padding-right:10px!important;}
+  /* K2.4 — what an exercise GENERATES as HTML (feedback, the quiz) sits in
+     JupyterLab's rendered-HTML box, which keeps 20 px of padding on the right
+     only: the multiple-choice quiz stood 10 px left of the centre (28a). In
+     the exercise parts the padding goes on both sides or neither; and the
+     quiz's own box is centred in what is left. */
+  .acc-practice .jp-RenderedHTMLCommon,.acc-code .jp-RenderedHTMLCommon,
+  .acc-exsec .jp-RenderedHTMLCommon{padding-left:0!important;padding-right:0!important;}
+  /* 2026-10-01 E10 Teil 4 (K2.4, lab_center) — two more of the same kind.
+     JupyterLab gives printed output (.jp-RenderedText) 1ch of padding on the
+     LEFT only: the stdout box of "bring your own data" stood 3.9 px right of
+     the centre. And a hint is left-aligned text in a centred 640 px box: its
+     lines stop short of the right edge, so the text stood 2–9 px left of it.
+     Padding on both sides; hints justified, the last line centred — as the
+     end's note (12-k3). */
+  .acc-practice .jp-RenderedText,.acc-code .jp-RenderedText,
+  .acc-exsec .jp-RenderedText{padding-right:1ch!important;}
+  .nbhint{text-align:justify!important;text-align-last:center;}
+  .acc-exsec .Quiz,.acc-exsec .MultipleChoiceQn,.acc-exsec .ManyChoiceQn,
+  .acc-exsec .NumericQn,.acc-exsec .StringQn{
+      margin-left:auto!important;margin-right:auto!important;}
+  body.nbquiet .acc-exsec .widget-inline-hbox{
+      margin-left:10px!important;margin-right:10px!important;}
+  /* …and a list of options (the quadrant question) is as wide as its longest
+     option, so the list — circles and words — stands on the centre instead
+     of the left of a 560 px box (28a: the words ended 70 px left of it). The
+     options stay left-aligned under one another. */
+  .acc-practice .widget-radio,.acc-code .widget-radio,.acc-exsec .widget-radio{
+      width:auto!important;max-width:100%%!important;}
+  .acc-practice .widget-radio-box,.acc-code .widget-radio-box,
+  .acc-exsec .widget-radio-box{width:fit-content!important;max-width:100%%!important;}
+  body.nbquiet .sol-btn{color:#2f8f6f!important;}
+  body.nbquiet .sc-btn:hover{background:rgba(214,158,18,.10)!important;filter:none;}
+  body.nbquiet .sol-btn:hover{background:rgba(63,168,119,.10)!important;filter:none;}
+  body[data-jp-theme-light="false"].nbquiet .sc-btn{color:#e0ad4a!important;}
+  body[data-jp-theme-light="false"].nbquiet .sol-btn{color:#4fbf8b!important;}
+  body[data-jp-theme-light="false"].nbquiet .sc-btn:hover{
+      background:rgba(224,173,74,.14)!important;}
+  body[data-jp-theme-light="false"].nbquiet .sol-btn:hover{
+      background:rgba(79,191,139,.14)!important;}
+  /* the Solution <details> lays its pill out centred and hides the default triangle */
+  .sol-details{text-align:center;margin:12px auto;}
+  .sol-details>summary{list-style:none!important;}
+  .sol-details>summary::-webkit-details-marker{display:none!important;}
+  .sol-details>summary::marker{content:""!important;}
+  /* clickable "line — Back to <group> — line" header at the bottom of each group */
+  .nb-grouptop{cursor:pointer!important;text-decoration:none!important;opacity:.85;}
+  .nb-grouptop:hover{opacity:1;text-decoration:none!important;}
+  /* in-text source markers "[n]": normal-size (on the baseline, NOT superscript),
+     blue clickable numbers that jump to the matching References entry (see cite()) */
+  .cite-link{color:#2c6e91!important;text-decoration:none!important;cursor:pointer;font-weight:600;}
+  .cite-link:hover{text-decoration:underline!important;}
+  /* highlight a References entry for a moment after it is jumped to */
+  .ref-flash{animation:refflash 1.6s ease-out 1;}
+  /* E18.6: nur opacity animieren (bisher background) */
+  @keyframes refflash{0%%{opacity:.35;}100%%{opacity:1;}}
+  /* editable code box → adopt the selected Jupyter theme's editor colours & font */
+  :where([data-digichem],.nbrail-own) .codearea textarea{
+      font-family:var(--jp-code-font-family,monospace)!important;
+      font-size:var(--jp-code-font-size,13px)!important;line-height:1.5!important;
+      background:var(--jp-cell-editor-background,#f6f8fa)!important;
+      color:var(--jp-content-font-color1,#24292e)!important;
+      border:1px solid var(--jp-cell-editor-border-color,#c8ccd0)!important;
+      border-radius:8px!important;}
+  /* remove the default rectangular frame/shadow the ipywidgets accordion draws
+     around itself — only our styled pills and inner boxes should be visible */
+  :where([data-digichem],.nbrail-own) .jupyter-widget-Accordion,:where([data-digichem],.nbrail-own) .jupyter-widget-Collapse,:where([data-digichem],.nbrail-own) .jupyter-widget-Collapse-contents,
+  :where([data-digichem],.nbrail-own) .p-Accordion,:where([data-digichem],.nbrail-own) .p-Collapse,:where([data-digichem],.nbrail-own) .lm-Accordion,:where([data-digichem],.nbrail-own) .lm-Collapse,
+  :where([data-digichem],.nbrail-own) .jupyter-widget-Accordion-child,:where([data-digichem],.nbrail-own) .jp-OutputArea-child{
+      border:none!important;box-shadow:none!important;background:transparent!important;}
+  /* hide ALL scrollbars inside the accordions (including the horizontal bar that
+     appears on hover at the bottom of a chapter); content still scrolls by
+     wheel/drag, and nothing about centring changes */
+  .acc-chapter,.acc-chapter *,.acc-group,.acc-group *,
+  :where([data-digichem],.nbrail-own) .jupyter-widgets-output-area,:where([data-digichem],.nbrail-own) .widget-output,
+  :where([data-digichem],.nbrail-own) .jp-OutputArea,:where([data-digichem],.nbrail-own) .jp-OutputArea *,:where([data-digichem],.nbrail-own) .jp-Cell-outputWrapper,:where([data-digichem],.nbrail-own) .jp-Cell-outputWrapper *{
+      scrollbar-width:none!important;-ms-overflow-style:none!important;}
+  .acc-chapter::-webkit-scrollbar,.acc-chapter *::-webkit-scrollbar,
+  .acc-group::-webkit-scrollbar,.acc-group *::-webkit-scrollbar,
+  :where([data-digichem],.nbrail-own) .jupyter-widgets-output-area::-webkit-scrollbar,:where([data-digichem],.nbrail-own) .widget-output::-webkit-scrollbar,
+  :where([data-digichem],.nbrail-own) .jp-OutputArea::-webkit-scrollbar,:where([data-digichem],.nbrail-own) .jp-OutputArea *::-webkit-scrollbar,
+  :where([data-digichem],.nbrail-own) .jp-Cell-outputWrapper *::-webkit-scrollbar{width:0!important;height:0!important;display:none!important;background:transparent!important;}
+  /* accordion title bar -> centred pill sized to its label */
+  :where([data-digichem],.nbrail-own) .jupyter-widget-Collapse-header,:where([data-digichem],.nbrail-own) .p-Collapse-header,:where([data-digichem],.nbrail-own) .lm-Collapse-header{
+      width:fit-content!important;margin:8px auto!important;padding:10px 30px!important;
+      border:none!important;border-radius:12px!important;font-weight:800!important;
+      letter-spacing:.3px;color:#fff!important;justify-content:center!important;
+      text-align:center!important;box-shadow:0 4px 12px rgba(0,0,0,.16);
+      background:%(pill_chapter)s!important;}
+  :where([data-digichem],.nbrail-own) .jupyter-widget-Collapse-header *,:where([data-digichem],.nbrail-own) .p-Collapse-header *,:where([data-digichem],.nbrail-own) .lm-Collapse-header *{color:#fff!important;}
+  /* TOP LEVEL — the Chapter overview + the three section groups share one pill.
+     Only background + a bigger font are set here (NO padding), and this rule is
+     placed BEFORE the chapter/viz/practice/plain rules so their equal-specificity
+     rules win for the accordions NESTED inside a group (source-order wins) and the
+     bigger font does not leak onto the child chapter pills. */
+  /* TOP-LEVEL sections (Content overview + Introduction / Content / Appendix) are shown
+     as centred "— text —" HEADERS like the back-to footer lines, NOT pills, while the
+     header still toggles the section open/closed. Child combinator so ONLY the group's
+     own header is restyled — never the chapter/viz/practice pills nested inside it. */
+  .acc-group>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header,
+  .acc-group>.p-Collapse>.p-Collapse-header,
+  .acc-group>.lm-Collapse>.lm-Collapse-header{
+      background:transparent!important;box-shadow:none!important;border-radius:0!important;
+      color:#33475b!important;width:840px!important;max-width:94%%!important;
+      margin:18px auto 8px!important;padding:2px 0!important;
+      font-size:1.18em!important;font-weight:800!important;letter-spacing:.4px!important;
+      display:flex!important;align-items:center!important;gap:16px!important;justify-content:center!important;}
+  .acc-group>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header *,
+  .acc-group>.p-Collapse>.p-Collapse-header *,
+  .acc-group>.lm-Collapse>.lm-Collapse-header *{color:#33475b!important;}
+  .acc-group>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header::before,
+  .acc-group>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header::after,
+  .acc-group>.p-Collapse>.p-Collapse-header::before,
+  .acc-group>.p-Collapse>.p-Collapse-header::after,
+  .acc-group>.lm-Collapse>.lm-Collapse-header::before,
+  .acc-group>.lm-Collapse>.lm-Collapse-header::after{
+      content:"";flex:1 1 auto;border-top:2px solid currentColor;opacity:.35;}
+  /* chapter pills are made clearly bigger than the viz/practice pills nested inside them
+     (larger font + more padding), so the chapter heading stands out at a glance */
+  .acc-chapter  .jupyter-widget-Collapse-header,.acc-chapter  .p-Collapse-header{
+      background:%(pill_chapter)s!important;font-size:1.42em!important;padding:13px 40px!important;}
+  .acc-viz      .jupyter-widget-Collapse-header,.acc-viz      .p-Collapse-header{
+      background:%(pill_viz)s!important;font-size:0.95em!important;padding:8px 24px!important;}
+  .acc-practice .jupyter-widget-Collapse-header,.acc-practice .p-Collapse-header{
+      background:%(pill_practice)s!important;font-size:0.95em!important;padding:8px 24px!important;}
+  /* unnumbered meta sections (setup, overview, glossary, summary, …) → grey pill */
+  .acc-plain .jupyter-widget-Collapse-header,.acc-plain .p-Collapse-header{
+      background:linear-gradient(90deg,#7b8792,#9ba7b2)!important;}
+  /* HIDE the accordion's collapse caret so ONLY the label is horizontally centred in a
+     pill / header (the header still toggles open/closed on click). Covers both an icon
+     element and a ::before caret; the group ::before lines above are left untouched. */
+  :where([data-digichem],.nbrail-own) .jupyter-widget-Collapse-header i,:where([data-digichem],.nbrail-own) .p-Collapse-header i,:where([data-digichem],.nbrail-own) .lm-Collapse-header i,
+  :where([data-digichem],.nbrail-own) .jupyter-widget-Collapse-header svg,:where([data-digichem],.nbrail-own) .p-Collapse-header svg,:where([data-digichem],.nbrail-own) .lm-Collapse-header svg,
+  :where([data-digichem],.nbrail-own) .jupyter-widget-Collapse-header .fa,
+  :where([data-digichem],.nbrail-own) .jupyter-widget-Collapse-header [class*="icon"],
+  :where([data-digichem],.nbrail-own) .jupyter-widget-Collapse-header [class*="caret"],
+  :where([data-digichem],.nbrail-own) .jupyter-widget-Collapse-header [class*="arrow"]{display:none!important;}
+  .acc-chapter  .jupyter-widget-Collapse-header::before,
+  .acc-plain    .jupyter-widget-Collapse-header::before{content:none!important;display:none!important;}
+  /* .acc-viz / .acc-practice / .acc-code keep theirs: the quiet style puts the
+     fold triangle there (see below). */
+  /* centring aids that DO work here (also apply inside the top-level groups/overview) */
+  .acc-chapter .widget-hbox,.acc-chapter .jupyter-widget-hbox,
+  .acc-group .widget-hbox,.acc-group .jupyter-widget-hbox{justify-content:center!important;}
+  .acc-chapter img,.acc-group img{display:block;margin-left:auto!important;margin-right:auto!important;}
+  /* inline math (imath) must flow WITHIN the text line, not be block-centred like the
+     big formula/plot images above — higher specificity so it wins over that rule */
+  .acc-chapter img.imath,.acc-group img.imath{
+      display:inline-block!important;margin:0 2px!important;vertical-align:middle!important;}
+  .acc-chapter .jupyter-widgets-output-area,.acc-chapter .widget-output,
+  .acc-group .jupyter-widgets-output-area,.acc-group .widget-output{text-align:center;}
+  /* numbered / bulleted lists: bold markers + a clear gap to the text */
+  :where([data-digichem],.nbrail-own) .jp-RenderedMarkdown ol li::marker,:where([data-digichem],.nbrail-own) .jp-RenderedMarkdown ul li::marker,
+  :where([data-digichem],.nbrail-own) .rendered_html ol li::marker,:where([data-digichem],.nbrail-own) .rendered_html ul li::marker,
+  :where([data-digichem],.nbrail-own) .widget-html-content ol li::marker,:where([data-digichem],.nbrail-own) .widget-html-content ul li::marker{font-weight:800;}
+  :where([data-digichem],.nbrail-own) .jp-RenderedMarkdown li,:where([data-digichem],.nbrail-own) .rendered_html li,:where([data-digichem],.nbrail-own) .widget-html-content li{margin:6px 0;padding-left:10px;}
+  /* centre the whole quiz and each question box on the main axis */
+  :where([data-digichem],.nbrail-own) .Quiz{max-width:880px!important;margin:0 auto!important;}
+  /* jupyterquiz question boxes → interpretation-box look, in purple */
+  :where([data-digichem],.nbrail-own) .MultipleChoiceQn,:where([data-digichem],.nbrail-own) .ManyChoiceQn,:where([data-digichem],.nbrail-own) .NumericQn,:where([data-digichem],.nbrail-own) .StringQn{
+      background:linear-gradient(180deg,#ece0f7,#f4ecfb)!important;
+      border:4px solid #8155bf!important;border-radius:14px!important;
+      color:#1a1a1a!important;text-align:center!important;padding:16px 24px!important;
+      max-width:820px!important;margin:14px auto!important;}
+  :where([data-digichem],.nbrail-own) .MultipleChoiceQn p,:where([data-digichem],.nbrail-own) .ManyChoiceQn p,:where([data-digichem],.nbrail-own) .NumericQn p,:where([data-digichem],.nbrail-own) .StringQn p{
+      color:#1a1a1a!important;text-align:center!important;}
+  /* quiz answer buttons → setup-box look, in a lighter purple; keep green/red feedback */
+  :where([data-digichem],.nbrail-own) .Quiz .MCButton{
+      background:linear-gradient(180deg,#f4ecfb,#faf6fe)!important;
+      border:1px solid #b79fd4!important;border-radius:14px!important;
+      color:#1a1a1a!important;padding:12px 14px!important;}
+  :where([data-digichem],.nbrail-own) .Quiz .MCButton p{color:#1a1a1a!important;}
+  :where([data-digichem],.nbrail-own) .Quiz .MCButton.correctButton{
+      background:linear-gradient(180deg,#cdefd8,#e9f7ee)!important;border-color:#2f8f6f!important;color:#155e43!important;}
+  :where([data-digichem],.nbrail-own) .Quiz .MCButton.incorrectButton{
+      background:linear-gradient(180deg,#f6d2d2,#fbeaea)!important;border-color:#c0392b!important;color:#922b21!important;}
+
+
+  /* ======================================================================
+     2026-09-29 — EILAUFTRAG E8.20 (Oberfläche, Skizze). THE MIDDLE OF THE
+     PAGE STEPS FORWARD. Document and timeline fade out softly over a fixed
+     band at their top and bottom edge (--nbfade, 84 px), so the reading
+     line in the middle is where the page is fully there. A mask on the
+     SCROLLER (and on the timeline's rail box), not on the content: it is
+     painted on the window onto the page, so it stands still while the page
+     scrolls through it. Our notebook only; never in print. */
+  html body :is([data-digichem],.nbrail-own) .jp-WindowedPanel-outer,
+  html body #nbpanel-root#nbpanel-root.vert .nbrail{
+      --nbfade:84px;
+      -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 var(--nbfade),
+                         #000 calc(100%% - var(--nbfade)),transparent 100%%);
+      mask-image:linear-gradient(180deg,transparent 0,#000 var(--nbfade),
+                 #000 calc(100%% - var(--nbfade)),transparent 100%%);}
+  @media print{
+    html body :is([data-digichem],.nbrail-own) .jp-WindowedPanel-outer,
+    html body #nbpanel-root#nbpanel-root.vert .nbrail{-webkit-mask-image:none;mask-image:none;}
+  }
+
+  /* ======================================================================
+     2026-10-02 — EILAUFTRAG E18.6 (Oberfläche; Fluss JS). ALLES FLÜSSIG:
+     ES WERDEN NUR transform UND opacity ANIMIERT. Übergänge auf Höhe,
+     Breite, Lage, Rand, Fläche, Schatten, Filter (gemessen v1.55: 58
+     Regeln) liefen im Hauptthread, auch mitten im Scrollen/Zoomen (XP-
+     Stücke `top/height`, Namen `width/height/font-size`, Marken
+     `background/border-color`). In unserem Notebook, im Panel und auf der
+     Cover-Timeline gilt jetzt nur noch die Liste unten: Drehen/Wachsen der
+     Marken (--nbspin/--nbgrow, registriert, treiben `transform`),
+     transform, opacity; alles andere springt. Dauer und Kurve bleiben die
+     der jeweiligen Regel. Keyframes: refflash/nbm-land opacity,
+     nbm-glow --nbgrow, nbcover-breathe transform. Kein will-change. */
+  html body:not(#nbz#nbz#nbz#nbz#nbz) :is(#nbpanel-root,[data-digichem],.nbrail-own,.nbcover-tl) *,
+  html body:not(#nbz#nbz#nbz#nbz#nbz) :is(#nbpanel-root,[data-digichem],.nbrail-own,.nbcover-tl) *::before,
+  html body:not(#nbz#nbz#nbz#nbz#nbz) :is(#nbpanel-root,[data-digichem],.nbrail-own,.nbcover-tl) *::after{
+      transition-property:--nbspin,--nbgrow,transform,opacity,translate,scale,rotate!important;}
+
+  /* ======================================================================
+     2026-10-02 — EILAUFTRAG E19.4 (Oberfläche; Erkennung und Anpassung JS,
+     Metadaten Python). DAS RÜCKFALL-AUSSEHEN — eine Datei für alle
+     Umgebungen. Vertrag an JS (am <html> der Seite, in der dieses
+     Stylesheet liegt; in Colab/VS Code ist das der Ausgabe-Rahmen):
+       data-nbenv="lab|nb7|lite|binder|colab|vscode|pycharm|other"
+       data-nbdock="1|0"   0 = kein Panel neben dem Dokument möglich
+       2026-10-03 (rebase v1.62, JS PAUSE-js): ebenso data-nbenv="page"
+       (statt other) und data-nbui="lab|frame|page" — frame/page = dock 0
+                           (Colab: Ausgabe im eigenen iframe; VS Code/
+                           PyCharm: Webview ohne Zugriff auf die Oberfläche)
+     Dunkel: wie überall body.nbdark (JS; VS Code meldet body.vscode-dark,
+     Colab prefers-color-scheme). Was das Stylesheet dann tut:
+       1  JupyterLab-Variablen, die es außerhalb von Jupyter nicht gibt
+          (--jp-content-font-color1, -font-family, --jp-code-font-*,
+          --jp-cell-editor-*), mit Werten der Umgebung bzw. hell/dunkel —
+          in Lab/NB7/Lite/Binder unberührt; color-scheme für Formularteile.
+       2  data-nbdock="0": keine schwebenden Teile (Leiste, Griff, Lesehöhen-
+          Cursor), das Panel steht als ruhige Werkzeugzeile im Fluss und die
+          Fortschritts-Leiste .nbprog (der eingebaute Rückfall) ist sichtbar
+          — auch wenn das Skript läuft (.nbrail-live) und auch schmal (< 821 px).
+       3  Text und Flächen in Colab/VS Code: Grund durchsichtig (die
+          Umgebung malt ihn), Text in deren Vordergrundfarbe. */
+  html:is([data-nbenv="colab"],[data-nbenv="vscode"],[data-nbenv="pycharm"],[data-nbenv="other"],[data-nbenv="page"]) body{
+      --jp-content-font-color1:rgba(0,0,0,.87);--jp-content-font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+      --jp-code-font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+      --jp-code-font-size:13px;--jp-cell-editor-background:#f5f7f9;--jp-cell-editor-border-color:#d6dee6;
+      color-scheme:light;}
+  html:is([data-nbenv="colab"],[data-nbenv="vscode"],[data-nbenv="pycharm"],[data-nbenv="other"],[data-nbenv="page"]) body.nbdark{
+      --jp-content-font-color1:rgba(255,255,255,.87);--jp-cell-editor-background:#1b2027;
+      --jp-cell-editor-border-color:#36414c;color-scheme:dark;}
+  html[data-nbenv="vscode"] body{
+      --jp-content-font-color1:var(--vscode-editor-foreground,rgba(0,0,0,.87));
+      --jp-content-font-family:var(--vscode-font-family,system-ui,sans-serif);
+      --jp-code-font-family:var(--vscode-editor-font-family,ui-monospace,monospace);
+      --jp-cell-editor-background:var(--vscode-notebook-cellEditorBackground,var(--vscode-editor-background,#f5f7f9));}
+  html[data-nbenv="vscode"] body.nbdark{
+      --jp-content-font-color1:var(--vscode-editor-foreground,rgba(255,255,255,.87));
+      --jp-cell-editor-background:var(--vscode-notebook-cellEditorBackground,var(--vscode-editor-background,#1b2027));}
+  html:is([data-nbenv="colab"],[data-nbenv="vscode"],[data-nbenv="pycharm"],[data-nbenv="other"],[data-nbenv="page"]) body{
+      color:var(--jp-content-font-color1);font-family:var(--jp-content-font-family);}
+  html:is([data-nbdock="0"],[data-nbui="frame"],[data-nbui="page"]) body #nbpanel-root :is(.nbrail,.nbgrip,.nbmap-cursor,.nbsb,.nbmap-here,.nbreadfix){display:none!important;}
+  html:is([data-nbdock="0"],[data-nbui="frame"],[data-nbui="page"]) body #nbpanel-root.nbpanel-host,
+  html:is([data-nbdock="0"],[data-nbui="frame"],[data-nbui="page"]) body #nbpanel-root.nbpanel-host .nbdock{
+      position:static!important;inset:auto!important;transform:none!important;
+      width:auto!important;height:auto!important;max-width:820px;}
+  html:is([data-nbdock="0"],[data-nbui="frame"],[data-nbui="page"]) body #nbpanel-root.nbpanel-host{display:block!important;margin:10px auto!important;}
+  html:is([data-nbdock="0"],[data-nbui="frame"],[data-nbui="page"]) body #nbpanel-root .nbdock{display:flex!important;flex-wrap:wrap;
+      justify-content:center;align-items:center;gap:6px;padding:6px 8px;border-radius:12px;
+      border:1px solid color-mix(in srgb,var(--jp-content-font-color1,#1f2933) 18%%,transparent);}
+  html:is([data-nbdock="0"],[data-nbui="frame"],[data-nbui="page"]) body #nbpanel-root .nbdock > *{position:static!important;}
+  html:is([data-nbdock="0"],[data-nbui="frame"],[data-nbui="page"]) body.nbrail-live .nbprog,
+  html:is([data-nbdock="0"],[data-nbui="frame"],[data-nbui="page"]) body .nbprog{display:block!important;}
+  html:is([data-nbdock="0"],[data-nbui="frame"],[data-nbui="page"]) body .nbprog{max-width:820px;box-sizing:border-box;overflow-x:auto;}
+
+  /* ======================================================================
+     2026-10-08 — EILAUFTRAG E25.d (Oberfläche; Erkennung JS). DUNKEL AUCH
+     AUSSERHALB VON JUPYTERLAB. Nutzer 08.10. (PyCharm, dunkles Theme): die
+     Vorschau hell — helle Karten auf dunklem Grund. Ursache: das Cover wird
+     nur dunkel über body[data-jp-theme-light="false"] (06-marks, E15.2) und
+     nimmt seinen Grund aus var(--jp-layout-color0,#fff); PyCharm, VS Code und
+     Colab haben weder das Attribut noch die --jp-Farben. Gemessen v1.67 (Lab,
+     als PyCharm nachgestellt: html[data-nbenv=pycharm], ohne
+     data-jp-theme-light): mit body.nbdark Cover-Grund weiß und Satz 2,1 : 1,
+     mit „prefers-color-scheme: dark“ oder VS Codes body.vscode-dark alles hell.
+     Jetzt in einer fremden Oberfläche (html[data-nbenv], E19.4) dunkel, wenn
+       * body.nbdark (JS sagt dunkel), body.vscode-dark / -high-contrast
+         (VS Code), oder
+       * die Seite „prefers-color-scheme: dark“ meldet (Webview von PyCharm/
+         Colab/VS Code folgt IDE bzw. System) — außer VS Code sagt hell;
+     dann: --nbcov-* und die --jp-Farben dunkel (Grund in VS Code dessen
+     Editorfarbe), Titelkarte, Titel, Linie, Satz, Modus-/Sprach-Tinte und
+     Konto wie im dunklen Lab. In JupyterLab/NB7/Lite (kein fremdes
+     data-nbenv) ändert sich nichts. Zwei IDs: schlägt E15.2 (eine).
+     Für JS: body.nbdark auch in fremden Oberflächen aus der Umgebung setzen
+     (Hintergrund der Seite bzw. matchMedia) — dann folgt auch das Dokument. */
+  html:is([data-nbenv="colab"],[data-nbenv="vscode"],[data-nbenv="pycharm"],[data-nbenv="other"],[data-nbenv="page"]) body:is(.nbdark,.vscode-dark,.vscode-high-contrast:not(.vscode-high-contrast-light)){
+      --nbcov-acc:#4fd39b;--nbcov-face:#1f252c;--nbcov-ink:#9fb0bd;
+      --jp-layout-color0:var(--vscode-editor-background,#16191d);--jp-layout-color1:var(--vscode-editor-background,#1b1f24);
+      --jp-content-font-color1:var(--vscode-editor-foreground,rgba(255,255,255,.87));
+      --jp-cell-editor-background:#1b2027;--jp-cell-editor-border-color:#36414c;color-scheme:dark;}
+  html:is([data-nbenv="colab"],[data-nbenv="vscode"],[data-nbenv="pycharm"],[data-nbenv="other"],[data-nbenv="page"]) body:is(.nbdark,.vscode-dark,.vscode-high-contrast:not(.vscode-high-contrast-light)) .nbtitle:has(>.nbcover):not(#nbz#nbz) .nbtitle-card{background:#1d2228!important;border-color:#33414f!important;}
+  html:is([data-nbenv="colab"],[data-nbenv="vscode"],[data-nbenv="pycharm"],[data-nbenv="other"],[data-nbenv="page"]) body:is(.nbdark,.vscode-dark,.vscode-high-contrast:not(.vscode-high-contrast-light)) .nbtitle:has(>.nbcover):not(#nbz#nbz) .nbtitle-h{color:#dbe4ec!important;}
+  html:is([data-nbenv="colab"],[data-nbenv="vscode"],[data-nbenv="pycharm"],[data-nbenv="other"],[data-nbenv="page"]) body:is(.nbdark,.vscode-dark,.vscode-high-contrast:not(.vscode-high-contrast-light)) .nbtitle:has(>.nbcover):not(#nbz#nbz) .nbtitle-rule{background:#3b4652!important;}
+  html:is([data-nbenv="colab"],[data-nbenv="vscode"],[data-nbenv="pycharm"],[data-nbenv="other"],[data-nbenv="page"]) body:is(.nbdark,.vscode-dark,.vscode-high-contrast:not(.vscode-high-contrast-light)) .nbtitle:has(>.nbcover):not(#nbz#nbz) :is(.nbtitle-sub,.nbtitle-lead){color:#7fb8dc!important;}
+  html:is([data-nbenv="colab"],[data-nbenv="vscode"],[data-nbenv="pycharm"],[data-nbenv="other"],[data-nbenv="page"]) body:is(.nbdark,.vscode-dark,.vscode-high-contrast:not(.vscode-high-contrast-light)) .nbtitle:has(>.nbcover):not(#nbz#nbz) .nbtitle-facts :is(li,p,div,span):not(.nbtitle-k){color:#b4c1cc!important;}
+  html:is([data-nbenv="colab"],[data-nbenv="vscode"],[data-nbenv="pycharm"],[data-nbenv="other"],[data-nbenv="page"]) body:is(.nbdark,.vscode-dark,.vscode-high-contrast:not(.vscode-high-contrast-light)) .nbtitle:has(>.nbcover):not(#nbz#nbz) :is(.nbmode,.nblang){--nbskin-ink:#dbe2e9;}
+  html:is([data-nbenv="colab"],[data-nbenv="vscode"],[data-nbenv="pycharm"],[data-nbenv="other"],[data-nbenv="page"]) body:is(.nbdark,.vscode-dark,.vscode-high-contrast:not(.vscode-high-contrast-light)) .nbtitle:has(>.nbcover):not(#nbz#nbz) .nbacct{--nbacct-ink:#dbe2e9;--nbskin-ink:#dbe2e9;--nbacct-quiet:#9fb0bd;--nbacct-line:#3b4652;--nbacct-ok:#4fd39b;}
+  @media (prefers-color-scheme:dark){
+    html:is([data-nbenv="colab"],[data-nbenv="vscode"],[data-nbenv="pycharm"],[data-nbenv="other"],[data-nbenv="page"]) body:not(.vscode-light):not(.vscode-high-contrast-light){
+        --nbcov-acc:#4fd39b;--nbcov-face:#1f252c;--nbcov-ink:#9fb0bd;
+        --jp-layout-color0:var(--vscode-editor-background,#16191d);--jp-layout-color1:var(--vscode-editor-background,#1b1f24);
+        --jp-content-font-color1:var(--vscode-editor-foreground,rgba(255,255,255,.87));
+        --jp-cell-editor-background:#1b2027;--jp-cell-editor-border-color:#36414c;color-scheme:dark;}
+    html:is([data-nbenv="colab"],[data-nbenv="vscode"],[data-nbenv="pycharm"],[data-nbenv="other"],[data-nbenv="page"]) body:not(.vscode-light):not(.vscode-high-contrast-light) .nbtitle:has(>.nbcover):not(#nbz#nbz) .nbtitle-card{background:#1d2228!important;border-color:#33414f!important;}
+    html:is([data-nbenv="colab"],[data-nbenv="vscode"],[data-nbenv="pycharm"],[data-nbenv="other"],[data-nbenv="page"]) body:not(.vscode-light):not(.vscode-high-contrast-light) .nbtitle:has(>.nbcover):not(#nbz#nbz) .nbtitle-h{color:#dbe4ec!important;}
+    html:is([data-nbenv="colab"],[data-nbenv="vscode"],[data-nbenv="pycharm"],[data-nbenv="other"],[data-nbenv="page"]) body:not(.vscode-light):not(.vscode-high-contrast-light) .nbtitle:has(>.nbcover):not(#nbz#nbz) .nbtitle-rule{background:#3b4652!important;}
+    html:is([data-nbenv="colab"],[data-nbenv="vscode"],[data-nbenv="pycharm"],[data-nbenv="other"],[data-nbenv="page"]) body:not(.vscode-light):not(.vscode-high-contrast-light) .nbtitle:has(>.nbcover):not(#nbz#nbz) :is(.nbtitle-sub,.nbtitle-lead){color:#7fb8dc!important;}
+    html:is([data-nbenv="colab"],[data-nbenv="vscode"],[data-nbenv="pycharm"],[data-nbenv="other"],[data-nbenv="page"]) body:not(.vscode-light):not(.vscode-high-contrast-light) .nbtitle:has(>.nbcover):not(#nbz#nbz) .nbtitle-facts :is(li,p,div,span):not(.nbtitle-k){color:#b4c1cc!important;}
+    html:is([data-nbenv="colab"],[data-nbenv="vscode"],[data-nbenv="pycharm"],[data-nbenv="other"],[data-nbenv="page"]) body:not(.vscode-light):not(.vscode-high-contrast-light) .nbtitle:has(>.nbcover):not(#nbz#nbz) :is(.nbmode,.nblang){--nbskin-ink:#dbe2e9;}
+    html:is([data-nbenv="colab"],[data-nbenv="vscode"],[data-nbenv="pycharm"],[data-nbenv="other"],[data-nbenv="page"]) body:not(.vscode-light):not(.vscode-high-contrast-light) .nbtitle:has(>.nbcover):not(#nbz#nbz) .nbacct{--nbacct-ink:#dbe2e9;--nbskin-ink:#dbe2e9;--nbacct-quiet:#9fb0bd;--nbacct-line:#3b4652;--nbacct-ok:#4fd39b;}
+  }
+    /* 2026-10-11 (E26.1, by the Python workshop, STOP.md) — THE READING VERSION
+       GIVES WAY WHERE THE DOCUMENT'S WIDGETS ARE DRAWN IN THE SAME OUTPUT AREA.
+       `nb-live` is set by the page script (10-rail-host); the :has() rule does
+       the same without script on a browser that knows :has (own rule: a
+       selector it does not know must not take the first one with it). */
+    .nb-live .nbreading{display:none!important;}
+    .jp-OutputArea:has(.acc-root) .nbreading{display:none!important;}
+    /* E26.1b — the cell's widget outputs come held (layout: height 0,
+       visibility hidden, class nbhold), so a front end that draws widgets
+       itself, one page per output, without this stylesheet (PyCharm) shows
+       none of them under the reading version. Here, where our widgets are
+       drawn in the same page, they are lifted (the script takes the inline
+       values off, 10-rail-host): the page of v1.70. The stash keeps its own parking rule. */
+    .nb-live .nbhold:not(.nbctl-stash){visibility:visible!important;height:auto!important;}
+    .jp-OutputArea:has(.acc-root) .nbhold:not(.nbctl-stash){visibility:visible!important;height:auto!important;}

@@ -1,0 +1,17 @@
+<!doctype html>
+<!-- E36 J1 (Werkstatt JS) — die Startseite der Hülle: dist/huelle/<TOOLKIT_VERSION>/lesen.html?nb=<id>&v=<NB_VERSION>.
+     Der Bau setzt __LADER__ = js.lader aus manifest.json (claude/VERTRAG-E36.md). Alles andere holt der Lader. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:,">
+<title>DigiChemJN</title>
+</head>
+<body style="margin:0">
+<p id="nbl-msg" role="status" style="font:15px system-ui,sans-serif;margin:24px 16px">…</p>
+<noscript><p style="font:15px system-ui,sans-serif;margin:24px 16px">This page needs JavaScript. · Diese Seite braucht JavaScript.</p></noscript>
+<script src="__LADER__"></script>
+</body>
+</html>

@@ -1,0 +1,275 @@
+# E17.1 (2026-10-02, Inhalt) — Complex Numbers auf Deutsch.
+# Eine Zeile "en:" (das englische Literal, genau wie im Quelltext; \n = Zeilenumbruch),
+# darunter "de:". Der Build (toolkit/i18n.py) prüft je Paar: gleiche %-Platzhalter,
+# gleiche HTML-Tags, gleiche Zahlen. Anrede: Sie (E22.2). Zahlen im Text mit Dezimalkomma, in <code> mit Punkt; die Eingabefelder nehmen beides.
+# ⎵ = ein Leerzeichen am Anfang oder Ende des Literals (sichtbar, damit es kein Werkzeug still entfernt).
+# Was hier fehlt, bleibt Englisch (Literaturangaben, Code, Formeln, Zeichen wie Re(z) =).
+
+# Beispiele — so wird jeder englische Text übersetzt (genau das Literal aus dem Quelltext):
+en: Notebook title
+de: Titel des Notebooks
+
+en: One sentence on what this is about (placeholder)
+de: Ein Satz, worum es geht (Platzhalter)
+
+en: Chapter title (placeholder)
+de: Kapiteltitel (Platzhalter)
+
+en: Second chapter title (placeholder)
+de: Zweiter Kapiteltitel (Platzhalter)
+
+en: <b>Compute y for x = 3.</b>
+de: <b>Berechnen Sie y für x = 3.</b>
+
+en: <b>Compute y for x = 4.</b>
+de: <b>Berechnen Sie y für x = 4.</b>
+
+en: Third chapter title (placeholder)
+de: Dritter Kapiteltitel (Platzhalter)
+
+en: Fourth chapter title (placeholder)
+de: Vierter Kapiteltitel (Platzhalter)
+
+en: Fifth chapter title (placeholder)
+de: Fünfter Kapiteltitel (Platzhalter)
+
+en: <b>Pick the right statement.</b>
+de: <b>Wählen Sie die richtige Aussage.</b>
+
+en: <b>Turn the arrow by half a circle.</b>
+de: <b>Drehen Sie den Pfeil um einen halben Kreis.</b>
+
+en: <b>Steer the point into the circle.</b>
+de: <b>Steuern Sie den Punkt in den Kreis.</b>
+
+# E28: Rückmeldungen der Aufgaben (deutsche Zahlen mit Komma, py_e22 E22.2b)
+
+en: Not yet. Put x = 3 into y = a·x. You entered %g.
+de: Noch nicht. Setzen Sie x = 3 in y = a·x ein. Sie haben %g eingegeben.
+
+en: Correct: y = %d · 3 = %d.
+de: Richtig: y = %d · 3 = %d.
+
+en: Not yet. Put x = 4 into y = a·x. You entered %g.
+de: Noch nicht. Setzen Sie x = 4 in y = a·x ein. Sie haben %g eingegeben.
+
+en: Correct: y = %d · 4 = %d.
+de: Richtig: y = %d · 4 = %d.
+
+en: Correct: a positive slope makes y grow (placeholder).
+de: Richtig: Eine positive Steigung lässt y wachsen (Platzhalter).
+
+en: Not yet. Look at the sign of a in the figure (placeholder).
+de: Noch nicht. Achten Sie auf das Vorzeichen von a in der Abbildung (Platzhalter).
+
+en: Not yet. Turning by half a circle adds π (placeholder). You entered %g.
+de: Noch nicht. Eine halbe Drehung addiert π (Platzhalter). Sie haben %g eingegeben.
+
+en: Correct: %.2f + π, any full turn more or less is the same angle.
+de: Richtig: %.2f + π; eine volle Drehung mehr oder weniger ist derselbe Winkel.
+
+en: On target (placeholder).
+de: Im Ziel (Platzhalter).
+
+en: Off by %.2f. Move x first, then y (placeholder).
+de: Um %.2f daneben. Verschieben Sie zuerst x, dann y (Platzhalter).
+
+# E29 P1 (2026-10-12): alles auf dem Cover zweisprachig — Untertitel, Abbildungs- und Aufgabennamen
+en: Series &mdash; Section (placeholder)
+de: Reihe &mdash; Abschnitt (Platzhalter)
+
+en: Figure name (placeholder)
+de: Name der Abbildung (Platzhalter)
+
+en: Second figure name (placeholder)
+de: Name der zweiten Abbildung (Platzhalter)
+
+en: Third figure name (placeholder)
+de: Name der dritten Abbildung (Platzhalter)
+
+en: Fourth figure name (placeholder)
+de: Name der vierten Abbildung (Platzhalter)
+
+en: Fifth figure name (placeholder)
+de: Name der fünften Abbildung (Platzhalter)
+
+en: Exercise name 1 (placeholder)
+de: Name der Aufgabe 1 (Platzhalter)
+
+en: Exercise name 2 (placeholder)
+de: Name der Aufgabe 2 (Platzhalter)
+
+en: Exercise name 3 (placeholder)
+de: Name der Aufgabe 3 (Platzhalter)
+
+en: Exercise name 4 (placeholder)
+de: Name der Aufgabe 4 (Platzhalter)
+
+en: Exercise name 5 (placeholder)
+de: Name der Aufgabe 5 (Platzhalter)
+
+en: learning goal 1 (placeholder)
+de: Lernziel 1 (Platzhalter)
+
+en: learning goal 2 (placeholder)
+de: Lernziel 2 (Platzhalter)
+
+# E29 P1 (Hauptwerkstatt 12.10., beim Zusammenführen): Namen der Abschnitte in Einführung/Anhang (Zeitleiste, Hover-Box)
+en: How to use this notebook
+de: So benutzen Sie dieses Notebook
+
+en: What you will be able to do
+de: Was Sie danach können
+
+en: The route through this notebook
+de: Der Weg durch dieses Notebook
+
+en: References and licence
+de: Quellen und Lizenz
+
+en: Conclusion
+de: Fazit
+
+# E30 A1 — the conclusion as a text (conclusion.py)
+en: Summary (placeholder). In full sentences, what the chapters established and how they build on each other: the first chapter introduced the idea and its formula, the second applied it to a picture, and the exercises practised the step that matters. Write it as one line of argument, not as a list of topics.
+de: Zusammenfassung (Platzhalter). In ganzen Sätzen, was die Kapitel gezeigt haben und wie sie aufeinander aufbauen: Das erste Kapitel hat die Idee und ihre Formel eingeführt, das zweite hat sie auf ein Bild angewandt, und die Aufgaben haben den entscheidenden Schritt geübt. Schreiben Sie es als einen Gedankengang, nicht als Liste von Themen.
+
+en: Context (placeholder). Where the result stands: what it means for the lecture, the lab or a neighbouring field, which assumption it rests on, and what it does not cover.
+de: Einordnung (Platzhalter). Wo das Ergebnis steht: was es für die Vorlesung, das Labor oder ein Nachbarfach bedeutet, auf welcher Annahme es beruht und was es nicht abdeckt.
+
+en: Outlook (placeholder). What comes next: the question this notebook leaves open, the notebook that follows in the series, and one thing to try on your own with the code of the exercises.
+de: Ausblick (Platzhalter). Wie es weitergeht: die Frage, die dieses Notebook offenlässt, das nächste Notebook der Reihe und eine Sache, die Sie mit dem Code der Aufgaben selbst ausprobieren können.
+
+# E30 B2 — the template's German was incomplete (howto, ⚙ controls, goals, glossary): pairs as in Complex/Modeling
+en: <b>Glossary</b>
+de: <b>Glossar</b>
+
+en: Gentle — wide tolerance, full hints
+de: Behutsam: große Toleranz, ausführliche Hinweise
+
+en: Strict — tight tolerance, minimal hints
+de: Streng: enge Toleranz, knappe Hinweise
+
+en: Difficulty:
+de: Schwierigkeit:
+
+en: Both — calculate and code
+de: Beides: rechnen und programmieren
+
+en: Plain — text and figures only
+de: Nur lesen: Text und Abbildungen
+
+en: Content:
+de: Inhalt:
+
+en: ▶  Rebuild now with this content
+de: ▶  Jetzt mit diesem Inhalt neu aufbauen
+
+en: <div style='text-align:center;font-size:.85em;opacity:.8'>Now: <b>%s</b>. Each choice keeps its own progress.</div>
+de: <div style='text-align:center;font-size:.85em;opacity:.8'>Jetzt: <b>%s</b>. Jede Wahl behält ihren eigenen Fortschritt.</div>
+
+en: “%s” saved — it applies from the next run. ▶ rebuilds now.
+de: „%s“ gespeichert, gilt ab dem nächsten Lauf. ▶ baut jetzt neu auf.
+
+en: Could not save this choice here.
+de: Diese Wahl ließ sich hier nicht speichern.
+
+en: Language · Sprache:
+de: Sprache:
+
+en: ▶  Rebuild now · Jetzt neu aufbauen
+de: ▶  Jetzt neu aufbauen
+
+en: Saved: %s from the next run.
+de: Gespeichert: ab dem nächsten Lauf %s.
+
+en: ↺  Reset this notebook
+de: ↺  Dieses Notebook zurücksetzen
+
+en: Yes, reset
+de: Ja, zurücksetzen
+
+en: Cancel
+de: Abbrechen
+
+en: <div class='nbwarn' style='text-align:center;font-size:.9em'><b>Sure?</b> Clears answers and statistics of <b>this notebook</b> and locks the chapters. Seed, style and settings stay.</div>
+de: <div class='nbwarn' style='text-align:center;font-size:.9em'><b>Sicher?</b> Löscht Antworten und Statistik <b>dieses Notebooks</b> und sperrt die Kapitel wieder. Seed, Stil und Einstellungen bleiben.</div>
+
+en: <div class='nbok' style='text-align:center;font-size:.9em'>Reset: %d exercises open again.</div>
+de: <div class='nbok' style='text-align:center;font-size:.9em'>Zurückgesetzt: %d Aufgaben sind wieder offen.</div>
+
+en: <div class='nbink' style='text-align:center;font-size:.9em'>Nothing was reset.</div>
+de: <div class='nbink' style='text-align:center;font-size:.9em'>Es wurde nichts zurückgesetzt.</div>
+
+en: paste a progress code here
+de: Fortschrittscode hier einfügen
+
+en: Show my progress code
+de: Meinen Fortschrittscode zeigen
+
+en: Restore from code
+de: Aus Code wiederherstellen
+
+en: <div class='nbink' style='text-align:center;font-size:.9em;margin-top:4px'>Keep this code. Paste it back to restore:</div><pre style='%s;margin:6px auto 0;text-align:left;max-width:640px;white-space:pre-wrap;word-break:break-all'>%s</pre>
+de: <div class='nbink' style='text-align:center;font-size:.9em;margin-top:4px'>Bewahren Sie diesen Code auf. Fügen Sie ihn wieder ein, um den Stand herzustellen:</div><pre style='%s;margin:6px auto 0;text-align:left;max-width:640px;white-space:pre-wrap;word-break:break-all'>%s</pre>
+
+en: Seed:
+de: Seed:
+
+en: Use this seed
+de: Diesen Seed verwenden
+
+en: 🎲  New random seed
+de: 🎲  Neuer Zufalls-Seed
+
+en: <div class='nbink' style='text-align:center;font-size:.88em;margin-top:6px'>Seed <b>%d</b> — %s.</div>
+de: <div class='nbink' style='text-align:center;font-size:.88em;margin-top:6px'>Seed <b>%d</b>: %s.</div>
+
+en: pinned: same numbers next run
+de: festgehalten, im nächsten Lauf dieselben Zahlen
+
+en: not pinned: new numbers next run
+de: nicht festgehalten, im nächsten Lauf neue Zahlen
+
+en: <div class='nbok' style='text-align:center;font-size:.9em'>New numbers from seed %d. Progress kept.</div>
+de: <div class='nbok' style='text-align:center;font-size:.9em'>Neue Zahlen aus Seed %d. Der Fortschritt bleibt.</div>
+
+en: <div class='nbwarn' style='text-align:center;font-size:.9em'>A whole number, 0 to 99999999.</div>
+de: <div class='nbwarn' style='text-align:center;font-size:.9em'>Eine ganze Zahl von 0 bis 99999999.</div>
+
+en: <div class='nbwarn' style='text-align:center;font-size:.9em'>Could not save this seed here. Nothing changed.</div>
+de: <div class='nbwarn' style='text-align:center;font-size:.9em'>Dieser Seed ließ sich hier nicht speichern. Es hat sich nichts geändert.</div>
+
+en: <b>Every chapter:</b> an idea with its formula, a <b>Visualisation</b>, one <b>Practice</b> exercise.<br><br><b>No programming needed.</b> Type a number, pick an option or move the sliders, then press <i>Check</i>. A wrong answer gets a hint, never the answer.<br><br><b>Coding is optional.</b> The fold <i>write it in code</i> unlocks the same step. If you skip it, you lose nothing.<br><br><b>Chapters open one by one.</b> Answer, or press <i>Skip for now</i>. The timeline shows what you skipped. The lock only sets your pace; it is not a grade.
+de: <b>Jedes Kapitel:</b> eine Idee mit ihrer Formel, eine <b>Visualisierung</b> und eine <b>Übungsaufgabe</b>.<br><br><b>Programmieren ist nicht nötig.</b> Tippen Sie eine Zahl ein, wählen Sie eine Antwort oder bewegen Sie die Schieberegler und drücken Sie dann <i>Prüfen</i>. Eine falsche Antwort bekommt einen Hinweis, nie die Lösung.<br><br><b>Programmieren ist freiwillig.</b> Der Abschnitt <i>in Code schreiben</i> schaltet denselben Schritt frei. Wenn Sie ihn auslassen, verpassen Sie nichts.<br><br><b>Die Kapitel öffnen sich nacheinander.</b> Antworten Sie oder drücken Sie <i>Vorerst überspringen</i>. Die Zeitleiste zeigt, was Sie übersprungen haben. Die Sperre gibt nur Ihr Tempo vor; sie ist keine Note.
+
+en: output
+de: Ergebnis
+
+en: step
+de: Schritt
+
+en: After working through this notebook, you can:<table style='border-collapse:collapse;margin:12px auto 0'>%s</table><div style='margin-top:14px;font-size:.93em'>Each objective belongs to an exercise below. So you can check every one of them yourself.<br><br><b>No programming is required.</b> This is a <i>%s</i> notebook. In this standard, the objectives are the concepts, the physics and the critical check, not the implementation. You solve every exercise by entering numbers, choosing an option or moving sliders. Each exercise also has a clearly marked <i>optional</i> code fold, closed at first, for anyone who wants to write the formula in Python. It unlocks the same step, and you never need it to get through.</div>
+de: Wenn Sie dieses Notebook durchgearbeitet haben, können Sie:<table style='border-collapse:collapse;margin:12px auto 0'>%s</table><div style='margin-top:14px;font-size:.93em'>Jedes Lernziel gehört zu einer Aufgabe weiter unten. So können Sie jedes davon selbst überprüfen.<br><br><b>Programmieren ist nicht nötig.</b> Dies ist ein <i>%s</i>-Notebook. In diesem Standard sind die Lernziele die Begriffe, die Physik und die kritische Prüfung, nicht die Umsetzung in Code. Jede Aufgabe lösen Sie, indem Sie Zahlen eingeben, eine Antwort wählen oder Schieberegler bewegen. Jede Aufgabe hat außerdem einen deutlich als <i>freiwillig</i> markierten Code-Abschnitt, zunächst geschlossen, für alle, die die Formel in Python schreiben möchten. Er schaltet denselben Schritt frei, und Sie brauchen ihn nie, um durchzukommen.</div>
+
+# E30 B2 — the metadata of _setup.py in English, German here
+en: Series, section (placeholder)
+de: Reihe, Abschnitt (Platzhalter)
+
+en: … enter the authors …
+de: … Autor:innen eintragen …
+
+en: Audience (degree programme, semester)
+de: Zielgruppe (Studiengang, Semester)
+
+en: Prior knowledge (placeholder)
+de: Vorkenntnisse (Platzhalter)
+
+en: keyword 1
+de: Stichwort 1
+
+en: keyword 2
+de: Stichwort 2
+
+en: Source of the content (script, chapter, pages)
+de: Quelle der Inhalte (Skript, Kapitel, Seiten)

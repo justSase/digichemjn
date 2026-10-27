@@ -1,0 +1,365 @@
+  /* 2026-09-28 (R1 · Paket 2, Werkstatt Python — CSS may fold this into its
+     own files) — the 📚 window. (1) The list had max-height:280px, so its last
+     lines scrolled away under the cell's foot ("These numbers live…" cut in
+     half): the drawer scrolls, the list does not. (2) The legend chips had no
+     rule at all and drew nothing: they get the chapter rows' pips. */
+  .nbpanel-host .nbcell.pg-stats .nbserieslist{max-height:none;overflow:visible;}
+  .nbseries-key .ps{display:inline-block;width:9px;height:9px;border-radius:2px;
+      flex:0 0 auto;box-sizing:border-box;border:1px solid currentColor;
+      background:currentColor;}
+  .nbseries-key .ps.a{transform:rotate(45deg);}
+  .nbseries-key .ps.open{background:transparent!important;opacity:.55;}
+  .nbseries-key .ps.done{color:#27784f;}
+  .nbseries-key .ps.skip{color:#b8860b;}
+  .nbseries-key .ps.fail{color:#b4432c;}
+  .nbseries-key .ps.open{color:var(--nbskin-quiet,#55636f);}
+  .nbseries-key .ps.c.done{color:#7a37e6;}
+  body.nbdark .nbseries-key .ps.done{color:#5fe0a8;}
+  body.nbdark .nbseries-key .ps.skip{color:#e8b95c;}
+  body.nbdark .nbseries-key .ps.fail{color:#f0907d;}
+  body.nbdark .nbseries-key .ps.c.done{color:#c7a8ff;}
+
+  /* ======================================================================
+     2026-09-29 (Eilauftrag E6.12, Oberfläche, Skizze) — THE PIPS SAY WHAT
+     THE LANE SAYS. Contract E6: every pip (under/beside the chapter AND in
+     the 📚 window) carries data-kind="calc|code" and
+     data-st="solved|wrong|skipped|open|locked". The pip now wears the
+     lane's own marking for that state:
+       solved   the route's fill (green / violet) and a tick
+       wrong    red and a cross        skipped  amber and the skip arrow
+       open     the route's ring on the panel's surface and the OPEN
+                padlock in the route's colour (the lane's is-current door)
+       locked   the lane's dark fill and the CLOSED padlock (--nbskin-lock)
+     The calc pip is a diamond (turned 45°); the sign and both padlock
+     strokes turn back about the pip's middle, so they stand level — the
+     same trick as the lane (28f). Size comes from E6.11 (--nbpp), 12 px
+     without it. */
+  html body :is(#nbpanel-root#nbpanel-root .nbchapstat,.nbseries-chap) .ps[data-st]{
+      --pp:var(--nbpp,12px);--lk:calc(var(--pp) * .56);--cr:0deg;
+      --kc:#3aa06f;
+      position:relative;box-sizing:border-box;display:inline-block;
+      border:max(1.5px, calc(var(--pp) * .1)) solid var(--kc)!important;
+      border-radius:22%%!important;opacity:1!important;
+      background:var(--kc)!important;color:#fff!important;
+      transform:none!important;}
+  html body :is(#nbpanel-root#nbpanel-root .nbchapstat,.nbseries-chap) .ps[data-st][data-kind="calc"]{
+      --cr:-45deg;transform:rotate(45deg)!important;border-radius:18%%!important;}
+  html body :is(#nbpanel-root#nbpanel-root .nbchapstat,.nbseries-chap) .ps[data-st][data-kind="code"]{--kc:#8b4ff2;}
+  html body.nbdark :is(#nbpanel-root#nbpanel-root .nbchapstat,.nbseries-chap) .ps[data-st]{--kc:#4fbf8b;}
+  html body.nbdark :is(#nbpanel-root#nbpanel-root .nbchapstat,.nbseries-chap) .ps[data-st][data-kind="code"]{--kc:#b896ff;}
+  html body :is(#nbpanel-root#nbpanel-root .nbchapstat,.nbseries-chap) .ps[data-st="wrong"]{--kc:#c0392b!important;}
+  html body :is(#nbpanel-root#nbpanel-root .nbchapstat,.nbseries-chap) .ps[data-st="skipped"]{--kc:#d99b2b!important;}
+  /* the sign: one glyph, centred, turned level */
+  html body :is(#nbpanel-root#nbpanel-root .nbchapstat,.nbseries-chap) .ps:is([data-st="solved"],[data-st="wrong"],[data-st="skipped"])::after{
+      position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+      font-style:normal;font-weight:900;line-height:1;
+      font-size:calc(var(--pp) * .62);color:#fff;
+      transform:rotate(var(--cr));}
+  html body :is(#nbpanel-root#nbpanel-root .nbchapstat,.nbseries-chap) .ps[data-st="solved"]::after{content:'\\2713';}
+  html body :is(#nbpanel-root#nbpanel-root .nbchapstat,.nbseries-chap) .ps[data-st="wrong"]::after{content:'\\2715';}
+  html body :is(#nbpanel-root#nbpanel-root .nbchapstat,.nbseries-chap) .ps[data-st="skipped"]::after{content:'\\21B7';}
+  /* open: the door — ring on the surface, the open padlock in the route's colour */
+  html body :is(#nbpanel-root#nbpanel-root .nbchapstat,.nbseries-chap) .ps[data-st="open"]{
+      background:var(--nbpanel-surf,var(--nbskin-surf,#fff))!important;color:var(--kc)!important;}
+  /* locked: the dark fill and the closed padlock */
+  html body :is(#nbpanel-root#nbpanel-root .nbchapstat,.nbseries-chap) .ps[data-st="locked"]{
+      --kc:#6c7885!important;background:#46535f!important;color:var(--nbskin-lock,#eef2f6)!important;}
+  /* the padlock, drawn: the shackle (::before) and the body (::after),
+     both placed about the pip's middle, both turned back about it */
+  html body :is(#nbpanel-root#nbpanel-root .nbchapstat,.nbseries-chap) .ps:is([data-st="open"],[data-st="locked"])::before,
+  html body :is(#nbpanel-root#nbpanel-root .nbchapstat,.nbseries-chap) .ps:is([data-st="open"],[data-st="locked"])::after{
+      content:'';position:absolute;left:50%%;top:50%%;box-sizing:border-box;}
+  html body :is(#nbpanel-root#nbpanel-root .nbchapstat,.nbseries-chap) .ps:is([data-st="open"],[data-st="locked"])::before{
+      width:calc(var(--lk) * .56);height:calc(var(--lk) * .56);
+      margin-left:calc(var(--lk) * -.28);margin-top:calc(var(--lk) * -.5);
+      border:max(1.2px, calc(var(--pp) * .08)) solid currentColor;border-bottom:0;
+      border-radius:999px 999px 0 0;
+      transform-origin:50%% calc(var(--lk) * .5);transform:rotate(var(--cr));}
+  html body :is(#nbpanel-root#nbpanel-root .nbchapstat,.nbseries-chap) .ps[data-st="open"]::before{
+      transform:rotate(var(--cr)) translate(45%%, -18%%);}
+  html body :is(#nbpanel-root#nbpanel-root .nbchapstat,.nbseries-chap) .ps:is([data-st="open"],[data-st="locked"])::after{
+      width:var(--lk);height:calc(var(--lk) * .54);
+      margin-left:calc(var(--lk) * -.5);margin-top:calc(var(--lk) * -.04);
+      background:currentColor;border-radius:18%%;
+      transform-origin:50%% calc(var(--lk) * .04);transform:rotate(var(--cr));}
+  /* the legend of the 📚 window speaks the same language */
+  html body .nbseries-key .ps.a.done,html body .nbseries-key .ps.c.done{opacity:1;}
+
+  /* ======================================================================
+     2026-09-29 — EILAUFTRAG E8.8 (Oberfläche, Skizze; die Lage macht JS).
+     EVERY TOOL WINDOW LOOKS LIKE „CONTROLS“. The drawer (⚙ difficulty,
+     👤 progress code, 📚 statistics, code page) is one box whose frame the
+     script writes inline with !important (placeDock: position, width,
+     radius, border, shadow, padding) — none of that can be overridden from
+     here. What CAN: everything the script leaves alone.
+       · the veil behind it, as behind Controls (.nbhelp-back): the page
+         dims and blurs, so the window is the only thing that speaks;
+       · the deep, two-layer shadow of Controls, as a filter (the inline
+         box-shadow stays underneath and is hidden in it);
+       · a head bar: the build line on top becomes the title row of the
+         window, accent ink, rule under it — the head of .nbhelp;
+       · the pages' sections are divided the way Controls divides them
+         (dashed rule, small caps heading).
+     Centred on the screen and one at a time: JS (placeDock, E8.8). */
+  html body #nbpanel-root.open .nbdock::before{
+      content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+      background:color-mix(in srgb,var(--nbskin-ink,#1f2933) 28%%,transparent);
+      backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);
+      animation:nbveil8 .2s ease both;}
+  @keyframes nbveil8{from{opacity:0;}to{opacity:1;}}
+  html body #nbpanel-root .nbdrawer{
+      z-index:2;
+      filter:drop-shadow(0 18px 26px rgba(0,0,0,.16)) drop-shadow(0 2px 5px rgba(0,0,0,.08));
+      font-family:var(--nbskin-font,inherit);color:var(--nbskin-ink,#1f2933);}
+  html body #nbpanel-root .nbdrawer > .nbbuild{
+      display:block;margin:-10px -14px 8px!important;padding:14px 18px 10px!important;
+      text-align:left!important;font-weight:800!important;
+      font-size:calc(17px * var(--nbk,1))!important;letter-spacing:.3px;
+      color:var(--nbskin-acc,#1d5c8a)!important;
+      border-bottom:1px solid var(--nbskin-line,#c3ced8);}
+  html body #nbpanel-root .nbdrawer .nbcell{
+      padding:10px 4px!important;border-bottom:1px dashed var(--nbskin-line,#c3ced8);}
+  html body #nbpanel-root .nbdrawer .nbcell:last-child{border-bottom:0;}
+  html body #nbpanel-root .nbdrawer .nbcell-h{
+      color:var(--nbskin-quiet,#55636f)!important;letter-spacing:1.6px!important;}
+  body.nbdark #nbpanel-root .nbdrawer{
+      filter:drop-shadow(0 18px 26px rgba(0,0,0,.45)) drop-shadow(0 2px 5px rgba(0,0,0,.3));}
+  html body #nbpanel-root .nbdrawer > .nbbuild ~ *{border-top:0!important;}
+
+  /* ======================================================================
+     2026-09-30 — EILAUFTRAG E9.8 (Struktur + Oberfläche, Skizze). IM MODUS
+     „BOTH“ STEHEN DIE ZWEI PIPS NEBENEINANDER. Zwei Reihen (calc + code) =
+     both; dann wird die Liste ein Gitter mit einer Zeile und zwei Spalten,
+     in jeder Spalte der Pip und darunter klein sein Wort:
+         ◆    ■
+       EXERC. CODING
+     So braucht die Spalte kaum mehr Breite als bisher die eine Reihe
+     „◆ EXERCISES“ (nebeneinander MIT Wörtern rechts daneben ragte über den
+     Panelrand, Bild-Probe). JS schreibt flex-direction:column inline mit
+     !important — das Gitter macht die Flex-Richtung wirkungslos, statt sie
+     zu überstimmen. Fallen die Wörter weg (nbnotext), bleiben zwei Pips
+     Seite an Seite. Mit nur einer Reihe (calc oder code) ändert sich nichts. */
+  html body #nbpanel-root#nbpanel-root.vert.nbnames .nbchapstat:has(> .nbpip-row + .nbpip-row){
+      display:inline-grid!important;grid-auto-flow:column;grid-auto-columns:max-content;
+      align-items:start!important;justify-items:center;
+      column-gap:calc(6px * var(--nbk,1) * var(--nbzf,1));row-gap:0;}
+  html body #nbpanel-root#nbpanel-root.vert.nbnames .nbchapstat:has(> .nbpip-row + .nbpip-row) .nbpip-row{
+      flex-direction:column-reverse!important;align-items:center!important;
+      justify-content:flex-start!important;
+      gap:calc(3px * var(--nbk,1) * var(--nbzf,1));}
+  html body #nbpanel-root#nbpanel-root.vert.nbnames .nbchapstat:has(> .nbpip-row + .nbpip-row) .nbpip-lab{
+      font-size:calc(8px * var(--nbk,1) * var(--nbzf,1))!important;letter-spacing:.04em;}
+  /* die Raute ragt oben und unten .21 ihrer Seite hinaus: Luft zum Wort,
+     dieselbe Luft beim Quadrat, damit beide Wörter auf einer Linie stehen */
+  html body #nbpanel-root#nbpanel-root.vert.nbnames .nbchapstat:has(> .nbpip-row + .nbpip-row) .ps[data-kind]{
+      margin-block:calc(var(--nbpp) * .21)!important;}
+  html body #nbpanel-root#nbpanel-root.vert.nbnames.nbnotext .nbchapstat:has(> .nbpip-row + .nbpip-row){
+      column-gap:calc(4px * var(--nbk,1) * var(--nbzf,1));}
+
+  /* ======================================================================
+     2026-09-30 — EILAUFTRAG E11.12 (Oberfläche; Lage, Größe des Rahmens
+     und Schließen macht JS, E11.7). ALLE WERKZEUG-FENSTER WIE „CONTROLS“.
+     Gemessen (v1.39, 1400 × 900, minimal hell): Controls (.nbhelp) hat den
+     Inhalt 18 px vom Rand, Kopf 17 px fett in der Akzentfarbe mit Linie,
+     Abschnitte mit gestrichelter Linie und Kapitälchen-Überschrift in der
+     zweiten Akzentfarbe, × oben rechts. Die Schublade (⚙ 👤 📚 ⌨) rückte
+     den Inhalt 44 px ein (Gitter max. 560 px mittig + 4 + 4 px), ihre
+     Überschriften waren grau, ihr Kopf rollte mit weg, ein × fehlte.
+     Dazu wuchs in beiden die Schrift mit der Panelbreite (15/17 px × --nbk).
+     Jetzt, für alles, was das Skript nicht inline schreibt (Rahmen, Breite,
+     Innenabstand 10/14 px, Radius, Schatten der Schublade bleiben JS):
+       · feste Schrift 15 px, Überschriften 17 px: im Fenster gilt
+         --nbk = 1 (alle „× --nbk“-Regeln dort werden zu festen Pixeln);
+       · Inhalt 18 px vom Rand wie Controls: Gitter ohne Höchstbreite und
+         ohne Seitenrand über 4 px, Zellen ohne Seitenrand;
+       · Abschnitts-Überschrift (.nbcell-h) = Controls' h4: fett,
+         Versalien, 1.6 px gesperrt, --nbskin-acc2;
+       · der Kopf (.nbbuild) bleibt beim Rollen stehen (sticky) und trägt
+         die Fensterfläche;
+       · × : ein `.nbhelp-x` (JS E11.7: `button.nbdrawer-x.nbhelp-x`, sticky,
+         z-index 2 inline) oder `.nbwin-x` im Fenster bekommt das ×-Aussehen
+         von Controls; der Kopf liegt mit z-index 1 DARUNTER (mit 3 deckte
+         er das × zu — gemessen mit js-E11.7: Treffer auf dem × = Kopf). */
+  html body :is(.nbdrawer,.nbhelp){--nbk:1!important;}
+  html body #nbpanel-root .nbdrawer > .nbbuild{
+      font-size:17px!important;position:sticky;top:-10px;z-index:1;
+      background:var(--nbskin-surf,#fff);padding-right:52px!important;}
+  html body #nbpanel-root .nbdrawer .nbdrawer-grid,
+  html body #nbpanel-root[data-page] .nbdrawer .nbdrawer-grid{
+      max-width:none!important;margin:0!important;padding:0 4px 4px!important;}
+  html body #nbpanel-root .nbdrawer .nbcell{padding:10px 0!important;}
+  html body #nbpanel-root .nbdrawer .nbcell-h{
+      font-size:17px!important;font-weight:800!important;letter-spacing:1.6px!important;
+      text-transform:uppercase;margin:0 0 4px!important;
+      color:var(--nbskin-acc2,#2c6e91)!important;}
+  html body #nbpanel-root .nbdrawer :is(.nbwin-x,.nbhelp-x){
+      all:unset;position:absolute!important;top:14px!important;right:18px!important;z-index:4;cursor:pointer;
+      box-sizing:border-box!important;width:28px!important;min-width:0!important;height:28px!important;
+      padding:0!important;margin:0!important;border:0!important;box-shadow:none!important;
+      line-height:28px!important;text-align:center;
+      border-radius:var(--nbskin-pill-r,50%%)!important;font-size:18px!important;
+      background:transparent!important;color:var(--nbskin-quiet,#55636f)!important;}
+  html body #nbpanel-root .nbdrawer :is(.nbwin-x,.nbhelp-x):is(:hover,:focus-visible){
+      background:var(--nbskin-track,#d7dfe7)!important;color:var(--nbskin-ink,#1f2933)!important;}
+
+  /* ======================================================================
+     2026-10-02 — EILAUFTRAG E18.1 (Oberfläche; ersetzt die Farben von
+     E16.4; Zustände JS). BEARBEITET = GEFÜLLT in der Farbe des Ergebnisses,
+     im Panel UND auf dem Cover gleich: richtig grün #1e7a4c (Rechnen) bzw.
+     lila #6b3fd1 (Coding), falsch rot #b42318, übersprungen goldgelb
+     #e0a800 — Rand und Fläche; das Zeichen weiß (5,3 · 6,4 · 6,6 : 1), auf
+     Gold dunkel #1f2933 (6,9 : 1). Gleiche Farben in allen Stilen und
+     hell/dunkel. Unter dem Zeiger, ausgewählt und unter dem Marker gelten
+     die alten Regeln (Hervorhebung). Cover: `data-st` an der Zeile (JS). */
+  html body #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-node:not(:hover,.nbsel,.here) :is(.nbrail-dot:is(.st-ans,.st-both),.nbcodemark.cd-done,.nbrail-dot.st-fail,.nbcodemark.cd-fail,.nbrail-dot.st-skip,.nbcodemark.cd-skip){
+      --nbsc:#1e7a4c;border-color:var(--nbsc)!important;border-style:solid!important;
+      background:var(--nbsc)!important;background-image:none!important;opacity:1!important;}
+  html body #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-node:not(:hover,.nbsel,.here) .nbcodemark.cd-done{--nbsc:#6b3fd1!important;}
+  html body #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-node:not(:hover,.nbsel,.here) :is(.st-fail,.cd-fail){--nbsc:#b42318!important;}
+  html body #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-node:not(:hover,.nbsel,.here) :is(.st-skip,.cd-skip){--nbsc:#e0a800!important;}
+  html body #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-node:not(:hover,.nbsel,.here) :is(.st-ans,.st-both,.cd-done,.st-fail,.cd-fail,.st-skip,.cd-skip) .nbdotg{color:#fff!important;}
+  html body #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-node:not(:hover,.nbsel,.here) :is(.st-skip,.cd-skip) .nbdotg{color:#1f2933!important;}
+  html body .nbcover-tl .nbtl-row:not(:hover,.nbtl-hov,.nbtl-pin):is([data-st="solved"],[data-st="wrong"],[data-st="skipped"]) .nbtl-mk{
+      --nbsc:#1e7a4c;border-color:var(--nbsc)!important;border-style:solid!important;background:var(--nbsc)!important;opacity:1!important;
+      box-shadow:0 0 7px 1px color-mix(in srgb,var(--nbsc) 55%%,transparent)!important;}
+  html body .nbcover-tl .nbtl-row.nbtl-code[data-st="solved"] .nbtl-mk{--nbsc:#6b3fd1!important;}
+  html body .nbcover-tl .nbtl-row[data-st="wrong"] .nbtl-mk{--nbsc:#b42318!important;}
+  html body .nbcover-tl .nbtl-row[data-st="skipped"] .nbtl-mk{--nbsc:#e0a800!important;}
+
+  /* ======================================================================
+     2026-10-02 — EILAUFTRAG E19.5 (Oberfläche; Verhalten, Verschlüsselung
+     und Texte JS). DAS KONTO-FELD MIT PASSWORT — überall gleich, im
+     👤-Fenster (E17.2) und auf dem Cover (E17.3). Vertrag an JS:
+       .nbacct[data-in="0|1"]      das Konto (nicht / eingeloggt)
+         .nbacct-t                 Überschrift (Cover) — im Fenster .nbcell-h
+         .nbacct-me                eingeloggt: .nbacct-id (Person-Id) + Knöpfe
+         .nbacct-form              Einloggen / neues Konto
+           input.nbacct-code       Profil-Code (Groß-/Kleinschreibung zählt)
+           .nbacct-pwbox > input.nbacct-pw[type=password]
+                         + button.nbacct-eye[aria-pressed]   zeigen/verbergen
+           button.nbacct-btn       jeder Knopf; .nbprimary = Hauptknopf,
+                                   .nbdanger = Ausloggen/Löschen
+         .nbacct-msg[data-kind="ok|err|info"]   Rückmeldung (leer = weg)
+         .nbacct-note              „kein Zurücksetzen“ — rote Warnung
+         .nbacct-qr                QR (svg/canvas/img), weißer Grund + Ruhezone
+       [hidden] gilt immer; [aria-invalid="true"] am Feld = falsch.
+     2026-10-03 (rebase v1.62, Markup JS PAUSE-js): ebenso gilt
+       .nbacct[data-state="out|new|in"] · .nbacct-row (Reihe) ·
+       button.nbacct-btn[data-do] (in/create/code = Hauptknopf, out =
+       Ausloggen) · .nbacct-msg[data-tone="ok|bad"] · .nbacct-codebox >
+       code.nbacct-codetext · .nbacct-qrbox > svg.nbacct-qr
+     Farben aus --nbacct-*: im Fenster aus dem Stil (--nbskin-*), auf dem
+     Cover aus --nbcov-* (minimal, E15.2). Text ≥ 4,5 : 1 auf jeder Fläche. */
+  html body .nbacct{--nbacct-acc:var(--nbskin-acc,#1d5c8a);--nbacct-ink:var(--nbskin-ink,#1f2933);
+      --nbacct-face:var(--nbskin-surf,#fff);--nbacct-line:var(--nbskin-line,#c3ced8);
+      --nbacct-quiet:var(--nbskin-quiet,#55636f);--nbacct-red:#b42318;
+      display:block;text-align:left;color:var(--nbacct-ink);font-size:14px;line-height:1.45;}
+  html body.nbdark .nbacct{--nbacct-red:#ff8a7a;}
+  /* :not(#nbz) — eine ID mehr als die Schubladen-Regeln (#nbpanel-root
+     .nbdrawer button/input, 03/06/09), die sonst Größe und Farben setzen */
+  html body .nbacct:not(#nbz) [hidden]{display:none!important;}
+  html body .nbacct:not(#nbz) :is(.nbacct-me,.nbacct-form,.nbacct-row){display:flex!important;flex-wrap:wrap;gap:8px;align-items:center;}
+  html body .nbacct:not(#nbz) :is(.nbacct-me,.nbacct-form) + .nbacct-form{margin-top:8px;}
+  html body .nbacct:not(#nbz) :is(input.nbacct-code,input.nbacct-pw){
+      all:unset;box-sizing:border-box!important;flex:1 1 180px;min-width:0;width:100%%!important;
+      height:36px!important;padding:0 12px!important;margin:0!important;
+      border:1.5px solid color-mix(in srgb,var(--nbacct-ink) 32%%,var(--nbacct-face))!important;
+      border-radius:10px!important;background:var(--nbacct-face)!important;
+      color:var(--nbacct-ink)!important;-webkit-text-fill-color:var(--nbacct-ink);
+      font-family:var(--jp-code-font-family,ui-monospace,monospace)!important;font-size:14px!important;
+      line-height:34px!important;letter-spacing:.04em;text-align:left!important;}
+  html body .nbacct:not(#nbz) input.nbacct-pw[type="password"]{letter-spacing:.18em;}
+  html body .nbacct:not(#nbz) :is(input.nbacct-code,input.nbacct-pw)::placeholder{
+      color:var(--nbacct-quiet);-webkit-text-fill-color:var(--nbacct-quiet);opacity:1;letter-spacing:.02em;
+      font-family:var(--nbskin-font,var(--jp-content-font-family,inherit));}
+  html body .nbacct:not(#nbz) :is(input.nbacct-code,input.nbacct-pw):focus{
+      border-color:var(--nbacct-acc)!important;
+      box-shadow:0 0 0 3px color-mix(in srgb,var(--nbacct-acc) 25%%,transparent)!important;}
+  html body .nbacct:not(#nbz) :is(input.nbacct-code,input.nbacct-pw)[aria-invalid="true"]{
+      border-color:var(--nbacct-red)!important;
+      box-shadow:0 0 0 3px color-mix(in srgb,var(--nbacct-red) 22%%,transparent)!important;}
+  html body .nbacct:not(#nbz) :is(input,button):disabled{opacity:.55!important;cursor:not-allowed;}
+  html body .nbacct:not(#nbz) .nbacct-pwbox{position:relative;flex:1 1 180px;min-width:0;display:flex!important;}
+  html body .nbacct:not(#nbz) .nbacct-pwbox input.nbacct-pw{padding-right:42px!important;}
+  html body .nbacct:not(#nbz) button.nbacct-eye{all:unset;position:absolute;right:4px;top:4px;
+      width:28px!important;height:28px!important;padding:0!important;border-radius:8px!important;
+      cursor:pointer;display:grid;place-items:center;font-size:15px!important;line-height:1!important;
+      background:transparent!important;border:0!important;color:var(--nbacct-quiet)!important;}
+  html body .nbacct:not(#nbz) button.nbacct-eye:is(:hover,:focus-visible,[aria-pressed="true"]){
+      color:var(--nbacct-ink)!important;background:color-mix(in srgb,var(--nbacct-ink) 10%%,transparent)!important;}
+  html body .nbacct:not(#nbz) button.nbacct-btn{all:unset;box-sizing:border-box!important;cursor:pointer;
+      height:36px!important;min-height:0!important;width:auto!important;padding:0 15px!important;margin:0!important;
+      border-radius:999px!important;display:inline-flex;align-items:center;gap:6px;
+      font-family:inherit;font-size:13.5px!important;line-height:1!important;font-weight:700;white-space:nowrap;
+      border:1.5px solid color-mix(in srgb,var(--nbacct-ink) 30%%,var(--nbacct-face))!important;
+      background:var(--nbacct-face)!important;color:var(--nbacct-ink)!important;box-shadow:none!important;
+      transition:transform .15s ease,opacity .15s ease;}
+  html body .nbacct:not(#nbz) button.nbacct-btn:hover{transform:translateY(-1px);}
+  html body .nbacct:not(#nbz) :is(button.nbacct-btn,button.nbacct-eye):focus-visible{
+      outline:2px solid var(--nbacct-acc)!important;outline-offset:2px;}
+  html body .nbacct:not(#nbz) button.nbacct-btn:is(.nbprimary,[data-do="in"],[data-do="create"],[data-do="code"]){border-color:var(--nbacct-acc)!important;
+      background:var(--nbacct-acc)!important;color:var(--nbacct-face)!important;}
+  html body .nbacct:not(#nbz) button.nbacct-btn:is(.nbdanger,[data-do="out"]){color:var(--nbacct-red)!important;
+      border-color:color-mix(in srgb,var(--nbacct-red) 55%%,var(--nbacct-face))!important;}
+  html body .nbacct:not(#nbz) .nbacct-id{display:inline-block;padding:5px 11px;border-radius:8px;
+      font-family:var(--jp-code-font-family,ui-monospace,monospace)!important;font-size:14px!important;
+      font-weight:700;letter-spacing:.08em;font-variant-numeric:tabular-nums;color:var(--nbacct-ink)!important;
+      background:color-mix(in srgb,var(--nbacct-acc) 10%%,var(--nbacct-face));
+      border:1px solid color-mix(in srgb,var(--nbacct-acc) 45%%,var(--nbacct-face));}
+  html body .nbacct:is([data-in="0"],[data-state="out"],[data-state="new"]):not(#nbz) .nbacct-id{font-family:inherit!important;font-weight:600;letter-spacing:0;
+      color:var(--nbacct-quiet)!important;background:transparent;border-style:dashed;}
+  html body .nbacct:not(#nbz) .nbacct-msg{margin-top:6px;font-size:13px!important;font-weight:600;color:var(--nbacct-ink)!important;}
+  html body .nbacct:not(#nbz) .nbacct-msg:empty{display:none!important;}
+  html body .nbacct:not(#nbz) .nbacct-msg:is([data-kind="err"],[data-tone="bad"]){color:var(--nbacct-red)!important;}
+  html body .nbacct:not(#nbz) .nbacct-msg:is([data-kind="err"],[data-tone="bad"]):not(:empty)::before{content:"✗ ";}
+  html body .nbacct:not(#nbz) .nbacct-msg:is([data-kind="ok"],[data-tone="ok"]){color:var(--nbacct-ok,var(--nbacct-acc))!important;}
+  html body .nbacct:not(#nbz) .nbacct-msg:is([data-kind="ok"],[data-tone="ok"]):not(:empty)::before{content:"✓ ";}
+  html body .nbacct:not(#nbz) .nbacct-note{margin-top:8px;padding:6px 10px;font-size:12.5px!important;line-height:1.4!important;
+      color:var(--nbacct-ink)!important;border-left:3px solid var(--nbacct-red);border-radius:0 8px 8px 0;
+      background:color-mix(in srgb,var(--nbacct-red) 8%%,var(--nbacct-face));}
+  html body .nbacct:not(#nbz) .nbacct-note :is(b,strong){color:var(--nbacct-red)!important;font-size:inherit!important;}
+  html body .nbacct:not(#nbz) :is(.nbacct-qr:not(svg),.nbacct-qrbox){display:inline-block;margin-top:8px;padding:10px;background:#fff!important;
+      border-radius:8px;line-height:0!important;box-shadow:0 0 0 1px var(--nbacct-line);}
+  html body .nbacct:not(#nbz) :is(.nbacct-qr :is(svg,canvas,img),svg.nbacct-qr){display:block;width:168px;height:168px;
+      image-rendering:pixelated;image-rendering:crisp-edges;}
+  html body .nbacct:not(#nbz) code.nbacct-codetext{display:block;box-sizing:border-box;margin:8px 0 2px!important;
+      padding:8px 10px;border-radius:8px;font-family:var(--jp-code-font-family,ui-monospace,monospace)!important;
+      font-size:12.5px!important;line-height:1.45!important;letter-spacing:.02em;text-align:left;
+      color:var(--nbacct-ink)!important;user-select:all;
+      background:color-mix(in srgb,var(--nbacct-acc) 8%%,var(--nbacct-face))!important;
+      border:1px solid color-mix(in srgb,var(--nbacct-acc) 35%%,var(--nbacct-face));}
+  @media (prefers-reduced-motion:reduce){
+      html body .nbacct:not(#nbz) :is(button.nbacct-btn,input){transition:none!important;}
+      html body .nbacct:not(#nbz) button.nbacct-btn:hover{transform:none;}}
+
+  /* ======================================================================
+     2026-10-03 — EILAUFTRAG E21 Rest PY-R7b (Oberfläche; Lage Python
+     py-E21.7). DIE VERSIONSZEILE IST KLEIN. Seit py-E21.7 steht `.nbbuild`
+     nicht mehr als Kopf der Schublade, sondern als letzte Zeile der
+     ⚙-Zelle (Inline .72em). Gemessen Probebau v1.62: 15 px — die
+     Fenster-Regel aus 09 („eine Größe für allen Text, 15 px × K“, trifft
+     jedes `div` im Fenster, !important) schlägt den Inline-Wert. Jetzt
+     11 px fest (`--nbk` ist im Fenster 1), leise, ohne Sperrung des Kopfs.
+     Dazu der Strich ohne Kopf (Befund Python): das Gitter trug oben eine
+     Linie, die bisher nur `.nbbuild ~ *` wegnahm — ohne Kopf stand sie
+     allein oben im Fenster; sie entfällt. */
+  html body #nbpanel-root .nbdrawer .nbcell .nbbuild{
+      font-size:11px!important;line-height:1.3!important;font-weight:600!important;
+      letter-spacing:.3px!important;}
+  html body #nbpanel-root .nbdrawer > .nbdrawer-grid{border-top:0!important;}
+
+  /* ======================================================================
+     2026-10-06 — EILAUFTRAG E23.4 (Oberfläche). VISUALISIERUNGEN UND DIE
+     KAPITEL IN INTRODUCTION/APPENDIX ALS GEFÜLLTE PUNKTE, wie Kapitel und
+     Intro gefüllt sind. Gemessen v1.63 (Cover): Abbildungen ein leeres
+     Rechteck 11 × 9 px (Rand neutral, innen die Fläche), die Abschnitte
+     ein leerer Ring 10 px. Jetzt beide ein runder, ganz gefüllter Punkt
+     10 px in der neutralen Farbe der Marken (--nbtl-b: hell #46535f, dunkel
+     der leise Ton des Stils) — hell und dunkel gefüllt. Fairy behält seine
+     Silhouette (E18.5, Tropfen der Abschnitte), gefüllt. Multiple Choice
+     und BYOD bleiben, wie sie sind (eigene Farbe, E18.4). */
+  html body:not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz) .nbcover-tl .nbtl-row:is(.nbtl-figure,.nbtl-sub) .nbtl-mk{
+      width:10px!important;height:10px!important;border:2px solid var(--nbtl-b)!important;
+      background:var(--nbtl-b)!important;box-shadow:none!important;color:var(--nbtl-b)!important;}
+  html body:not(.nbskin-fairy):not(#nbz#nbz#nbz#nbz#nbz#nbz#nbz) .nbcover-tl .nbtl-row:is(.nbtl-figure,.nbtl-sub) .nbtl-mk{
+      border-radius:50%%!important;}

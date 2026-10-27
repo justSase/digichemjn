@@ -1,0 +1,484 @@
+  /* ======================================================================
+     2026-09-24n — THE DOCUMENT IN FRONT, THE INSTRUMENT BEHIND
+     The quiet pass took the decoration off the panel but left it a CARD: a
+     border, a radius, a filled rectangle down the right-hand side. Two cards
+     beside a page of flat text read as the loudest things on screen, which is
+     exactly backwards — the notebook is what is being read. So the panel stops
+     being an object and becomes an edge, and the hierarchy the quiet pass took
+     out of the document is given back to it, in weight and rule rather than in
+     colour. */
+
+  /* ---- the rail is a line in the margin, not a panel ------------------ */
+  .nbrail{background:transparent!important;background-image:none!important;
+      border:0!important;border-radius:0!important;box-shadow:none!important;}
+  .nbpanel-host.vert .nbrail{
+      border-left:1px solid var(--nbquiet-line,#e4e9ee)!important;}
+  body[data-jp-theme-light="false"] .nbrail{--nbquiet-line:#252c35;
+      background:transparent!important;}
+
+  /* ---- the toolbar is a rule, not a card ------------------------------ */
+  .nbdock{border:0!important;border-radius:0!important;box-shadow:none!important;
+      border-bottom:1px solid var(--nbquiet-line,#e2e8ee)!important;}
+  .nbdrawer{border-radius:0!important;box-shadow:none!important;}
+
+  /* ---- the reading position: a short BAR on the line ------------------ */
+  /* A ring read as a fifth kind of mark. It is a band again, as it was — just
+     short: about the height of a marker circle, narrower than the line it
+     travels on, and behind every mark so it never hides one. */
+  /* 2026-09-24ai — THE MARKER GLOWS, AND IT GLOWS FROM UNDERNEATH.
+     z-index 1 puts it below the line and below every mark, so the light comes
+     out around them rather than over them: the marks keep their own colours and
+     the glow reads as something passing behind the rail. */
+  .nbpanel-host.vert .nbmap-here{
+      width:7px!important;margin-left:-3.5px!important;
+      border-radius:4px!important;
+      background:var(--nbmark,#2c6e91)!important;
+      border:1px solid var(--nbring,#fff)!important;
+      box-shadow:0 0 6px 2px var(--nbglow,rgba(255,255,255,.8)),
+                 0 0 18px 7px var(--nbglow,rgba(255,255,255,.4))!important;
+      opacity:.95;z-index:1!important;}
+  .nbpanel-host.vert .nbmap-here:hover,
+  .nbpanel-host.vert .nbmap-here.dragging{opacity:1;}
+  /* E16.3: no trail (the stretch since the last mark) — the marker's light is one circle */
+  .nbmap-trail{display:none!important;}
+  /* 2026-09-24ab — IT PAINTS AGAIN, IN BOTH THEMES.
+     This block used to cancel the marker's colouring, on the argument that a
+     short marker covers nothing. It does cover something: it stands ON the
+     line, and the marks stand out on both sides of it, so a mark the marker is
+     level with is the one the reader is at. The rules that do the painting live
+     at the very end of the stylesheet (search for "LAST WORD") and use
+     --nbmark, which is white on dark and #0d63e0 on light — the light value is
+     the part that was missing when this override was here. */
+
+  /* ---- TWO PROGRESSIONS: green answers, purple code ------------------- */
+  /* The green lane is the ordinary route through the notebook. The coding
+     route runs beside it as a glowing purple outline — the one glow left in
+     the whole panel, so it means something. */
+  .nbpanel-host.vert .nbmap-fill.code{
+      width:18px!important;margin-left:-9px!important;
+      background:transparent!important;background-color:transparent!important;
+      border-left:2px solid rgba(123,79,189,.9)!important;
+      border-right:2px solid rgba(123,79,189,.9)!important;
+      border-radius:2px!important;
+      box-shadow:0 0 9px 1px rgba(123,79,189,.45)!important;}
+  body[data-jp-theme-light="false"] .nbpanel-host.vert .nbmap-fill.code{
+      border-color:rgba(167,131,232,.95)!important;
+      box-shadow:0 0 10px 1px rgba(167,131,232,.4)!important;}
+  .nbmap-fill{background-color:#3aa06f!important;}
+
+  /* ---- the document gets its hierarchy back --------------------------- */
+  /* A chapter opener is the most important line on the page, so it looks like
+     one: larger, darker, and closed by a hairline that spans the column. */
+  body.nbquiet .acc-chapter>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header,
+  body.nbquiet .acc-chapter>.lm-Collapse>.lm-Collapse-header,
+  body.nbquiet .acc-chapter>.p-Collapse>.p-Collapse-header{
+      font-size:1.52em!important;font-weight:800!important;
+      letter-spacing:-.2px!important;color:#12324a!important;
+      padding:14px 0 10px!important;margin:34px auto 6px!important;
+      border-bottom:0!important;}
+  body.nbquiet .acc-chapter>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header *,
+  body.nbquiet .acc-chapter>.lm-Collapse>.lm-Collapse-header *{color:#12324a!important;}
+  body.nbquiet .acc-chapter>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header:hover,
+  body.nbquiet .acc-chapter>.lm-Collapse>.lm-Collapse-header:hover{
+      color:#2c6e91!important;}
+  body[data-jp-theme-light="false"].nbquiet
+      .acc-chapter>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header,
+  body[data-jp-theme-light="false"].nbquiet
+      .acc-chapter>.lm-Collapse>.lm-Collapse-header{
+      color:#dce6ee!important;border-bottom:0!important;}
+  body[data-jp-theme-light="false"].nbquiet
+      .acc-chapter>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header *,
+  body[data-jp-theme-light="false"].nbquiet
+      .acc-chapter>.lm-Collapse>.lm-Collapse-header *{color:#dce6ee!important;}
+  /* a locked chapter is legible as locked while it is shut */
+  body.nbquiet .acc-locked>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header,
+  body.nbquiet .acc-locked>.lm-Collapse>.lm-Collapse-header{
+      color:#8898a6!important;}
+  body.nbquiet .acc-locked>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header *,
+  body.nbquiet .acc-locked>.lm-Collapse>.lm-Collapse-header *{color:#8898a6!important;}
+  /* the section headers step back so the chapters can step forward */
+  body.nbquiet .acc-group>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header,
+  body.nbquiet .acc-group>.lm-Collapse>.lm-Collapse-header{
+      font-size:.78em!important;letter-spacing:2.6px!important;
+      text-transform:uppercase!important;color:#7b8a97!important;
+      margin:46px auto 6px!important;font-weight:700!important;}
+  body.nbquiet .acc-group>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header *,
+  body.nbquiet .acc-group>.lm-Collapse>.lm-Collapse-header *{color:#7b8a97!important;}
+
+  /* ---- the reading column uses the width it has ----------------------- */
+  /* The boxes were capped at 780px inside a 1200px column, which left a third
+     of the page empty on the left and made the text look like a narrow strip
+     pinned to the middle. */
+  /* ONE COLUMN, AND A LADDER INSIDE IT (2026-09-24u).
+     Two wrong answers came before this one. First everything was capped in
+     PIXELS, which made a narrow strip in a wide page. Then the caps were
+     removed altogether, which let a line of text run the whole width of a
+     2000px screen — unreadable, and the box no longer agreed with the text
+     inside it.
+     The cap is back, but in `rem`: a line that is 68 characters wide stays 68
+     characters wide at every document zoom and on every screen — `rem`,
+     not `em`, so a heading in a smaller type does not get a smaller column. The column is
+     centred on the axis, and inside it the ladder holds.
+
+        74rem / 100 - title banner, section rules, chapter headings, the end
+        70rem /  94 - the boxes of a chapter
+        64rem /  88 - boxes inside a fold (visualisation, practice, code)
+     (the second number is per cent of a narrow window; a bare %% in this
+      stylesheet is a format placeholder) */
+  /* THE BOX IS AS WIDE AS WHAT IS IN IT (2026-09-24w).
+     A fixed column meant a four-line list sat in a box twice its width, and the
+     box's edges no longer agreed with the text's. `fit-content` measures the
+     content: prose fills the column and wraps at the cap, a short list keeps the
+     box short. The cap is the reading measure, the floor stops a two-word box
+     from becoming a stamp. */
+  body.nbquiet .nbbox,body.nbquiet .nblock{
+      width:fit-content!important;
+      min-width:min(100%%,26rem)!important;
+      max-width:min(94%%,70rem)!important;
+      margin-left:auto!important;margin-right:auto!important;}
+  body.nbquiet .nbend{
+      width:100%%!important;max-width:74rem!important;
+      margin-left:auto!important;margin-right:auto!important;}
+  body.nbquiet .acc-viz .nbbox,body.nbquiet .acc-viz .nblock,
+  body.nbquiet .acc-practice .nbbox,body.nbquiet .acc-practice .nblock,
+  body.nbquiet .acc-code .nbbox,body.nbquiet .acc-code .nblock{
+      max-width:min(88%%,64rem)!important;}
+  /* 2026-09-24bi — and NOT the chapter pills. This was the second of the two
+     places the pill's width was set, and the wider one: it put every heading
+     across the whole column, which is invisible while a pill is a bare
+     heading and a banner the moment a skin paints one. The width of a name is
+     the width of the name. The SECTION rule keeps its full span — that one is
+     a hairline with a label in it, and it is meant to separate. */
+  body.nbquiet :where([data-digichem],.nbrail-own) .jupyter-widget-Collapse-header,
+  body.nbquiet :where([data-digichem],.nbrail-own) .p-Collapse-header,
+  body.nbquiet :where([data-digichem],.nbrail-own) .lm-Collapse-header{
+      width:fit-content!important;max-width:74rem!important;
+      margin-left:auto!important;margin-right:auto!important;}
+  body.nbquiet .acc-group>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header,
+  body.nbquiet .acc-group>.lm-Collapse>.lm-Collapse-header{
+      width:100%%!important;max-width:74rem!important;}
+  .nbcover .nbtitle-card{width:fit-content!important;
+      max-width:min(94%%,70rem)!important;
+      margin-left:auto!important;margin-right:auto!important;}
+  body.nbquiet .acc-viz .jupyter-widget-Collapse-header,
+  body.nbquiet .acc-viz .p-Collapse-header,
+  body.nbquiet .acc-practice .jupyter-widget-Collapse-header,
+  body.nbquiet .acc-practice .p-Collapse-header,
+  body.nbquiet .acc-code .jupyter-widget-Collapse-header,
+  body.nbquiet .acc-code .p-Collapse-header{
+      width:fit-content!important;max-width:94%%!important;}
+
+  /* ipywidgets caps every HTML widget at 880px and gives it 2px of margin —
+     which is why the BOXES were 88px narrower than the rules above them while
+     the rules themselves ran the full width. That cap is off (2026-09-24p). */
+  /* 2026-09-24x — ONLY THE HTML WIDGETS. `.widget-inline-hbox` is on every
+     inline widget, controls included, so `width:100%%` on it stretched every
+     slider, dropdown and checkbox in the notebooks across the whole reading
+     column. The cap that had to go was the one on the BOXES; a control keeps
+     the size ipywidgets gives it. */
+  body.nbquiet :where([data-digichem],.nbrail-own) .widget-html,body.nbquiet :where([data-digichem],.nbrail-own) .widget-html-content,
+  body.nbquiet :where([data-digichem],.nbrail-own) .widget-inline-hbox.widget-html,
+  body.nbquiet :where([data-digichem],.nbrail-own) .jupyter-widget-html,body.nbquiet :where([data-digichem],.nbrail-own) .jupyter-widget-html-content{
+      max-width:none!important;width:100%%!important;
+      margin-left:0!important;margin-right:0!important;}
+  /* the title page's own paragraphs take the same width as everything else */
+  .nbcover .nbtitle-lead,.nbcover .nbtitle-note,.nbcover .nbtitle-fine{
+      max-width:74rem!important;width:100%%!important;
+      margin-left:auto!important;margin-right:auto!important;
+      box-sizing:border-box!important;}
+
+  /* a group's body indents everything inside it by 15px on each side, so a
+     chapter rule was 28px narrower than the section rule above it. Side padding
+     off; the vertical padding, which is real spacing, stays. */
+  body.nbquiet :where([data-digichem],.nbrail-own) .jupyter-widget-Collapse-contents,
+  body.nbquiet :where([data-digichem],.nbrail-own) .p-Collapse-contents,
+  body.nbquiet :where([data-digichem],.nbrail-own) .lm-Collapse-contents{
+      padding-left:0!important;padding-right:0!important;}
+  body.nbquiet :where([data-digichem],.nbrail-own) .jupyter-widget-Accordion,
+  body.nbquiet :where([data-digichem],.nbrail-own) .jupyter-widget-Collapse{margin-left:0!important;margin-right:0!important;}
+
+  /* the markdown cell's own side padding is taken off, so the title banner is
+     exactly as wide as the boxes under it and as the empty cells below */
+  body.nbvert .jp-NotebookPanel:where([data-digichem],.nbrail-own) .jp-MarkdownCell .jp-RenderedMarkdown,
+  body.nbvert .jp-NotebookPanel:where([data-digichem],.nbrail-own) .jp-MarkdownCell .jp-Cell-inputArea,
+  body.nbvert .jp-NotebookPanel:where([data-digichem],.nbrail-own) .jp-MarkdownCell .jp-InputArea{
+      padding-left:0!important;padding-right:0!important;}
+
+  /* ---- the title page fills the page ---------------------------------- */
+  /* THE TITLE PAGE IS AS TALL AS IT IS (2026-09-24o).
+     A full-page cover centred its content, which put a screen of nothing above
+     the card and another screen of nothing between the cover and Introduction.
+     It now starts directly under the toolbar and ends where its last line
+     ends. */
+  .nbcover{min-height:0!important;width:100%%!important;
+      justify-content:flex-start!important;
+      padding:0 0 22px!important;}
+  /* the banner is the column, not the window (2026-09-24u) */
+  .nbcover .nbtitle-card{width:fit-content!important;
+      max-width:min(94%%,70rem)!important;
+      margin:0 auto!important;border-radius:16px!important;
+      padding:34px 56px 30px!important;}
+  body.nbvert .jp-NotebookPanel .jp-Cell .nbtitle.nbcover{
+      max-width:none!important;}
+
+  /* ======================================================================
+     2026-09-24q — THE LANE IN SEGMENTS, AND A MARK FOR THE CODE
+     The XP lane is no longer one green frontier but one segment per settled
+     exercise: green answered, amber skipped, red answered wrongly. Get a
+     skipped or wrong one right and its own stretch turns green. */
+  .nbmap-segs{display:none;}
+  .nbpanel-host.vert .nbmap-segs{display:block;position:absolute;
+      left:0;top:0;right:0;bottom:0;pointer-events:none;z-index:2;}
+  .nbpanel-host.vert .nbseg{position:absolute;
+      left:var(--nbvert-axis,30px);margin-left:-4px;width:8px;
+      border-radius:2px;
+      transition:height .45s cubic-bezier(.22,.61,.36,1),
+                 top .45s cubic-bezier(.22,.61,.36,1),
+                 background-color .3s ease;}
+  .nbpanel-host.vert .nbseg[data-s="done"]{background:#3aa06f;}
+  .nbpanel-host.vert .nbseg[data-s="skip"]{background:#d99b2b;}
+  .nbpanel-host.vert .nbseg[data-s="fail"]{background:#c0392b;}
+  body[data-jp-theme-light="false"] .nbpanel-host.vert .nbseg[data-s="done"]{background:#4fbf8b;}
+  body[data-jp-theme-light="false"] .nbpanel-host.vert .nbseg[data-s="skip"]{background:#e0ad4a;}
+  body[data-jp-theme-light="false"] .nbpanel-host.vert .nbseg[data-s="fail"]{background:#d4584a;}
+  /* 2026-09-24ae — the chapter's point is NOT tinted. Colour on this rail means
+     a state an exercise is in, and a chapter has no such state; tinting it said
+     the chapter had been passed or given up, which is not a thing that can
+     happen to a chapter. The rules are removed rather than disabled. */
+
+  /* the coding exercise's own mark: a rounded SQUARE, so the four kinds of
+     mark on the rail are four shapes — diamond, circle, dot, square */
+  .nbmap-node.codetask{min-width:40px;}
+  .nbcodemark{position:absolute;top:calc(62px * var(--nbthick,1));left:50%%;
+      transform:translate(-50%%,-50%%);
+      width:calc(17px * var(--nbthick,1));height:calc(17px * var(--nbthick,1));
+      border-radius:50%%;                      /* a circle, like the others */
+      box-sizing:border-box;
+      border:max(1px, calc(2px * var(--nbthick,1))) solid #8894a0;
+      background:var(--nbrail-bg,#f6f8fa);
+      color:#fff;font-size:calc(9px * var(--nbthick,1));font-weight:800;
+      line-height:calc(13px * var(--nbthick,1));text-align:center;
+      text-decoration:none!important;
+      transition:transform .18s ease,background .2s ease;}
+  .nbpanel-host.vert .nbcodemark{
+      left:var(--nbvert-axis,30px)!important;top:0!important;}
+  /* solved is solved: the same green as everything else (2026-09-24u) */
+  .nbcodemark.cd-done{background:#3aa06f;border-color:#3aa06f;}
+  .nbcodemark.cd-skip{background:#d99b2b;border-color:#d99b2b;}
+  .nbcodemark.cd-fail{background:#c0392b;border-color:#c0392b;}
+  .nbcodemark.cd-lock{background:#46535f;border-color:#6c7885;
+      font-size:calc(8px * var(--nbthick,1));}
+  .nbcodemark.cd-open{background:var(--nbrail-bg,#f6f8fa);}
+  body[data-jp-theme-light="false"] .nbcodemark{background:#171c22;border-color:#8894a0;}
+  body[data-jp-theme-light="false"] .nbcodemark.cd-done{
+      background:#4fbf8b;border-color:#4fbf8b;}
+  body[data-jp-theme-light="false"] .nbcodemark.cd-skip{background:#e0ad4a;border-color:#e0ad4a;}
+  body[data-jp-theme-light="false"] .nbcodemark.cd-fail{background:#d4584a;border-color:#d4584a;}
+  .nbmap-node:hover .nbcodemark,.nbmap-node:focus .nbcodemark,
+  .nbmap-node.nbpop .nbcodemark{transform:translate(-50%%,-50%%) scale(1.22);}
+  .nbpanel-host.vert .nbmap-node.codetask{z-index:6;}
+  /* the detail ladder drops it with the other small marks */
+  .nbpanel-host.det-dot .nbcodemark{display:none;}
+
+  /* FULL SCREEN HAS NO WIDTH OF ITS OWN (2026-09-24r).
+     The full-screen block capped the boxes at 1400-1560px, from a time when the
+     reading column was narrow and the caps were a courtesy. Now the column IS
+     the width, so the caps only left a band of empty page between the text and
+     the rail. Everything in full screen is the column, exactly as it is outside
+     it. */
+  body.nbfs .jp-NotebookPanel:where([data-digichem],.nbrail-own),body.nbfs :where([data-digichem],.nbrail-own) .jp-Notebook,
+  body.nbfs :where([data-digichem],.nbrail-own) .jp-WindowedPanel-outer,body.nbfs :where([data-digichem],.nbrail-own) .jp-WindowedPanel-inner,
+  body.nbfs :where([data-digichem],.nbrail-own) .jp-WindowedPanel-viewport{
+      width:100%%!important;max-width:none!important;}
+  /* 2026-09-28b (K2.1) — AND NO BOX CHANGES WIDTH EITHER.
+     Here stood a second set of full-screen widths: boxes and the quiz at 94%%
+     up to 70rem, exercise boxes 88%% up to 64rem, every pill 100%% up to
+     74rem. They were written for the same reason as the caps above and did
+     the opposite of §6 — measured at 1920 × 1080 (27h/28a, Complex): the key
+     message 850 → 1466 px, the exercise box 750 → 1373, the feedback 760 →
+     1478, the code fold's pill 285 → 1184 when ⛶ was pressed. The user's
+     finding "im Vollbild läuft alles über die ganze Breite". Gone: a box is
+     as wide in full screen as outside it, and only the containers above
+     follow the window. */
+
+  /* THE VISUALISATION'S MARK (2026-09-24v): a small square. Four shapes for
+     four things on the rail — diamond a section, circle a chapter or an
+     exercise, dot a sub-chapter, square a visualisation. */
+  .nbmap-node.viztask{min-width:34px;}
+  .nbvizmark{position:absolute;top:calc(62px * var(--nbthick,1));left:50%%;
+      transform:translate(-50%%,-50%%);
+      width:calc(11px * var(--nbthick,1));height:calc(11px * var(--nbthick,1));
+      border-radius:calc(2px * var(--nbthick,1));
+      box-sizing:border-box;
+      border:max(1px, calc(2px * var(--nbthick,1))) solid #2c6e91;
+      background:var(--nbrail-bg,#f6f8fa);
+      text-decoration:none!important;
+      transition:transform .18s ease,background .2s ease;}
+  .nbpanel-host.vert .nbvizmark{
+      left:var(--nbvert-axis,30px)!important;top:0!important;}
+  body[data-jp-theme-light="false"] .nbvizmark{
+      background:#171c22;border-color:#8fc7e8;}
+  .nbmap-node:hover .nbvizmark,.nbmap-node:focus .nbvizmark,
+  .nbmap-node.nbpop .nbvizmark{
+      transform:translate(-50%%,-50%%) scale(1.25);background:#2c6e91;}
+  .nbpanel-host.det-dot .nbvizmark{display:none;}
+
+  /* 2026-09-24x — THE EMPTY CELL AND THE CHAPTER SEPARATOR ARE GONE.
+     The notebook no longer ships a third cell, so there is nothing to frame;
+     and the dashed rule between chapters was asked for and then asked away
+     again. Both rule sets are removed rather than disabled — a dead rule that
+     still matches is the next surprise. */
+
+  /* a name that would be printed over its neighbour is taken off; the mark
+     stays, and the name comes back when the pointer is on it */
+  .nbpanel-host.vert .nbmap-node.nblabgone .nbmap-lab{
+      opacity:0!important;pointer-events:none!important;}
+  .nbpanel-host.vert .nbmap-node.nblabgone:hover .nbmap-lab,
+  .nbpanel-host.vert .nbmap-node.nblabgone:focus .nbmap-lab,
+  .nbpanel-host.vert .nbmap-node.nblabgone.nbpop .nbmap-lab{
+      opacity:1!important;pointer-events:auto!important;}
+
+  /* ---- the lock lives in the panel (2026-09-24ah) ---------------------- */
+  /* the shell the locked chapter renders is a parking space, not a page */
+  .nbstash-lock{display:none!important;}
+  /* …and the pill of a locked chapter cannot be opened from the document at
+     all. That is the point of moving the lock: there is exactly one way past
+     it, and it is on the timeline. The pill still says which chapter it is and
+     still goes quiet, so nothing is hidden — only the door is somewhere else. */
+  body.nbquiet .acc-locked>.jupyter-widget-Collapse>.jupyter-widget-Collapse-header,
+  body.nbquiet .acc-locked>.lm-Collapse>.lm-Collapse-header{
+      pointer-events:none!important;cursor:default!important;}
+  /* a locked mark that is waiting for its second click says so — a ring in the
+     unlock colour, nothing that opens or covers anything (2026-09-24aj) */
+  #nbpanel-root.vert .nbmap-node[data-armed] .nbchapdot{
+      background:#3fa877!important;border-color:#3fa877!important;
+      box-shadow:0 0 0 3px rgba(63,168,119,.45),
+                 0 0 14px 5px rgba(63,168,119,.35)!important;}
+  #nbpanel-root.vert .nbmap-node[data-armed] .nbmap-lab{
+      color:#2f8f6f!important;font-weight:800!important;opacity:1!important;}
+  body[data-jp-theme-light="false"] #nbpanel-root.vert
+      .nbmap-node[data-armed] .nbchapdot{
+      background:#4fbf8b!important;border-color:#4fbf8b!important;}
+  body[data-jp-theme-light="false"] #nbpanel-root.vert
+      .nbmap-node[data-armed] .nbmap-lab{color:#4fbf8b!important;}
+
+
+  /* 2026-09-28 (Paket 6, Skizze) — THE READER'S OWN CELLS WEAR THE SKIN.
+     A cell the reader adds under the document (the button "Your own cell",
+     JupyterLab's + or B) was JupyterLab's editor: its grey, its edge, in
+     every skin — in retro dark a blue-black slab on brown paper. The first
+     two cells are ours (title, document); every cell after them is the
+     reader's, whatever made it: `.jp-Cell ~ .jp-Cell ~ .jp-Cell`.
+     Face, edge, radius and ink come from the skin's tokens, so light and
+     dark follow ◐ like every box. The code stays monospace (§1: code folds
+     are monospace in every skin); prompt and output take the skin's font
+     and ink. Code colours are G3 (R2), not here. */
+  html body .nbrail-own .jp-Cell ~ .jp-Cell ~ .jp-Cell{
+      background:transparent!important;}
+  html body .nbrail-own .jp-Cell ~ .jp-Cell ~ .jp-Cell .jp-InputArea-editor{
+      background:var(--nbskin-surf)!important;
+      border:1px solid var(--nbskin-line)!important;
+      border-radius:min(var(--nbskin-r,10px),10px)!important;
+      color:var(--nbskin-ink)!important;box-shadow:none!important;}
+  html body .nbrail-own .jp-Cell ~ .jp-Cell ~ .jp-Cell.jp-mod-active .jp-InputArea-editor{
+      border-color:var(--nbskin-acc2,#2c6e91)!important;
+      box-shadow:0 0 0 1px var(--nbskin-acc2,#2c6e91)!important;}
+  html body .nbrail-own .jp-Cell ~ .jp-Cell ~ .jp-Cell :is(.cm-editor,.cm-gutters,.cm-content){
+      background:transparent!important;}
+  html body .nbrail-own .jp-Cell ~ .jp-Cell ~ .jp-Cell .cm-cursor{
+      border-left-color:var(--nbskin-ink)!important;}
+  html body .nbrail-own .jp-Cell ~ .jp-Cell ~ .jp-Cell :is(.jp-InputPrompt,.jp-OutputPrompt){
+      font-family:var(--nbskin-font,inherit)!important;
+      color:var(--nbskin-quiet,#55636f)!important;opacity:1!important;}
+  html body .nbrail-own .jp-Cell ~ .jp-Cell ~ .jp-Cell .jp-OutputArea-output{
+      color:var(--nbskin-ink)!important;background:transparent!important;}
+  /* retro's boxes carry a hard offset shadow; its own cells too */
+  html body.nbskin-retro .nbrail-own .jp-Cell ~ .jp-Cell ~ .jp-Cell .jp-InputArea-editor{
+      box-shadow:3px 3px 0 var(--nbskin-line)!important;}
+  /* cyber: a glow edge in its accent while the cell is active */
+  html body.nbskin-cyber .nbrail-own .jp-Cell ~ .jp-Cell ~ .jp-Cell.jp-mod-active .jp-InputArea-editor{
+      box-shadow:0 0 0 1px var(--nbskin-acc2),0 0 10px color-mix(in srgb,var(--nbskin-acc2) 45%%,transparent)!important;}
+
+  /* ======================================================================
+     2026-09-29 — EILAUFTRAG E8.10 (Oberfläche, Skizze; Lage + Verlässlich-
+     keit macht JS). „YOUR OWN CELL“ SAYS WHAT A CLICK DOES.
+     (a) The timeline mark: a ＋ in the square, and „＋“ before the name, so
+         the last mark reads as a button that adds, not a place to go.
+     (b) JupyterLab's strip under the document („Click to add a cell.“,
+         .jp-Notebook-footer — the hover box) in the style: dashed edge in
+         the accent, skin surface, skin font, one clear line
+         „＋ Add your own coding cell“; on hover it fills softly and the
+         edge goes solid. Only in our notebook (.nbrail-own / [data-digichem]). */
+  html body #nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-node.cell .nbsect::after{
+      content:'＋';position:absolute;left:50%%;top:50%%;
+      transform:translate(-50%%,-52%%) rotate(calc(-1 * var(--nbspin,0deg)));
+      font-weight:800;font-size:calc(12px * var(--nbk,1));line-height:1;
+      color:var(--nbskin-acc,#1d5c8a);pointer-events:none;}
+  html body #nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-node.cell .nbsect{
+      position:relative;border-style:dashed!important;
+      border-color:var(--nbskin-acc,#1d5c8a)!important;}
+  html body #nbpanel-root#nbpanel-root.vert .nbmap-node.cell .nbmap-lab::before{
+      content:'＋ ';color:var(--nbskin-acc,#1d5c8a);font-weight:800;}
+  html body #nbpanel-root#nbpanel-root.vert .nbmap-node.cell .nbmap-lab{
+      color:var(--nbskin-acc,#1d5c8a)!important;}
+  html body :is([data-digichem],.nbrail-own) .jp-Notebook-footer{
+      position:relative;box-sizing:border-box;min-height:44px;margin-top:14px;
+      border:2px dashed color-mix(in srgb,var(--nbskin-acc,#1d5c8a) 55%%,transparent)!important;
+      border-radius:min(var(--nbskin-r,10px),14px);
+      background:color-mix(in srgb,var(--nbskin-surf,#fff) 70%%,transparent)!important;
+      color:transparent!important;font-size:0!important;cursor:pointer;
+      transition:background .18s ease,border-color .18s ease,box-shadow .18s ease;}
+  html body :is([data-digichem],.nbrail-own) .jp-Notebook-footer::before{
+      content:'＋  Add your own coding cell';position:absolute;inset:0;
+      display:flex;align-items:center;justify-content:center;
+      font-weight:700;font-size:calc(15px * var(--nbk,1));line-height:1.2;
+      font-family:var(--nbskin-font,sans-serif);letter-spacing:.3px;
+      color:var(--nbskin-acc,#1d5c8a);}
+  /* py-E23.1 (Inhalt) — the strip's words in German when the run is German
+     (JS puts the run's language on our panel: [data-nblang], 19-rail dcMark) */
+  html body [data-digichem][data-nblang="de"] .jp-Notebook-footer::before{content:'＋  Eigene Programmierzelle anlegen';}
+  html body :is([data-digichem],.nbrail-own) .jp-Notebook-footer:hover{
+      border-style:solid!important;border-color:var(--nbskin-acc,#1d5c8a)!important;
+      background:color-mix(in srgb,var(--nbskin-acc,#1d5c8a) 9%%,var(--nbskin-surf,#fff))!important;
+      box-shadow:0 0 0 3px color-mix(in srgb,var(--nbskin-acc,#1d5c8a) 16%%,transparent);}
+  body.nbskin-retro :is([data-digichem],.nbrail-own) .jp-Notebook-footer{border-radius:0;}
+  /* 2026-10-05 — E22.7 (Struktur; Zustand JS 01-jump). Hover über die YOC-Marke der Timeline
+     zeigt diesen Streifen wie sein eigener Hover: JS setzt `.nbyoc-hot`, solange der Zeiger auf
+     der Marke steht. Sichtbar (JupyterLab blendet den Streifen außerhalb von :hover aus). */
+  html body :is([data-digichem],.nbrail-own) .jp-Notebook-footer.nbyoc-hot{opacity:1!important;
+      border-style:solid!important;border-color:var(--nbskin-acc,#1d5c8a)!important;
+      background:color-mix(in srgb,var(--nbskin-acc,#1d5c8a) 9%%,var(--nbskin-surf,#fff))!important;
+      box-shadow:0 0 0 3px color-mix(in srgb,var(--nbskin-acc,#1d5c8a) 16%%,transparent);}
+
+  /* ======================================================================
+     2026-09-30 — EILAUFTRAG E10.2 (Oberfläche). KEIN DOPPELTER TITEL.
+     Seit py-E9.5 steht alles zwischen Titelkarte und „Your own cell“ in
+     einem Wurzel-Akkordeon `.acc-title.acc-root`, dessen Kopf den Titeltext
+     noch einmal trägt — unter der Karte stand „Complex Numbers“ zweimal.
+     Der Kopf wird ausgeblendet; die Karte ist der Kopf. Zu/auf klappt JS
+     über diesen Kopf (`h.click()` in __nbTitleToggle), das wirkt auch an
+     einem ausgeblendeten Element. Nur der Kopf der Wurzel: die Kapitel-
+     und Gruppenköpfe darin bleiben, YOC (`.acc-yoc`) bleibt. */
+  html body :is([data-digichem],.nbrail-own) .acc-title.acc-root > .jupyter-widget-Collapse > .jupyter-widget-Collapse-header{
+      display:none!important;}
+
+  /* 2026-10-02 E19.6 (Oberfläche) — WENIGER KÄSTEN. Kapitelinhalte und die
+     Kapitel aus Introduction/Appendix stehen als fließender Lehrbuchsatz auf
+     der Seite: in minimal, retro und fairy ohne Fläche, Rand, Schatten um den
+     Text (concept, grey, viz, ex). Cyber behält dezente Kästen (Nutzer: „sehr
+     nice“): halbdurchsichtig, dünner Rand, weiches Leuchten statt Versatz.
+     Kernaussage (interp/key) und Warnung (warn) regelt E19.8. */
+  html body:not(.nbskin-cyber) .jp-Notebook .nbbox:is(.nbbox-concept,.nbbox-grey,.nbbox-viz,.nbbox-ex){
+      background:none!important;border:0!important;box-shadow:none!important;border-radius:0!important;}
+  html body.nbskin-cyber .jp-Notebook .nbbox:is(.nbbox-concept,.nbbox-grey,.nbbox-viz,.nbbox-ex){
+      background:rgba(255,255,255,.55)!important;border:1px solid rgba(124,92,214,.28)!important;
+      border-radius:10px!important;box-shadow:0 0 18px rgba(120,60,200,.08)!important;}
+  html body.nbskin-cyber.nbdark .jp-Notebook .nbbox:is(.nbbox-concept,.nbbox-grey,.nbbox-viz,.nbbox-ex){
+      background:rgba(14,20,42,.78)!important;border-color:rgba(0,229,255,.22)!important;
+      box-shadow:0 0 18px rgba(0,229,255,.07)!important;}
+
+  /* 2026-10-02 — EILAUFTRAG E21.14 (Oberfläche; Markup Python). DIE DREI
+     PUNKTE UNTER DER ÜBERSCHRIFTSPILLE (Wappen `.nborn-crest` aus py-E19.9)
+     SIND WEG — auch in Dateien, die das Markup noch tragen. Die Zierlinie
+     am Ende (`.nborn-rule`) bleibt. */
+  html body .nborn-crest{display:none!important;}

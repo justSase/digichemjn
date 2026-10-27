@@ -1,0 +1,14 @@
+{
+ "about": "E21.0 — a USED browser, keys as v1.54 left them (before the per-notebook keys of E15.7/E16.10). Hand-made by the Hauptwerkstatt from the key names and parsers in toolkit/js (12, 14, 11, 19) on 2026-10-02; a real dump from the reader's browser (DevTools → localStorage, keys digichemjn.*) is better and replaces this file 1:1. {id} = notebook id.",
+ "items": {
+  "digichemjn.zoom.v1": "130",
+  "digichemjn.guizoom.v1": "70",
+  "digichemjn.readline.v1": "60",
+  "digichemjn.orient.v1": "v",
+  "digichemjn.role.v1": "student",
+  "digichemjn.mode.{id}": "both",
+  "digichemjn.bookmark.{id}": "ch2",
+  "digichemjn.owncells.v1": {"{id}": {"v": "1.54", "t": 1790900000000, "cells": ["x = 1 + 1j\nabs(x)"]}},
+  "digichemjn.cover.v1": {"{id}": {"t": 1790900000000, "title": "old build", "k": {"t1": {"calc": "solved", "code": "open"}}}}
+ }
+}

@@ -1,0 +1,72 @@
+# E16.5 (2026-10-02, Inhalt) — the cover's cards: one per timeline mark, 2–3 sentences,
+# what the chapter or exercise contains and teaches. Read at build time by
+# toolkit/card_facts.py (card_desc); it never reaches the reader's cell.
+# One line per card:  <key>: <text>
+# Keys: ch<n> chapter · fig<n> its figure · <task> its exercise (t1 … q1 b1) ·
+# code_<task> its coding exercise · sub_<slug of the section's name> · end · cell.
+# Title and the groups (Introduction, Content, Appendix) have no card.
+# Complex Numbers
+
+# howto.py
+sub_how_to_use_this_notebook: A short guide to how the notebook is built. Every chapter has an idea with its formula, a visualisation and one exercise, and the coding part is optional. You also learn how hints work and why the chapters open one after another.
+
+# teaches.py
+sub_what_you_will_be_able_to_do: The learning goals of this notebook in one table. Each goal belongs to an exercise or to the quiz, so you can check every one of them yourself.
+
+# roadmap.py
+sub_the_route_through_this_notebook: An overview of the path through the seven chapters. It shows how a single definition, i² = −1, leads from the complex plane through the four basic operations to the polar form. At the end, multiplication turns out to be a rotation combined with a stretch.
+
+# c01.py
+ch1: Some equations, such as x² + 1 = 0, have no solution among the real numbers. This chapter introduces the imaginary unit i, defined by i² = −1, and shows how it supplies the missing roots. You also meet the two parts of every complex number, the real part and the imaginary part.
+fig1: A parabola f(x) = x² + q that you raise and lower with a slider. Real roots exist only while the curve crosses the horizontal axis. Once q is positive the crossings disappear, and the roots have to be looked for somewhere else.
+t1: You solve the equation z² + q = 0 for your personal value of q. You give the root with the positive imaginary part, which needs only a square root and the definition of i.
+code_t1: You write a short Python function roots_of(q) that returns both roots of z² + q = 0. It turns the calculation of Exercise 1 into code that works for every positive q.
+
+# c02.py
+ch2: A complex number z = a + ib can be drawn as a point in a plane: the real part a on the horizontal axis, the imaginary part b on the vertical axis. This turns algebra into geometry, because every number now has a position, a length and an angle. You also learn to name the four quadrants of this plane.
+fig2: You move a point through the complex plane with two sliders. The picture shows its arrow, its length |z| and its angle φ. With b = 0 the point lies on the horizontal axis and is an ordinary real number.
+t2: You decide in which quadrant your personal number lies. The signs of the real part and of the imaginary part are all you need.
+code_t2: You write a function quadrant(a, b) that returns the quadrant of z = a + ib. It also has to recognise a number that lies on one of the two axes.
+
+# c03.py
+ch3: Complex numbers are added and subtracted part by part: real part with real part, imaginary part with imaginary part. In the plane this is the addition of arrows, known as the parallelogram rule. The two parts never influence each other.
+fig3: Two arrows and their sum or their difference in the complex plane. The dashed lines close a parallelogram. Subtraction turns out to be the addition of the reversed arrow.
+t3: You compute the sum and the difference of your two personal numbers. Four small additions and subtractions fill the four boxes.
+code_t3: You write a function add_sub() that returns both the sum and the difference of two complex numbers. It applies the rule of Exercise 3 to any pair of numbers.
+
+# c04.py
+ch4: To multiply two complex numbers you multiply out the brackets and use i² = −1. This step mixes the real and the imaginary parts. The chapter also introduces the complex conjugate, which mirrors a number across the real axis, and shows that z times its conjugate is always a real number.
+fig4: The upper picture steps through the powers of i, and each step is a quarter turn. The lower picture shows a number together with its conjugate and their product, which always stays real.
+t4: You multiply your two personal numbers by hand. What matters most is the minus sign that i·i = −1 puts into the real part.
+code_t4: You write a function mul() that multiplies two complex numbers from their four components. The check also tries i·i, so the minus sign has to be right.
+
+# c05.py
+ch5: The modulus |z| is the length of the arrow, and it follows from z times its conjugate. The conjugate also makes division possible: you multiply the numerator and the denominator by the conjugate of the denominator, and the denominator becomes a real number. After that you only divide two real parts.
+fig5: Each number sits on a circle whose radius is its modulus, and their quotient is drawn beside them. However you move the points, the modulus of the quotient equals the quotient of the moduli.
+t5: You divide your two personal numbers by using the conjugate of the denominator. The numbers are chosen so that the result has whole-number parts.
+code_t5: You write a function divide() that divides two complex numbers with the conjugate trick. It must also refuse to divide by zero.
+
+# c06.py
+ch6: Every complex number can also be described by its length and its angle: z = |z|·e^(iφ). This is the polar form, and Euler's relation links it to cosine and sine. The chapter also shows why the simple formula arctan(b/a) gives the wrong angle in two of the four quadrants.
+fig6: In the upper picture an arrow travels round the unit circle, and its shadows trace the cosine and the sine. The lower picture compares the true angle of a number with the angle that arctan(b/a) returns.
+t6: You write your personal number in polar form, as a modulus and an angle in radians. Look at the sign of the real part before you trust the arctan.
+code_t6: You write a function to_polar() that returns the modulus and the angle of a number. The angle has to be right in all four quadrants.
+
+# c07.py
+ch7: In polar form multiplication becomes simple: the moduli multiply and the angles add. Every product is therefore a stretch combined with a rotation. This is the geometric meaning of complex multiplication that physics and engineering rely on.
+fig7: Two numbers, each set by its length and its angle, together with their product or quotient. You can produce a pure rotation or a pure stretch and watch both rules at work.
+t7: You steer a second number with two sliders until the product lands on a target. Nothing is typed, but the rule of this chapter tells you where to aim.
+code_t7: You write a function rotate() that turns a number about the origin by a given angle. The length of the number must stay the same.
+
+# conclusion.py
+sub_conclusion: All the rules of this notebook on one page, from i² = −1 to multiplication in polar form, followed by short definitions of the terms. Use it for revision or to look up a formula quickly. Two notes close it: the locks set your pace and are no assessment, and your numbers come from your own seed.
+
+
+# refs.py
+sub_references_and_licence: The sources cited in the chapters, together with the licence of this notebook. The licence allows you to use, share and change the notebook.
+
+# quiz.py
+q1: Five multiple-choice questions on the whole notebook. They test the central ideas, from i² = −1 to the arctan trap, and each answer comes with a short explanation.
+
+# byod.py
+b1: A cell membrane behaves like a resistor and a capacitor in parallel, and its impedance is a complex number. You run a short program with simulated values or with your own, and read the amplitude and the phase from the modulus and the argument.

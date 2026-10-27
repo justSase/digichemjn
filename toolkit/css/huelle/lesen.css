@@ -1,0 +1,30 @@
+/* E36 C1 (Werkstatt CSS, 19.10.2026) — DIE SEITE DER HÜLLE: lesen.html (App, Webseite; plan/ARCHITEKTUR.md).
+   Nicht in der .ipynb (kein Marker in chapter_template.py; assemble.py liest nur css/*.css), Plain CSS (kein % DESIGN).
+
+   Hülle-CSS (claude/VERTRAG-E36.md, manifest.json „css“ in Lade-Reihenfolge), für alle Notebooks gleich:
+     1. _NBREAD_CSS ohne <style>…</style> (chapter_template.py; trägt css/15-reader.css)
+     2. die <style> im Dokument (Ornament-Regeln .nbo-*) — 1 + 2 Text wie in der .ipynb (toolkit/paket.py)
+     3. diese Datei, als LETZTE (an dieselbe Datei angehängt oder als eigene seite.<sha8>.css — beides gemessen)
+   Gleiche Regeln in gleicher Reihenfolge wie im Notebook-iframe → das Lesefenster .nbrw ist dort und in lesen.html
+   pixelgleich (tests/regress/css_e36.py, je Stil × hell/dunkel, 1366 + 390 px). Darum greift hier NICHTS in .nbrw
+   oder .nbreading ein: nur die Seite um das Fenster — Rand 0 (wie der Rahmen eines Notebook-Viewers) und der Grund
+   der Seite = der Grund des Fensters (sonst ein weißer Streifen unter einem dunklen Fenster). Die Werte sind die
+   --rw-bg aus 15-reader.css (css_e36 H2 misst: Seite = Fenster, in jedem Stil × hell/dunkel).
+   digi (E38a C1): eigene Regeln im Lesefenster — Grund #f6f7fb / #04050b. */
+html,body{margin:0;padding:0}
+html{background:#ffffff;color-scheme:light}
+@media (prefers-color-scheme:dark){html{background:#1e2329;color-scheme:dark}}
+html:has(.nbrw[data-nbrw-theme=light]){background:#ffffff;color-scheme:light}
+html:has(.nbrw[data-nbrw-theme=dark]){background:#1e2329;color-scheme:dark}
+html:has(.nbrw[data-nbrw-skin=cyber]){background:#faf8ff;color-scheme:light}
+html:has(.nbrw[data-nbrw-skin=fairy]){background:#fffbff;color-scheme:light}
+html:has(.nbrw[data-nbrw-skin=digi]){background:#f6f7fb;color-scheme:light}
+html:has(.nbrw[data-nbrw-skin=cyber][data-nbrw-theme=dark]){background:#0d1120;color-scheme:dark}
+html:has(.nbrw[data-nbrw-skin=fairy][data-nbrw-theme=dark]){background:#1d1629;color-scheme:dark}
+html:has(.nbrw[data-nbrw-skin=digi][data-nbrw-theme=dark]){background:#04050b;color-scheme:dark}
+@media (prefers-color-scheme:dark){
+  html:has(.nbrw:not([data-nbrw-theme=light])){background:#1e2329;color-scheme:dark}
+  html:has(.nbrw[data-nbrw-skin=cyber]:not([data-nbrw-theme=light])){background:#0d1120;color-scheme:dark}
+  html:has(.nbrw[data-nbrw-skin=fairy]:not([data-nbrw-theme=light])){background:#1d1629;color-scheme:dark}
+  html:has(.nbrw[data-nbrw-skin=digi]:not([data-nbrw-theme=light])){background:#04050b;color-scheme:dark}
+}

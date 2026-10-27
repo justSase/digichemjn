@@ -1,0 +1,5 @@
+# Only what the SITE build needs. The notebooks install their own packages at
+# run time through piplite; nothing here ends up in the reader's browser.
+jupyterlite-core==0.6.*
+jupyterlite-pyodide-kernel==0.6.*
+jupyterlab~=4.4

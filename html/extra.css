@@ -1,0 +1,119 @@
+/* ------------------------------------------------------------------
+   The HTML edition: what the notebook got from ipywidgets, done in CSS.
+   Everything else (boxes, formulas, the progress panel) is the notebook's
+   own stylesheet, inlined above this block.
+   ------------------------------------------------------------------ */
+:root{ --pill-chapter:linear-gradient(90deg,#245f80,#3f8fb5);
+       --pill-viz:linear-gradient(90deg,#c85fa0,#e2a0c6);
+       --pill-practice:linear-gradient(90deg,#c0392b,#d9695c);
+       --pill-plain:linear-gradient(90deg,#7b8792,#9ba7b2);
+       --page:#ffffff; --ink:#33475b; }
+body.nbhtml{margin:0;background:var(--page);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    padding:120px 0 80px;}
+body.nbhtml.nbdark{--page:#111820;--ink:#c6d2dc;}
+.nbmain{max-width:1000px;margin:0 auto;padding:0 16px;}
+.nbvbox,.nbhbox{display:flex;flex-direction:column;align-items:center;width:100%;}
+.nbhbox{flex-direction:row;justify-content:center;flex-wrap:wrap;gap:10px;}
+.nbanchor{display:block;height:0;position:relative;top:-110px;}
+
+/* ---- title ---- */
+.nbtitle{text-align:center;margin:0 auto 18px;padding:0 16px;}
+.nbtitle-card{display:inline-block;background:linear-gradient(90deg,#33475a,#527189);color:#fff;
+    padding:20px 48px;border-radius:16px;box-shadow:0 6px 18px rgba(51,71,90,.30);}
+.nbtitle-h{font-size:1.95em;font-weight:800;letter-spacing:.4px;}
+.nbtitle-s{font-size:1.05em;font-weight:600;opacity:.92;margin-top:4px;}
+.nbtitle-sub{color:#5b6b7b;max-width:720px;margin:14px auto 0;font-style:italic;}
+.nbtitle-note{color:#7a8896;max-width:720px;margin:8px auto 0;font-size:.92em;}
+body.nbdark .nbtitle-sub,body.nbdark .nbtitle-note{color:#8fa0b0;}
+
+/* ---- accordions as <details> ---- */
+.nbacc{width:100%;}
+.nbacc>summary{list-style:none;cursor:pointer;width:fit-content;margin:8px auto;
+    padding:10px 30px;border-radius:12px;font-weight:800;letter-spacing:.3px;color:#fff;
+    text-align:center;box-shadow:0 4px 12px rgba(0,0,0,.16);background:var(--pill-chapter);
+    transition:transform .15s ease,box-shadow .15s ease;}
+.nbacc>summary::-webkit-details-marker{display:none;}
+.nbacc>summary:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(0,0,0,.22);}
+.nbacc.acc-chapter>summary{font-size:1.42em;padding:13px 40px;}
+.nbacc.acc-plain>summary{background:var(--pill-plain);}
+.nbacc.acc-viz>summary{background:var(--pill-viz);font-size:.95em;padding:8px 24px;}
+.nbacc.acc-practice>summary{background:var(--pill-practice);font-size:.95em;padding:8px 24px;}
+.nbacc.acc-group>summary{background:transparent;box-shadow:none;border-radius:0;color:var(--ink);
+    width:840px;max-width:94%;margin:22px auto 8px;padding:2px 0;font-size:1.18em;
+    display:flex;align-items:center;gap:16px;justify-content:center;}
+.nbacc.acc-group>summary::before,.nbacc.acc-group>summary::after{
+    content:"";flex:1 1 auto;border-top:2px solid currentColor;opacity:.35;}
+.nbacc-body{animation:nbopen .25s ease;}
+@keyframes nbopen{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+
+/* ---- sliders, numbers, options ---- */
+.nbfig{width:100%;max-width:820px;margin:6px auto;}
+.nbsliders{display:flex;flex-direction:column;align-items:center;gap:4px;margin:6px 0;}
+.nbsl{display:flex;align-items:center;gap:10px;font-size:.92em;}
+.nbsl-lab{min-width:92px;text-align:right;opacity:.85;}
+.nbsl input[type=range]{width:360px;accent-color:#2c6e91;}
+.nbsl select{padding:3px 8px;border-radius:8px;border:1px solid #c3ccd4;background:#fff;color:inherit;}
+body.nbdark .nbsl select{background:#222a33;border-color:#3b444d;}
+.nbsl-val{min-width:52px;font-variant-numeric:tabular-nums;font-weight:700;color:#2c6e91;}
+body.nbdark .nbsl-val{color:#8fc7e8;}
+.nbcanvas-wrap{text-align:center;}
+.nbcanvas{max-width:100%;height:auto;}
+.nbcanvas-wrap.js .nbfallback{display:none;}
+.nbcanvas-wrap:not(.js) .nbcanvas{display:none;}
+.nbfields{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 18px;margin:8px 0;}
+.nbnum{display:flex;align-items:center;gap:8px;font-size:.95em;}
+.nbnum input{width:120px;padding:6px 8px;border-radius:8px;border:1px solid #c3ccd4;
+    background:#fff;color:#243b53;font-size:1em;}
+body.nbdark .nbnum input{background:#222a33;border-color:#3b444d;color:#dbe5ee;}
+.nbopts{display:flex;flex-direction:column;gap:6px;margin:8px auto;width:fit-content;}
+.nbopt{display:flex;align-items:center;gap:8px;cursor:pointer;}
+.nbcheck{text-align:center;margin:10px 0;}
+.nbfeedback{max-width:780px;margin:0 auto;}
+.nbsol{width:100%;max-width:820px;margin:8px auto;}
+.nbsol>summary{list-style:none;cursor:pointer;width:fit-content;margin:8px auto;padding:8px 22px;
+    border-radius:10px;font-weight:700;color:#fff;background:linear-gradient(90deg,#1e7a54,#3aa97a);}
+.nbsol>summary::-webkit-details-marker{display:none;}
+.nbcode{width:100%;max-width:820px;margin:8px auto;}
+.nbstub{background:#f3f6f9;border:1px solid #dde4ea;border-radius:10px;padding:12px 14px;
+    overflow:auto;font-size:.86em;line-height:1.5;}
+body.nbdark .nbstub{background:#1b222a;border-color:#2f3841;color:#cbd6e0;}
+.nbcode-note{text-align:center;font-size:.88em;opacity:.85;margin-top:6px;}
+
+/* ---- locked exercise ---- */
+.nblock{max-width:820px;margin:10px auto;padding:14px 18px;border-radius:12px;text-align:center;
+    background:linear-gradient(90deg,#f4f6f8,#fbfcfd);border:1px dashed #c8d2db;}
+body.nbdark .nblock{background:#1b222a;border-color:#39424b;}
+.nblock .sc-btn{margin:4px 6px;}
+
+/* ---- feedback lines (same look as the notebook) ---- */
+.nbmsg{max-width:780px;margin:8px auto;padding:10px 14px;border-radius:10px;text-align:center;}
+.nbmsg.ok{background:#e7f4ec;border:1px solid #bfe0cd;color:#155e43;}
+.nbmsg.no{background:#fdecec;border:1px solid #f2caca;color:#922b21;}
+body.nbdark .nbmsg.ok{background:#16281f;border-color:#2b5643;color:#8fe0b8;}
+body.nbdark .nbmsg.no{background:#2a1a1a;border-color:#5a3030;color:#f0a9a2;}
+
+/* the panel is pinned to the page, not to a notebook */
+body.nbhtml .nbpanel-host{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:1200;}
+body.nbhtml .nbprog{display:none;}
+@media (max-width:820px){
+  body.nbhtml .nbpanel-host{display:none!important;}
+  body.nbhtml{padding-top:24px;}
+  .nbsl input[type=range]{width:200px;}
+  .nbsl-lab{min-width:64px;}
+}
+
+/* the drawer in the HTML edition brings its own controls; a slot that would
+   borrow a notebook widget stays empty here and its cell is dropped */
+.nbcell:has(.nbslot:empty){display:none;}
+.nbdrawer .nbcodein{width:100%;margin:6px 0;padding:5px 8px;border-radius:8px;
+    border:1px solid #c3ccd4;background:#fff;color:#243b53;}
+body.nbdark .nbdrawer .nbcodein{background:#222a33;border-color:#3b444d;color:#dbe5ee;}
+.nbdrawer select{padding:4px 8px;border-radius:8px;border:1px solid #c3ccd4;
+    background:#fff;color:inherit;}
+body.nbdark .nbdrawer select{background:#222a33;border-color:#3b444d;}
+
+.nbdrawer .sc-btn,.nbdrawer button{font-size:.78em!important;padding:5px 12px!important;
+    height:auto!important;min-height:0!important;line-height:1.3!important;
+    box-shadow:none!important;border-radius:8px!important;}
+.nbdrawer .nbcell{font-size:.95em;}

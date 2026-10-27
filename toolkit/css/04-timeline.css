@@ -1,0 +1,1062 @@
+  /* ======================================================================
+     THE VERTICAL PANEL — the same timeline turned onto the document's own
+     axis. Nothing about the nodes changes; only where they are put.
+     Every rule is scoped to .vert, so switching back leaves nothing behind.
+     The geometry carries !important because the horizontal rules it replaces
+     are keyed on node kinds (.sect.first, .task) and would otherwise outrank a
+     plainly scoped override — the same specificity trap as the marker. */
+  /* the host stays a full-window layer in BOTH orientations — the width of the
+     vertical panel belongs to the rail, not to the layer that carries it */
+  .nbpanel-host.vert .nbrail{--nbrail-bg:#f6f8fa;
+      z-index:10;width:var(--nbvert-w,300px)!important;
+      max-width:none!important;min-width:0!important;}
+  /* 2026-09-24aj — AND THE DARK VALUE HAS TO OUTRANK IT.
+     The line above sets --nbrail-bg from two classes and an element; the dark
+     rule further up sets it from an attribute and an element, and loses. So in
+     the vertical layout every mark that fills itself with "the rail's own
+     background" — the hollow diamonds, an unanswered circle, the ring a mark
+     wears — came out #f6f8fa on a #1d2228 rail: white marks on a dark panel.
+     Measured before this: Introduction's ring rgb(246,248,250) in dark. */
+  body[data-jp-theme-light="false"] .nbpanel-host.vert .nbrail{
+      --nbrail-bg:#1d2228;}
+  .nbpanel-host.vert .nbrail{flex-direction:column;width:100%%;height:100%%;
+      min-width:0;max-width:none!important;gap:0;padding:8px 0 6px;
+      box-sizing:border-box;overflow:hidden;}
+  .nbpanel-host.vert .nbrail-row{flex-direction:column;align-items:stretch;
+      gap:0;height:auto!important;min-height:0;flex:1 1 auto;overflow:hidden;}
+  .nbpanel-host.vert .nbmap{display:block;flex:1 1 auto;min-height:0;
+      overflow-y:auto;overflow-x:hidden;width:100%%;
+      -webkit-mask-image:none;mask-image:none;}
+  /* ::-webkit-scrollbar sets only the HEIGHT for the horizontal bar, so the
+     vertical one comes out zero wide — it has to be named explicitly. This is
+     the bar that is meant to run next to the document's own. */
+  /* The DOCUMENT's scrollbar goes too. The rail stands exactly where it was,
+     it is the same length as the document, and its marker is the thumb — two
+     scrollbars side by side, one of them ours, was the thing that looked wrong.
+     The wheel, the keyboard and the touchpad are untouched; only the painted
+     bar is gone. Scoped to .nbvert so a notebook without the rail keeps its own. */
+  body.nbvert :where([data-digichem],.nbrail-own) .jp-WindowedPanel-outer,
+  body.nbvert :where([data-digichem],.nbrail-own) .jp-Notebook{scrollbar-width:none!important;-ms-overflow-style:none!important;}
+  body.nbvert :where([data-digichem],.nbrail-own) .jp-WindowedPanel-outer::-webkit-scrollbar,
+  body.nbvert :where([data-digichem],.nbrail-own) .jp-Notebook::-webkit-scrollbar{width:0!important;height:0!important;
+      display:none!important;}
+
+  /* No scrollbar of its own any more: the reading marker does that job. It sits
+     where a thumb would sit, it is the same length as the window it stands for,
+     and it can be dragged. Two bars next to each other saying the same thing was
+     one bar too many. */
+  /* ---- THE GRIP (2026-09-24bf) -----------------------------------------
+     The panel's size control, living on the panel's left edge, half way down.
+     It sits INSIDE the rail's box — the rail is overflow:hidden, so anything
+     hanging out to the left would be cut off — and there is room for it at
+     every size: the lane's axis is at least 46px from the edge when the panel
+     is open, and dead centre when it is shut.
+     Horizontal keeps no grip: there the panel's size is its thickness, which
+     the reader has never asked to change. */
+  .nbgrip{display:none;}
+  /* 2026-09-24bi — ON THE OUTSIDE, AND ABOVE THE RAIL.
+     It is a sibling of the rail now rather than a child, so nothing clips it,
+     and the panel script places it in window coordinates against the panel's
+     left flank. The old `top:50%% + translateY(-50%%)` has to go with the
+     absolute positioning, or it offsets the top the script writes.
+     z-index 1410: the rail computes to 1400, and a handle painted under the
+     thing it moves is not a handle — measured twice now. Teil 3 (2026-10-01):
+     below the dock/drawer (1420), so an open window covers the knob. */
+  .nbpanel-host.vert .nbgrip{
+      display:block;position:fixed;z-index:1410;
+      width:13px;height:58px;padding:0;margin:0;
+      /* 2026-09-25 — IT IS THE PANEL'S EDGE, NOT A BUTTON BESIDE IT.
+         The rail's own surface and border, rounded on the LEFT only, and no
+         border where the two meet — so the panel grows a tab to pull on
+         instead of carrying a separate little object next to it. */
+      border:1px solid #cbd5de;border-right:0!important;
+      border-radius:8px 0 0 8px;
+      background:var(--nbrail-bg,#f6f8fa);cursor:ew-resize;
+      pointer-events:auto;
+      box-shadow:-3px 2px 10px rgba(0,0,0,.14);
+      transition:background .15s ease,border-color .15s ease,height .15s ease;}
+  .nbpanel-host.vert .nbgrip span{
+      display:block;width:3px;height:22px;margin:0 auto;border-radius:2px;
+      background:#46535f;opacity:.55;
+      /* two lines, drawn as one element plus its own shadow: a second box for
+         a second stripe would be a second thing to keep in step */
+      box-shadow:-4px 0 0 0 #46535f, 4px 0 0 0 #46535f;}
+  .nbpanel-host.vert .nbgrip:hover{border-color:#8b98a5;height:72px;
+      filter:brightness(1.06);}
+  .nbpanel-host.vert .nbgrip:hover span{opacity:.9;}
+  .nbpanel-host.vert .nbgrip.nbdragging{border-color:var(--nbmark,#0d63e0);
+      filter:brightness(1.10);}
+  .nbpanel-host.vert .nbgrip.nbdragging span{background:#0d63e0;opacity:1;
+      box-shadow:-4px 0 0 0 #0d63e0, 4px 0 0 0 #0d63e0;}
+  body[data-jp-theme-light="false"] .nbpanel-host.vert .nbgrip,
+  body.nbdark .nbpanel-host.vert .nbgrip{
+      background:var(--nbrail-bg,#1d2228);border-color:#39424d;}
+  body[data-jp-theme-light="false"] .nbpanel-host.vert .nbgrip span,
+  body.nbdark .nbpanel-host.vert .nbgrip span{
+      background:#b7c3cd;box-shadow:-4px 0 0 0 #b7c3cd, 4px 0 0 0 #b7c3cd;}
+  body[data-jp-theme-light="false"] .nbpanel-host.vert .nbgrip:hover,
+  body.nbdark .nbpanel-host.vert .nbgrip:hover{border-color:#8b98a5;}
+
+  .nbpanel-host.vert .nbmap{scrollbar-width:none;-ms-overflow-style:none;}
+  .nbpanel-host.vert .nbmap::-webkit-scrollbar{width:0;height:0;display:none;}
+  .nbpanel-host.vert .nbmap-here{cursor:grab;pointer-events:auto!important;}
+  .nbpanel-host.vert .nbmap-here:active,
+  .nbpanel-host.vert .nbmap-here.dragging{cursor:grabbing;}
+  .nbpanel-host.vert .nbmap-inner{display:block;position:relative;width:100%%;
+      padding:0!important;flex:none;}
+
+  /* the track and the lanes run DOWN the column */
+  .nbpanel-host.vert .nbmap-inner::before{
+      left:var(--nbvert-axis,30px)!important;top:var(--rail-y0,0px)!important;
+      width:8px!important;height:var(--rail-h,0px)!important;
+      margin-left:-4px;transform:none!important;
+      /* 2026-09-24ao — the same ink as the marks. A pale grey line under dark
+         marks read as two different materials; one colour makes it one object,
+         and the marks are told apart by shape, which is the whole system. */
+      background:#46535f!important;}
+  body[data-jp-theme-light="false"] .nbpanel-host.vert .nbmap-inner::before{
+      background:#39424d!important;}
+  .nbpanel-host.vert .nbmap-fill{left:var(--nbvert-axis,30px)!important;
+      margin-left:-4px;top:var(--fill-y0,0px);width:8px!important;
+      background:linear-gradient(180deg,#3fa877,#6ed7a6);
+      transition:height .55s cubic-bezier(.22,.61,.36,1);}
+  .nbpanel-host.vert .nbmap-fill.tail{width:3px!important;margin-left:1px;
+      background:linear-gradient(180deg,#e0a500,#f0c25a);
+      transition:height .45s ease,opacity .25s ease;}
+  .nbpanel-host.vert .nbmap-fill.tail.gave-up{
+      background:linear-gradient(180deg,#c0392b,#dc7365);}
+  .nbpanel-host.vert .nbmap-fill.code{width:16px!important;margin-left:-8px;}
+  /* Turned on its side the marker is a thin band running DOWN the rail. It is
+     narrower than the line it travels on and it passes BEHIND every circle and
+     dot — including a stack of them, which is what a collapsed chapter leaves
+     behind. Above the green fill, below the markers: it has to stay visible
+     along a solved stretch without ever hiding what it is pointing at. */
+  .nbpanel-host.vert .nbmap-here{left:var(--nbvert-axis,30px)!important;
+      margin-left:-2.5px;width:5px!important;height:50px;
+      z-index:4!important;}
+  .nbpanel-host.vert .nbmap-node{z-index:6;}
+  .nbpanel-host.vert .nbmap-merge{z-index:7;}
+  /* A folded dot is not removed, only taken out of sight: the moment its
+     section opens again it has its own place back. */
+  /* shut away with its chapter: no box, no pointer, nothing to overlap */
+  .nbpanel-host.vert .nbmap-node.nbgone{opacity:0!important;pointer-events:none!important;}
+  .nbpanel-host.vert .nbmap-node.nbfolded .nbchapdot,
+  .nbpanel-host.vert .nbmap-node.nbfolded .nbsubdot,
+  .nbpanel-host.vert .nbmap-node.nbfolded .nbmap-lab{opacity:0;pointer-events:none;}
+  .nbpanel-host.vert .nbmap-node.nbfolded{pointer-events:none;}
+  /* what stands in for them: one dot with the count in it */
+  .nbmap-merge{display:none;}
+  .nbpanel-host.vert .nbmap-merge{display:block;position:absolute;
+      left:var(--nbvert-axis,30px);top:0;transform:translate(-50%%,-50%%);
+      width:21px;height:21px;border-radius:50%%;z-index:3;
+      background:#46535f;color:#fff;border:2px solid #6c7885;
+      font-size:10px;font-weight:800;line-height:17px;text-align:center;
+      text-decoration:none!important;cursor:pointer;
+      transition:transform .18s ease,background .2s ease;}
+  .nbpanel-host.vert .nbmap-merge:hover{
+      transform:translate(-50%%,-50%%) scale(1.22);background:var(--nbmark);
+      border-color:var(--nbmark);}
+  body[data-jp-theme-light="false"] .nbpanel-host.vert .nbmap-merge{
+      background:#39444e;border-color:#5b6b78;color:#dfe6ec;}
+
+  /* the interruption in front of every further section bar, turned on its side:
+     a band ACROSS the rail rather than along it */
+  .nbpanel-host.vert .nbmap-gap{left:var(--nbvert-axis,30px)!important;
+      margin-left:-31px;width:62px!important;}
+
+  /* a node is a point on a line now, not a box in a row */
+  .nbpanel-host.vert .nbmap-node{position:absolute!important;left:0!important;
+      right:0;top:0;width:auto!important;min-width:0!important;height:0!important;
+      margin:0!important;overflow:visible;}
+  .nbpanel-host.vert .nbmap-node .nbsect,
+  .nbpanel-host.vert .nbmap-node .nbchapdot,
+  .nbpanel-host.vert .nbmap-node .nbsubdot,
+  .nbpanel-host.vert .nbmap-node .nbrail-dot{
+      position:absolute!important;left:var(--nbvert-axis,30px)!important;
+      top:0!important;bottom:auto!important;right:auto!important;
+      transform:translate(-50%%,-50%%)!important;margin:0!important;}
+  /* ======================================================================
+     THE STRUCTURE IS DRAWN WITH DIAMONDS
+     One shape for one kind of thing, so that the rail can be read at a glance:
+
+         ◆ filled diamond   a block begins — Introduction, Content, Appendix
+         ◇ hollow diamond   an end of the document — the title page, the end of
+                            the guided part, the empty cell below it
+         ● small dot        a chapter or a section inside a block
+         ○ circle           an exercise, and the only mark that carries state
+
+     Bars were the wrong shape for two of those three: they read as a cut across
+     the line, which is exactly what the line must not have. A diamond sits ON
+     the line and lets it run through. */
+  .nbpanel-host.vert .nbmap-node .nbsect{
+      width:calc(15px * var(--nbthick,1))!important;
+      height:calc(15px * var(--nbthick,1))!important;
+      border-radius:2px!important;
+      transform:translate(-50%%,-50%%) rotate(45deg)!important;
+      box-shadow:0 0 0 max(1px, calc(2px * var(--nbthick,1))) var(--nbrail-bg,#f6f8fa);}
+  /* 2026-09-24am — ONE FILL FOR EVERY MARK, ONE PER THEME.
+     The rail had four different "empty" colours — the rail's own background for
+     the rings, slate for the squares, the title page's grey for the three
+     things you do — and at a glance that read as four states rather than four
+     shapes. The shape carries the meaning; the fill carries only the theme.
+       day    #46535f, the slate the sub-chapters under Introduction already had
+       night  the rail's own background, which is what the Content ring shows
+     A state colour still wins: those rules name a class (.st-ans, .cd-skip, …)
+     and outrank this one, which is the point — colour on the rail means a
+     state, and nothing else does. */
+  .nbpanel-host.vert .nbmap-node .nbsect,
+  .nbpanel-host.vert .nbmap-node .nbchapdot,
+  .nbpanel-host.vert .nbmap-node .nbsubdot,
+  .nbpanel-host.vert .nbmap-node .nbrail-dot,
+  .nbpanel-host.vert .nbvizmark,
+  .nbpanel-host.vert .nbcodemark{background:#46535f!important;}
+  body[data-jp-theme-light="false"] .nbpanel-host.vert .nbmap-node .nbsect,
+  body[data-jp-theme-light="false"] .nbpanel-host.vert .nbmap-node .nbchapdot,
+  body[data-jp-theme-light="false"] .nbpanel-host.vert .nbmap-node .nbsubdot,
+  body[data-jp-theme-light="false"] .nbpanel-host.vert .nbmap-node .nbrail-dot,
+  body[data-jp-theme-light="false"] .nbpanel-host.vert .nbvizmark,
+  body[data-jp-theme-light="false"] .nbpanel-host.vert .nbcodemark{
+      background:var(--nbrail-bg,#1d2228)!important;}
+
+  /* 2026-09-24aj — THE TWO FAMILIES SWAP.
+     The ends of the document were the hollow ones and the section bars the
+     filled ones. The other way round reads better: a section is a division you
+     pass through, an end is where the document stops — and a solid mark is the
+     stronger full stop. So the ends are filled now and the sections are rings. */
+  /* the section keeps its OUTLINE colour; the fill is the common one above
+     (2026-09-24am) — a ring and a disc were two fills for one idea */
+  .nbpanel-host.vert .nbmap-node.sect .nbsect{
+      border:max(1px, calc(2.5px * var(--nbthick,1))) solid #2c6e91!important;
+      box-sizing:border-box!important;}
+  body[data-jp-theme-light="false"] .nbpanel-host.vert .nbmap-node.sect .nbsect{
+      border-color:#8fc7e8!important;}
+  .nbpanel-host.vert .nbmap-node.title .nbsect,
+  .nbpanel-host.vert .nbmap-node.end   .nbsect,
+  .nbpanel-host.vert .nbmap-node.cell  .nbsect{
+      border:max(1px, calc(2.5px * var(--nbthick,1))) solid #8894a0!important;
+      box-sizing:border-box!important;}
+  body[data-jp-theme-light="false"] .nbpanel-host.vert .nbmap-node.title .nbsect,
+  body[data-jp-theme-light="false"] .nbpanel-host.vert .nbmap-node.end .nbsect,
+  body[data-jp-theme-light="false"] .nbpanel-host.vert .nbmap-node.cell .nbsect{
+      border-color:#6c7885!important;}
+  .nbpanel-host.vert .nbmap-node .nbrail-dot{
+      line-height:calc(24px * var(--nbthick,1))!important;}
+
+  /* ----------------------------------------------------------------------
+     BIGGER MARKS ON THE VERTICAL RAIL (2026-09-24aa)
+     The sizes above were set when the rail lay flat across the top of the
+     document and had a banner's worth of room. Standing on its side it has a
+     whole window's height and a column of its own, and at those proportions
+     the marks read as specks. One factor, applied to every shape at once, so
+     the four shapes keep their relative sizes and stay on one axis.
+     --nbsym multiplies --nbthick; the panel control still scales everything. */
+  /* 2026-09-24aj — twice again. The rail has a window's height and a column
+     of its own; at 1.45 the marks still read as punctuation rather than as
+     the instrument. */
+  .nbpanel-host.vert{--nbsym:2.9;}
+  .nbpanel-host.vert .nbmap-node .nbsect{
+      width:calc(15px * var(--nbthick,1) * var(--nbsym,1))!important;
+      height:calc(15px * var(--nbthick,1) * var(--nbsym,1))!important;
+      box-sizing:border-box!important;
+      border:max(1px, calc(2px * var(--nbthick,1))) solid #2c6e91!important;}
+  body[data-jp-theme-light="false"] .nbpanel-host.vert .nbmap-node .nbsect{
+      border-color:#8fc7e8!important;}
+  .nbpanel-host.vert .nbmap-node .nbchapdot{
+      width:calc(13px * var(--nbthick,1) * var(--nbsym,1))!important;
+      height:calc(13px * var(--nbthick,1) * var(--nbsym,1))!important;
+      line-height:calc(13px * var(--nbthick,1) * var(--nbsym,1))!important;
+      font-size:calc(7px * var(--nbthick,1) * var(--nbsym,1))!important;}
+  .nbpanel-host.vert .nbmap-node.locked .nbchapdot{
+      width:calc(16px * var(--nbthick,1) * var(--nbsym,1))!important;
+      height:calc(16px * var(--nbthick,1) * var(--nbsym,1))!important;
+      line-height:calc(16px * var(--nbthick,1) * var(--nbsym,1))!important;
+      font-size:calc(8px * var(--nbthick,1) * var(--nbsym,1))!important;}
+  .nbpanel-host.vert .nbmap-node .nbsubdot{
+      width:calc(9px * var(--nbthick,1) * var(--nbsym,1))!important;
+      height:calc(9px * var(--nbthick,1) * var(--nbsym,1))!important;}
+  /* 2026-09-24ak — the two exercise circles carry their own factor. At the
+     full --nbsym they were 59px against a 31px chapter square: the busiest
+     marks on the rail were also the biggest. --nbcirc pulls them back to a
+     little over the chapter's size, which is the order they deserve. */
+  .nbpanel-host.vert .nbmap-node .nbrail-dot{
+      width:calc(24px * var(--nbthick,1) * var(--nbsym,1) * var(--nbcirc,1))!important;
+      height:calc(24px * var(--nbthick,1) * var(--nbsym,1) * var(--nbcirc,1))!important;
+      line-height:calc(24px * var(--nbthick,1) * var(--nbsym,1) * var(--nbcirc,1))!important;
+      font-size:calc(.78em * var(--nbthick,1) * var(--nbsym,1) * var(--nbcirc,1))!important;}
+  /* the coding exercise IS an exercise, so its circle is the same size as the
+     other one — a smaller one said "less important", which it is not
+     (2026-09-24ag) */
+  .nbpanel-host.vert .nbcodemark{
+      width:calc(24px * var(--nbthick,1) * var(--nbsym,1) * var(--nbcirc,1))!important;
+      height:calc(24px * var(--nbthick,1) * var(--nbsym,1) * var(--nbcirc,1))!important;
+      line-height:calc(24px * var(--nbthick,1) * var(--nbsym,1) * var(--nbcirc,1))!important;
+      font-size:calc(.78em * var(--nbthick,1) * var(--nbsym,1) * var(--nbcirc,1))!important;}
+  /* the open door on the coding ladder, drawn like the one on the other */
+  /* 2026-09-24ao — two open doors, two colours. The written route's next
+     exercise has worn a green ring since the beginning; the coding route's gets
+     purple, which is the colour that route has always had in this notebook. A
+     reader with both open can tell at a glance which ladder each belongs to. */
+  /* The written route's open door, said again here: the `.st-open` rule further
+     up paints every unanswered circle grey and sits later than the original
+     `.is-current` rule, so the green ring was being overwritten — measured
+     rgb(136,148,160) where it should have been green. */
+  #nbpanel-root.vert .nbmap-node.is-current .nbrail-dot{
+      border-color:#3fa877!important;
+      box-shadow:0 0 0 max(1px, calc(2px * var(--nbthick,1))) rgba(63,168,119,.38)!important;}
+  body[data-jp-theme-light="false"] #nbpanel-root.vert
+      .nbmap-node.is-current .nbrail-dot{
+      border-color:#4fbf8b!important;
+      box-shadow:0 0 0 max(1px, calc(2px * var(--nbthick,1))) rgba(79,191,139,.38)!important;}
+  .nbpanel-host.vert .nbcodemark.cd-current{
+      border-color:#7b4fbd!important;
+      box-shadow:0 0 0 max(1px, calc(2px * var(--nbthick,1))) rgba(123,79,189,.38)!important;}
+  body[data-jp-theme-light="false"] .nbpanel-host.vert .nbcodemark.cd-current{
+      border-color:#b39ae0!important;
+      box-shadow:0 0 0 max(1px, calc(2px * var(--nbthick,1))) rgba(179,154,224,.38)!important;}
+  .nbpanel-host.vert .nbvizmark{
+      width:calc(11px * var(--nbthick,1) * var(--nbsym,1))!important;
+      height:calc(11px * var(--nbthick,1) * var(--nbsym,1))!important;}
+
+  /* ----------------------------------------------------------------------
+     ONE SHAPE FOR EVERYTHING (2026-09-24ab)
+     Four shapes were four things to learn. The diamond is the one that works:
+     it sits ON the line and lets the line run through it, where a circle and a
+     square both read as a stop. So every mark is a diamond now and the three
+     things that actually differ carry the difference:
+
+         size     what kind of thing it is — section, chapter, exercise, …
+         fill     solid = reached, hollow = an end of the document
+         colour   the state of an exercise
+
+     The glyph inside a mark would turn with the box, so it rides in an <i>
+     that turns back. */
+  /* 2026-09-24ae — THREE SHAPES, AND EACH ONE MEANS A KIND OF THING.
+         ◆  diamond  a division of the document: the three section bars, and
+                     its two ends (hollow)
+         ▢  square   a chapter or a sub-chapter — the text you read
+         ●  circle   an exercise, and ONLY an exercise: the practice one and
+                     its coding twin. The only marks that carry a state, so
+                     the only ones that are ever coloured, and the only ones
+                     with a symbol in them.
+     One shape for everything (24ab) was one shape too few: it made a chapter
+     heading and a question look like the same kind of event. */
+  /* the visualisation is one of the three things you DO, so it is one of the
+     three small diamonds — the triangle was a fourth shape for a third idea */
+  .nbpanel-host.vert .nbvizmark{
+      border:max(1px, calc(2px * var(--nbthick,1))) solid #8894a0!important;
+      border-radius:2px!important;clip-path:none!important;box-sizing:border-box!important;
+      transform:translate(-50%%,-50%%) rotate(45deg)!important;
+      width:calc(24px * var(--nbthick,1) * var(--nbsym,1) * var(--nbcirc,1))!important;
+      height:calc(24px * var(--nbthick,1) * var(--nbsym,1) * var(--nbcirc,1))!important;}
+  body[data-jp-theme-light="false"] .nbpanel-host.vert .nbvizmark{
+      border-color:#6c7885!important;}
+  .nbpanel-host.vert .nbmap-node .nbchapdot,
+  .nbpanel-host.vert .nbmap-node .nbsubdot{
+      border-radius:3px!important;
+      transform:translate(-50%%,-50%%)!important;
+      box-sizing:border-box!important;
+      border:max(1px, calc(2px * var(--nbthick,1))) solid #46535f!important;}
+  /* 2026-09-28c (K3.6) — in the dark the chapter and sub-chapter squares
+     take their edge in the skin's quiet ink: #4b5763 on the dark panel stood
+     1.9–2.2 : 1 (15 marks per dark skin, lab_contrast --overlay, 28b). Same
+     weight as before, so every state colour that painted over it still does. */
+  body[data-jp-theme-light="false"] .nbpanel-host.vert .nbmap-node .nbchapdot,
+  body[data-jp-theme-light="false"] .nbpanel-host.vert .nbmap-node .nbsubdot{
+      border-color:var(--nbskin-quiet,#9fb0bd)!important;}
+  /* 2026-09-24al — THE SHAPES SETTLE.
+         ◇ ring diamond, large   a section: Introduction, Content, Appendix
+         ▢ square                a chapter or sub-chapter — the text
+         ◆ small filled diamond  something you DO: the visualisation, the
+                                 written exercise, the coding exercise
+         ● filled circle, small  an end of the document: the title page, the
+                                 end of the guided part, your own cell
+     Three things to do and three ends; the circle is the full stop and the
+     small diamond is the invitation. */
+  .nbpanel-host.vert .nbmap-node .nbrail-dot,
+  .nbpanel-host.vert .nbcodemark{
+      border-radius:2px!important;
+      transform:translate(-50%%,-50%%) rotate(45deg)!important;}
+  /* the glyph inside them has to turn back */
+  /* (E15.1: the sign's turn back is 12-k3.css alone; this rule was always outranked there) */
+  /* …and they are small, in the title page's own filled design */
+  /* 2026-09-24ap — BIGGER, AND CUT OUT OF THE LINE.
+     Two things made the three exercise marks disappear. They were small — .46
+     of an already-reduced size — and since the line took the same ink as the
+     marks (24ao) they sat on a bar of exactly their own colour, so there was no
+     edge to see. Both are fixed: .74, and a ring of the rail's own background
+     around every mark, which is what cuts a mark out of the line it stands on
+     (the section diamond has had that ring from the beginning). */
+  .nbpanel-host.vert{--nbcirc:.74;}
+  #nbpanel-root.vert .nbmap-node .nbsect,
+  #nbpanel-root.vert .nbmap-node .nbchapdot,
+  #nbpanel-root.vert .nbmap-node .nbsubdot,
+  #nbpanel-root.vert .nbmap-node .nbrail-dot,
+  #nbpanel-root.vert .nbvizmark,
+  #nbpanel-root.vert .nbcodemark{
+      box-shadow:0 0 0 max(2px, calc(3px * var(--nbthick,1)))
+                 var(--nbrail-bg,#f6f8fa)!important;
+      /* 2026-09-24ap — AND THE FILL CHANGES AT ONCE.
+         `.nbchapdot,.nbsubdot{transition:background .45s}` is nearly half a
+         second, and the marker passes a mark in less than that — so the chapter
+         squares and the sub-chapter squares were still half-way to white when
+         the marker had already moved on, and never looked lit at all. Measured
+         under the marker in the dark theme: section, visualisation and coding
+         mark rgb(255,255,255); chapter, sub-chapter and exercise still
+         rgb(29,34,40). "Aufleuchten" is not a fade. */
+      transition:transform .26s cubic-bezier(.22,.61,.36,1),
+                 background .10s linear,border-color .10s linear!important;}
+  /* an unanswered exercise takes the common fill above; only its OUTLINE says
+     which of the two routes it belongs to */
+  .nbpanel-host.vert .nbmap-node .nbrail-dot.st-open{border-color:#8894a0!important;}
+  body[data-jp-theme-light="false"] .nbpanel-host.vert .nbmap-node .nbrail-dot.st-open{
+      border-color:#6c7885!important;}
+  /* the two ends of the document are small filled circles instead */
+  .nbpanel-host.vert .nbmap-node.title .nbsect,
+  .nbpanel-host.vert .nbmap-node.end   .nbsect,
+  .nbpanel-host.vert .nbmap-node.cell  .nbsect{
+      border-radius:50%%!important;
+      transform:translate(-50%%,-50%%)!important;
+      width:calc(9px * var(--nbthick,1) * var(--nbsym,1))!important;
+      height:calc(9px * var(--nbthick,1) * var(--nbsym,1))!important;}
+  /* The 24aj rule that left an unanswered exercise hollow lived here. It is
+     gone: the three "something to do" marks are filled in the title page's grey
+     now (see above), and this rule — same specificity, later in the sheet —
+     was quietly painting them the rail's own background instead. */
+  /* (the symbol's size and place: 14-e7.css, E15.1 — it is drawn now) */
+  /* the hover nudge must not undo the rotation */
+  /* 2026-09-24ag — EVERY MARK TURNS UNDER THE POINTER.
+     The diamonds did it by accident and the reader liked it, so it is the rule
+     now: a mark answers the pointer by turning a quarter of the way round and
+     growing a little. A diamond becomes a square and a square a diamond, which
+     is the same gesture read from either side; a circle has no corners to show,
+     so it turns the whole way round and the symbol inside it comes back upright
+     — a spin rather than a tilt, because a tilted tick reads as broken. */
+  .nbpanel-host.vert .nbmap-node .nbsect,
+  .nbpanel-host.vert .nbmap-node .nbchapdot,
+  .nbpanel-host.vert .nbmap-node .nbsubdot,
+  .nbpanel-host.vert .nbmap-node .nbrail-dot,
+  .nbpanel-host.vert .nbvizmark,
+  .nbpanel-host.vert .nbcodemark{
+      transition:transform .26s cubic-bezier(.22,.61,.36,1),
+                 background .3s ease,border-color .3s ease!important;}
+  /* These carry the host's ID on purpose. Several older hover rules set a
+     transform on the same marks and sit later in the sheet; an ID outranks any
+     number of classes, so the turn cannot be undone by one of them. Measured
+     before the ID went on: the chapter square stayed at 0° and came out at
+     scale 1.26 — two hover rules stacking, neither of them this one. */
+  /* diamonds: 45° -> 90°, i.e. square */
+  #nbpanel-root.vert .nbmap-node:hover .nbsect,
+  #nbpanel-root.vert .nbmap-node:focus .nbsect,
+  #nbpanel-root.vert .nbmap-node.nbpop .nbsect,
+  #nbpanel-root.vert .nbvizmark:hover{
+      transform:translate(-50%%,-50%%) rotate(90deg) scale(1.14)!important;}
+  /* squares: 0° -> 45°, i.e. diamond */
+  #nbpanel-root.vert .nbmap-node:hover .nbchapdot,
+  #nbpanel-root.vert .nbmap-node:hover .nbsubdot,
+  #nbpanel-root.vert .nbmap-node:focus .nbchapdot,
+  #nbpanel-root.vert .nbmap-node:focus .nbsubdot,
+  #nbpanel-root.vert .nbmap-node.nbpop .nbchapdot,
+  #nbpanel-root.vert .nbmap-node.nbpop .nbsubdot{
+      transform:translate(-50%%,-50%%) rotate(45deg) scale(1.14)!important;}
+  /* circles: all the way round, so the symbol lands upright again */
+  #nbpanel-root.vert .nbmap-node:hover .nbrail-dot,
+  #nbpanel-root.vert .nbmap-node:focus .nbrail-dot,
+  #nbpanel-root.vert .nbmap-node.nbpop .nbrail-dot,
+  #nbpanel-root.vert .nbcodemark:hover,
+  #nbpanel-root.vert .nbmap-node:hover .nbcodemark,
+  #nbpanel-root.vert .nbmap-node.nbpop .nbcodemark,
+  #nbpanel-root.vert .nbmap-node:focus .nbcodemark{
+      transform:translate(-50%%,-50%%) rotate(360deg) scale(1.14)!important;}
+  /* the same ring of background the section diamond wears, so a mark standing
+     on the line is cut out of it instead of sitting in front of it */
+  .nbpanel-host.vert .nbmap-node .nbchapdot,
+  .nbpanel-host.vert .nbmap-node .nbsubdot{
+      box-shadow:0 0 0 max(1px, calc(2px * var(--nbthick,1)))
+                 var(--nbrail-bg,#f6f8fa)!important;}
+
+  /* the names read down the column, one per line, beside the dot */
+  /* There is room to the right of the line, so the names are written out in
+     full and set larger — wrapping onto a second or third line rather than
+     being cut off with an ellipsis. A name is the only thing that tells the
+     reader what a circle IS; shortening it is the last thing to do, not the
+     first. */
+  .nbpanel-host.vert .nbmap-node.sect.first .nbmap-lab,
+  .nbpanel-host.vert .nbmap-node.sect .nbmap-lab,
+  .nbpanel-host.vert .nbmap-node .nbmap-lab,
+  .nbpanel-host.vert .nbmap-node .nbtasklab{
+      position:absolute!important;
+      left:calc(var(--nbvert-axis,30px) + 26px * var(--nbthick,1) * var(--nbsym,1))!important;
+      top:0!important;bottom:auto!important;right:auto!important;
+      transform:translateY(-50%%)!important;
+      width:auto!important;
+      max-width:calc(100%% - var(--nbvert-axis,30px) - 34px * var(--nbthick,1) * var(--nbsym,1))!important;
+      text-align:left!important;white-space:normal!important;
+      overflow-wrap:break-word;hyphens:auto;
+      overflow:visible;text-overflow:clip;height:auto!important;
+      font-size:calc(.78em * var(--nbthick,1))!important;
+      line-height:1.24;display:block!important;}
+  .nbpanel-host.vert .nbmap-node.sect .nbmap-lab{
+      font-size:calc(.68em * var(--nbthick,1))!important;}
+  /* 2026-09-24al — NO NAMES ON THE RAIL AT ALL.
+     They were the reason the panel could be widened, and with them gone the
+     rail is one column of marks: position and shape say what each one is, and
+     the tooltip says the name when it is actually wanted.
+     The host's ID is on purpose: the section names carry their own rule with
+     three classes further up, and six of them were still showing without it.
+
+     2026-09-25d — AND THEY COME BACK WHEN THERE IS ROOM FOR THEM.
+     The names were dropped because they did not fit, and then the control's
+     range was cut to 150-300px, which guaranteed they never would. Both ends
+     moved: the panel opens to 560px now, and `nbnames` is put on the host by
+     applyGui when the measured column is at least 96px wide. So this is no
+     longer a decision about names — it is a measurement about width. */
+  #nbpanel-root.vert:not(.nbnames) .nbmap-node .nbmap-lab,
+  #nbpanel-root.vert:not(.nbnames) .nbmap-node .nbtasklab{display:none!important;}
+  .nbpanel-host.vert .nbmap-node.chap .nbmap-lab{font-weight:700;}
+
+  /* the hover lift becomes a nudge to the right — up has nowhere to go */
+  .nbpanel-host.vert .nbmap-node:hover,
+  .nbpanel-host.vert .nbmap-node:focus,
+  .nbpanel-host.vert .nbmap-node.nbpop{transform:none!important;}
+  .nbpanel-host.vert .nbmap-node:hover .nbrail-dot,
+  .nbpanel-host.vert .nbmap-node:focus .nbrail-dot,
+  .nbpanel-host.vert .nbmap-node.nbpop .nbrail-dot,
+  .nbpanel-host.vert .nbmap-node:hover .nbchapdot,
+  .nbpanel-host.vert .nbmap-node:focus .nbchapdot,
+  .nbpanel-host.vert .nbmap-node.nbpop .nbchapdot,
+  .nbpanel-host.vert .nbmap-node:hover .nbsubdot,
+  .nbpanel-host.vert .nbmap-node:focus .nbsubdot,
+  .nbpanel-host.vert .nbmap-node.nbpop .nbsubdot{
+      transform:translate(-50%%,-50%%) scale(1.26)!important;}
+  .nbpanel-host.vert .nbmap-node:hover .nbmap-lab,
+  .nbpanel-host.vert .nbmap-node:hover .nbtasklab,
+  .nbpanel-host.vert .nbmap-node.nbpop .nbmap-lab,
+  .nbpanel-host.vert .nbmap-node.nbpop .nbtasklab{
+      transform:translateY(-50%%) translateX(4px) scale(1.16)!important;
+      transform-origin:0 50%%;font-weight:700;}
+
+  /* the controls wrap under the line, each zoom bar on its own row */
+  /* The controls are in the dock now, not in the rail, so turning the panel on
+     its side does not have to rearrange them at all — which is exactly why they
+     went into a dock: in the vertical rail they were pushed off the bottom of
+     the column and could not be reached. */
+
+  /* ======================================================================
+     THE THEME CROSS-FADE
+     Switching between light and dark is a whole-page change of luminance, and
+     an instant one is unpleasant to look at in a darkened room. The class is
+     put on just before the switch and taken off again afterwards, so this
+     blanket transition exists for one second and never slows anything else —
+     in particular not the marker and the hover, which need to feel immediate. */
+  /* NOT `*`. The first version of this block put a transition on every element
+     and every pseudo-element in the document. In a JupyterLab page that is tens
+     of thousands of nodes, and Chromium answers by not painting the document at
+     all: the application goes blank while the DOM and every computed style say
+     it is perfectly fine. A cross-fade is only ever visible on the big flat
+     surfaces anyway, so it is applied to those by name and to nothing else. */
+  /* ONE duration for everything that changes, armed at the same moment, so the
+     application and the document cross over together instead of one snapping
+     while the other glides. Named surfaces only — a transition on `*` is what
+     stopped Chromium painting the page at all. */
+  body.nbtheming:where(.nb-dc-active),
+  body.nbtheming:where(.nb-dc-active) #main,body.nbtheming:where(.nb-dc-active) #jp-top-panel,body.nbtheming:where(.nb-dc-active) #jp-main-dock-panel,
+  body.nbtheming .jp-NotebookPanel:where([data-digichem],.nbrail-own),body.nbtheming :where([data-digichem],.nbrail-own) .jp-Notebook,
+  body.nbtheming :where([data-digichem],.nbrail-own) .jp-WindowedPanel-outer,body.nbtheming :where([data-digichem],.nbrail-own) .jp-Cell,
+  body.nbtheming :where([data-digichem],.nbrail-own) .jp-Cell-inputWrapper,body.nbtheming :where([data-digichem],.nbrail-own) .jp-Cell-outputWrapper,
+  body.nbtheming :where([data-digichem],.nbrail-own) .jp-OutputArea-output,body.nbtheming :where([data-digichem],.nbrail-own) .jp-RenderedHTMLCommon,
+  body.nbtheming :where([data-digichem],.nbrail-own) .jp-Toolbar,body.nbtheming:where(.nb-dc-active) .jp-SideBar,body.nbtheming:where(.nb-dc-active) .lm-TabBar-tab,
+  body.nbtheming:where(.nb-dc-active) .jp-MenuBar,body.nbtheming:where(.nb-dc-active) .lm-MenuBar-item,
+  body.nbtheming .nbbox,body.nbtheming .nbrail,body.nbtheming .nbdock,
+  body.nbtheming .nbtitle-card,body.nbtheming .nbtitle-h,
+  body.nbtheming .nbtitle-sub,body.nbtheming .nbtitle-lead,
+  body.nbtheming .nbtitle-note,body.nbtheming .nbtitle-fine,
+  body.nbtheming .nbbtn,body.nbtheming .nbslval,body.nbtheming .nbslider,
+  body.nbtheming .nbdrawer,body.nbtheming .nbdrawer .nbcell,
+  body.nbtheming .nbseries,body.nbtheming .nbprofile,
+  body.nbtheming .nbmap-lab,body.nbtheming .nbtasklab,
+  body.nbtheming .nbrail-dot,body.nbtheming .nbchapdot,
+  body.nbtheming .nbsubdot,body.nbtheming .nbsect,
+  body.nbtheming :where([data-digichem],.nbrail-own) .jupyter-widget-Collapse-header,
+  body.nbtheming :where([data-digichem],.nbrail-own) .lm-Collapse-header,body.nbtheming :where([data-digichem],.nbrail-own) .p-Collapse-header,
+  body.nbtheming .nbend-h,body.nbtheming .nbend-note,body.nbtheming .nbend-rule,
+  /* 2026-09-24y — the box's INSIDE as well. `.nbbox` alone was not enough: the
+     block, the text widget ipywidgets wraps it in, the code frame and the
+     accordion body all carry backgrounds and their own durations, which is why
+     the lag was visible inside the boxes and nowhere else. */
+  body.nbtheming .nblock,body.nbtheming .nbbox *,body.nbtheming .nblock *,
+  body.nbtheming :where([data-digichem],.nbrail-own) .widget-html,body.nbtheming :where([data-digichem],.nbrail-own) .widget-html-content,
+  body.nbtheming :where([data-digichem],.nbrail-own) .jupyter-widget-html,body.nbtheming :where([data-digichem],.nbrail-own) .jupyter-widget-html-content,
+  body.nbtheming :where([data-digichem],.nbrail-own) .jupyter-widget-Collapse-contents,
+  body.nbtheming :where([data-digichem],.nbrail-own) .lm-Collapse-contents,
+  body.nbtheming :where([data-digichem],.nbrail-own) .jp-InputArea,body.nbtheming :where([data-digichem],.nbrail-own) .jp-InputArea-editor,
+  body.nbtheming :where([data-digichem],.nbrail-own) .cm-editor,body.nbtheming :where([data-digichem],.nbrail-own) .cm-scroller,body.nbtheming :where([data-digichem],.nbrail-own) .cm-gutters{
+      transition:none!important;}
+  /* 2026-09-24n — INSTANT. A cross-fade cannot be synchronous here: our own
+     surfaces are ours to repaint in one frame, JupyterLab's arrive whenever its
+     theme file has loaded, and any duration at all makes the two halves of the
+     window visibly disagree for that long. So there is no duration: everything
+     switches in the same frame, and the palette below is what makes that
+     possible in BOTH directions. */
+
+  /* ======================================================================
+     THE PANEL'S ONE FIXED DIMENSION
+     Lying flat, the panel is the width of the document — always, and nothing
+     may change it: not the thickness control, not the drawer, not full screen,
+     not a long chapter name. Standing on its side it is the full height of the
+     document instead. One dimension is the document's and is not negotiable;
+     the other is the only thing the panel control touches. */
+  .nbpanel-host:not(.vert) .nbrail{
+      box-sizing:border-box!important;
+      width:var(--nbrail-w,min(96vw,1180px))!important;
+      max-width:var(--nbrail-w,min(96vw,1180px))!important;
+      min-width:0!important;}
+  .nbpanel-host:not(.vert) .nbmap{max-width:none!important;}
+
+  /* ======================================================================
+     THE DETAIL LADDER
+     Making the panel thinner does not squash the timeline — it takes detail
+     away, from the outside in: first the names, then the glyphs inside the
+     markers, then the exercise circles, then the section bars, then the
+     chapter dots, until one line is left. Everything fades rather than being
+     removed, so nothing reflows and nothing jumps: the spacing of the
+     timeline is the same at every thickness, only less of it is drawn. */
+  .nbmap-lab,.nbtasklab,.nbrail-dot,.nbchapdot,.nbsubdot,.nbsect{
+      transition:opacity .28s ease,color .28s ease,
+                 width .3s ease,height .3s ease,font-size .3s ease,
+                 transform .18s cubic-bezier(.34,.9,.35,1),background .2s ease;}
+  .nbpanel-host.det-text .nbmap-lab,
+  .nbpanel-host.det-text .nbtasklab{opacity:0;pointer-events:none;}
+  /* the padlocks, ticks and crosses go before the circles that carry them */
+  .nbpanel-host.det-emoji .nbrail-dot,
+  .nbpanel-host.det-emoji .nbchapdot{color:transparent!important;}
+  .nbpanel-host.det-circle .nbrail-dot{opacity:0;pointer-events:none;}
+  .nbpanel-host.det-bar .nbsect{opacity:0;pointer-events:none;}
+  .nbpanel-host.det-dot .nbchapdot,
+  .nbpanel-host.det-dot .nbsubdot{opacity:0;pointer-events:none;}
+  /* a node with nothing left to show must not still catch a click */
+  .nbpanel-host.det-dot .nbmap-node{pointer-events:none;}
+
+  /* the footer that closes the notebook — a rule, a line, a sentence */
+  .nbend{color:#5b6b7b;text-align:center;margin:26px auto 10px;max-width:720px;}
+  .nbend-rule{width:74px;height:2px;border-radius:2px;background:#cbd5de;
+      margin:0 auto 13px;}
+  .nbend-h{font-size:1.06em;font-weight:800;color:#33475b;letter-spacing:.3px;}
+  .nbend-note{margin-top:7px;font-size:.92em;color:#7a8794;line-height:1.5;}
+  body[data-jp-theme-light="false"] .nbend-rule{background:#39424d;}
+  body[data-jp-theme-light="false"] .nbend-h{color:#c8d4de;}
+  body[data-jp-theme-light="false"] .nbend-note{color:#8b98a5;}
+  /* 2026-10-02 — EILAUFTRAG E16.12 (Oberfläche; Markup Python py-E16.12,
+     Verhalten JS). UNTER „END OF THE GUIDED PART“: ZURÜCK ZUM START UND
+     NEUSTART MIT ANDEREM MODUS. Markup: `.nbend-go` > `button.nbend-btn.
+     nbend-top` · `.nbend-again` (Zeile) · `button.nbend-btn.nbend-mode
+     [data-mode]`. Eine umbrechende Reihe, mittig: der Pfeil-Knopf allein in
+     der ersten Zeile (die Zeile `.nbend-again` nimmt die ganze Breite), die
+     Modus-Knöpfe darunter. Jeder Knopf in `.nbend`: Pille in den Farben des
+     Stils, ≥ 34 px hoch; der Pfeil-Knopf in der Markenfarbe. */
+  .nbend-go{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px;margin-top:16px;}
+  .nbend-again{flex:0 0 100%%;margin-top:4px;font-size:.78em;font-weight:800;letter-spacing:1.6px;
+      text-transform:uppercase;color:var(--nbskin-quiet,#7a8794);}
+  html body .nbend button{all:unset;box-sizing:border-box;cursor:pointer;display:inline-flex;align-items:center;
+      justify-content:center;gap:6px;min-height:34px;padding:6px 16px;border-radius:999px;
+      font:700 .9em/1.2 var(--nbskin-font,var(--jp-content-font-family,inherit));
+      color:var(--nbskin-ink,#1f2933);background:var(--nbskin-surf,#fff);
+      border:1.5px solid var(--nbskin-line,#c3ced8);transition:transform .16s ease,opacity .16s ease;}
+  html body .nbend button:hover{transform:translateY(-2px);border-color:var(--nbmark,#0d63e0);}
+  html body .nbend button:focus-visible{outline:2px solid var(--nbring,#0d63e0);outline-offset:2px;}
+  html body .nbend button.nbend-top{color:#fff;background:var(--nbmark-ink,var(--nbmark,#0d63e0));border-color:transparent;}
+  body.nbdark .nbend button{color:var(--nbskin-ink,#dbe2e9);background:var(--nbskin-surf,#1d2228);border-color:var(--nbskin-line,#3b4652);}
+  body.nbdark .nbend button.nbend-top{color:#0b0f14;background:var(--nbmark,#7fb8dc);}
+  /* 2026-10-02 — EILAUFTRAG E21.11 (Oberfläche; Reihenfolge/Markup Python).
+     DIE KNÖPFE „START AGAIN WITH …“ SEHEN AUS WIE DIE MODUS-KARTEN AUF DEM
+     COVER (`.nbmode .nbmode-opt`, 06-marks + JS-Inline): Karte statt Pille —
+     Ecke 12 px (die Cover-Karte ist immer minimal, E15.2), Rand 1,5 px Tinte 35 %%, Innenabstand 10/10/9,
+     Spalte (Zeichen · Name · Zeile), je 120–150 px in einer Reihe, Fläche
+     und Tinte aus --nbcov-*, gewählt/Zeiger in --nbcov-acc. Bringt Python
+     die Teile `.nbmode-ic/-l/-d` mit, sehen sie aus wie auf der Karte. */
+  html body .nbend button.nbend-mode{flex-direction:column;gap:2px;flex:1 1 0;min-width:120px;max-width:150px;
+      min-height:0;padding:10px 10px 9px;border-radius:12px;
+      font:400 1em/1.25 var(--nbskin-font,var(--jp-content-font-family,inherit));text-align:center;
+      background:var(--nbcov-face,#fff);color:var(--nbcov-ink,#55636f);
+      border:1.5px solid color-mix(in srgb,var(--nbcov-ink,#55636f) 35%%,transparent);}
+  html body .nbend button.nbend-mode:hover{border-color:var(--nbcov-acc,#3fa877);}
+  html body .nbend button.nbend-mode .nbmode-ic{font-size:20px;line-height:1.2;}
+  html body .nbend button.nbend-mode .nbmode-l{font-weight:800;font-size:.9em;color:var(--nbskin-ink,#1f2933);}
+  html body .nbend button.nbend-mode .nbmode-d{font-size:.74em;line-height:1.3;opacity:.9;}
+  html body .nbend button.nbend-mode:not(:has(.nbmode-l)){font-weight:800;font-size:.9em;color:var(--nbskin-ink,#1f2933);}
+  body.nbdark .nbend button.nbend-mode{background:var(--nbcov-face,#1f252c);color:var(--nbcov-ink,#9fb0bd);
+      border-color:color-mix(in srgb,var(--nbcov-ink,#9fb0bd) 35%%,transparent);}
+  body.nbdark .nbend button.nbend-mode:not(:has(.nbmode-l)){color:var(--nbskin-ink,#dbe2e9);}
+  /* the first bar and the last one are the covers, not sections */
+  .nbmap-node.sect.cell .nbsect{background:#8894a0;}
+  .nbmap-node.sect.cell .nbmap-lab{color:#8894a0;}
+  body[data-jp-theme-light="false"] .nbmap-node.sect.cell .nbsect{background:#6c7885;}
+  body[data-jp-theme-light="false"] .nbmap-node.sect.cell .nbmap-lab{color:#8894a0;}
+  .nbmap-node.sect.title .nbsect{background:#8894a0;}
+  .nbmap-node.sect.title .nbmap-lab{color:#8894a0;}
+  body[data-jp-theme-light="false"] .nbmap-node.sect.title .nbsect{background:#6c7885;}
+  body[data-jp-theme-light="false"] .nbmap-node.sect.title .nbmap-lab{color:#8894a0;}
+  /* the end bar reads as a full stop, not as another section */
+  .nbmap-node.sect.end .nbsect{background:#8894a0;}
+  .nbmap-node.sect.end .nbmap-lab{color:#8894a0;}
+  body[data-jp-theme-light="false"] .nbmap-node.sect.end .nbsect{background:#6c7885;}
+  body[data-jp-theme-light="false"] .nbmap-node.sect.end .nbmap-lab{color:#8894a0;}
+
+  /* ---- LAST WORD: the reading marker ----------------------------------------
+     Where the marker stands, everything it covers turns light — a locked circle,
+     a chapter dot, a section bar, in the light theme and in the dark one alike.
+     These rules live at the very end and carry a theme selector of their own,
+     because the dark twins above are `body[...] .nbrail-dot.st-lock` — three
+     classes AND an element — and would otherwise outrank a plain `.here`. A
+     marker that loses to a state colour is the one thing it may never do: it is
+     not a state, it is where you are. */
+  /* 2026-09-24af — EVERY MARK IS AN OUTLINE AND A FILL, AND THE MARKER FILLS
+     IT. The title page's diamond already worked this way and was the one the
+     reader pointed at: a ring that stands on the line, which the marker fills
+     as it goes past and which empties again behind it. That only reads if the
+     two parts exist on every mark, so each one below carries both — the outline
+     in its own colour, the fill either its state or the rail's background — and
+     `.here` sets BOTH to the marker's colour. Before this, half the marks took
+     only an outline on the way past and the exercise circle only a border, so
+     the marker seemed to skip them. */
+  /* The host's ID, and the reason is measured (2026-09-24ap). Written with
+     `.nbpanel-host` this rule is (0,5,0); the per-theme fill added in 24am is
+     `body[…] .nbpanel-host.vert .nbmap-node .nbchapdot` — (0,5,1), one element
+     more — so it won on specificity however late this one sat. The chapter
+     squares, the sub-chapter squares and the exercise diamonds therefore never
+     lit up under the marker in the dark theme, while the section, the
+     visualisation and the coding mark did: those three happen to have their own
+     ID-prefixed rules. Measured: rgb(29,34,40) where white was wanted. */
+  #nbpanel-root.vert .nbmap-node.here .nbsect,
+  #nbpanel-root.vert .nbmap-node.here .nbchapdot,
+  #nbpanel-root.vert .nbmap-node.here .nbsubdot,
+  #nbpanel-root.vert .nbmap-node.here .nbrail-dot,
+  #nbpanel-root.vert .nbmap-node.here .nbvizmark,
+  #nbpanel-root.vert .nbmap-node.here .nbcodemark,
+  #nbpanel-root.vert .nbmap-node.here.title .nbsect,
+  #nbpanel-root.vert .nbmap-node.here.end   .nbsect,
+  #nbpanel-root.vert .nbmap-node.here.cell  .nbsect{
+      background:var(--nbmark)!important;
+      border-color:var(--nbmark)!important;}
+  /* the symbol inside a filled circle has to stay readable against it */
+  .nbpanel-host.vert .nbmap-node.here .nbrail-dot,
+  .nbpanel-host.vert .nbmap-node.here .nbcodemark{
+      color:var(--nbrail-bg,#f6f8fa)!important;}
+  /* …and every mark the marker is level with wears the same white ring for as
+     long as it is there — the glow travelling from one mark to the next is what
+     makes the rail read as a thing in motion rather than a list (2026-09-24ai) */
+  #nbpanel-root.vert .nbmap-node.here .nbsect,
+  #nbpanel-root.vert .nbmap-node.here .nbchapdot,
+  #nbpanel-root.vert .nbmap-node.here .nbsubdot,
+  #nbpanel-root.vert .nbmap-node.here .nbrail-dot,
+  #nbpanel-root.vert .nbmap-node.here .nbvizmark,
+  #nbpanel-root.vert .nbmap-node.here .nbcodemark{
+      box-shadow:0 0 0 2px var(--nbring,#fff),
+                 0 0 12px 4px var(--nbglow,rgba(255,255,255,.65))!important;}
+
+  /* 2026-09-24ak — POINTED AT, AND PICKED.
+     Both are the same statement — "this one" — so both are the same fill: the
+     marker's colour, white on dark and blue on light. The difference is how
+     long it lasts. A pointer is a moment; a click is a choice, and it stays
+     until another one is made, which is what tells the reader where they last
+     went. The marker's own `.here` is neither, and outranks both by sitting
+     later in the sheet. */
+  #nbpanel-root.vert .nbmap-node:hover .nbsect,
+  #nbpanel-root.vert .nbmap-node:hover .nbchapdot,
+  #nbpanel-root.vert .nbmap-node:hover .nbsubdot,
+  #nbpanel-root.vert .nbmap-node:hover .nbrail-dot,
+  #nbpanel-root.vert .nbmap-node:hover .nbvizmark,
+  #nbpanel-root.vert .nbmap-node:hover .nbcodemark,
+  #nbpanel-root.vert .nbmap-node.nbsel .nbsect,
+  #nbpanel-root.vert .nbmap-node.nbsel .nbchapdot,
+  #nbpanel-root.vert .nbmap-node.nbsel .nbsubdot,
+  #nbpanel-root.vert .nbmap-node.nbsel .nbrail-dot,
+  #nbpanel-root.vert .nbmap-node.nbsel .nbvizmark,
+  #nbpanel-root.vert .nbmap-node.nbsel .nbcodemark{
+      background:var(--nbpick)!important;
+      border-color:var(--nbpick)!important;
+      box-shadow:0 0 0 2px var(--nbpick),
+                 0 0 12px 4px var(--nbpickglow)!important;}
+  #nbpanel-root.vert .nbmap-node:hover .nbrail-dot,
+  #nbpanel-root.vert .nbmap-node:hover .nbcodemark,
+  #nbpanel-root.vert .nbmap-node.nbsel .nbrail-dot,
+  #nbpanel-root.vert .nbmap-node.nbsel .nbcodemark{
+      color:var(--nbrail-bg,#f6f8fa)!important;}
+  #nbpanel-root.vert .nbmap-node.nbsel .nbmap-lab{
+      opacity:1!important;font-weight:800!important;}
+  /* the horizontal banner keeps the plain version */
+  .nbmap-node.here .nbrail-dot,
+  body[data-jp-theme-light="false"] .nbmap-node.here .nbrail-dot,
+  body.nbdark .nbmap-node.here .nbrail-dot{border-color:var(--nbmark)!important;}
+  .nbmap-node.here .nbchapdot,
+  .nbmap-node.here .nbsubdot,
+  .nbmap-node.here .nbsect,
+  body[data-jp-theme-light="false"] .nbmap-node.here .nbchapdot,
+  body[data-jp-theme-light="false"] .nbmap-node.here .nbsubdot,
+  body[data-jp-theme-light="false"] .nbmap-node.here .nbsect,
+  body.nbdark .nbmap-node.here .nbchapdot,
+  body.nbdark .nbmap-node.here .nbsubdot,
+  body.nbdark .nbmap-node.here .nbsect{background:var(--nbmark)!important;}
+
+  /* Pointing at a node is attention too, not a state — so it takes the same
+     colour, and it grows, whatever the node's state colour would otherwise be.
+     These rules live with the marker's, at the end, for the same reason: the
+     dark twins further up carry an element plus three classes and would
+     otherwise win. */
+  .nbmap-node:hover .nbrail-dot,.nbmap-node:focus .nbrail-dot,
+  .nbmap-node.nbpop .nbrail-dot,
+  body[data-jp-theme-light="false"] .nbmap-node:hover .nbrail-dot,
+  body[data-jp-theme-light="false"] .nbmap-node:focus .nbrail-dot,
+  body[data-jp-theme-light="false"] .nbmap-node.nbpop .nbrail-dot,
+  body.nbdark .nbmap-node:hover .nbrail-dot,
+  body.nbdark .nbmap-node:focus .nbrail-dot,
+  body.nbdark .nbmap-node.nbpop .nbrail-dot{
+      border-color:var(--nbmark)!important;}
+  .nbmap-node:hover .nbchapdot,.nbmap-node:focus .nbchapdot,
+  .nbmap-node.nbpop .nbchapdot,
+  .nbmap-node:hover .nbsubdot,.nbmap-node:focus .nbsubdot,
+  .nbmap-node.nbpop .nbsubdot,
+  .nbmap-node:hover .nbsect,.nbmap-node:focus .nbsect,
+  .nbmap-node.nbpop .nbsect,
+  body[data-jp-theme-light="false"] .nbmap-node:hover .nbchapdot,
+  body[data-jp-theme-light="false"] .nbmap-node:hover .nbsubdot,
+  body[data-jp-theme-light="false"] .nbmap-node:hover .nbsect,
+  body.nbdark .nbmap-node:hover .nbchapdot,
+  body.nbdark .nbmap-node:hover .nbsubdot,
+  body.nbdark .nbmap-node:hover .nbsect{background:var(--nbmark)!important;}
+  .nbmap-node:hover .nbmap-lab,.nbmap-node:focus .nbmap-lab,
+  .nbmap-node.nbpop .nbmap-lab,
+  .nbmap-node:hover .nbtasklab,.nbmap-node:focus .nbtasklab,
+  .nbmap-node.nbpop .nbtasklab,
+  body[data-jp-theme-light="false"] .nbmap-node:hover .nbmap-lab,
+  body[data-jp-theme-light="false"] .nbmap-node:hover .nbtasklab,
+  body.nbdark .nbmap-node:hover .nbmap-lab,
+  body.nbdark .nbmap-node:hover .nbtasklab{color:var(--nbmark)!important;}
+
+  /* ======================================================================
+     THE STRIP BESIDE THE DOCUMENT
+     The rail hangs over the right-hand edge, so the reading column has to end
+     before it does. The earlier build wrote `padding-right` onto the SCROLLER,
+     which fails twice over in a real JupyterLab: the front end's own windowed
+     scroller owns that inline style and writes 0px back over it, and padding on
+     a content-box scroller WIDENS it — the element's right edge moved out from
+     under the window and took the rail with it.
+     A rule with !important beats a non-important inline style, and the padding
+     is taken off the CELLS, which are ours: the column narrows, re-centres, and
+     nothing about the scroller's box changes. */
+  /* ======================================================================
+     THE DOCUMENT IS NOT A FOLD
+     JupyterLab puts a gutter beside every cell that collapses its output, and
+     offers to turn a long output into a small scrolling box with a drag handle.
+     There is one output here and it IS the document: folding it away leaves a
+     reader looking at a two-line window and no way back that they would guess.
+     The gutters stay for the layout and stop responding; a state that got set
+     anyway is taken off again by unlockCell(). */
+  body.nbvert .jp-NotebookPanel:where([data-digichem],.nbrail-own) .jp-Cell .jp-Collapser,
+  body.nbvert .jp-NotebookPanel:where([data-digichem],.nbrail-own) .jp-Cell .jp-InputCollapser,
+  body.nbvert .jp-NotebookPanel:where([data-digichem],.nbrail-own) .jp-Cell .jp-OutputCollapser,
+  body.nbvert .jp-NotebookPanel:where([data-digichem],.nbrail-own) .jp-Cell-inputCollapser,
+  body.nbvert .jp-NotebookPanel:where([data-digichem],.nbrail-own) .jp-Cell-outputCollapser{
+      pointer-events:none!important;cursor:default!important;}
+  body.nbvert .jp-NotebookPanel:where([data-digichem],.nbrail-own) .jp-Cell.jp-mod-outputsScrolled .jp-OutputArea-child,
+  body.nbvert .jp-NotebookPanel:where([data-digichem],.nbrail-own) .jp-OutputArea-child{
+      max-height:none!important;resize:none!important;overflow:visible!important;}
+  body.nbvert .jp-NotebookPanel:where([data-digichem],.nbrail-own) .jp-OutputArea-promptOverlay{display:none!important;}
+
+  /* ONE AXIS, and it is the toolbar's. The progress chip stands on the middle
+     of the bar, and everything under it — every accordion, every box — stands on
+     the same line. That costs the same strip on the left that the rail takes on
+     the right; it buys a document whose parts line up with the tools that
+     operate on them, which is worth more than the room. */
+  /* 2026-09-24n: only the RIGHT is reserved. Padding both sides kept the axis
+     by throwing away as much room on the left as the rail takes on the right —
+     1250px of cell became a 600px strip of text with a third of the page empty
+     beside it. The axis is kept a cheaper way: the toolbar's centre chip is
+     placed over the middle of what is left (see placeDock), so the document and
+     the tools still line up and the reading column gets its width back. */
+  body.nbvert .jp-NotebookPanel:where([data-digichem],.nbrail-own) .jp-Cell{
+      box-sizing:border-box!important;
+      padding-left:0!important;
+      padding-right:0!important;}
+  /* 2026-09-27b — THE PANEL LIES OVER THE DOCUMENT (STRUKTUR §4, Vorhaben E).
+     The cells used to give up --nbvert-pad on the right, so pulling the panel
+     open pushed the reading column, the zoom control and the profile chip to
+     the left (Nutzerbefund, video 27.09.). The document now keeps its full
+     width at every panel size and the panel opens OVER it. --nbvert-pad and
+     --nbdock-cut are gone; nothing reads them any more. */
+  /* A widget keeps the width it was laid out at, so a box built while the
+     column was wider hangs out past the padding and is clipped mid-word. The
+     guard is on the BOX, never on its contents: a blanket max-width on
+     everything inside once collapsed the whole column to one character. */
+  body.nbvert .jp-NotebookPanel .jp-Cell .nbbox,
+  body.nbvert .jp-NotebookPanel .jp-Cell .nblock,
+  body.nbvert .jp-NotebookPanel .jp-Cell .nbend,
+  body.nbvert .jp-NotebookPanel .jp-Cell img.nbplot{
+      max-width:100%%!important;box-sizing:border-box!important;}
+
+  /* ======================================================================
+     ONE QUIET SURFACE
+     The document settled into a plain style — one ink, thin borders, colour
+     only where it carries a state — and the instrument beside it had not. It
+     still had gradients, glows and a drop shadow, which is three ways of saying
+     "look at me" next to a page that says nothing of the kind. This block is the
+     last word on the panel's surface: flat fills, hairline borders, one accent,
+     and shape rather than colour wherever shape will do. Nothing here changes a
+     position or a size — only how loud it is. */
+  .nbrail,.nbdock{
+      box-shadow:none!important;
+      border:1px solid var(--nbquiet-line,#e2e8ee)!important;
+      border-radius:10px!important;}
+  body[data-jp-theme-light="false"] .nbrail,
+  body[data-jp-theme-light="false"] .nbdock,
+  body.nbdark .nbrail,body.nbdark .nbdock{
+      --nbquiet-line:#2b333c;background:#171c22!important;}
+  .nbmap-fill,.nbmap-fill.tail,.nbmap-fill.code,.nbmap-ahead{
+      background-image:none!important;box-shadow:none!important;}
+  .nbmap-fill{background-color:#3fa877!important;}
+  .nbmap-fill.tail{background-color:#d99b2b!important;}
+  .nbmap-fill.tail.gave-up{background-color:#c0392b!important;}
+  .nbmap-fill.code{background-color:rgba(123,79,189,.32)!important;}
+  /* a marker is a shape on a line, not a lamp */
+  .nbrail-dot,.nbchapdot,.nbsubdot,.nbsect,.nbmap-node .nbrail-dot{
+      background-image:none!important;}
+  .nbmap-node .nbrail-dot.st-both,.nbmap-node .nbrail-dot.st-code,
+  .nbmap-node.code-end .nbrail-dot,.nbmap-node.code-end .nbchapdot,
+  .nbmap-node.code-end .nbsubdot,.nbmap-node.code-end .nbsect,
+  .nbmap-node.code-end:hover .nbrail-dot,.nbmap-node.code-end:hover .nbchapdot,
+  .nbmap-node.code-end:hover .nbsubdot{box-shadow:none!important;}
+  .nbmap-node:hover .nbrail-dot,.nbmap-node:focus .nbrail-dot,
+  .nbmap-node.nbpop .nbrail-dot{box-shadow:none!important;}
+  /* the buttons are outlines, not pills with a fill */
+  /* ...except the one inset that says which theme is on: that is a state, and
+     states are the only thing the panel is allowed to be loud about */
+  .nbbtn:not(.nbtheme){background-image:none!important;box-shadow:none!important;}
+  .nbbtn.nbtheme{background-image:none!important;}
+  .nbdrawer-grid{border-top:1px solid var(--nbquiet-line,#e2e8ee)!important;}
+  .nbbuild{text-align:right;font-size:.72em;font-weight:700;letter-spacing:1.1px;
+      color:#8b98a5;padding:2px 4px 6px;font-variant-numeric:tabular-nums;}
+  body[data-jp-theme-light="false"] .nbbuild{color:#6c7885;}
+
+  /* ======================================================================
+     THE LAYER IS NEVER PAINTED
+     #nbpanel-root covers the whole viewport so that the rail and the toolbar
+     can be placed anywhere in it. A background on it is a curtain over the
+     application. This is the last word on the subject, so that no dark twin,
+     no theme and no later rule can draw one by accident. */
+  .nbpanel-host,#nbpanel-root{background:transparent!important;
+      background-image:none!important;}
+
+
+  /* ======================================================================
+     2026-09-29 (Eilauftrag E6.10, Oberfläche, Skizze) — THE MARKER RUNS IN
+     FRONT OF THE XP LANE, AND THE LANE IS STRONG AGAIN.
+     The segments sit at z 2 inside .nbmap-inner, the marker at z 1: it ran
+     UNDER the fill, which is why K3.2 had to pale the fill (46.7 %% green,
+     35.6 %% violet) to let the marker show through. With the marker on top
+     the fill no longer has to step back: green and violet at 85 %% / 80 %%
+     of their colour on light, 62 %% on dark. Amber and red keep K3.2. */
+  html body #nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-here{z-index:5!important;}
+  html body #nbpanel-root#nbpanel-root#nbpanel-root.vert .nbseg[data-s="done"]{
+      background:color-mix(in srgb,#3aa06f 85%%,var(--nbpanel-surf))!important;}
+  html body #nbpanel-root#nbpanel-root#nbpanel-root.vert .nbseg[data-s="code"]{
+      background:color-mix(in srgb,#8b4ff2 80%%,var(--nbpanel-surf))!important;}
+  html body.nbdark #nbpanel-root#nbpanel-root#nbpanel-root.vert .nbseg[data-s="done"]{
+      background:color-mix(in srgb,#4fbf8b 62%%,var(--nbpanel-surf))!important;}
+  html body.nbdark #nbpanel-root#nbpanel-root#nbpanel-root.vert .nbseg[data-s="code"]{
+      background:color-mix(in srgb,#b896ff 62%%,var(--nbpanel-surf))!important;}
+
+  /* ======================================================================
+     2026-09-29 — EILAUFTRAG E8.12 (Oberfläche, Skizze; die Lage macht JS:
+     placeCursor rechts im Panel, auch zugeklappt; Namen bleiben links der
+     Lane). THE CURSOR IS THE PANEL'S SCROLLBAR. It replaces E7.5's fat
+     pill with three grips: a slim rounded thumb on a track that runs the
+     whole height of the panel along its RIGHT edge — the place and the
+     shape every reader already knows as „this is where I am, drag me“.
+       track  .nbrail::after, 10 px wide, inset 3 px from the right edge,
+              a faint groove in the panel's edge colour
+       thumb  .nbmap-cursor, 10 × 48 px (× K), accent, darker on hover/drag,
+              no ring any more — it sits IN the track, not on the page
+     Shut (32 px panel) track and thumb still fit: 10 px of 32. */
+  html body #nbpanel-root#nbpanel-root.vert .nbrail{position:relative;}
+  html body #nbpanel-root#nbpanel-root.vert .nbrail::after{
+      content:'';position:absolute;top:6px;bottom:6px;right:3px;
+      width:calc(10px * var(--nbk,1));border-radius:calc(5px * var(--nbk,1));
+      background:color-mix(in srgb,var(--nbskin-line,#c3ced8) 45%%,transparent);
+      box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--nbskin-line,#c3ced8) 60%%,transparent);
+      pointer-events:none;z-index:0;}
+  html body #nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-cursor{
+      width:calc(10px * var(--nbk,1))!important;height:calc(48px * var(--nbk,1))!important;}
+  html body #nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-cursor::before{
+      border-radius:calc(5px * var(--nbk,1))!important;border:0!important;
+      background:color-mix(in srgb,var(--nbmark,#0d63e0) 70%%,var(--nbskin-quiet,#55636f))!important;
+      box-shadow:0 1px 3px rgba(0,0,0,.25)!important;opacity:.85;
+      transition:opacity .15s ease,background .15s ease;}
+  html body #nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-cursor::after{display:none!important;}
+  html body #nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-cursor:is(:hover,.nbdragging)::before{
+      opacity:1;filter:none!important;
+      background:var(--nbmark,#0d63e0)!important;
+      box-shadow:0 0 0 2px color-mix(in srgb,var(--nbmark,#0d63e0) 25%%,transparent),
+                 0 1px 4px rgba(0,0,0,.3)!important;}
+  /* 2026-09-30 (E11.6, Struktur; Zeile von JS, DATEIEN.md) — the scroll bar
+     left the panel: with #nbpanel-root.nbsb-out the track is JS's `.nbsb`
+     in its own column right of the panel, the panel's own groove goes. */
+  html body #nbpanel-root#nbpanel-root.vert.nbsb-out .nbrail::after{display:none!important;}
+  /* 2026-10-01 — EILAUFTRAG E12.3 (Oberfläche; Lage, Länge und Ziehen macht
+     JS). DIE SCROLLBAR SIEHT GANZ NORMAL AUS: eine sichtbare Rinne (`.nbsb`)
+     und ein grauer Daumen (`.nbmap-cursor`) ohne Leuchten, ohne Griffrillen,
+     beim Berühren/Ziehen dunkler. Sie gehört nicht mehr zur Lesehöhe (die
+     tragen Knopf + Marker + Fixpunkt), also nicht in der Lesefarbe.
+     Die Rinne trug bisher nur JS' Inline-Stil, und der ist ungültig
+     (`45%%%%` im Raw-String → kein Hintergrund, Befund v1.42); hier gilt er.
+     Haken für JS: die Daumenlänge kommt aus --nbsb-th (px, am Daumen oder
+     am Host); ohne sie bleibt 48 px × K. */
+  /* Teil 3 (2026-10-01): Rinne-Farbe über --nbsb-c (Fairy hell, 07-skins),
+     sonst --nbskin-line. Rundung und ::after stehen schon oben (drei IDs,
+     !important); die Fallbacks liefert body immer. */
+  html body #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root .nbsb{
+      background:color-mix(in srgb,var(--nbsb-c,var(--nbskin-line)) 60%%,transparent)!important;
+      box-shadow:inset 0 0 0 1px var(--nbskin-line)!important;
+      border-radius:calc(5px * var(--nbk,1))!important;}
+  html body #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-cursor{height:var(--nbsb-th,calc(48px * var(--nbk,1)))!important;filter:none!important;}
+  html body #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-cursor::before{
+      background:var(--nbskin-quiet)!important;
+      box-shadow:none!important;opacity:1!important;filter:none!important;}
+  html body #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-cursor:is(:hover,.nbdragging)::before{background:var(--nbskin-ink)!important;}
+
+  /* ======================================================================
+     2026-10-02 — EILAUFTRAG E16.2 (Oberfläche; Zustand JS). TITLE ZU: NUR
+     DIE TITELMARKE, KEIN STRAHL NACH UNTEN. Gemessen (v1.55, Title zu,
+     gelöste Aufgaben): die Stücke `.nbseg` der ausgeblendeten Aufgaben
+     liefen von der Titelmarke bis zur ersten eigenen Zelle (bzw. YOC) —
+     die „rosa Spur“ war die violette Coding-Farbe. Title zu = die Marke
+     „End“ ist weg (`.end.nbgone`, nur dann, E11.2). Dann zeichnen nur noch
+     die Stücke der eigenen Zellen (YOC ↔ Own cell n); Strahl und alle
+     anderen Stücke sind aus. */
+  html body #nbpanel-root#nbpanel-root.vert:has(.nbmap-node.end.nbgone) .nbmap-inner::before,
+  html body #nbpanel-root#nbpanel-root.vert:has(.nbmap-node.end.nbgone) .nbseg:not([data-s="own"]){display:none!important;}
+
+  /* ======================================================================
+     2026-10-06 — EILAUFTRAG E23.18 (Oberfläche; Länge JS). DER DAUMEN DER
+     SCROLLLEISTE BLEIBT GREIFBAR. JS macht ihn so lang wie den sichtbaren
+     Anteil des Dokuments (Rinne × sichtbare Höhe ÷ Title…YOC, über
+     --nbsb-th bzw. die Höhe am Daumen); reingezoomt und bei offenen
+     Akkordeons wird er damit kurz. Unter 24 px trifft ihn die Maus kaum —
+     er wird nie kürzer als 24 px (min-height schlägt jede Höhe, auch eine
+     inline gesetzte). Gemessen v1.63: der Daumen nimmt jede Länge an, die
+     JS ihm gibt (6 px → 6 px). */
+  html body #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-cursor{min-height:24px!important;}
+
+  /* ======================================================================
+     2026-10-08 — EILAUFTRAG E25.p (Oberfläche; Länge des Daumens JS,
+     E23.18). DIE SCROLLLEISTE BLEIBT IMMER GLEICH DÜNN — so dünn wie bei
+     ganz eingeklapptem Panel (10 px), unabhängig von Panelbreite und Lupe.
+     Gemessen v1.67 (1920 × 1080, Panel ganz ausgezogen, --nbk 1,42): der
+     Daumen 14,2 px auf einer 10-px-Rinne (Breite und Rundung × --nbk, aus
+     E7.5/K4); die Rinne (`.nbsb`, Breite von JS inline 10 px) blieb. Jetzt
+     Daumen, seine Zeichnung und beide Rundungen fest; die Lupe wirkte schon
+     vorher nicht. Fünf IDs: schlägt E7.5/E12.3 (drei/vier). */
+  html body #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-cursor{
+      width:10px!important;}
+  html body #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root.vert .nbmap-cursor::before{
+      border-radius:5px!important;}
+  html body #nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root#nbpanel-root .nbsb{
+      border-radius:5px!important;}
