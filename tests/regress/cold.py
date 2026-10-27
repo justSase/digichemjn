@@ -75,6 +75,11 @@ def template(kind):
 def start_lab(venv, root, home, offline=False):
     s = socket.socket(); s.bind(("127.0.0.1", 0)); port = s.getsockname()[1]; s.close()
     env = {k: v for k, v in os.environ.items() if not k.startswith(("JUPYTER", "PYTHON", "VIRTUAL_ENV", "DIGICHEM"))}
+    # E38 Zusammenführen (Hauptwerkstatt, Tests): R1–R7/O1 behaupten das LAB-Dokument nach Run All (Panel, Widgets, Cover als
+    # Ausgabe). Seit E38 P3 zeigt die Zelle der Vorlage ohne DIGICHEM_LAB=1 das Paket — run.py setzt die Variable für die
+    # Lab-Suiten; sie bleibt hier stehen, wenn der Aufrufer sie gesetzt hat (sonst wie bisher: kein DIGICHEM_*).
+    if os.environ.get("DIGICHEM_LAB"):
+        env["DIGICHEM_LAB"] = os.environ["DIGICHEM_LAB"]
     env.update(HOME=home, JUPYTER_DATA_DIR=os.path.join(home, "data"),
                JUPYTER_CONFIG_DIR=os.path.join(home, "config"),
                JUPYTER_RUNTIME_DIR=os.path.join(home, "runtime"), IPYTHONDIR=os.path.join(home, "ipython"),

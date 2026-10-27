@@ -137,7 +137,10 @@ row("H1 keine Hülle im Paket", not h1bad, " · ".join(h1))
 
 # ---- H2
 js = rd(os.path.join(H, man["js"]["reader"])).decode("utf-8") if (man.get("js") or {}).get("reader") else ""
-css = "\n".join(rd(os.path.join(H, c)).decode("utf-8") for c in man.get("css") or [])
+# E38 P1 (Python): die Hülle trägt die Schriften (schriften.<sha8>.css, @font-face → woff2, geprüft in py_e38_p1). R2
+# behauptete bisher: JEDE CSS der Hülle stammt aus der Ausgabe des Kernels — die Schriften tun das nicht (der Kernel bringt
+# keine mit); R2/B1/H2 vergleichen die CSS ohne sie.
+css = "\n".join(rd(os.path.join(H, c)).decode("utf-8") for c in man.get("css") or [] if not c.startswith("schriften."))
 # E36 Zusammenführen (Hauptwerkstatt): die Hülle-CSS endet mit toolkit/css/huelle/lesen.css (Seite von lesen.html, CSS C1,
 # VERTRAG-E36 „geändert von CSS“) — R2/B1 vergleichen die Lesefassungs-CSS OHNE diesen Schluss (er gilt der Seite, nicht dem Fenster)
 _SEITE_P = os.path.join(ROOT, "toolkit", "css", "huelle", "lesen.css")

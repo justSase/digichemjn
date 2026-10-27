@@ -534,3 +534,11 @@ print("built", OUT, "with", len(cells), "cells;", len(MEGA), "chars in the mega-
 # dist/ ist Bau-Ausgang, nie im Bündel (pack_bundle.py). DIGICHEM_DIST=0 lässt es weg.
 from paket import ausgaenge as _ausgaenge
 _ausgaenge(OUT, nb["metadata"]["digichemjn"])
+# E38 P3 (2026-10-27, Python) — DIE ZELLE ZEIGT DAS PAKET. Die eben geschriebene .ipynb läuft je Sprache einmal im
+# Kernel (Weg des Labs, Zeile für ein Notebook); ihre Lesefassung + Hülle + Schriften + daten.json gehen gepackt in
+# eine Zeile `_NBP` der Zelle, deren letzte Zeile sie zeigt statt das Dokument neu zu bauen (toolkit/paketzelle.py).
+# DIGICHEM_LAB=1 im Kernel: der bisherige Weg (die Ladung _NBZ bleibt). NB_CELL_PAKET = False: Zelle wie bis v1.84.
+NB_CELL_PAKET = True
+if NB_CELL_PAKET:
+    from paketzelle import einbauen as _einbauen
+    _einbauen(OUT, nb["metadata"]["digichemjn"])

@@ -11,6 +11,11 @@ Zurückschreiben. Ein roter Test = kein Zurückschreiben, der Patch geht an die 
     #   --scripts none|all|a.py,b.py   Stufe 2: die eigenständigen lab_*.py aus scripts.txt (Vorgabe all)
 Exit 0 = `REGRESS OK`. Das Tor ist die volle Matrix mit Stufe 2 (ohne Schalter).
 
+**Seit E38 P3 (27.10.)** zeigt die Zelle der Vorlage das mitgelieferte Paket (`toolkit/paketzelle.py`); das Lab-Dokument
+(Rail, Panel, Widgets, `_STRUCT`/`LANG`/`NOTEBOOK` im Kernel) baut der Kernel nur mit **`DIGICHEM_LAB=1`**. `run.py` setzt es
+für Matrix und Skripte (außer ausdrücklich gesetzt). **Ein Skript einzeln** gegen das Lab-Dokument: `DIGICHEM_LAB=1 python3
+tests/regress/<skript>.py …`. Das Paket selbst messen `py_e38_p3.py` (nimmt die Variable weg) und die Leser-Skripte über `dist/`.
+
 **Stufe 2:** `scripts.txt` listet die Messskripte der Werkstätten (`lab_yoc`, `lab_seed`, `lab_flow` …), die seit E12 nicht
 mehr vor dem Ausliefern liefen (Befund Dirigent). Je Notebook ein Lauf auf demselben Server, Exit 0 = grün. Wer ein Skript
 besitzt, hält seine Zeile aktuell (Argumente mit `{nb}`, `{out}`).

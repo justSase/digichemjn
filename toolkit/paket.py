@@ -16,6 +16,8 @@ sind bei jedem Bau gleich → das Paket ist byte-gleich reproduzierbar) und schr
       reader.<sha8>.js             _NBRW_REHYD + 20-reader.js, Platzhalter __NBREADV__/__NBREADID__ (der Lader setzt
                                    data-nbrw-v/-id; claude/VERTRAG-E36.md)
       lader.<sha8>.js, lesen.html  aus toolkit/js/huelle/lader.js und lesen.html.in (JS J1, __LADER__ ersetzt), falls da
+      schriften.<sha8>.css         E38 P1: @font-face der Schriften von digi, ERSTE in manifest.css
+      <schrift>.<sha8>.woff2, ofl-<familie>.<sha8>.txt   aus toolkit/fonts/ (manifest.fonts)
       manifest.json                {toolkit, css: [...], js: {lader, reader}, fonts, pyodide} + Bytes/gzip/sha256
                                    (pyodide: E38a P2, Standard "/pyodide/<PYV>/", DIGICHEM_PYODIDE_URL, "off" → null)
   dist/inhalt/<id>/<NB_VERSION>/   nur das Notebook-Eigene
@@ -23,7 +25,9 @@ sind bei jedem Bau gleich → das Paket ist byte-gleich reproduzierbar) und schr
                                    type=application/json data-nbrw-put)
       daten.json                   Kapitel, Aufgaben + Antworten/Toleranzen, Code-Aufgaben +
                                    Prüf-Code, Regler (Steuerung; Bilder siehe unten), Gating,
-                                   Marken der Zeitleiste, Seed und Modus des Baus
+                                   Marken der Zeitleiste, Seed und Modus des Baus; E38 P2: je Aufgabe Hinweise
+                                   (Stufen en/de), Lösung, Überspringen, Toleranz je Schwierigkeit, Prüf-Code
+                                   en/de; Schwierigkeitsstufen, Gating-Regeln, Sätze des Labs (aufgaben_regeln)
       meta.json                    id, nb_version, toolkit, langs, lang, title en/de, OER-Felder (META), Dateien
   dist/inhalt/<id>/aktuell.json    {"v": NB_VERSION} (lesen.html?nb=<id> ohne v)
   dist/kurse.json                  E39a K2: {kurs-id: [{platz, id, titel, version}, …]} aus allen chapters/_setup*.py
@@ -55,10 +59,12 @@ print("@@E36@@" + _j36.dumps({
     "id": NOTEBOOK.get("id"), "title": NOTEBOOK.get("title"),
     "lang": LANG["value"], "mode": MODE["value"],
     "seed": {"value": SEED.get("value"), "fixed": SEED.get("fixed")},
+    "p4": _nbrw_live_all() if "_nbrw_live_all" in globals() else None,
     "toolkit": TOOLKIT_VERSION, "nb_version": NB_VERSION,
     "gate": _nbrw_gate(), "timeline": _e36_tl(),
     "titles": globals().get("_NBRW_TITLES") or {},
     "meta": {k: v for k, v in META.items()},
+    "p2": _nbrw_daten() if "_nbrw_daten" in globals() else None,
     "env": kernel_env()}, ensure_ascii=False, default=str))
 '''
 
@@ -74,19 +80,22 @@ def _clean_env(home, lang):
                DIGICHEM_READ_ALL="1",            # die Bilder gesperrter Kapitel jetzt (sonst erst beim Entsperren)
                DIGICHEM_READ_PAGE="1",           # E38a P1: die Lesezeile spricht von lesen.html, nicht von JupyterLab
                DIGICHEM_NBRW_BUDGET="1e9",       # jeder Regler bekommt seine Bilder (kein Zeitbudget im Bau)
-               MPLBACKEND="module://matplotlib_inline.backend_inline")
+               MPLBACKEND="module://matplotlib_inline.backend_inline",
+               # E38 P3: die Zelle der Vorlage zeigt sonst das mitgelieferte Paket (toolkit/paketzelle.py) — der Bau
+               # (und wer das Paket nachbaut: py_e36 R1) braucht das Dokument aus dem Kernel, den Weg des Labs
+               DIGICHEM_LAB="1")
     return env
 
 
-def run_cell(nb_path, lang, timeout=1200):
+def run_cell(nb_path, lang, timeout=1200, extra_env=None):
     """Führt die Code-Zelle der gebauten .ipynb in einem frischen Kernel aus.
-    → (Lesefassung als HTML, Daten des Kernels, Sekunden)."""
+    → (Lesefassung als HTML, Daten des Kernels, Sekunden). extra_env (E38 P3): Variablen über _clean_env hinaus."""
     from jupyter_client.manager import start_new_kernel
     nb = json.load(open(nb_path, encoding="utf-8"))
     code = "".join(next(c for c in nb["cells"] if c["cell_type"] == "code")["source"])
     home = tempfile.mkdtemp(prefix="digichem-e36-")
     t0 = time.time()
-    km, kc = start_new_kernel(kernel_name="python3", env=_clean_env(home, lang), cwd=home)
+    km, kc = start_new_kernel(kernel_name="python3", env=dict(_clean_env(home, lang), **(extra_env or {})), cwd=home)
     try:
         def drain(mid):
             outs, errs, txt = [], [], []
@@ -195,6 +204,31 @@ def _b64json(s, z=False):
     return json.loads(zlib.decompress(b) if z else b)
 
 
+def _fig0(doc, at):
+    """Das Startbild eines Reglers ohne data-z: der Inhalt seines <div class='nbrw-fig'>."""
+    i = doc.find("<div class='nbrw-fig'>", at)
+    if i < 0:
+        return ""
+    i += len("<div class='nbrw-fig'>")
+    j = doc.find("</div></div>", i)          # _nbrw_slider: fig + Ende des Reglers
+    return doc[i:j] if j > 0 else ""
+
+
+def live(f0, k):
+    """E38 P4 (2026-10-27, Python) — das Render-Programm des Reglers (toolkit `_nbrw_live`), zugeordnet über sein
+    Startbild (sha8 = erstes Bild in data-z). {code, fn, html, params, pkgs, dpi, spec, start} — code ist eigenständiges
+    Python (numpy + matplotlib), `_nbrw_render(**werte)` (= html) → das Bild als HTML; `fn`/`params`/`_nbrw_svg` für den
+    Leser (claude/VERTRAG-E38-js.md J3); spec = jede Steuerung mit vollem Bereich.
+    Der Lauf des Baus gibt dieselben Bilder wie data-z (tests/regress/py_e38_p4.py). None = nicht gefunden,
+    {"fehlt": [...]} = ein Name kann nicht reisen (dann bleibt das Fenster bei der Vorschaustufe)."""
+    s8 = _sha(f0.encode("utf-8"))[:8] if f0 else None
+    for p in k.get("p4") or []:
+        if p.get("f0_sha8") == s8:
+            return {x: y for x, y in p.items() if x != "f0_sha8"}
+    fehlt = [p for p in k.get("p4") or [] if "fehlt" in p]
+    return fehlt[0] if fehlt and len(fehlt) == len(k.get("p4") or []) else None
+
+
 def daten(doc, k, k_other=None):
     """Was das Paket an Daten trägt — aus dem Markup der Lesefassung (das, was 20-reader.js
     liest) und aus dem Kernel (Gating, Marken, Seed, Modus)."""
@@ -215,12 +249,62 @@ def daten(doc, k, k_other=None):
         d = _b64json(z, z=True) if z else {"c": [], "f": []}
         sliders.append({"nr": i, "steuerung": d["c"], "bilder": len(d["f"]) or 1,
                         "z_bytes": len(z), "z_sha8": _sha(z.encode())[:8] if z else "",
-                        "in": "lesefassung (data-z)" if z else "lesefassung (nur Startbild)"})
+                        "in": "lesefassung (data-z)" if z else "lesefassung (nur Startbild)",
+                        "live": live(d["f"][0] if d["f"] else _fig0(doc, m.end()), k)})
     titles = k.get("titles") or {}
+    p2 = aufgaben_regeln(calc, code, k, k_other)
     return {"format": "digichemjn-daten/1", "id": k["id"], "version": k["nb_version"], "toolkit": k["toolkit"],
             "seed": k["seed"], "modus": k["mode"], "sprache_des_laufs": k["lang"],
             "kapitel": k["gate"]["chap"], "kapitel_titel": {l: titles.get(l) or [] for l in LANGS}, "gating": {x: y for x, y in k["gate"].items() if x != "chap"}, "aufgaben": calc, "code": code, "regler": sliders,
-            "marken": k["timeline"]}
+            "marken": k["timeline"], **p2}
+
+
+def loesung(per_lang):
+    """{en: {intro, code, warn}, de: …} → {intro: {en, de}, code: {en, de}, warn: {en, de}} (claude/VERTRAG-E38-js.md J1:
+    loesung = {intro: Text, code: Text}, Text = {en, de}); None ohne Lösung."""
+    if not any(per_lang.values()):
+        return None
+    return {f: {l: (s or {}).get(f, "") for l, s in per_lang.items()} for f in ("intro", "code", "warn")}
+
+
+def aufgaben_regeln(calc, code, k, k_other=None):
+    """E38 P2 (2026-10-27, Python) — was das Lab um eine Aufgabe herum tut, als Daten fürs Lesefenster (JS J1):
+    je Aufgabe Hinweise (Stufen), Lösung, „Überspringen“, Toleranz je Schwierigkeit; je Code-Aufgabe Lösung,
+    Überspringen, Prüf-Code in beiden Sprachen; dazu Schwierigkeitsstufen, Gating-Regeln und die Sätze des Labs.
+    Quelle: toolkit/chapter_template.py `_nbrw_daten()` im Kernel des Baus, je Sprache ein Lauf (en = k, de = k_other)
+    — dieselben Aufrufe (hint_steps, solution_box, skip_button, _DIFF), die die Lab-Knöpfe bauen. Die Werte gelten für
+    den Seed des Baus wie die Antworten (daten.json "seed")."""
+    runs = {"en": (k.get("p2") or {})}
+    if k_other is not None:
+        runs["de"] = k_other.get("p2") or {}
+    if not runs["en"]:
+        raise RuntimeError("E38 P2: der Kernel hat keine Aufgaben-Regeln gemeldet (_nbrw_daten fehlt)")
+    en = runs["en"]
+    by = lambda f: {l: f(r) for l, r in runs.items()}
+    for t in calc:
+        key = t["task"]
+        t["hinweise"] = by(lambda r: (r.get("hinweise") or {}).get(key) or [])
+        t["loesung"] = loesung(by(lambda r: ((r.get("loesungen") or {}).get("answer") or {}).get(key)))
+        t["ueberspringen"] = key in ((en.get("ueberspringen") or {}).get("answer") or [])
+        # claude/VERTRAG-E38-js.md J2: je Stufe die Toleranz je Feld (Zahlen, in der Reihenfolge der Felder von data-a);
+        # welches Feld der Stufe folgt („stufe“) und welches seine eigene hat („eigen“): toleranz_felder
+        tz = (en.get("toleranz") or {}).get(key) or {}
+        t["toleranz"] = {lv: [f[1] for f in fl] for lv, fl in tz.items()}
+        t["toleranz_felder"] = [[f[0], f[2]] for f in (tz.get("standard") or next(iter(tz.values()), []))]
+    for c in code:
+        key = c["task"]
+        c["loesung"] = loesung(by(lambda r: ((r.get("loesungen") or {}).get("code") or {}).get(key)))
+        c["ueberspringen"] = key in ((en.get("ueberspringen") or {}).get("code") or [])
+        c["pruef"] = by(lambda r: (r.get("pruef_code") or {}).get(key))
+    # Hinweise zu einer Aufgabe, die dieser Modus nicht als Rechenaufgabe baut (Modus code): bei der Code-Aufgabe
+    have = {t["task"] for t in calc}
+    for c in code:
+        if c["task"] not in have:
+            h = by(lambda r: (r.get("hinweise") or {}).get(c["task"]) or [])
+            if any(h.values()):
+                c["hinweise"] = h
+    return {"schwierigkeit": en.get("schwierigkeit"), "regeln": en.get("regeln"),
+            "texte": by(lambda r: r.get("texte") or {})}
 
 
 def meta(k, md, files, huelle_rel):
@@ -265,6 +349,58 @@ def pyodide_url(js, env=None):
     return u.replace("{v}", m.group(1)) if u.endswith("/") else u.replace("{v}", m.group(1)) + "/"
 
 
+# ---------------------------------------------------------------------------
+# E38 P1 (2026-10-27, Python) — DIE SCHRIFTEN GEHÖREN ZUR HÜLLE.
+# lesen.html zeigte Systemschriften: das Lab bringt Unbounded als data:-URL in 07-skins.css mit, die Hülle
+# nichts (manifest.fonts = []). Jetzt liegen die drei Schriften von digi als woff2 (Lateinisch-Teilmenge von
+# @fontsource 5.3.0 = Google Fonts; Unbounded 400 ist Byte für Byte die Schrift des Labs) in toolkit/fonts/
+# und gehen beim Bau in die Hülle: je Datei `<stamm>.<sha8>.woff2`, die OFL je Familie als
+# `ofl-<familie>.<sha8>.txt`, dazu `schriften.<sha8>.css` (@font-face, url relativ zur CSS-Datei) als ERSTE
+# in manifest.css — der Lader lädt sie wie jede CSS (claude/VERTRAG-E36.md, Feld fonts ergänzt):
+#   fonts: [{family, weight, style, file, unicode_range, bytes, sha8, lizenz, quelle}]
+# Gewichte: 15-reader.css nutzt 400 und 600–800, kursiv einmal → Instrument Sans 400 + 700 (600/800 nimmt der
+# Browser von 700, kursiv schräg gestellt), Unbounded 400 (Überschriften), JetBrains Mono 400. ≈ 75 KB.
+# Lizenz: SIL Open Font License 1.1 — Einbetten und Weitergeben mit Software erlaubt, Namen unverändert,
+# die Lizenz liegt bei (https://openfontlicense.org).
+# ---------------------------------------------------------------------------
+FONTS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fonts")
+LATIN = ("U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,"
+         "U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD")       # @fontsource unicode.json "latin"
+FONTS = (  # (Familie, Gewicht, Stil, Datei in toolkit/fonts/, Lizenz in toolkit/fonts/, Quelle)
+    ("Unbounded", 400, "normal", "unbounded-latin-400-normal.woff2", "OFL-unbounded.txt", "@fontsource/unbounded 5.3.0"),
+    ("Instrument Sans", 400, "normal", "instrument-sans-latin-400-normal.woff2", "OFL-instrument-sans.txt",
+     "@fontsource/instrument-sans 5.3.0"),
+    ("Instrument Sans", 700, "normal", "instrument-sans-latin-700-normal.woff2", "OFL-instrument-sans.txt",
+     "@fontsource/instrument-sans 5.3.0"),
+    ("JetBrains Mono", 400, "normal", "jetbrains-mono-latin-400-normal.woff2", "OFL-jetbrains-mono.txt",
+     "@fontsource/jetbrains-mono 5.3.0"),
+)
+
+
+def font_face(family, weight, style, url):
+    return ("@font-face{font-family:\"%s\";font-style:%s;font-weight:%d;font-display:swap;"
+            "src:url(%s) format(\"woff2\");unicode-range:%s;}" % (family, style, weight, url, LATIN))
+
+
+def fonts(src=None):
+    """Die Schriften der Hülle aus toolkit/fonts/: [(Familie, Gewicht, Stil, Datei, woff2-Bytes, Lizenz, Lizenz-Bytes,
+    Quelle)]. Fehlt eine Datei oder ist sie kein woff2: Abbruch (eine Hülle ohne Schrift fiele still auf Systemschriften)."""
+    d = src or FONTS_DIR
+    out = []
+    for fam, w, st, fn, lic, q in FONTS:
+        p, lp = os.path.join(d, fn), os.path.join(d, lic)
+        if not os.path.isfile(p) or not os.path.isfile(lp):
+            raise RuntimeError("E38 P1: Schrift oder Lizenz fehlt: %s / %s" % (p, lp))
+        b = open(p, "rb").read()
+        if b[:4] != b"wOF2":
+            raise RuntimeError("E38 P1: %s ist kein woff2" % p)
+        lb = open(lp, "rb").read()
+        if b"SIL Open Font License" not in lb:
+            raise RuntimeError("E38 P1: %s ist nicht die OFL" % lp)
+        out.append((fam, w, st, fn, b, lic, lb, q))
+    return out
+
+
 def write_huelle(root, tkv, css, js, lesen_html=None, lader_js=None):
     """claude/VERTRAG-E36.md: manifest {toolkit, css: [Lade-Reihenfolge], js: {lader, reader}, fonts, pyodide};
     lesen.html = toolkit/js/huelle/lesen.html.in mit __LADER__ → js.lader (einziger Name ohne Prüfsumme)."""
@@ -283,6 +419,17 @@ def write_huelle(root, tkv, css, js, lesen_html=None, lader_js=None):
     # (toolkit/css/huelle/lesen.css, CSS C1: html/body Rand 0, Grund der Seite = Grund des Fensters; nicht in der .ipynb)
     _s = os.path.join(os.path.dirname(os.path.abspath(__file__)), "css", "huelle", "lesen.css")
     css = list(css) + ([open(_s, encoding="utf-8").read()] if os.path.exists(_s) else [])
+    # E38 P1: die Schriften zuerst (woff2 + OFL mit sha8 im Namen, @font-face in schriften.<sha8>.css)
+    faces, lics = [], {}
+    for fam, w, st, fn, b, lic, lb, q in fonts():
+        ff = put(fn[:-len(".woff2")], "woff2", b)
+        if lic not in lics:
+            lics[lic] = put(lic[:-len(".txt")].lower(), "txt", lb)
+        faces.append(font_face(fam, w, st, ff))
+        man["fonts"].append({"family": fam, "weight": w, "style": st, "file": ff, "unicode_range": LATIN,
+                             "bytes": len(b), "sha8": _sha(b)[:8], "lizenz": lics[lic], "quelle": q})
+    man["css"].append(put("schriften", "css", ("/* DigiChemJN — Schriften von digi (SIL Open Font License 1.1, "
+                                               "Lizenzen: ofl-*.txt) */\n" + "\n".join(faces) + "\n").encode("utf-8")))
     man["css"].append(put("leser", "css", "\n".join(css).encode("utf-8")))
     man["js"]["reader"] = put("reader", "js", "\n".join(js).encode("utf-8"))
     if lader_js and os.path.exists(lader_js):
@@ -326,7 +473,7 @@ def ausgaenge(nb_path, md, dist="../dist", lesen_html="../toolkit/js/huelle/lese
         km = runs[lang][1].get("meta") or {}
         if (km.get("thema"), km.get("kurse") or []) != (md.get("thema"), md.get("kurse") or []):
             raise RuntimeError("E39a: thema/kurse im Lauf (%s) ≠ metadata.digichemjn" % lang)
-    b = json.dumps(daten(runs["en"][0], k_en), ensure_ascii=False, indent=1).encode("utf-8")
+    b = json.dumps(daten(runs["en"][0], k_en, runs["de"][1]), ensure_ascii=False, indent=1).encode("utf-8")
     _write(os.path.join(out, "daten.json"), b)
     files["daten.json"] = _size(b)
     hd, man = write_huelle(dist, tkv, *hull, lesen_html=lesen_html, lader_js=lader_js)

@@ -67,8 +67,15 @@ def run_cell(src, extra):
                 elif t == "status" and c["execution_state"] == "idle": break
             return outs, errs, "".join(text)
         outs, errs, _ = drain(kc.execute(code))
+        # E38 P3 (Python): the cell of the Vorlage shows the PACKAGE (toolkit/paketzelle.py) — no toolkit in the kernel,
+        # no _STRUCT; the chapter titles of the run are the package's (daten.json kapitel_titel, the run's language).
+        # Behauptete bisher: every run has _STRUCT (the toolkit built the document in the kernel).
         _, e2, txt = drain(kc.execute(
-            "import json as _j; print(_j.dumps([e['title'] for e in _STRUCT if e.get('kind') == 'chapter']))"))
+            "import json as _j\n"
+            "try:\n    _t = [e['title'] for e in _STRUCT if e.get('kind') == 'chapter']\n"
+            "except NameError:\n"
+            "    _t = ((_NBP_DATA.get('daten') or {}).get('kapitel_titel') or {}).get(_NBP_STATE['lang']) or []\n"
+            "print(_j.dumps(_t))"))
         chapters = json.loads(txt.strip().splitlines()[-1]) if txt.strip() else []
         for o in outs: o["models"] = models
         return outs, errs + e2, chapters

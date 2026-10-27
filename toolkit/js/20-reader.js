@@ -1048,12 +1048,9 @@
       });
       bd.appendChild(mk('p', 'nbrw-dr-n', L.modes[mode][2]));
     } else if (drwKind === 'gear') {
-      if (BI) {
-        bd.appendChild(mk('div', 'nbrw-dr-t', X('lang')));
-        var lr = bd.appendChild(mk('div', 'nbrw-dr-row'));
-        ['en', 'de'].forEach(function (x) { lr.appendChild(dbtn(x.toUpperCase(), 'nbrw-dr-lang', function () { applyLang(x, true); drawer('gear'); })).setAttribute('aria-pressed', String(x === lg)); });
-      }
+      j2Gear(bd);                  // E38 J2: Lab's ⚙ (difficulty · content, style, light/dark, language, seed, code, start over, rebuild)
       bd.appendChild(mk('div', 'nbrw-dr-t', X('fb'))); bd.appendChild(mk('p', 'nbrw-fb', fbText()));
+      bd.appendChild(mk('p', 'nbrw-dr-n nbrw-dr-build', 'v' + (root.getAttribute('data-nbrw-v') || (W.DIGICHEMJN && W.DIGICHEMJN.v) || '') + ' \u00B7 build ' + V));
     } else if (drwKind === 'fb') {
       bd.appendChild(mk('p', 'nbrw-fb', fbText())); bd.appendChild(mk('p', 'nbrw-dr-n', X('fbS') + ' · v' + V));
     } else acForm(bd);
@@ -1074,6 +1071,203 @@
   drw.addEventListener('wheel', function (e) { e.stopPropagation(); if (drw.scrollHeight <= drw.clientHeight) e.preventDefault(); }, { passive: false });
   imp(drw, 'overscroll-behavior', 'contain');
 
+  // ---- E38 J2 (2026-10-27, Werkstatt JS) — ⚙ LIKE LAB'S ---------------------------------------------------------
+  // Lab's ⚙ drawer (controls.py, nbdrawer): Difficulty · Content, Your seed, Carry your progress, Start over, ▶ Rebuild
+  // now — plus 🎨 style and ◐ light/dark. The window's ⚙ had language + feedback only. Now the same rows, the same
+  // words, the keys digichemjn.<id>.reader.* (K): diff (gentle|standard|strict: the tolerance of a number, like Lab's
+  // tol(); strict = no hints, J1 hears the event nbrw:diff), mode, skin, theme. The seed is shown, not drawn anew:
+  // the numbers come from the build (new ones need Python — JupyterLab's ⚙). The progress code IS Lab's
+  // (progress_code(): base64url "id|answers|code|difficulty|hmac8", the same key) — so a code moves between Lab and
+  // the window both ways; WebCrypto needs a secure page (https, localhost), else one sentence. Start over asks
+  // first, as Lab's (R1 · 3): answers and statistics go, seed, style and settings stay. ▶ Rebuild: lesen.html loads
+  // anew; an output (IDE) redraws the window from the state kept here.
+  var J2W = {
+    en: { dc: 'Difficulty · Content', dn: 'Difficulty: how close an answer must be, and how much a hint says. The question stays the same.',
+          cn: 'Content: calculate, code or both.', lv: { gentle: 'Gentle', standard: 'Standard', strict: 'Strict' },
+          look: 'Style · light/dark', th: { '': 'auto', dark: 'dark', light: 'light' },
+          seed: 'Your seed', seedN: 'The exercise numbers come from this seed. Same seed, same exercises — for anyone.',
+          pin: 'pinned: same numbers next run', unpin: 'not pinned: new numbers next run', seed0: 'no seed in this build',
+          seedX: 'New numbers need Python: ⚙ › Your seed in JupyterLab or on the Lite page. Here the build fixed them.',
+          code: 'Carry your progress', show: 'Show my progress code', keep: 'Keep this code. Paste it back to restore:',
+          ph: 'paste a progress code here', load: 'Restore from code', copy: 'Copy', copied: 'Copied.',
+          bad: 'That does not look like a progress code.', tag: 'This code does not check out — it was changed by hand, or it is from an older version without a checksum.',
+          other: 'This code belongs to %s, not to this notebook (%s).', len: 'The code covers %d exercises, this notebook has %d — it is probably from an older version.',
+          ok: 'Restored: %d exercises as in the code.', insec: 'Progress codes need a secure page (https or localhost); this page is not one.',
+          over: 'Start over', reset: '↺  Reset this notebook', sure: 'Sure? Clears answers and statistics of this notebook and locks the chapters. Seed, style and settings stay.',
+          yes: 'Yes, reset', no: 'Cancel', done: 'Reset: %d exercises open again.', none: 'Nothing was reset.',
+          re: '▶  Rebuild now', reN: 'Draws this notebook again from what is kept in this browser.', reD: 'Redrawn.' },
+    de: { dc: 'Schwierigkeit · Inhalt', dn: 'Schwierigkeit: wie genau eine Antwort sein muss und wie viel ein Hinweis verrät. Die Frage bleibt dieselbe.',
+          cn: 'Inhalt: rechnen, programmieren oder beides.', lv: { gentle: 'Sanft', standard: 'Standard', strict: 'Streng' },
+          look: 'Stil · hell/dunkel', th: { '': 'automatisch', dark: 'dunkel', light: 'hell' },
+          seed: 'Ihr Seed', seedN: 'Die Zahlen der Aufgaben kommen aus diesem Seed. Gleicher Seed, gleiche Aufgaben — für alle.',
+          pin: 'fest: dieselben Zahlen beim nächsten Lauf', unpin: 'nicht fest: neue Zahlen beim nächsten Lauf', seed0: 'kein Seed in diesem Bau',
+          seedX: 'Neue Zahlen braucht Python: ⚙ › Ihr Seed in JupyterLab oder auf der Lite-Seite. Hier hat der Bau sie festgelegt.',
+          code: 'Fortschritt mitnehmen', show: 'Meinen Fortschrittscode zeigen', keep: 'Bewahren Sie diesen Code auf. Zum Wiederherstellen hier einfügen:',
+          ph: 'Fortschrittscode hier einfügen', load: 'Aus Code wiederherstellen', copy: 'Kopieren', copied: 'Kopiert.',
+          bad: 'Das sieht nicht wie ein Fortschrittscode aus.', tag: 'Dieser Code stimmt nicht — er wurde von Hand geändert oder stammt aus einer älteren Version ohne Prüfsumme.',
+          other: 'Dieser Code gehört zu %s, nicht zu diesem Notebook (%s).', len: 'Der Code umfasst %d Aufgaben, dieses Notebook hat %d — wohl aus einer älteren Version.',
+          ok: 'Wiederhergestellt: %d Aufgaben wie im Code.', insec: 'Fortschrittscodes brauchen eine sichere Seite (https oder localhost); diese ist keine.',
+          over: 'Von vorn', reset: '↺  Dieses Notebook zurücksetzen', sure: 'Sicher? Löscht Antworten und Statistik dieses Notebooks und sperrt die Kapitel. Seed, Stil und Einstellungen bleiben.',
+          yes: 'Ja, zurücksetzen', no: 'Abbrechen', done: 'Zurückgesetzt: %d Aufgaben wieder offen.', none: 'Nichts wurde zurückgesetzt.',
+          re: '▶  Jetzt neu aufbauen', reN: 'Zeichnet dieses Notebook neu aus dem, was dieser Browser aufbewahrt.', reD: 'Neu gezeichnet.' } };
+  function j2W(k) { return J2W[de ? 'de' : 'en'][k]; }
+  var J2LV = ['gentle', 'standard', 'strict'], J2TOL = { gentle: 2e-2, standard: 5e-3, strict: 1e-3 };
+  var j2UI = { code: '', msg: '', ask: false, rmsg: '', re: '' };
+  function j2Data() {
+    var d = W.DIGICHEMJN && W.DIGICHEMJN.daten;
+    if (d && typeof d === 'object' && (!d.id || d.id === ID)) return d;
+    var s = root.querySelector('script[type="application/json"][data-nbrw-daten]');
+    if (s) { try { return JSON.parse(s.textContent); } catch (e) {} }
+    return null;
+  }
+  var j2D = j2Data();
+  function j2Lv() { var v = load('diff', ''); return J2LV.indexOf(v) >= 0 ? v : 'standard'; }
+  function j2Stufen() {           // the package's levels (P2: schwierigkeit.stufen{lv:{tol}}), else Lab's _DIFF
+    var s = j2D && j2D.schwierigkeit && j2D.schwierigkeit.stufen, o = {};
+    J2LV.forEach(function (l) { o[l] = s && s[l] && s[l].tol > 0 ? +s[l].tol : J2TOL[l]; });
+    return o;
+  }
+  function j2Tol(t, x, i) {       // the tolerance of field i: the package's per level, else Lab's tol() where the build used it
+    var lv = j2Lv(), it = null, L0 = j2D && j2D.aufgaben;
+    if (W.Array.isArray(L0)) for (var k = 0; k < L0.length; k++) if (L0[k] && L0[k].task === t.key) it = L0[k];
+    var tz = it && it.toleranz && it.toleranz[lv];
+    if (W.Array.isArray(tz) && tz[i] > 0) return +tz[i];
+    var S = j2Stufen(), b = j2D && j2D.schwierigkeit && J2LV.indexOf(j2D.schwierigkeit.gebaut) >= 0 ? j2D.schwierigkeit.gebaut : 'standard';
+    return Math.abs(x[2] - S[b]) < 1e-12 ? S[lv] : x[2];          // a field's own tolerance stays
+  }
+  function j2SetLv(l) {
+    if (J2LV.indexOf(l) < 0) return;
+    if (l === 'standard') { try { W.localStorage.removeItem(K + '.diff'); } catch (e) {} } else save('diff', l);
+    wrap.setAttribute('data-nbrw-diff', l);
+    try { wrap.dispatchEvent(new W.CustomEvent('nbrw:diff', { detail: { level: l } })); } catch (e) {}
+  }
+  // Lab's progress code (progress_code / apply_progress_code, the same key — tamper-evident, not tamper-proof)
+  var J2KEY = 'digichemjn/progress-code/2026-09', J2S = { open: 'o', locked: 'o', solved: 'd', skipped: 's', wrong: 'f' }, J2B = { o: '', d: 'solved', s: 'skipped', f: 'wrong' };
+  function j2Order() {
+    var o = j2D && j2D.gating && W.Array.isArray(j2D.gating.order) ? j2D.gating.order.slice() : [];
+    if (!o.length) tasks.forEach(function (t) { if (t.key && o.indexOf(t.key) < 0) o.push(t.key); });
+    return o;
+  }
+  function j2St(kind, key) { var t = taskBy(kind, key); if (t) return stOf(t); var v = load((kind === 'code' ? 'code.' : 'task.') + key, ''); return DONE[v] ? v : 'open'; }
+  function j2Tag(body) {
+    if (!(W.crypto && W.crypto.subtle && W.TextEncoder)) return W.Promise.reject(new Error('insec'));
+    var E = new W.TextEncoder(), C = W.crypto.subtle;
+    return C.importKey('raw', E.encode(J2KEY), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']).then(function (k) { return C.sign('HMAC', k, E.encode(body)); })
+      .then(function (s) { var u = new W.Uint8Array(s), h = ''; for (var i = 0; i < 4; i++) h += (u[i] < 16 ? '0' : '') + u[i].toString(16); return h; });
+  }
+  function j2B64(s) { var u = new W.TextEncoder().encode(s), b = ''; for (var i = 0; i < u.length; i++) b += String.fromCharCode(u[i]); return W.btoa(b).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
+  function j2Unb64(s) { s = s.replace(/-/g, '+').replace(/_/g, '/'); var r = W.atob(s + '==='.slice((s.length + 3) % 4)), u = new W.Uint8Array(r.length); for (var i = 0; i < r.length; i++) u[i] = r.charCodeAt(i); return new W.TextDecoder('utf-8', { fatal: true }).decode(u); }
+  function j2Code() {
+    var o = j2Order(), DC = { gentle: 'g', standard: 's', strict: 't' };
+    var body = (ID || 'nb') + '|' + o.map(function (k) { return J2S[j2St('calc', k)] || 'o'; }).join('') + '|' + o.map(function (k) { return J2S[j2St('code', k)] || 'o'; }).join('')
+      + '|' + o.map(function (k) { return DC[load('dset.' + k, '')] || '-'; }).join('');
+    return j2Tag(body).then(function (tg) { return j2B64(body + '|' + tg); });
+  }
+  function j2Apply(code) {
+    var raw = String(code || '').replace(/\s+/g, ''), body, tag, p;
+    try { var sg = j2Unb64(raw), cut = sg.lastIndexOf('|'); body = sg.slice(0, cut); tag = sg.slice(cut + 1); p = body.split('|'); if (cut < 0 || p.length < 3) throw 0; }
+    catch (e) { return W.Promise.resolve([false, j2W('bad')]); }
+    return j2Tag(body).then(function (tg) {
+      if (tg !== tag) return [false, j2W('tag')];
+      if (p[0] !== (ID || 'nb')) return [false, j2W('other').replace('%s', JSON.stringify(p[0])).replace('%s', JSON.stringify(ID || 'nb'))];
+      var o = j2Order(), a = p[1], c = p[2], d = p[3] || '';
+      if (a.length !== o.length || c.length !== o.length) return [false, j2W('len').replace('%d', a.length).replace('%d', o.length)];
+      if (/[^odsf]/.test(a + c)) return [false, j2W('bad')];
+      if (d.length !== o.length) d = '';
+      var DB = { g: 'gentle', s: 'standard', t: 'strict' };
+      o.forEach(function (k, n) {
+        [['task.', a.charAt(n)], ['code.', c.charAt(n)]].forEach(function (q) {
+          try { if (J2B[q[1]]) W.localStorage.setItem(K + '.' + q[0] + k, J2B[q[1]]); else W.localStorage.removeItem(K + '.' + q[0] + k); } catch (e) {}
+        });
+        if (d && DB[d.charAt(n)]) save('dset.' + k, DB[d.charAt(n)]); else { try { W.localStorage.removeItem(K + '.dset.' + k); } catch (e) {} }
+      });
+      gate();
+      return [true, j2W('ok').replace('%d', o.length)];
+    }, function () { return [false, j2W('insec')]; });
+  }
+  function j2Reset() {
+    var n = 0, ks = [];
+    try { for (var i = 0; i < W.localStorage.length; i++) { var k = W.localStorage.key(i); if (k && /\.(task|code|hint|dset)\.[^.]+$/.test(k) && k.indexOf(K + '.') === 0) ks.push(k); } } catch (e) {}
+    ks.forEach(function (k) { try { W.localStorage.removeItem(k); } catch (e) {} });
+    tasks.forEach(function (t) {
+      if (t.key) n += t.kind === 'calc' ? 1 : 0;
+      t.fb.textContent = ''; t.fb.removeAttribute('data-ok');
+      [].forEach.call(t.el.querySelectorAll('input.nbrw-input'), function (x) { x.value = ''; });
+      [].forEach.call(t.el.querySelectorAll('input[type=radio]'), function (x) { x.checked = false; });
+    });
+    gate();
+    return n;
+  }
+  function j2Rebuild() {
+    if (HULL) { try { W.location.reload(); } catch (e) {} return; }
+    tasks.forEach(function (t) { t.fb.textContent = ''; t.fb.removeAttribute('data-ok'); });
+    gate(); paint(); label(); later();
+    j2UI.re = j2W('reD');
+  }
+  // the difficulty an exercise was settled at, once (Lab's _mark_diff) — for the code's fourth part
+  try {
+    new W.MutationObserver(function (rs) {
+      rs.forEach(function (r) {
+        var el = r.target, k = el.getAttribute && el.getAttribute('data-task');
+        if (!k || !el.classList.contains('nbrw-task') || el.getAttribute('data-kind') === 'code') return;
+        if (DONE[el.getAttribute('data-st')] && !load('dset.' + k, '')) save('dset.' + k, j2Lv());
+      });
+    }).observe(root, { subtree: true, attributes: true, attributeFilter: ['data-st'] });
+  } catch (e) {}
+  wrap.setAttribute('data-nbrw-diff', j2Lv());
+  function j2Gear(bd) {
+    function sec(t) { bd.appendChild(mk('div', 'nbrw-dr-t', t)); return bd.appendChild(mk('div', 'nbrw-dr-row')); }
+    function note(t, cls) { return bd.appendChild(mk('p', 'nbrw-dr-n' + (cls ? ' ' + cls : ''), t)); }
+    var r = sec(j2W('dc')), lv = j2Lv();
+    r.setAttribute('role', 'radiogroup'); r.setAttribute('data-k', 'diff');
+    J2LV.forEach(function (l) { var b = r.appendChild(dbtn(j2W('lv')[l], 'nbrw-dr-diff', function () { j2SetLv(l); drawer('gear'); })); b.setAttribute('data-diff', l); b.setAttribute('role', 'radio'); b.setAttribute('aria-checked', String(l === lv)); });
+    var m = bd.appendChild(mk('div', 'nbrw-dr-row')); m.setAttribute('role', 'radiogroup'); m.setAttribute('data-k', 'mode');
+    MODES.forEach(function (x) { var b = m.appendChild(dbtn(L.modes[x][0] + ' ' + L.modes[x][1], 'nbrw-dr-mode', function () { setMode(x, true); drawer('gear'); })); b.setAttribute('data-mode', x); b.setAttribute('role', 'radio'); b.setAttribute('aria-checked', String(x === mode)); b.title = L.modes[x][2]; });
+    note(j2W('dn') + ' ' + j2W('cn'));
+    var s = sec(j2W('look')); s.setAttribute('data-k', 'skin');
+    SKINS.forEach(function (x, i) { var b = s.appendChild(dbtn(x, 'nbrw-dr-skin', function () { keep(function () { sk = i; save('skin', x); paint(); label(); }); drawer('gear'); })); b.setAttribute('data-skin', x); b.setAttribute('aria-pressed', String(i === sk)); });
+    var tr = bd.appendChild(mk('div', 'nbrw-dr-row')); tr.setAttribute('data-k', 'theme');
+    THEMES.forEach(function (x, i) { var b = tr.appendChild(dbtn(j2W('th')[x], 'nbrw-dr-theme', function () { th = i; save('theme', x); paint(); label(); drawer('gear'); })); b.setAttribute('data-theme', x || 'auto'); b.setAttribute('aria-pressed', String(i === th)); });
+    if (BI) {
+      var lr = sec(X('lang'));
+      ['en', 'de'].forEach(function (x) { lr.appendChild(dbtn(x.toUpperCase(), 'nbrw-dr-lang', function () { applyLang(x, true); drawer('gear'); })).setAttribute('aria-pressed', String(x === lg)); });
+    }
+    var sd = j2D && j2D.seed, sv = sd && sd.value != null ? sd.value : null;
+    bd.appendChild(mk('div', 'nbrw-dr-t', j2W('seed')));
+    var sl = note(sv == null ? j2W('seed0') : 'Seed ' + sv + ' — ' + (sd.fixed ? j2W('pin') : j2W('unpin')), 'nbrw-dr-seed');
+    if (sv != null) sl.setAttribute('data-seed', String(sv));
+    note(j2W('seedN')); note(j2W('seedX'));
+    var cr = sec(j2W('code')); cr.setAttribute('data-k', 'code');
+    cr.appendChild(dbtn(j2W('show'), 'nbrw-dr-show', function () {
+      j2Code().then(function (c) { j2UI.code = c; j2UI.msg = ''; }, function () { j2UI.code = ''; j2UI.msg = j2W('insec'); }).then(function () { if (drwKind === 'gear') drawer('gear'); });
+    }));
+    if (j2UI.code) {
+      note(j2W('keep'));
+      var pre = bd.appendChild(mk('pre', 'nbrw-dr-code', j2UI.code)); imp(pre, 'white-space', 'pre-wrap'); imp(pre, 'word-break', 'break-all'); imp(pre, 'user-select', 'all');
+      bd.appendChild(mk('div', 'nbrw-dr-row')).appendChild(dbtn(j2W('copy'), 'nbrw-dr-copy', function (b) {
+        try { W.navigator.clipboard.writeText(j2UI.code).then(function () { b.textContent = j2W('copied'); }, function () {}); } catch (e) {}
+      }));
+    }
+    var inp = bd.appendChild(mk('input', 'nbrw-dr-in')); inp.type = 'text'; inp.placeholder = j2W('ph'); inp.setAttribute('aria-label', j2W('ph')); inp.spellcheck = false;
+    imp(inp, 'width', '100%'); imp(inp, 'box-sizing', 'border-box');
+    bd.appendChild(mk('div', 'nbrw-dr-row')).appendChild(dbtn(j2W('load'), 'nbrw-dr-load', function () {
+      j2Apply(inp.value).then(function (r) { j2UI.msg = r[1]; j2UI.ok = r[0]; if (r[0]) j2UI.code = ''; if (drwKind === 'gear') drawer('gear'); });
+    }));
+    if (j2UI.msg) note(j2UI.msg, 'nbrw-dr-msg').setAttribute('data-ok', j2UI.ok ? '1' : '0');
+    var rr = sec(j2W('over')); rr.setAttribute('data-k', 'reset');
+    if (!j2UI.ask) rr.appendChild(dbtn(j2W('reset'), 'nbrw-dr-reset', function () { j2UI.ask = true; j2UI.rmsg = ''; drawer('gear'); }));
+    else {
+      note(j2W('sure'), 'nbrw-dr-sure');
+      var q = bd.appendChild(mk('div', 'nbrw-dr-row'));
+      q.appendChild(dbtn(j2W('yes'), 'nbrw-dr-yes', function () { if (!j2UI.ask) return; j2UI.ask = false; j2UI.rmsg = j2W('done').replace('%d', j2Reset()); drawer('gear'); }));
+      q.appendChild(dbtn(j2W('no'), 'nbrw-dr-no', function () { j2UI.ask = false; j2UI.rmsg = j2W('none'); drawer('gear'); }));
+    }
+    if (j2UI.rmsg) note(j2UI.rmsg, 'nbrw-dr-msg');
+    var rb = sec(''); rb.setAttribute('data-k', 'rebuild');
+    rb.appendChild(dbtn(j2W('re'), 'nbrw-dr-rebuild', function () { j2Rebuild(); if (drwKind === 'gear') drawer('gear'); }));
+    note(j2UI.re || j2W('reN'));
+    j2UI.re = '';
+  }
   // ---- E33 B3 — THE ACCOUNT IN THE WINDOW, as Lab's (12-rail-series-role) ---------------------------------------
   // One record per browser (digichemjn.account.v1: person id, favourites, the password's check — never the
   // password), ON per notebook (digichemjn.acct.on.<id>, E25 o): the same keys as Lab, so where Lab and the window
@@ -1435,6 +1629,10 @@
     gates.forEach(function (g) {
       var t = taskBy(g.kind, g.key), lock = !!(t && !t.off && !DONE[stOf(t)]);
       if (lock !== g.lock) {
+        // E38 Zusammenführen (Hauptwerkstatt, JS): a chapter that comes unlocked unfolds, like Lab (_open_lock: „AND IT
+        // UNFOLDS, ALWAYS“) — since C2 a locked chapter starts closed, and it stayed closed when its exercise opened
+        // (py_e26_2 P2: the next exercise's field not fillable). Only on the change locked → open, not at load.
+        if (g.lock && !lock) { var gd = g.el.closest && g.el.closest('details[data-kind=chapter]'); if (gd && !gd.open) gd.open = true; }
         any = true; g.lock = lock;
         imp(g.el, 'display', lock ? 'none' : g.disp);
         g.el.setAttribute('data-st', lock ? 'locked' : 'open');
@@ -1463,12 +1661,12 @@
     } else {
       var f = a.f || [], bad = false;
       ok = f.length > 0;
-      f.forEach(function (x) {
+      f.forEach(function (x, xi) {
         var inp = t.el.querySelector('.nbrw-input[data-f="' + x[0] + '"]'), v = num(inp && inp.value);
         if (v == null) { bad = true; return; }
         var d = Math.abs(v - x[1]);
         if (x[3] > 0) { d = ((v - x[1]) % x[3] + x[3]) % x[3]; d = Math.min(d, x[3] - d); }
-        if (!(d <= x[2] + 1e-12)) ok = false;
+        if (!(d <= j2Tol(t, x, xi) + 1e-12)) ok = false;             // E38 J2: the difficulty's tolerance (Lab's tol())
       });
       if (bad) { t.fb.textContent = T.num; t.fb.removeAttribute('data-ok'); return; }
     }
@@ -1558,6 +1756,7 @@
       if (t.rb) t.rb.textContent = T.run;
       if (t.cb) t.cb.textContent = T.clip;
     });
+    j1All();                      // E38 J1: Lab's words in the chosen language
   }
   var PYV = '0.27.7', PYCDN = 'https://cdn.jsdelivr.net/pyodide/v' + PYV + '/full/', PYURL = PYCDN;
   // E38a J2: in lesen.html the shell's loader hands over manifest.pyodide (own server, absolute, ends in /) as
@@ -1664,39 +1863,269 @@
       }
     });
   });
+  // ---- E38 J1 (2026-10-27, Werkstatt JS) — THE EXERCISES LIKE LAB -------------------------------------------------
+  // Lab gives an exercise 💬 Hint 1 of N (one step per click, then „Hide hints“; no progress changes, hint_steps),
+  // ⤼ Skip for now (an open one turns skipped, the next opens, the page goes on to it; skip_button) and, where it has
+  // one, 💡 Solution (answer route: an open one turns skipped, nothing moves; code route: open or skipped turns wrong
+  // = „given up ✗“; solution_box). The window had none of the three. Words = Lab's (de.txt). The data come from
+  // the content package (daten.json, Python P2) as window.DIGICHEMJN.daten — or, where the reading version is an
+  // output without the loader, from <script type=application/json data-nbrw-daten> inside it (claude/VERTRAG-E38-js.md):
+  // aufgaben[]/code[] {task, hinweise|hints, loesung|solution, skip}. A text may be "…", {en, de} or per difficulty
+  // {gentle, standard, strict}. Strict shows no hints, like Lab's hints_on() (K.diff, set in ⚙ — J2 tells us by
+  // the event nbrw:diff on .nbrw). Without data: Skip only — no empty buttons.
+  var J1W = {
+    en: { h1: '💬  Hint 1 of %d', hn: '💬  Hint %d of %d', hh: '💬  Hide hints', hs: '💬  Show hints', hb: 'Hint %d.',
+          sol: '💡  Solution', solH: '💡  Hide solution', skip: '⤼  Skip for now',
+          sk: 'Skipped — the next chapter and its exercise are open. This one stays amber until you come back and get it right.',
+          skc: 'Skipped — the next coding exercise is open. This one stays amber until you come back and get it right.',
+          wr: 'This one is marked wrong, and the next chapter and its exercise are open already. Get it right and it turns green.',
+          wrc: 'This one is marked wrong, and the next coding exercise is open already. Get it right and it turns green.',
+          done: 'Already solved — nothing to skip.' },
+    de: { h1: '💬  Hinweis 1 von %d', hn: '💬  Hinweis %d von %d', hh: '💬  Hinweise verbergen', hs: '💬  Hinweise zeigen', hb: 'Hinweis %d.',
+          sol: '💡  Lösung', solH: '💡  Lösung verbergen', skip: '⤼  Vorerst überspringen',
+          sk: 'Übersprungen: Das nächste Kapitel und seine Aufgabe sind offen. Diese hier bleibt gelb, bis Sie zurückkommen und sie richtig lösen.',
+          skc: 'Übersprungen: Die nächste Programmieraufgabe ist offen. Diese hier bleibt gelb, bis Sie zurückkommen und sie richtig lösen.',
+          wr: 'Diese hier ist als falsch markiert, und das nächste Kapitel mit seiner Aufgabe ist schon offen. Lösen Sie sie richtig, dann wird sie grün.',
+          wrc: 'Diese hier ist als falsch markiert, und die nächste Programmieraufgabe ist schon offen. Lösen Sie sie richtig, dann wird sie grün.',
+          done: 'Schon gelöst — nichts zu überspringen.' } };
+  var J1LV = { gentle: 1, standard: 1, strict: 1 };
+  function j1W(k) { return J1W[de ? 'de' : 'en'][k]; }
+  function j1Data() {
+    var d = W.DIGICHEMJN && W.DIGICHEMJN.daten;
+    if (d && typeof d === 'object' && (!d.id || d.id === ID)) return d;
+    var s = root.querySelector('script[type="application/json"][data-nbrw-daten]');
+    if (s) { try { return JSON.parse(s.textContent); } catch (e) {} }
+    return null;
+  }
+  var j1D = j1Data();
+  function j1Lv() { var v = load('diff', ''); return J1LV[v] ? v : 'standard'; }
+  function j1Pick(x) {             // a text of the package: "…" | {en, de} | {gentle, standard, strict} | […] of these
+    if (x == null) return null;
+    if (typeof x === 'string') return x;
+    if (W.Array.isArray(x)) return x.map(j1Pick).filter(function (y) { return y != null && y !== ''; });
+    if (typeof x !== 'object') return String(x);
+    if ('gentle' in x || 'standard' in x || 'strict' in x) { var lv = j1Lv(); return j1Pick(lv in x ? x[lv] : x.standard); }
+    if ('en' in x || 'de' in x) return j1Pick(x[eff()] != null ? x[eff()] : (x.en != null ? x.en : x.de));
+    return null;
+  }
+  function j1Item(t) {
+    var L0 = j1D && (t.kind === 'code' ? j1D.code : j1D.aufgaben);
+    if (!W.Array.isArray(L0)) return null;
+    for (var i = 0; i < L0.length; i++) if (L0[i] && L0[i].task === t.key) return L0[i];
+    return null;
+  }
+  function j1Hints(t) {
+    if (t.kind === 'code' || j1Lv() === 'strict') return [];
+    var it = j1Item(t), h = it ? j1Pick(it.hinweise != null ? it.hinweise : it.hints) : null;
+    return W.Array.isArray(h) ? h : (typeof h === 'string' && h ? [h] : []);
+  }
+  function j1Sol(t) {              // {intro (html), code (python)} or null
+    var it = j1Item(t), s = it ? (it.loesung != null ? it.loesung : it.solution) : null;
+    if (s == null) return null;
+    if (typeof s === 'object' && !W.Array.isArray(s) && ('code' in s || 'intro' in s)) return { intro: j1Pick(s.intro) || '', code: j1Pick(s.code) || '' };
+    s = j1Pick(s);
+    return typeof s === 'string' && s ? (t.kind === 'code' ? { intro: '', code: s } : { intro: s, code: '' }) : null;
+  }
+  function j1Btn(cls, fn) {
+    var b = mk('button', 'nbrw-abtn ' + cls); b.type = 'button';
+    b.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); if (t0(b).el.getAttribute('data-st') !== 'locked') fn(); });
+    return b;
+  }
+  function t0(b) { return b.__nbrwT; }
+  function j1Next(t) {             // the next exercise of the same route, shown in this mode
+    var i = tasks.indexOf(t);
+    for (var j = i + 1; j < tasks.length; j++) if (tasks[j].kind === t.kind && tasks[j].key && !tasks[j].off) return tasks[j];
+    return null;
+  }
+  function j1Say(t, s) { t.j1.say.textContent = s; imp(t.j1.say, 'display', s ? '' : 'none'); }
+  function j1Skip(t) {
+    var s = stOf(t), k = (t.kind === 'code' ? 'code.' : 'task.') + t.key, moved = !DONE[s];
+    if (moved) save(k, 'skipped');
+    j1Say(t, s === 'solved' ? j1W('done') : s === 'wrong' ? j1W(t.kind === 'code' ? 'wrc' : 'wr') : j1W(t.kind === 'code' ? 'skc' : 'sk'));
+    gate();
+    var n = moved ? j1Next(t) : null;          // like Lab (_goto_next): a skip moves on to the next exercise
+    if (n && n.ent) W.setTimeout(function () { go(n.ent); }, 350);
+  }
+  function j1Hint(t) {
+    var J = t.j1, n = J.hints.length;
+    if (!J.open) { J.open = true; if (!J.seen) J.seen = 1; }
+    else if (J.seen < n) J.seen++;
+    else J.open = false;
+    try { var m = parseInt(load('hint.' + t.key, '0'), 10) || 0; if (J.seen > m) save('hint.' + t.key, J.seen); } catch (e) {}
+    j1Paint(t); if (ready) later();
+  }
+  function j1SolT(t) {
+    var J = t.j1; J.sol = !J.sol;
+    if (J.sol) {
+      var s = stOf(t), k = (t.kind === 'code' ? 'code.' : 'task.') + t.key;
+      if (t.kind === 'code') { if (s !== 'solved' && s !== 'wrong') save(k, 'wrong'); }      // task_code_bypassed
+      else if (!DONE[s]) save(k, 'skipped');                                                    // task_solution_opened
+      gate();
+    }
+    j1Paint(t); if (ready) later();
+  }
+  function j1Paint(t) {
+    var J = t.j1; if (!J) return;
+    J.hints = j1Hints(t); J.solv = j1Sol(t);
+    var n = J.hints.length;
+    if (J.seen > n) J.seen = n;
+    imp(J.hb, 'display', n ? '' : 'none');
+    J.hb.textContent = !n ? '' : J.open && J.seen < n ? j1W('hn').replace('%d', J.seen + 1).replace('%d', n)
+                       : J.open ? j1W('hh') : J.seen ? j1W('hs') : j1W('h1').replace('%d', n);
+    J.hb.setAttribute('aria-expanded', String(!!(J.open && n)));
+    J.hbox.innerHTML = '';
+    if (J.open) J.hints.slice(0, J.seen).forEach(function (x, i) {
+      var d = J.hbox.appendChild(mk('div', 'nbrw-hint')); d.setAttribute('data-i', String(i + 1));
+      d.appendChild(mk('b', '', j1W('hb').replace('%d', i + 1))); d.appendChild(D.createTextNode(' '));
+      var sp = d.appendChild(mk('span')); sp.innerHTML = x;             // the package's own markup (as the reading version)
+    });
+    imp(J.hbox, 'display', J.open && n ? '' : 'none');
+    imp(J.sb, 'display', J.solv ? '' : 'none');
+    J.sb.textContent = J.sol ? j1W('solH') : j1W('sol');
+    J.sb.setAttribute('aria-expanded', String(!!(J.sol && J.solv)));
+    J.sbox.innerHTML = '';
+    if (J.sol && J.solv) {
+      if (J.solv.intro) { var p = J.sbox.appendChild(mk('div', 'nbrw-sol-i')); p.innerHTML = J.solv.intro; }
+      if (J.solv.code) { var pre = J.sbox.appendChild(mk('pre', 'nbrw-sol-c nbrw-hl')); pre.innerHTML = hl(J.solv.code); }
+    }
+    imp(J.sbox, 'display', J.sol && J.solv ? '' : 'none');
+    J.kb.textContent = j1W('skip');
+    var lk = t.el.getAttribute('data-st') === 'locked';
+    [J.hb, J.sb, J.kb].forEach(function (b) { b.disabled = lk; });
+    if (lk) j1Say(t, '');
+  }
+  tasks.forEach(function (t) {
+    if (!t.key) return;
+    var J = t.j1 = { seen: 0, open: false, sol: false, hints: [], solv: null };
+    var row = mk('div', 'nbrw-acts'); row.setAttribute('data-kind', t.kind);
+    imp(row, 'flex', '1 1 100%'); imp(row, 'display', 'flex'); imp(row, 'flex-wrap', 'wrap'); imp(row, 'justify-content', 'center'); imp(row, 'gap', '8px');
+    J.hb = j1Btn('nbrw-hintbtn', function () { j1Hint(t); });
+    J.kb = j1Btn('nbrw-skipbtn', function () { j1Skip(t); });
+    J.sb = j1Btn('nbrw-solbtn', function () { j1SolT(t); });
+    [J.hb, J.kb, J.sb].forEach(function (b) { b.__nbrwT = t; row.appendChild(b); });
+    J.hbox = mk('div', 'nbrw-hints'); J.sbox = mk('div', 'nbrw-sol'); J.say = mk('div', 'nbrw-skipsay');
+    J.say.setAttribute('role', 'status');
+    [J.hbox, J.sbox, J.say].forEach(function (x) { imp(x, 'flex', '1 1 100%'); imp(x, 'box-sizing', 'border-box'); imp(x, 'width', '100%'); });
+    imp(J.say, 'display', 'none');
+    var at = t.kind === 'code' ? (t.out || null) : t.fb;           // under the check / the run's output
+    var ref = at && at.parentNode === t.el ? at.nextSibling : null;
+    [row, J.hbox, J.sbox, J.say].forEach(function (x) { t.el.insertBefore(x, ref); });
+    j1Paint(t);
+    try { new W.MutationObserver(function () { j1Paint(t); }).observe(t.el, { attributes: true, attributeFilter: ['data-st'] }); } catch (e) {}
+  });
+  function j1All() { tasks.forEach(j1Paint); }
+  wrap.addEventListener('nbrw:diff', function () { tasks.forEach(function (t) { if (t.j1) { t.j1.open = false; t.j1.seen = 0; } }); j1All(); });
   // sliders over pictures drawn by the kernel
+  // ---- E38 J3 (2026-10-27, Werkstatt JS) — FIRST THE PREVIEW, THEN LIVE ------------------------------------------
+  // The kernel's pictures (data-z: one per stage, often six) are the PREVIEW: the slider shows and moves at once
+  // (it waited, hidden, for the pictures to unpack), a move shows the nearest stage's picture at once. Where the
+  // content package carries the render function as Python (daten.json regler[nr].py — Python P4; claude/VERTRAG-
+  // E38-js.md: {code, fn, params:[{name, min, max, step, value}], pkgs}) the slider runs on the real values and the
+  // picture is drawn LIVE by Python in the browser (Pyodide — the reader's py(), own server in lesen.html) as soon as
+  // it is ready: started at the first move in lesen.html, used wherever it already runs (after ▶ of a coding
+  // exercise). Until then, and if it fails, the preview stays — never an empty picture. data-live on the slider:
+  // vorschau · laedt · live · aus. In Jupyter the kernel draws (our widgets, Lab) — the window never runs there.
+  function j3Data() {
+    var d = W.DIGICHEMJN && W.DIGICHEMJN.daten;
+    if (d && typeof d === 'object' && (!d.id || d.id === ID)) return d;
+    var s = root.querySelector('script[type="application/json"][data-nbrw-daten]');
+    if (s) { try { return JSON.parse(s.textContent); } catch (e) {} }
+    return null;
+  }
+  var j3D = j3Data();
+  function j3Py(nr) {             // the render function of slider nr, or null
+    var R = j3D && j3D.regler, r = null;
+    if (W.Array.isArray(R)) for (var i = 0; i < R.length; i++) if (R[i] && +R[i].nr === nr) r = R[i];
+    var p = r && (r.py || r.live);
+    if (!p || typeof p !== 'object') return null;
+    var code = p.code || p.quelle, fn = p.fn || p.funktion, ps = p.params || p.parameter;
+    if (typeof code !== 'string' || !/^[A-Za-z_]\w*$/.test(String(fn || '')) || !W.Array.isArray(ps)) return null;
+    return { code: code, fn: fn, params: ps, pkgs: W.Array.isArray(p.pkgs) ? p.pkgs : ['numpy', 'matplotlib'] };
+  }
+  var J3SVG = 'import io as _io, matplotlib as _mpl\n_mpl.use("Agg")\nimport matplotlib.pyplot as _plt\n'
+    + 'def _nbrw_svg(_f, _kw):\n    _fig = _f(**_kw)\n    _b = _io.StringIO()\n    _fig.savefig(_b, format="svg")\n    _plt.close(_fig)\n'
+    + '    _s = _b.getvalue()\n    return _s[_s.find("<svg"):]\n';
+  function j3Num(s) { var v = parseFloat(String(s).replace(/[−–]/g, '-')); return isFinite(v) && /^\s*[-+−–]?[\d.]/.test(String(s)) ? v : null; }
   function inflate(b64) {
     var bin = W.atob(b64), u = new W.Uint8Array(bin.length);
     for (var i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i);
     return new W.Response(new W.Blob([u]).stream().pipeThrough(new W.DecompressionStream('deflate'))).text().then(JSON.parse);
   }
-  [].forEach.call(root.querySelectorAll('.nbrw-slider[data-z]'), function (el) {
+  [].forEach.call(root.querySelectorAll('.nbrw-slider[data-z]'), function (el, nr) {
     if (!W.DecompressionStream || !W.Blob || !W.Response) return;           // too old a browser: the start picture stays
     var fig = el.querySelector('.nbrw-fig'), rs = el.querySelectorAll('.nbrw-range'), os = el.querySelectorAll('.nbrw-val');
+    var LV = j3Py(nr), want = null;
+    // at once: the slider and its value are there (a move before the pictures are unpacked is kept and shown then)
+    [].forEach.call(rs, function (r) { r.style.display = ''; r.addEventListener('input', function () { if (!el.__nbrwShow) want = r; }); });
+    [].forEach.call(os, function (o) { o.style.display = ''; });
+    el.setAttribute('data-live', 'vorschau');
     inflate(el.getAttribute('data-z')).then(function (P) {
-      var cur0 = 0;
-      function show(s, j) {
+      var cur0 = 0, live = null, liveP = null, busy = false, again = false, lt = 0;
+      // live: each control is a parameter of the render function — numeric labels → the real range, others stay stages
+      var par = LV ? [].map.call(rs, function (r, q) {
+        var c = P.c[q] || { l: [] }, p0 = LV.params[q] || {}, nums = c.l.map(j3Num), isN = nums.every(function (x) { return x != null; });
+        return { name: p0.name || r.getAttribute('aria-label'), num: isN && p0.min != null && p0.max != null, nums: nums,
+                 min: +p0.min, max: +p0.max, step: +p0.step || 0, value: p0.value != null ? +p0.value : nums[c.d] };
+      }) : null;
+      function stageOf(q, x) {     // the preview stage nearest to a real value
+        var n = par[q].nums, k = 0; for (var i = 1; i < n.length; i++) if (Math.abs(n[i] - x) < Math.abs(n[k] - x)) k = i; return k;
+      }
+      function fmt(q, x) { var s = par[q].step, m = /\.(\d+)$/.exec(String(s)), d = s > 0 && s < 1 ? (m ? Math.min(6, m[1].length) : 3) : 0; return x.toFixed(d); }
+      function kw() {
+        var o = {};
+        [].forEach.call(rs, function (r, q) { o[par[q].name] = par[q].num ? +r.value : (P.c[q].l[+r.value] != null && j3Num(P.c[q].l[+r.value]) != null ? j3Num(P.c[q].l[+r.value]) : P.c[q].l[+r.value]); });
+        return o;
+      }
+      function show(s, j) {        // s = the moved control, j = its stage (preview) or its real value (live); the others to their start, as before
         var c = P.c[s]; if (!c) return;
         [].forEach.call(rs, function (r, q) {
-          var cq = P.c[q], jj = q === s ? j : cq.d;
-          r.value = String(jj);
-          if (os[q]) os[q].textContent = os[q].getAttribute('data-desc') + ' = ' + cq.l[jj];
+          var cq = P.c[q], ln = !!(par && par[q].num), v = q === s ? j : (ln ? par[q].nums[cq.d] : cq.d);
+          r.value = String(v);
+          if (os[q]) os[q].textContent = os[q].getAttribute('data-desc') + ' = ' + (ln ? fmt(q, +v) : cq.l[v]);
         });
-        var f = c.i[j] || 0;
+        var f = c.i[par && par[s].num ? stageOf(s, +j) : j] || 0;
         if (f !== cur0 && P.f[f] != null) { fig.innerHTML = P.f[f]; cur0 = f; }
         el.setAttribute('data-frame', String(f));
+        if (LV) j3Ask();
       }
-      [].forEach.call(rs, function (r) {
-        r.style.display = ''; r.addEventListener('input', function () { show(+r.getAttribute('data-s'), +r.value); });
+      function j3Ask() {          // live: the newest values, one drawing at a time
+        if (el.getAttribute('data-live') === 'aus') return;
+        if (!live) {
+          if (!liveP && (HULL || pyOk)) {
+            el.setAttribute('data-live', 'laedt');
+            liveP = py().then(function (Py) {
+              return Py.loadPackage(LV.pkgs).then(function () {
+                var ns = Py.globals.get('dict')();
+                return Py.runPythonAsync(J3SVG + '\n' + LV.code, { globals: ns }).then(function () { live = { P: Py, ns: ns }; el.setAttribute('data-live', 'live'); j3Ask(); });
+              });
+            }).then(null, function () { el.setAttribute('data-live', 'aus'); });
+          }
+          return;
+        }
+        if (busy) { again = true; return; }
+        busy = true; var my = ++lt, args = JSON.stringify(kw());
+        live.P.runPythonAsync('_nbrw_svg(' + LV.fn + ', __import__("json").loads(' + JSON.stringify(args) + '))', { globals: live.ns }).then(function (svg) {
+          svg = String(svg && svg.toString ? svg.toString() : svg || '');
+          if (my === lt && /^<svg[\s>]/.test(svg)) { fig.innerHTML = '<div style="text-align:center">' + svg + '</div>'; cur0 = -1; el.setAttribute('data-frame', 'live'); el.setAttribute('data-live-kw', args); }
+        }, function () {}).then(function () { busy = false; if (again) { again = false; j3Ask(); } });
+      }
+      [].forEach.call(rs, function (r, q) {
+        if (par && par[q].num) {                 // the real range of the parameter
+          var v0 = par[q].nums[+r.value]; r.min = String(par[q].min); r.max = String(par[q].max);
+          r.step = par[q].step > 0 ? String(par[q].step) : 'any'; r.value = String(v0 != null ? v0 : par[q].value);
+          if (os[q]) os[q].textContent = os[q].getAttribute('data-desc') + ' = ' + fmt(q, +r.value);
+          r.setAttribute('data-live-range', '1');
+        }
+        r.addEventListener('input', function () { show(+r.getAttribute('data-s'), +r.value); });
       });
-      [].forEach.call(os, function (o) { o.style.display = ''; });
       // E33 B4: the slider and its value on the column's axis (the value's box ran to the right edge, the pair sat left)
       if (/flex/.test(W.getComputedStyle(el).display)) {
         imp(el, 'justify-content', 'center'); imp(el, 'column-gap', '12px');
         [].forEach.call(os, function (o) { imp(o, 'flex', '0 0 auto'); imp(o, 'width', 'auto'); imp(o, 'min-width', '5.5em'); });
       }
       el.setAttribute('data-ready', '1');
-      el.__nbrwShow = show;
+      el.__nbrwShow = function (s, j) { show(s, par && par[s] && par[s].num ? par[s].nums[j] : j); };     // stages, as before (tests)
+      if (want) show(+want.getAttribute('data-s'), +want.value);
     }, function () {});
   });
 
@@ -1927,6 +2356,7 @@
   // accordions (<details>): open/closed kept per notebook
   [].forEach.call(root.querySelectorAll('details[data-acc]'), function (d) {
     var id = d.getAttribute('data-acc'), v = load('acc.' + id, '');
+    if (!v && /^(group|chapter)$/.test(d.getAttribute('data-kind') || '')) v = d.getAttribute('data-open') || '';   // E38 C2: parts/chapters start like Lab
     if (v === '1') d.open = true; else if (v === '0') d.open = false;
     d.addEventListener('toggle', function () { save('acc.' + id, d.open ? '1' : '0'); if (ready) later(); });
   });

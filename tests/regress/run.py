@@ -65,6 +65,13 @@ ap.add_argument("--height", type=int, default=900)
 # Modeling build that has not taken over E24.3 yet (NACHZIEHEN): run.py C M --under Complex
 ap.add_argument("--under", default=None, help="comma list of file-name parts: rows and scripts only for these notebooks")
 A = ap.parse_args(sys.argv[1:] if __name__ == "__main__" else ["x"])
+# E38 P3 (2026-10-27, Python) — DIE ZELLE DER VORLAGE ZEIGT DAS PAKET (toolkit/paketzelle.py); das Lab-Dokument (Rail,
+# Panel, Widgets) baut der Kernel nur mit DIGICHEM_LAB=1. Die Matrix und die Skripte aus scripts.txt messen das
+# Lab-Dokument (behaupteten bisher: jeder Lauf baut es) — sie bekommen DIGICHEM_LAB=1 (Server, Kernel, Skripte erben
+# es), außer es ist ausdrücklich gesetzt (DIGICHEM_LAB=0: alles gegen das Paket). Das Paket misst py_e38_p3 (setzt
+# es selbst zurück) und, über lesen.html, jedes E36/E38-Skript des Lesers.
+if __name__ == "__main__":
+    os.environ.setdefault("DIGICHEM_LAB", "1")
 if not A.nbs:
     import nbpick
     A.nbs = [nbpick.resolve(n.strip()) for n in A.nb.split(",") if n.strip()]

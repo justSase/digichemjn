@@ -90,7 +90,7 @@ def b1(src):
             pg.click(".lm-Menu-itemLabel:text-is('Run All Cells')", timeout=8000)
             t0 = time.time(); ran = False
             while time.time() - t0 < 150 and not ran:
-                pg.wait_for_timeout(1000); ran = bool(pg.query_selector("#nbpanel-root, .nbcover-out, .nbrw"))
+                pg.wait_for_timeout(1000); ran = bool(pg.query_selector("#nbpanel-root, .nbcover-out, .nbrw, iframe[data-digichemjn-rahmen]"))  # E38 P3: das Paket im eigenen Rahmen
             pg.wait_for_timeout(2000); pg.keyboard.press("Control+s"); pg.wait_for_timeout(4000)
             dlg2 = pg.query_selector(".jp-Dialog")
             b.close()

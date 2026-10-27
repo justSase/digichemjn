@@ -273,3 +273,32 @@ de: Stichwort 2
 
 en: Source of the content (script, chapter, pages)
 de: Quelle der Inhalte (Skript, Kapitel, Seiten)
+
+# E38 P2 (2026-10-27, Python): die Hinweis-Stufen der Vorlage auf Deutsch (Lab-Knopf und Lesefenster zeigen dieselben;
+# bis v1.84 englisch auch im deutschen Lauf)
+en: Idea: y = a·x, so just substitute.
+de: Idee: y = a·x, also einfach einsetzen.
+
+en: Working: y = %d · 3.
+de: Rechnung: y = %d · 3.
+
+en: Working: y = %d · 4.
+de: Rechnung: y = %d · 4.
+
+en: Idea: the slope says how y changes when x grows (placeholder).
+de: Idee: Die Steigung sagt, wie sich y ändert, wenn x wächst (Platzhalter).
+
+en: Working: a &gt; 0, so each step in x adds a to y (placeholder).
+de: Rechnung: a &gt; 0, also kommt bei jedem Schritt in x a zu y hinzu (Platzhalter).
+
+en: Idea: half a circle is π (placeholder).
+de: Idee: Ein halber Kreis ist π (Platzhalter).
+
+en: Working: φ' = %.2f + 3.14 (placeholder).
+de: Rechnung: φ' = %.2f + 3,14 (Platzhalter).
+
+en: Idea: x and y move the point independently (placeholder).
+de: Idee: x und y bewegen den Punkt unabhängig voneinander (Platzhalter).
+
+en: Working: set x to the circle's centre first (placeholder).
+de: Rechnung: zuerst x auf die Mitte des Kreises stellen (Platzhalter).

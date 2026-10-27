@@ -160,6 +160,33 @@ def main():
     row("H1 Hülle-CSS notebookunabhängig", ok1, det)
     # the two pages
     doc = "<!doctype html><meta charset=utf-8><body style='margin:0'>" + h
+    # E38 P1 (Python): die Hülle bringt die Schriften von digi mit (schriften.<sha8>.css, woff2) — lesen.html zeichnet digi
+    # in Unbounded/Instrument Sans/JetBrains Mono. P BEHAUPTETE BISHER gleiche Pixel bei gleichen (System-)Schriften: der
+    # Kernel bringt keine Schrift mit. Nun bekommt auch die Referenz die Schriften der Hülle (dieselben Dateien, <link>
+    # im iframe, relativ zur Seite in dist/), P vergleicht weiter Lage und Farbe; die Schriften selbst misst py_e38_p1.
+    if dist and not opt("--standin"):
+        try:
+            _man = json.load(open(os.path.join(dist, "huelle", tv, "manifest.json"), encoding="utf-8"))
+            _fc = [c for c in _man.get("css") or [] if c.startswith("schriften.")]
+            if _fc:
+                doc = doc.replace("<body style='margin:0'>", "<link rel=stylesheet href='huelle/%s/%s'><body style='margin:0'>"
+                                  % (tv, _fc[0]), 1)
+        except Exception:
+            pass
+    # E38 Zusammenführen (Hauptwerkstatt, Tests): seit P2 + J1 trägt das Paket die Aufgaben-Daten (Hinweise, Lösungen) und
+    # der Leser zeigt dazu Knöpfe; in der .ipynb liegen sie als erstes Kind der Lesefassung (paketzelle, VERTRAG-E38-js).
+    # P BEHAUPTETE BISHER: die Ausgabe des Kernels allein = lesen.html — bei 390 px brechen die zusätzlichen Knöpfe um, der
+    # Rollbalken links war 4 px anders (gemessen). Die Referenz bekommt dieselben Daten wie die Notebook-Fassung.
+    if dist and not opt("--standin"):
+        try:
+            _dj = open(os.path.join(dist, "inhalt", nid, nbv, "daten.json"), encoding="utf-8").read()
+            _dj = json.dumps(json.loads(_dj), ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
+            _i = doc.find("<div class='nbreading'")
+            if _i >= 0:
+                _i = doc.find(">", _i) + 1
+                doc = doc[:_i] + "<script type='application/json' data-nbrw-daten='%s'>%s</script>" % (nid, _dj) + doc[_i:]
+        except Exception:
+            pass
     open(os.path.join(tmp, "ref.html"), "w", encoding="utf-8").write(
         "<!doctype html><meta charset=utf-8><body style='margin:0'><iframe class='out' style='display:block;width:100%%;"
         "border:0;height:40px' srcdoc=\"%s\"></iframe><script>setInterval(function(){var f=document.querySelector('iframe');"

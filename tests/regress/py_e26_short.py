@@ -90,7 +90,10 @@ cargo = [l for l in lines if l.startswith("_NBZ = ")]
 # top — behauptete bisher: ≤ 15 lines and line 2 "# Output:" in every notebook
 _block = all(l in lines for l in getattr(shortcell, "NOTE_BLOCK", ("\0",)))
 lim = (15 + (len(shortcell.NOTE_BLOCK) - 3 if _block else 0)
-       + (0 if not chunked else sum(1 for l in lines if re.match(r'^ "[A-Za-z0-9+/=]*"$', l))))
+       + (0 if not chunked else sum(1 for l in lines if re.match(r'^ "[A-Za-z0-9+/=]*"$', l)))
+       # E38 P3 (Python): die Zelle trägt das Paket in EINER Zeile mehr (`_NBP = "…"`, toolkit/paketzelle.py) — L1
+       # behauptete bisher ≤ 23 Zeilen in der Vorlage; die Ladung _NBZ bleibt eine Zeile
+       + (1 if any(l.startswith("_NBP = ") for l in lines) else 0))
 ok = (len(lines) <= lim and lines[0].startswith("#@title DigiChemJN") and (lines[1].startswith("# Output:") or _block)
       # E29 P8 (12.10.): the Vorlage's run line is the warning, en + de (shortcell.NOTE_LINES)
       and (shortcell.RUN_LINE in lines or _block or all(l in lines for l in getattr(shortcell, "NOTE_LINES", ("\0",))))
@@ -175,6 +178,10 @@ def kernel_run(path, post=None):
     home = tempfile.mkdtemp(prefix="e26s_")
     env = {k: v for k, v in os.environ.items() if not k.startswith("DIGICHEM_") and k not in ("PYCHARM_HOSTED", "VSCODE_PID")}
     env["HOME"] = home
+    # E38 P3 (Python): L4/P1 prüfen den Lauf des TOOLKITS (Cover beider Sprachen, Gating, Prüf-Logik: LANG, _NBRW_PY …) —
+    # die Zelle der Vorlage zeigt sonst das Paket (toolkit/paketzelle.py, gemessen in py_e38_p3); behauptete bisher: jeder
+    # Lauf baut das Dokument im Kernel
+    env["DIGICHEM_LAB"] = "1"
     km, kc = start_new_kernel(kernel_name="python3", env=env, cwd=os.path.dirname(os.path.abspath(path)))
     try:
         def drain(mid):

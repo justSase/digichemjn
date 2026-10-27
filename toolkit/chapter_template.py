@@ -412,6 +412,7 @@ def _nbrw_slider(r):
     f0 = frame(base)
     if f0 is None:
         return ""
+    _NBRW_LIVE.append((r, f0))               # E38 P4: its render program, asked at the end (_nbrw_live_all)
     if _NBRW_CFG["t0"] is None:
         _NBRW_CFG["t0"] = _time.monotonic()
     if _time.monotonic() - _NBRW_CFG["t0"] > _NBRW_CFG["budget"]:
@@ -588,16 +589,22 @@ def _dedent_src(src):
     s = _tw.dedent(src)
     return s if not s[:1].isspace() else s.strip()
 
-def _nbrw_pysrc(key):
-    """The check of coding exercise `key` as a stand-alone Python text, or None."""
-    if key in _NBRW_PY:
-        return _NBRW_PY[key]
+def _nbrw_walk(own_locals=False):
+    """The name walk of _nbrw_pysrc (E26.3), on its own (E38 P4: the sliders' render functions use it too):
+    → (imports, values, defs, seen, bad, need, take). need(fn) = the source of fn, its names taken;
+    take(name, value, globals) = name defined in the program (import, def, class or literal).
+    own_locals=True (P4): a name that is a parameter or local of the function itself is not a global, even
+    when it is also an attribute (`def theme_axes(ax, grid=True): … ax.grid(…)` put `grid` in co_names);
+    the checks keep the walk of E26.3 unchanged (False)."""
     import types as _ty
-    chk = _PRUEFE.get(key)
-    _NBRW_PY[key] = None
-    if not isinstance(chk, _ty.FunctionType):
-        return None
     imports, values, defs, seen, bad = [], [], [], set(), []
+    def _locs(code):
+        out, todo = set(), [code]
+        while todo:
+            c = todo.pop()
+            out.update(c.co_varnames); out.update(c.co_cellvars)
+            todo.extend(x for x in c.co_consts if hasattr(x, "co_names"))
+        return out
     def need(fn_obj):
         code = fn_obj.__code__
         lam = code.co_name == "<lambda>"
@@ -611,8 +618,9 @@ def _nbrw_pysrc(key):
             except Exception:
                 bad.append(nm); continue
             take(nm, cv, fn_obj.__globals__)
+        locs = _locs(code) if own_locals else ()
         for nm in _nbrw_names(src, [code]) or ():
-            if nm in code.co_freevars:
+            if nm in code.co_freevars or nm in locs:
                 continue
             if nm in fn_obj.__globals__:
                 take(nm, fn_obj.__globals__[nm], fn_obj.__globals__)
@@ -660,6 +668,18 @@ def _nbrw_pysrc(key):
         if lit is None:
             bad.append(nm); return
         values.append("%s = %s" % (nm, lit))
+    return imports, values, defs, seen, bad, need, take
+
+def _nbrw_pysrc(key):
+    """The check of coding exercise `key` as a stand-alone Python text, or None."""
+    if key in _NBRW_PY:
+        return _NBRW_PY[key]
+    import types as _ty
+    chk = _PRUEFE.get(key)
+    _NBRW_PY[key] = None
+    if not isinstance(chk, _ty.FunctionType):
+        return None
+    imports, values, defs, seen, bad, need, take = _nbrw_walk()
     top = need(chk)
     if top is None or bad:
         _NBRW_PY[("bad", key)] = sorted(set(bad))
@@ -682,6 +702,113 @@ def _nbrw_pysrc(key):
         return None
     _NBRW_PY[key] = prog
     return prog
+
+# E38 P4 (2026-10-27, Python) — THE SLIDER'S PICTURE TRAVELS AS PYTHON (live in Pyodide or a kernel).
+# The reading window steps through the pictures the build drew (data-z: 5–6 values a control, "Vorschau-
+# stufe"). Live means any value: the window needs the render function itself. It is cut out of the notebook
+# like the check of a coding exercise (_nbrw_walk: the function, everything it reads — toolkit functions,
+# palette, numbers — as source/literals), together with what _nbrw_slider does around it (fig_to_html
+# at the slider's dpi, tight=False, the readout line above it, the rounded coordinates, the nbr- ids) and
+# the matplotlib settings the toolkit changed (rcParams that differ from matplotlib's defaults). The program
+# ends with  def _nbrw_render(**values) -> html ; for the values of the build it returns, character for
+# character, the picture in data-z (tests/regress/py_e38_p4.py). daten.json regler[].live = {code, fn, html, params,
+# pkgs, dpi, spec, start} (code = the program; fn/params/_nbrw_svg as the reader asks, claude/VERTRAG-E38-js.md J3). spec = every control with its full range
+# (float/int: min, max, step, value; menu: [label, value]) — the window offers all of it once Python is up.
+_NBRW_LIVE = []      # one entry per slider the reading version shows (dumped by toolkit/paket.py)
+
+def _nbrw_spec(sl):
+    out = []
+    for k, w in sl.items():
+        d = str(getattr(w, "description", "") or k)
+        if isinstance(w, Dropdown):
+            opts = [(str(o[0]), o[1]) if isinstance(o, tuple) else (str(o), o) for o in w.options]
+            out.append({"name": k, "art": "menu", "desc": d, "value": w.value,
+                        "options": [[l, v] for l, v in opts]})
+        elif isinstance(w, (FloatSlider, IntSlider)):
+            out.append({"name": k, "art": "int" if isinstance(w, IntSlider) else "float", "desc": d,
+                        "min": w.min, "max": w.max, "step": w.step, "value": w.value})
+    return out
+
+def _nbrw_rc():
+    """rcParams the toolkit set (≠ matplotlib's defaults), as a literal dict — the picture depends on them."""
+    import matplotlib as _mpl
+    out = {}
+    for k, v in plt.rcParams.items():
+        try:
+            d = _mpl.rcParamsDefault[k]
+        except KeyError:
+            continue
+        if k.startswith(("backend", "interactive", "webagg", "savefig.directory")) or v == d:
+            continue
+        if _nbrw_lit(v) is not None:
+            out[k] = v
+    return out
+
+def _nbrw_live(r, f0):
+    """The render program of slider r (see above), or {"fehlt": [names]} where a name cannot travel."""
+    import hashlib as _hl
+    imports, values, defs, seen, bad, need, take = _nbrw_walk(own_locals=True)
+    roots = [("_nbrw_r", r["render"]), ("fig_to_html", fig_to_html), ("_nbread_ids", _nbread_ids)]
+    if r.get("readout") is not None:
+        roots.insert(1, ("_nbrw_ro", r["readout"]))
+    for nm, fn in roots:
+        take(nm, fn, getattr(fn, "__globals__", globals()))
+    if bad:
+        return {"fehlt": sorted(set(bad))}
+    imps = set(imports) | {"import matplotlib"}
+    if "plt" not in seen:
+        imps.add("import matplotlib.pyplot as plt")
+    imports = sorted(imps)
+    rc = _nbrw_rc()
+    prog = "\n".join(
+        ["# DigiChemJN %s · live picture of a slider (%s, seed %s) · run: html = _nbrw_render(**values)"
+         % (NB_VERSION, LANG["value"], SEED.get("value")),
+         "import matplotlib; matplotlib.use('Agg')"] + imports
+        + ["plt.rcParams.update(%s)" % _nbrw_lit(rc)] + values + defs
+        + ["def _nbrw_render(**values):",
+           "    h = fig_to_html(_nbrw_r(**values), dpi=%r, tight=False)" % (r.get("dpi", 100),)]
+        + (["    try:", "        h = _nbrw_ro(**values) + h", "    except Exception:", "        pass"]
+           if r.get("readout") is not None else [])
+        + ["    h = __import__('re').sub(r'(\\d\\.\\d\\d)\\d+', r'\\1', h)",
+           "    return _nbread_ids(h)",
+           # claude/VERTRAG-E38-js.md J3: the reader runs `_nbrw_svg(fn, kw)` (its own: fn(**kw) → savefig svg); this
+           # program is run AFTER that definition and gives it the picture of the toolkit instead — colours as CSS
+           # variables, fonts, size exactly as the preview (data-z); a menu's label → its value
+           "_NBRW_MENU = %s" % _nbrw_lit({s["name"]: {str(o[0]): o[1] for o in s["options"]}
+                                          for s in _nbrw_spec(r["sliders"]) if s["art"] == "menu"} or {}),
+           "def _nbrw_svg(_f, _kw):",
+           "    _kw = {k: _NBRW_MENU.get(k, {}).get(v, v) if isinstance(v, str) else v for k, v in _kw.items()}",
+           "    _h = _nbrw_render(**_kw)",
+           "    _i, _j = _h.find('<svg'), _h.rfind('</svg>')",
+           "    return _h[_i:_j + 6] if _i >= 0 and _j > _i else _h"]) + "\n"
+    try:
+        compile(prog, "<slider>", "exec")
+    except SyntaxError as e:
+        return {"fehlt": ["SyntaxError %s" % e]}
+    pk = sorted({m for m in _re.findall(r"^(?:import|from) (\w+)", "\n".join(imports), _re.M)
+                 if m in ("numpy", "matplotlib", "scipy", "pandas", "sympy")} | {"matplotlib", "numpy"})
+    spec = _nbrw_spec(r["sliders"])
+    return {"pkgs": pk, "dpi": r.get("dpi", 100), "spec": spec,
+            "start": {k: w.value for k, w in r["sliders"].items()},
+            # claude/VERTRAG-E38-js.md J3 (the reader's keys): code, fn, params (numeric controls: min/max/step/value;
+            # a menu: name only — it stays stages); html = the function that gives the finished picture (preferred)
+            "code": prog, "fn": "_nbrw_r", "html": "_nbrw_render",
+            "params": [dict({"name": s["name"]}, **({k: s[k] for k in ("min", "max", "step", "value")} if s["art"] != "menu" else {}))
+                       for s in spec],
+            "f0_sha8": _hl.sha256(f0.encode("utf-8")).hexdigest()[:8]}
+
+def _nbrw_live_all():
+    """All sliders of this run's reading version (paket.py matches them by their start picture)."""
+    out, done = [], set()
+    for r, f0 in _NBRW_LIVE:
+        if id(r) in done:
+            continue
+        done.add(id(r))
+        try:
+            out.append(_nbrw_live(r, f0))
+        except Exception as e:
+            out.append({"fehlt": ["%r" % (e,)]})
+    return out
 
 def _ast_kinds():
     import ast as _ast
@@ -743,6 +870,70 @@ _NBRW_CV = {"mode": (f"What do you want to practise?", "Was möchten Sie üben?"
             "acct": (f"Sign in · new account", "Anmelden · neues Konto"),
             "acctT": (f"Your progress stays in this browser, per notebook — with or without an account.",
                       "Ihr Fortschritt bleibt in diesem Browser, je Notebook — mit oder ohne Konto.")}
+
+# E38 P2 (2026-10-27, Python) — THE EXERCISES' RULES FOR THE PACKAGE (daten.json, toolkit/paket.py). What the
+# Lab does around an exercise, as data of THIS run (seed, language): hint steps (hint_steps, the same checked
+# steps the Lab button shows), solutions (solution_box with a task), where "Skip for now" stands, the sentences
+# the Lab says, the tolerance of every typed field at each difficulty (a field with its own tolerance keeps it;
+# None = the difficulty's, as tol()), the difficulty levels (tolerance, hints on/off) and the gating: which
+# exercise waits for which, which states open the next one, and what showing a solution counts as.
+def _nbrw_daten():
+    hin = {}
+    for k, get in _HINT_SRC.items():
+        try:
+            hin[str(k)] = [str(x) for x in get()]
+        except Exception as e:
+            hin[str(k)] = {"fehler": repr(e)[:200]}
+    sol = {"answer": {}, "code": {}}
+    for (k, route), s in _NBRW_SOL.items():
+        try:
+            intro = s["intro"]() if callable(s["intro"]) else s["intro"]
+            code = s["code"]() if callable(s["code"]) else s["code"]
+        except Exception as e:
+            intro, code = "", "# %r" % (e,)
+        sol.setdefault(route, {})[k] = {"intro": str(intro or ""), "code": str(code or ""), "warn": _sol_warn(route)}
+    skip = {"answer": sorted(k for k, r in _NBRW_SKIPS if r == "answer"),
+            "code": sorted(k for k, r in _NBRW_SKIPS if r == "code")}
+    tolx = {}
+    for r in _NBRW.values():
+        if r.get("kind") != "calc" or not r.get("task") or not r.get("fields"):
+            continue
+        try:
+            ans = r["answer"]() if callable(r["answer"]) else r["answer"]
+        except Exception:
+            continue
+        row = {}
+        for lvl, d in _DIFF.items():
+            out = []
+            for fk, _lab in r["fields"]:
+                a = ans.get(fk)
+                if a is None:
+                    continue
+                a = tuple(a) if isinstance(a, (tuple, list)) else (a,)
+                own = len(a) > 1 and a[1] is not None
+                out.append([fk, float(a[1]) if own else float(d["tol"]), "eigen" if own else "stufe"])
+            row[lvl] = out
+        tolx[str(r["task"])] = row
+    say = {"skip": {r: {st: _skip_say(st, r) for st in ("skip", "fail", "done")} for r in ("answer", "code")},
+           "solution": {r: _sol_warn(r) for r in ("answer", "code")}}
+    return {
+        "hinweise": hin, "loesungen": sol, "ueberspringen": skip, "toleranz": tolx, "texte": say,
+        "schwierigkeit": {"stufe": DIFFICULTY["level"], "gebaut": DIFFICULTY["level"], "standard": "standard",
+                          "stufen": {k: {"tol": v["tol"], "hinweise": bool(v["hints"]), "name": v["label"]}
+                                     for k, v in _DIFF.items()}},
+        "regeln": {
+            # the chain of written answers: an exercise opens when the one before it is answered (right, wrong
+            # or skipped: _unlock_next); its chapter waits for `wartet_auf` (Lab: _TASKS["guard"])
+            "answer": {"kette": _answer_order(), "wartet_auf": {k: v for k, v in _TASKS["guard"].items() if v},
+                       "oeffnet_bei": ["solved", "wrong", "skipped"], "ueberspringen": "skipped",
+                       "loesung_zeigen": "skipped", "loesung_zaehlt_nicht_wenn": ["solved", "wrong"]},
+            # the coding ladder beside it (never blocks a chapter): cguard; showing the solution = given up (✗)
+            "code": {"kette": [k for k in _TASKS["order"] if _TASKS["has_code"].get(k)],
+                     "wartet_auf": {k: v for k, v in _TASKS["cguard"].items() if v},
+                     "oeffnet_bei": ["solved", "wrong", "skipped"], "ueberspringen": "skipped",
+                     "loesung_zeigen": "wrong", "loesung_zaehlt_nicht_wenn": ["solved", "wrong"]}},
+        "pruef_code": {str(k): _nbrw_pysrc(k) for k in _PRUEFE},
+        "sprache": LANG["value"]}
 
 def _nbrw_two(pair):
     return "".join("<span data-nbrw-l='%s'>%s</span>" % (l, _esc_txt(str(pair[k]))) for k, l in ((0, "en"), (1, "de")))
@@ -840,6 +1031,17 @@ def _nbread_line():
     # exercises are checked in the page, a coding exercise starts Python (Pyodide)
     # at its first Run. A notebook run never has the variable (paket strips DIGICHEM*).
     import os as _os38
+    # E38 P3 (2026-10-27, Python) — THE NOTEBOOK SHOWS THE PACKAGE (toolkit/paketzelle.py). Its reading
+    # version is made by the build like lesen.html's, with DIGICHEM_READ_PAGE=ipynb: the line says what works
+    # in a notebook without the Lab document — exercises in the window, coding at ▶ Run (Python in this
+    # browser) or copied into a cell below, where pruefe() checks it in the kernel.
+    if _os38.environ.get("DIGICHEM_READ_PAGE") == "ipynb":
+        return _nbL("Notebook version: exercises are checked right here; a coding exercise runs at its "
+                    "<b>&#9654; Run</b> (Python in this browser) or in a cell below, where <code>pruefe()</code> "
+                    "checks it in the kernel.",
+                    "Notebook-Fassung: Aufgaben werden hier gepr&uuml;ft; eine Code-Aufgabe l&auml;uft beim "
+                    "<b>&#9654; Ausf&uuml;hren</b> (Python in diesem Browser) oder in einer Zelle darunter, wo "
+                    "<code>pruefe()</code> sie im Kernel pr&uuml;ft.")
     if _os38.environ.get("DIGICHEM_READ_PAGE") == "1":
         return _nbL("Web version: exercises are checked right here; a coding exercise starts Python in this "
                     "browser at its first <b>&#9654; Run</b>.",
@@ -2068,8 +2270,8 @@ def fig_to_html(fig, dpi=100, tight=True):
 # a reader would notice. TOOLKIT_VERSION is the build — a date and a letter —
 # and it only matters when two notebooks from different days meet in one
 # JupyterLab window and their stylesheets have to agree which is newer.
-NB_VERSION = "1.84"
-TOOLKIT_VERSION = "2026-10-27a"
+NB_VERSION = "1.85"
+TOOLKIT_VERSION = "2026-10-27b"
 # E26.3 — the short cell (toolkit/shortcell.py): 0 = the cargo on ONE line;
 # > 0 = Variant B, the cargo in lines of that many characters (~4 000) for an
 # editor that cannot show one long line (PyCharm, to be measured). Read by the build.
@@ -2548,6 +2750,35 @@ _CODE_PRE = ('display:block;text-align:left;box-sizing:border-box;'
              'font-family:var(--jp-code-font-family,monospace);'
              'font-size:var(--jp-code-font-size,.9em);line-height:1.5')
 
+# E38 P2 (2026-10-27, Python) — WHAT THE LAB SAYS AND DOES AROUND AN EXERCISE, ONCE, FOR BOTH PLACES.
+# The reading window (JS J1) gets hints, solutions, skip and gating from daten.json; they come from the
+# SAME calls as the Lab widgets: solution_box and skip_button register here, hint_steps in _HINT_SRC,
+# the sentences below are the ones the Lab shows (one function each, the Lab uses it too).
+_NBRW_SOL = {}       # (task, route) -> {"intro", "code"}
+_NBRW_SKIPS = set()  # (task, route) with a "Skip for now" at the exercise
+
+def _sol_warn(route):
+    return ("Revealing the solution marks this coding exercise as given up (✗) "
+            "in the progress panel." if route == "code" else
+            "Revealing the solution marks this exercise as come back to later (⤳) "
+            "in the progress panel.")
+
+def _skip_say(st, route):
+    """What "Skip for now" answers, by the state the exercise is in afterwards."""
+    if st == "skip" and route == "code":
+        return ("Skipped \u2014 the next coding exercise is open. This one stays amber "
+                "until you come back and get it right.")
+    if st == "skip":
+        return ("Skipped \u2014 the next chapter and its exercise are open. This one "
+                "stays amber until you come back and get it right.")
+    if st == "fail" and route == "code":
+        return ("This one is marked wrong, and the next coding exercise is open "
+                "already. Get it right and it turns green.")
+    if st == "fail":
+        return ("This one is marked wrong, and the next chapter and its exercise are "
+                "open already. Get it right and it turns green.")
+    return "Already solved \u2014 nothing to skip."
+
 def solution_box(intro, code, task=None, route="answer"):
     """The worked solution, behind a green pill in the same family as the yellow
     check button. With `task` set, revealing it records that the reader did not
@@ -2564,11 +2795,9 @@ def solution_box(intro, code, task=None, route="answer"):
     body = HTML(layout=_w(), value="")
     # E17.1 — whole sentences, so each language can order its own words
     warn = ("<div class='nbink' style='text-align:center;font-size:.86em;opacity:.85;"
-            "margin-top:4px'>%s</div>"
-            % ("Revealing the solution marks this coding exercise as given up (✗) "
-               "in the progress panel." if route == "code" else
-               "Revealing the solution marks this exercise as come back to later (⤳) "
-               "in the progress panel.")) if task else ""
+            "margin-top:4px'>%s</div>" % _sol_warn(route)) if task else ""
+    if task:                                 # E38 P2: the reading window shows the same solution (daten.json)
+        _NBRW_SOL[(str(task), route)] = {"intro": intro, "code": code}
     hint = HTML(layout=_w(), value=warn)
     btn  = Button(description="💡  Solution", layout=Layout(width="220px", height="42px"))
     try: btn.style.button_color = "#3fa877"; btn.style.text_color = "#ffffff"; btn.style.font_weight = "800"
@@ -5760,6 +5989,7 @@ def skip_button(key, route="answer"):
     next chapter and its exercise open. On the code route it is
     `task_code_skipped`: the next coding exercise opens. A settled exercise is
     left alone (both functions only turn an OPEN one amber)."""
+    _NBRW_SKIPS.add((str(key), route))      # E38 P2 (daten.json)
     b = Button(description="\u293c  Skip for now",
                layout=Layout(width="auto", height="38px"))
     b.add_class("nbunlock")
@@ -5772,21 +6002,8 @@ def skip_button(key, route="answer"):
         else:
             task_skipped(k)
             st = _TASKS["state"].get(k)
-        # E17.1 — whole sentences, so each language can order its own words
-        if st == "skip" and route == "code":
-            say = ("Skipped \u2014 the next coding exercise is open. This one stays amber "
-                   "until you come back and get it right.")
-        elif st == "skip":
-            say = ("Skipped \u2014 the next chapter and its exercise are open. This one "
-                   "stays amber until you come back and get it right.")
-        elif st == "fail" and route == "code":
-            say = ("This one is marked wrong, and the next coding exercise is open "
-                   "already. Get it right and it turns green.")
-        elif st == "fail":
-            say = ("This one is marked wrong, and the next chapter and its exercise are "
-                   "open already. Get it right and it turns green.")
-        else:
-            say = "Already solved \u2014 nothing to skip."
+        # E17.1 — whole sentences, so each language can order its own words (E38 P2: in _skip_say)
+        say = _skip_say(st, route)
         out.value = ("<div class='nbink' style='text-align:center;font-size:.88em'>%s</div>"
                      % say)
     b.on_click(_go)

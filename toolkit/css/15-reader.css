@@ -634,6 +634,36 @@
 /* Z1 — alles auf der Hauptachse: auch das Inhaltsverzeichnis der Lesefassung (Block so breit
    wie sein Inhalt, mittig); die Spalte selbst haelt JS mittig (--nbrw-side links = rechts) */
 .nbrw .nbreading ol.nbread-toc{width:fit-content;max-width:100%;box-sizing:border-box;margin-left:auto!important;margin-right:auto!important}
+/* ======================================================================
+   E38 C2 (CSS, 27.10.) — DAS DOKUMENT IM LESER = LAB (Auftrag plan/AUFTRAG.md C2). Gemessen an Lab v1.84 (Vorlage, digi,
+   1400 x 900; Kopf .jupyter-widget-Collapse-header, 07-skins DIGI): Teile und Kapitel starten wie Lab (Einfuehrung, Anhang,
+   gesperrte Kapitel zu; Inhalt und Kapitel 1 offen) — das setzt 20-reader.js aus data-open (Python: „wie Lab startet“), solange
+   der Leser nichts anderes gespeichert hat; Abbildung/Uebung/Code bleiben offen (Lab: zu — bewusst, Lesefluss und Tests). Kapitel-Pille 14/30/10 Polster (51 px), offen in der Tinte, zu leise; gesperrtes Kapitel
+   (data-lock und Tor noch zu) mit Schloss vor dem Namen und „LOCKED“-Marke dahinter (Unbounded 0,7 em, Rand, 999 px) wie Labs
+   .nb-locked-Kopf; Teile mit 120-px-Strichen links und rechts; Abbildung/Uebung als Pille in der Tinte (6/30), Code leiser in der
+   Textschrift. Das Inhaltsverzeichnis der Lesefassung bleibt (Lab hat keins; env_reader W8/C2 springen und pruefen darueber).
+   Ueberschriften in Unbounded
+   (--rw-head; die Schrift selbst liefert die Huelle, Python P1). */
+.nbrw.nbrw .nbreading details.nbrw-acc>summary>h2.nbread-h{width:fit-content}
+.nbrw.nbrw .nbreading details.nbrw-acc>summary>h2.nbread-h::before,.nbrw.nbrw .nbreading details.nbrw-acc>summary>h2.nbread-h::after{
+  flex:0 0 min(120px,14vw)}
+.nbrw.nbrw .nbreading details[data-kind=chapter]>summary>h3.nbread-h{padding:15px 31px 11px;line-height:25px;font-family:var(--rw-head,var(--rw-font))}
+.nbrw.nbrw .nbreading details[data-kind=chapter]:not([open])>summary>h3.nbread-h{color:var(--rw-q)!important}
+.nbrw.nbrw .nbreading details[data-kind=chapter][data-lock="1"]:has(>[data-nbrw-gate][data-st=locked])>summary>h3.nbread-h{
+  display:flex;align-items:center;gap:.5em}
+.nbrw.nbrw .nbreading details[data-kind=chapter][data-lock="1"]:has(>[data-nbrw-gate][data-st=locked])>summary>h3.nbread-h::before{
+  content:"";flex:0 0 auto;width:.76em;height:.9em;margin-top:-.1em;background:currentColor;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 14'%3E%3Crect x='1' y='6' width='10' height='8' rx='1.6'/%3E%3Cpath d='M3.4 6V4.2a2.6 2.6 0 0 1 5.2 0V6' fill='none' stroke='%23000' stroke-width='1.9'/%3E%3C/svg%3E") center/contain no-repeat;
+  mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 14'%3E%3Crect x='1' y='6' width='10' height='8' rx='1.6'/%3E%3Cpath d='M3.4 6V4.2a2.6 2.6 0 0 1 5.2 0V6' fill='none' stroke='%23000' stroke-width='1.9'/%3E%3C/svg%3E") center/contain no-repeat}
+.nbrw.nbrw .nbreading details[data-kind=chapter][data-lock="1"]:has(>[data-nbrw-gate][data-st=locked])>summary>h3.nbread-h::after{
+  content:"Locked";flex:0 0 auto;padding:.12em .55em;font:400 .7em/1.3 var(--rw-head,var(--rw-font));letter-spacing:.02em;
+  text-transform:uppercase;border:1px solid currentColor;border-radius:999px}
+.nbrw.nbrw[data-nbrw-lang=de] .nbreading details[data-kind=chapter][data-lock="1"]:has(>[data-nbrw-gate][data-st=locked])>summary>h3.nbread-h::after{
+  content:"Gesperrt"}
+.nbrw.nbrw .nbreading details:is([data-kind=viz],[data-kind=practice])>summary>h4.nbread-h{padding:6px 30px;color:var(--rw-ink)!important}
+.nbrw.nbrw .nbreading details[data-kind=code]>summary>h4.nbread-h{font-family:var(--rw-font)!important;letter-spacing:1.7px!important}
+.nbrw.nbrw[data-nbrw-skin=digi][data-nbrw-theme=dark] .nbreading details[data-kind=code]>summary>h4.nbread-h{color:#9fb0bf!important}
+@media (prefers-color-scheme:dark){.nbrw.nbrw[data-nbrw-skin=digi]:not([data-nbrw-theme=light]) .nbreading details[data-kind=code]>summary>h4.nbread-h{color:#9fb0bf!important}}
 
 /* ======================================================================
    E33 (CSS, 13.10. abends) — Nutzer zu v1.78 (PyCharm, VS Code, Lab, Lite). Abgeglichen mit
@@ -729,3 +759,115 @@
 @media (max-width:620px){.nbrw.nbrw{--rw-pw:44px}.nbrw .nbrw-lab,.nbrw .nbrw-cur{display:none}
   .nbrw .nbrw-bar{flex-direction:column}.nbrw .nbrw-btn{min-width:0;padding:0 2px}}
 @media print{.nbrw .nbrw-win{height:auto;overflow:visible;margin-right:0!important}.nbrw .nbrw-panel{display:none}}
+
+/* ======================================================================
+   E38 C1 (CSS, 27.10.) — DAS DECKBLATT IM LESER = LAB (Auftrag plan/AUFTRAG.md C1: Groessen, Zeitleiste mit
+   Schloessern und Scrollbalken, Karten). Gemessen an Lab v1.84 (Vorlage, digi, 1400 x 900, hell/dunkel; 14-e7/02-dark):
+   Abstaende der Vorschau wie .nbcover (Ziele 4 px Polster, Zeitleiste 22 + 62 px), Zeitleiste in einer Lane von 640 px,
+   die waagerecht rollt, mit Lab-Leiste (10 px, Rinne + Daumen, r 5) und Rand-Verlauf nur an der Seite mit weiteren Punkten
+   (scroll-getriebene Animation statt JS-data-fade); Marken in Labs Formen und Groessen (Titel 16 Quadrat Gold, Teile/Ende 14 Ring,
+   Kapitel 18 Ring, Abbildung 10 Punkt, Rechnen/Code 12 Raute), gesperrt = gestrichelt, 45 % und Schloss (Maske wie Lab)
+   darin, offene Aufgabe = offenes Schloss in der Aufgabenfarbe; Namen 11/11,5 px, Kapitel mit Nummer und hoechstens 160 px
+   (zwei Zeilen); Moduskarten 12 px rund, Inhalt oben; ▶ als Dreieck auf runder Flaeche. Lage der Marken setzt weiter JS
+   (tlLay misst die Namen — breitere, umbrechende Namen ruecken die Marken wie in Lab auseinander). Handy (≤ 620 px,
+   E38a C2) bleibt senkrecht: die Geometrie hier gilt erst ab 621 px. */
+.nbrw.nbrw{--rw-cv-title:var(--rw-acc);--rw-cv-mk:var(--rw-lock);--rw-cv-fill:var(--rw-surf);--rw-cv-track:var(--rw-track);
+  --rw-cv-calc:var(--rw-ok);--rw-cv-calc-b:#1e7a4c;--rw-cv-code:var(--rw-acc2);--rw-cv-code-b:#6b3fd1;--rw-cv-dash:#8a96a3;
+  --rw-cv-sbg:color-mix(in srgb,var(--rw-track) 60%,transparent);--rw-cv-sth:var(--rw-q);
+  --rw-cv-lock:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Crect x='2' y='5' width='8' height='6' rx='1.3'/%3E%3Cpath d='M4 5V4a2 2 0 0 1 4 0v1' fill='none' stroke='%23000' stroke-width='1.6'/%3E%3C/svg%3E");
+  --rw-cv-open:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Crect x='1' y='5.4' width='8' height='6' rx='1.3'/%3E%3Cpath d='M6.5 5.4V3.4a2 2 0 0 1 4 0v1' fill='none' stroke='%23000' stroke-width='1.6'/%3E%3C/svg%3E")}
+/* digi wie Lab digi: hell Titelmarke #f2b426, Teile/Kapitel gefuellt; dunkel Ringe auf der Flaeche, Spur weiss 14 %, Code rosa */
+.nbrw.nbrw[data-nbrw-skin=digi]{--rw-cv-title:#f2b426;--rw-cv-fill:var(--rw-lock);--rw-cv-track:#d5d9e6;--rw-cv-code:#c2338f;
+  --rw-cv-sbg:rgba(221,225,236,.6);--rw-cv-sbl:#dde1ec;--rw-cv-sth:#454b63}
+.nbrw.nbrw[data-nbrw-skin=digi][data-nbrw-theme=dark]{--rw-cv-title:#ffd36b;--rw-cv-fill:#0b0e1c;--rw-cv-track:rgba(255,255,255,.165);
+  --rw-cv-code:#ff7bd5;--rw-cv-sbg:rgba(255,255,255,.066);--rw-cv-sbl:rgba(255,255,255,.11);--rw-cv-sth:#c3c9de}
+@media (prefers-color-scheme:dark){.nbrw.nbrw[data-nbrw-skin=digi]:not([data-nbrw-theme=light]){--rw-cv-title:#ffd36b;--rw-cv-fill:#0b0e1c;
+  --rw-cv-track:rgba(255,255,255,.165);--rw-cv-code:#ff7bd5;--rw-cv-sbg:rgba(255,255,255,.066);--rw-cv-sbl:rgba(255,255,255,.11);--rw-cv-sth:#c3c9de}}
+
+/* Kopf: Kicker der Vorschau in der Textschrift (Lab .nbcover: das span traegt Instrument Sans), „What you will learn“ 26 px */
+.nbrw.nbrw[data-nbrw-skin] .nbrw-cover .nbr-nbtitle-sub{font-family:var(--rw-font)!important}
+.nbrw.nbrw .nbrw-cover summary.nbr-nbcover-learn-h{padding:4px 0!important;line-height:18px!important;color:var(--rw-q)!important;font-size:11.5px}
+/* Marken: Formen, Groessen, Farben wie Lab (.nbtl-mk) */
+.nbrw.nbrw .nbrw-cv-tl[data-nbrw-row] .nbrw-cv-dot::before{box-sizing:border-box;content:"";width:10px;height:10px;border:2px solid var(--rw-cv-mk);
+  border-radius:50%;background:var(--rw-cv-mk);font-size:0;line-height:0}
+.nbrw.nbrw .nbrw-cv-tl[data-nbrw-row] .nbrw-cv-dot[data-kind=title]::before{width:16px;height:16px;border-radius:4px;
+  background:var(--rw-cv-title);border-color:var(--rw-cv-title);transform:translate(-50%,-50%);
+  box-shadow:0 0 10px 2px color-mix(in srgb,var(--rw-cv-title) 55%,transparent)}
+.nbrw.nbrw .nbrw-cv-tl[data-nbrw-row] .nbrw-cv-dot:is([data-kind=group],[data-kind=chap],[data-kind=end])::before{width:18px;height:18px;
+  border-radius:50%;background:var(--rw-cv-fill);border-color:var(--rw-cv-mk);transform:translate(-50%,-50%)}
+.nbrw.nbrw .nbrw-cv-tl[data-nbrw-row] .nbrw-cv-dot:is([data-kind=group],[data-kind=end])::before{width:14px;height:14px}
+.nbrw.nbrw .nbrw-cv-tl[data-nbrw-row] .nbrw-cv-dot:is([data-kind=calc],[data-kind=code])::before{width:12px;height:12px;border-radius:2px;
+  background:var(--rw-surf);border-color:var(--rw-cv-calc-b);transform:translate(-50%,-50%) rotate(45deg)}
+.nbrw.nbrw .nbrw-cv-tl[data-nbrw-row] .nbrw-cv-dot[data-kind=code]::before{border-radius:4px;border-color:var(--rw-cv-code-b)}
+.nbrw.nbrw .nbrw-cv-tl[data-nbrw-row] .nbrw-cv-dot[data-st=solved]::before{background:var(--rw-ok);border-color:var(--rw-ok)}
+.nbrw.nbrw .nbrw-cv-tl[data-nbrw-row] .nbrw-cv-dot[data-st=wrong]::before{border-color:var(--rw-bad)}
+.nbrw.nbrw .nbrw-cv-tl[data-nbrw-row] .nbrw-cv-dot[data-st=locked]::before{content:"";background:var(--rw-surf);border:2px dashed var(--rw-cv-dash);opacity:.45}
+.nbrw.nbrw .nbrw-cv-tl[data-nbrw-row] .nbrw-cv-dot[data-kind=viz][data-st=locked]::before{background:var(--rw-cv-mk);border:2px solid var(--rw-cv-mk);opacity:.4}
+/* das Schloss in der Marke (Lab .nbtl-row::after): gesperrt in der Markenfarbe, offene Aufgabe offen in ihrer Farbe */
+.nbrw.nbrw .nbrw-cv-tl[data-nbrw-row] .nbrw-cv-dot:is([data-st=locked]:not([data-kind=viz]),[data-st=open]:is([data-kind=calc],[data-kind=code]))::after{
+  content:"";position:absolute;left:0;top:0;width:11px;height:11px;transform:translate(-50%,-50%);pointer-events:none;
+  background:var(--rw-cv-mk);-webkit-mask:var(--rw-cv-lock) center/contain no-repeat;mask:var(--rw-cv-lock) center/contain no-repeat}
+.nbrw.nbrw .nbrw-cv-tl[data-nbrw-row] .nbrw-cv-dot:is([data-kind=calc],[data-kind=code]):is([data-st=locked],[data-st=open])::after{width:9px;height:9px}
+.nbrw.nbrw .nbrw-cv-tl[data-nbrw-row] .nbrw-cv-dot[data-st=open]:is([data-kind=calc],[data-kind=code])::after{background:var(--rw-cv-calc);
+  -webkit-mask-image:var(--rw-cv-open);mask-image:var(--rw-cv-open)}
+.nbrw.nbrw .nbrw-cv-tl[data-nbrw-row] .nbrw-cv-dot[data-st=open][data-kind=code]::after{background:var(--rw-cv-code)}
+.nbrw.nbrw .nbrw-cv-tl[data-nbrw-row] .nbrw-cv-dot:is(:hover,.is-hov,.is-pin)::before{transform:translate(-50%,-50%) scale(1.2);
+  border-color:var(--rw-acc);box-shadow:0 0 9px 2px color-mix(in srgb,var(--rw-acc) 55%,transparent)}
+.nbrw.nbrw .nbrw-cv-tl[data-nbrw-row] .nbrw-cv-dot:is([data-kind=calc],[data-kind=code]):is(:hover,.is-hov,.is-pin)::before{transform:translate(-50%,-50%) rotate(90deg) scale(1.2)}
+/* Namen wie Lab .nbtl-nm: Teile/Titel/Ende 11 px 800 Versalien, Kapitel 11,5 px mit Nummer, gesperrt leise 600 */
+.nbrw.nbrw .nbrw-cv-in{counter-reset:rwcvch}
+.nbrw.nbrw .nbrw-cv-tl[data-nbrw-row] .nbrw-cv-dot[data-kind=chap]{counter-increment:rwcvch}
+.nbrw.nbrw .nbrw-cv-tl[data-nbrw-row] .nbrw-cv-lab{font:700 11.5px/13.8px var(--rw-font)!important;letter-spacing:0;text-transform:none;
+  color:var(--rw-ink)!important}
+.nbrw.nbrw .nbrw-cv-tl[data-nbrw-row] .nbrw-cv-dot[data-kind=chap] .nbrw-cv-lab::before{content:counter(rwcvch) "\2009\2009";font-weight:900}
+.nbrw.nbrw .nbrw-cv-tl[data-nbrw-row] .nbrw-cv-dot[data-st=locked] .nbrw-cv-lab{font-weight:600!important;color:var(--rw-q)!important}
+.nbrw.nbrw .nbrw-cv-tl[data-nbrw-row] .nbrw-cv-dot:is([data-kind=title],[data-kind=group],[data-kind=end]) .nbrw-cv-lab{
+  font:800 11px/13.2px var(--rw-font)!important;letter-spacing:.8px!important;text-transform:uppercase!important;color:var(--rw-q)!important}
+.nbrw.nbrw .nbrw-cv-tl[data-nbrw-row] .nbrw-cv-dot[data-side=up] .nbrw-cv-lab{bottom:13px}
+.nbrw.nbrw .nbrw-cv-tl[data-nbrw-row] .nbrw-cv-dot[data-side=down] .nbrw-cv-lab{top:13px}
+.nbrw.nbrw .nbrw-cv-tl[data-nbrw-row] .nbrw-cv-dot:is(:hover,.is-hov,.is-pin) .nbrw-cv-lab{color:var(--rw-acc)!important}
+@property --rw-cv-fl{syntax:"<length>";inherits:false;initial-value:0px}
+@property --rw-cv-fr{syntax:"<length>";inherits:false;initial-value:0px}
+@keyframes rw-cv-fade{0%{--rw-cv-fl:0px;--rw-cv-fr:48px}12%{--rw-cv-fl:48px}88%{--rw-cv-fr:48px}100%{--rw-cv-fl:48px;--rw-cv-fr:0px}}
+/* Abstaende: ab 820 px Fensterhoehe (--nbrw-h; lesen.html 1400 x 900) genau Labs, darunter stufenlos enger bis zu E33 D (▶ im
+   ersten Bild eines 600-px-Fensters, PyCharm): jeder Abstand = clamp(eng, Hoehe − 820 + Lab, Lab); Kapitelnamen zweizeilig erst ab
+   820 px (darunter einzeilig wie bisher, die Lane bleibt 56 px hoch) */
+.nbrw.nbrw{--rw-cv-h:var(--nbrw-h,900px)}
+@media (min-width:621px){
+  /* Zeitleiste: Abstand wie .nbcover-tl (margin 22, Kopf 18, Lane 13 darunter, Lane 126 hoch, Leiste 10, Rest 62 + Kopf) */
+  .nbrw.nbrw .nbrw-cover summary.nbr-nbcover-learn-h{padding:clamp(0px,var(--rw-cv-h) - 816px,4px) 0!important}
+  .nbrw.nbrw .nbrw-cover .nbrw-cv-t.nbrw-cv-h:has(+ .nbrw-cv-tl){margin:clamp(14px,var(--rw-cv-h) - 793px,27px) auto clamp(8px,var(--rw-cv-h) - 807px,13px)!important;line-height:18px}
+  .nbrw.nbrw .nbrw-cv-tl[data-nbrw-row]{margin:0 auto clamp(14px,var(--rw-cv-h) - 736px,84px)!important}
+  .nbrw.nbrw .nbrw-cv-tl[data-nbrw-row] .nbrw-cv-lab{width:max-content!important;max-width:clamp(160px,(820px - var(--rw-cv-h)) * 1000,100000px)!important;
+    white-space:normal!important;text-align:center;overflow-wrap:break-word}
+  .nbrw.nbrw .nbrw-cv-tl[data-nbrw-row] .nbrw-cv-scroll{box-sizing:border-box;max-width:min(100%,calc(640px * var(--rw-z,1)))!important;
+    padding:clamp(0px,var(--rw-cv-h) - 802px,18px) 0 clamp(0px,var(--rw-cv-h) - 800px,20px);scrollbar-width:auto;scrollbar-color:auto;
+    -webkit-mask:linear-gradient(to right,transparent,#000 var(--rw-cv-fl),#000 calc(100% - var(--rw-cv-fr)),transparent) top/100% calc(100% - 10px) no-repeat,
+      linear-gradient(#000,#000) bottom/100% 10px no-repeat;
+    mask:linear-gradient(to right,transparent,#000 var(--rw-cv-fl),#000 calc(100% - var(--rw-cv-fr)),transparent) top/100% calc(100% - 10px) no-repeat,
+      linear-gradient(#000,#000) bottom/100% 10px no-repeat;
+    animation:rw-cv-fade linear both;animation-timeline:scroll(self inline)}
+  .nbrw.nbrw .nbrw-cv-tl[data-nbrw-row] .nbrw-cv-scroll::-webkit-scrollbar{height:10px}
+  .nbrw.nbrw .nbrw-cv-tl[data-nbrw-row] .nbrw-cv-scroll::-webkit-scrollbar-track{margin:0 10px;border-radius:5px;background:var(--rw-cv-sbg);
+    box-shadow:inset 0 0 0 1px var(--rw-cv-sbl,var(--rw-line))}
+  .nbrw.nbrw .nbrw-cv-tl[data-nbrw-row] .nbrw-cv-scroll::-webkit-scrollbar-thumb{border-radius:5px;background:var(--rw-cv-sth)}
+  .nbrw.nbrw .nbrw-cv-tl[data-nbrw-row] .nbrw-cv-scroll::-webkit-scrollbar-thumb:hover{background:var(--rw-ink)}
+  .nbrw.nbrw .nbrw-cv-tl[data-nbrw-row] .nbrw-cv-line{box-shadow:0 -1px 0 var(--rw-cv-track),0 1px 0 var(--rw-cv-track);background:var(--rw-cv-track)!important}
+  /* Moduskarten und ▶ wie Lab (.nbmode-opt, .nbcover-play) */
+  .nbrw.nbrw .nbrw-modes{margin:clamp(8px,var(--rw-cv-h) - 810px,10px) auto 0!important;gap:10px}
+  .nbrw.nbrw .nbrw-cover .nbrw-cv-t.nbrw-cv-h:has(+ .nbrw-modes){margin:0 auto!important;line-height:17px}
+}
+.nbrw.nbrw .nbrw-mode-opt{justify-content:flex-start!important;gap:2px;height:96px;padding:10px 10px 9px!important;border-radius:12px!important;
+  border:1px solid color-mix(in srgb,var(--rw-q) 35%,transparent)!important;background:var(--rw-surf)!important}
+.nbrw.nbrw .nbrw-mode-opt .nbrw-mode-l{font-size:12.6px;line-height:20px}
+.nbrw.nbrw .nbrw-mode-opt .nbrw-mode-d{font-size:10.36px;line-height:1.3}
+.nbrw.nbrw[data-nbrw-mode] .nbrw-mode-opt:is(.is-on,[aria-pressed=true],[aria-checked=true]){border-color:var(--rw-go)!important;
+  background:var(--rw-chap-bg,var(--rw-surf))!important;box-shadow:0 0 0 3px color-mix(in srgb,var(--rw-go) 22%,transparent)!important}
+.nbrw.nbrw[data-nbrw-mode] .nbrw-mode-opt:is(.is-on,[aria-pressed=true],[aria-checked=true])::after{content:"\2713";position:absolute;
+  top:6px;right:9px;font:800 11px/1 var(--rw-font);color:var(--rw-go)}
+.nbrw.nbrw[data-nbrw-skin=digi] [data-nbrw-act=play]{margin:clamp(12px,var(--rw-cv-h) - 798px,22px) auto clamp(4px,var(--rw-cv-h) - 810px,10px);padding:0;font-size:0!important;color:var(--rw-ink)!important;
+  background:var(--rw-chap-bg)!important;border:2px solid var(--rw-line)!important;box-shadow:0 6px 18px rgba(0,0,0,.08)}
+.nbrw.nbrw[data-nbrw-skin=digi][data-nbrw-theme=dark] [data-nbrw-act=play]{box-shadow:0 6px 18px rgba(0,0,0,.5)}
+.nbrw.nbrw[data-nbrw-skin=digi] [data-nbrw-act=play]::before{content:"";width:26px;height:30px;margin-left:6px;background:currentColor;
+  clip-path:polygon(0 0,100% 50%,0 100%)}
+.nbrw.nbrw[data-nbrw-skin=digi] [data-nbrw-act=play]:hover{box-shadow:0 0 0 6px color-mix(in srgb,var(--rw-go) 18%,transparent)!important}

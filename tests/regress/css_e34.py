@@ -76,6 +76,11 @@ def start_server(kind, root, theme):
     """JupyterLab or Notebook 7 with its own HOME; the front end's theme is the reader's (E15.3)."""
     home = tempfile.mkdtemp(prefix="e34_%s_" % kind)
     env = {k: v for k, v in os.environ.items() if not k.startswith(("JUPYTER", "DIGICHEM"))}
+    # E38 Zusammenführen (Hauptwerkstatt, Tests): since E38 P3 the Vorlage's cell shows the package unless the kernel has
+    # DIGICHEM_LAB=1 (run.py sets it for the Lab suites). Behauptete bisher: every Lab run builds the Lab document — the
+    # variable is kept when the caller set it; everything else DIGICHEM_* stays out as before.
+    if os.environ.get("DIGICHEM_LAB"):
+        env["DIGICHEM_LAB"] = os.environ["DIGICHEM_LAB"]
     env.update(HOME=home, JUPYTER_DATA_DIR=home + "/data", JUPYTER_CONFIG_DIR=home + "/cfg",
                JUPYTER_RUNTIME_DIR=home + "/rt", IPYTHONDIR=home + "/ip")
     sd = home + "/cfg/lab/user-settings/@jupyterlab/apputils-extension"; os.makedirs(sd)
